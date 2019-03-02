@@ -1,31 +1,33 @@
 package com.future.tcfm.controller;
 
+import com.future.tcfm.model.User;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
 public class UserController {
 
-        @Autowired
-        UserService memberService;
+    @Autowired
+    UserService userService;
 
-        @GetMapping("/member")
-        public List<Member> loadAll (){
-            return memberService.loadAll();
-        }
+    @GetMapping("/user")
+    public List<User> loadAll (){
+        return userService.loadAll();
+    }
 
-        @PostMapping("/member/create")
-        public Member createMember(@RequestBody Member member) {
-            return memberService.createMember(member);
-        }
+    @PostMapping("/user/create")
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
+    }
 
-        @PutMapping("/member/{id}")
-        public ResponseEntity<Member> updateMember(@PathVariable("id") int id, @RequestBody Member member) {
-            return memberService.updatedmember(id,member);
-        }
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+        return userService.updateduser(id,user);
     }
 }
+
