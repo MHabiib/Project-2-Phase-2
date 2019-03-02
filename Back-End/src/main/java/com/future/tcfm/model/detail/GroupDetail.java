@@ -14,6 +14,6 @@ public class GroupDetail {
     private String role;
     private Double balance;
     private Integer totalPayment;
-    private Date joinDate;
+    private Long joinDate;
     private Integer join; //join pada reccuring keberapa
 }

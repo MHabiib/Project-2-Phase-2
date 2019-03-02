@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface UserService {
     List<User> loadAll();
-
-    User createUser(User user);
-
-    ResponseEntity<User> updateduser(@PathVariable("id") int id, @RequestBody User user);
+    ResponseEntity createUser(User user);
+    ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user);
 }

@@ -11,5 +11,5 @@ public class PaymentDetail {
     private String idPayment;
     private String idUser;
     private String idGroup;
-    private Date paymentDate;
+    private Long paymentDate;
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -20,14 +21,14 @@ public class UserController {
         return userService.loadAll();
     }
 
-    @PostMapping("/user/create")
-    public User createUser(@RequestBody User user) {
+    @PostMapping("/user")
+    public ResponseEntity createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
-        return userService.updateduser(id,user);
+    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
+        return userService.updateUser(id,user);
     }
 }
 

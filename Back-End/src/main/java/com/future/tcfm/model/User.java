@@ -2,14 +2,19 @@ package com.future.tcfm.model;
 
 import com.future.tcfm.model.detail.GroupDetail;
 import com.future.tcfm.model.detail.PaymentDetail;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Data
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "user")
 public class User {
     @Id
@@ -19,6 +24,4 @@ public class User {
     private String password;
     private String phone;
     private Boolean superAdmin;
-    private List<GroupDetail> groupDtl;
-    private List<PaymentDetail>paymentDtl;
 }
