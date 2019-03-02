@@ -18,9 +18,9 @@ public class Group {
     private String idGroup;
     private String name;
     private Double regularPayment;
-    private Integer recurring; //date / integer?
-    private Date createdDate;
-    private Date closedDate;
+    private Long recurring; //date / integer?
+    private Long createdDate;
+    private Long closedDate;
     private List<GroupDetail> groupDtl;
     private List<PaymentDetail>paymentDtl;
     private List<Expense>expenseList;

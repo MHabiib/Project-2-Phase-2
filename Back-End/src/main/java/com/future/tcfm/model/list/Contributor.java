@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class Contributor {
     private String idUser;
+    private String name;
 }

@@ -17,7 +17,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Integer phone;
+    private String phone;
     private Boolean superAdmin;
     private List<GroupDetail> groupDtl;
     private List<PaymentDetail>paymentDtl;

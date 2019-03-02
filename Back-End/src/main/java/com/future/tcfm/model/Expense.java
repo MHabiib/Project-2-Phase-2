@@ -18,6 +18,6 @@ public class Expense {
     private String detail;
     private Double price;
     private List<Contributor>contributorList;
-    private Date date;
+    private Long date;
     private List<Approver>approverList;
 }
