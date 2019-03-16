@@ -23,5 +23,12 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    private Boolean superAdmin;
+    private String role;
+    private Long joinDate;
+    private Long leaveDate;
+    private Boolean active;
+    private String idGroup;
+    private String rekening;
+    private double balance;
+
 }

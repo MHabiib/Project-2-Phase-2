@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> loadAll() {
-        return userRepository.findAll();
+        return userRepository.findAllByActive(true);
     }
 
     @Override
@@ -41,9 +41,19 @@ public class UserServiceImpl implements UserService {
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
-        userExist.setSuperAdmin(user.getSuperAdmin());
         userExist.setPassword(user.getPassword());
+        userExist.setRole(user.getRole());
         userRepository.save(userExist);
-        return new ResponseEntity<>(userExist, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(userExist, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteUser(String id) {
+        User userExist = userRepository.findByIdUser(id);
+        if (userExist == null)
+            return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
+        userExist.setActive(false);
+        userRepository.save(userExist);
+        return new ResponseEntity<>("User deleted!", HttpStatus.OK);
     }
 }

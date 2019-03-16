@@ -11,4 +11,5 @@ public interface UserService {
     List<User> loadAll();
     ResponseEntity createUser(User user);
     ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user);
+    ResponseEntity deleteUser(@PathVariable("id") String id);
 }
