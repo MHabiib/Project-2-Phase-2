@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+        <sidebarDashboard />
     </div>
 </template>
 
@@ -9,7 +9,3 @@ export default {
     
 }
 </script>
-
-<style>
-    
-</style>

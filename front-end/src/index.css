@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+    background-color: white;
+}
+
+:root {
+    --darkColor: #223254;
+    --lightColor: #F2F4F6;
+}

@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  document.title = 'Login | Team Cash Flow Management'
+
   export default {
     data: function() {
       return {
@@ -44,9 +46,6 @@
           }
         })
       }
-    },
-    beforeCreate() {
-      document.title = 'Login | Team Cash Flow Management'
     }
   }
 </script>
