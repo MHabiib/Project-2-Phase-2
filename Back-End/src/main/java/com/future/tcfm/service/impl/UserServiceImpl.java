@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> updateUser(String id, User user) {
         User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
-            return new ResponseEntity<>("Failed to update User!\nUserId not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to update User!\nUserId not found!", HttpStatus.NOT_FOUND);
         if(userExist.getEmail()!=user.getEmail()) {
             if(userRepository.findByEmail(user.getEmail())!=null) return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST); ;
         }
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
         userExist.setRole(user.getRole());
+        userExist.setBalance(user.getBalance());
         userRepository.save(userExist);
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }

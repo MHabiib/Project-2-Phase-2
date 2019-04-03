@@ -31,6 +31,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseEntity updateGroup(String id, Group group) {
-        return null;
+        Group groupExist = groupRepository.findByIdGroup(id);
+        if (groupExist == null)
+            return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
+        groupExist.setRegularPayment(group.getRegularPayment());
+        groupExist.setGroupBalance(group.getGroupBalance());
+        groupExist.setMember(group.getMember());
+        return new ResponseEntity<>(groupExist, HttpStatus.OK);
+
     }
 }

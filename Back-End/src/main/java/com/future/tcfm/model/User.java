@@ -1,7 +1,5 @@
 package com.future.tcfm.model;
 
-import com.future.tcfm.model.detail.GroupDetail;
-import com.future.tcfm.model.detail.PaymentDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -30,5 +29,7 @@ public class User {
     private String idGroup;
     private String rekening;
     private double balance;
+    private List<Map> periodPayed;
+
 
 }
