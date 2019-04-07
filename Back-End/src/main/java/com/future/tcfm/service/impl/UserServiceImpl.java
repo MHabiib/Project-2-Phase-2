@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> loadAll() {
-        return userRepository.findAllByActive(true);
+        return userRepository.findAll();
     }
 
     @Override
@@ -26,6 +26,10 @@ public class UserServiceImpl implements UserService {
         User userExist = userRepository.findByEmail(user.getEmail());
         if (userExist != null)
             return new ResponseEntity<>("Failed to save User!\nEmail already exists!", HttpStatus.BAD_REQUEST);
+        if(user.getEmail()==null)
+            return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
+
+        user.setBalance(0);//FOR HANDLING NOT NULL PARAMATER
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -35,8 +39,9 @@ public class UserServiceImpl implements UserService {
         User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
             return new ResponseEntity<>("Failed to update User!\nUserId not found!", HttpStatus.NOT_FOUND);
-        if(userExist.getEmail()!=user.getEmail()) {
-            if(userRepository.findByEmail(user.getEmail())!=null) return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST); ;
+        if(!userExist.getEmail().equals(user.getEmail())) {
+            if(userRepository.findByEmail(user.getEmail())!=null)
+                return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST); ;
         }
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
@@ -48,7 +53,7 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }
 
-    @Override
+/*    @Override
     public ResponseEntity<?> deleteUser(String id) {
         User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
@@ -56,5 +61,5 @@ public class UserServiceImpl implements UserService {
         userExist.setActive(false);
         userRepository.save(userExist);
         return new ResponseEntity<>("User deleted!", HttpStatus.OK);
-    }
+    }*/
 }
