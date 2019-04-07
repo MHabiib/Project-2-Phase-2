@@ -6,6 +6,7 @@ import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> loadAll() {
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
         if(user.getEmail()==null)
             return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setBalance(0);//FOR HANDLING NOT NULL PARAMATER
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
