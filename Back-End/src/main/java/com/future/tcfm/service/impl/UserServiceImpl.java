@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userExist);
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }
+}
 
 /*    @Override
     public ResponseEntity<?> deleteUser(String id) {
@@ -67,4 +68,3 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userExist);
         return new ResponseEntity<>("User deleted!", HttpStatus.OK);
     }*/
-}
