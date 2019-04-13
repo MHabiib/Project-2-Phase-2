@@ -4,12 +4,15 @@
       <div class="loginTitle">
         Login
       </div>
+      <form @submit="loginHandler">
 
-      <div class="loginBody">
-        <input type="text" name="username" placeholder="Username" v-model="usernameInput" /><br />
-        <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
-        <button @click="loginHandler">Go</button>
-      </div>
+        <div class="loginBody">
+          <input type="text" name="username" placeholder="Username" v-model="usernameInput" /><br />
+          <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
+          <button @click.prevent="loginHandler">Go</button>
+        </div>
+
+      </form>
     </div>
   </div>
 </template>
@@ -23,27 +26,52 @@
       }
     },
     methods: {
-      loginHandler: function() {
-        fetch('/api/login', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: this.usernameInput,
-            password: this.passwordInput
+      loginHandler() {
+        let dataLogin = {
+          username: this.usernameInput,
+          passwordInput: this.passwordInput
+        }
+        this.axios
+          .post('http://localhost:8088/login',dataLogin)
+          .then((res) => {
+            if (res.loginSuccess) {
+              alert('Login Berhasil')
+              this.$router.push("/")
+            } else {
+              alert('Login Gagal')
+            }
           })
-        })
-        .then(response => response.json())
-        .then(res => {
-          if(res.loginSuccess) {
-            alert('Login Berhasil')
-          } else {
-            alert('Login Gagal')
-          }
-        })
+          .catch(e => {
+
+            if (e.response) {
+              console.log(e.message)
+            }
+          })
       }
+
+
+
+        // loginHandler: function() {
+      //   fetch('/api/login', {
+      //     method: 'POST',
+      //     headers: {
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({
+      //       username: this.usernameInput,
+      //       password: this.passwordInput
+      //     })
+      //   })
+      //   .then(response => response.json())
+      //   .then(res => {
+      //     if(res.loginSuccess) {
+      //       alert('Login Berhasil')
+      //     } else {
+      //       alert('Login Gagal')
+      //     }
+      //   })
+      // }
     },
     beforeCreate() {
       document.title = 'Login | Team Cash Flow Management'

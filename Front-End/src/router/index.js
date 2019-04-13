@@ -15,6 +15,8 @@ let router = new Router({
         {
             path: '/login',
             component: Login
-        }]
+        }],
+  mode: "history"
 }
 )
+export default router
