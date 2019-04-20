@@ -40,7 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests().anyRequest().authenticated()
                 .and().httpBasic()
-                .and().sessionManagement().disable();
+                .and().sessionManagement().disable()
+                .formLogin().loginProcessingUrl("/api/login").defaultSuccessUrl("/success")
+                .and().logout().logoutUrl("/api/logout");
+         
     }
 
     @Bean

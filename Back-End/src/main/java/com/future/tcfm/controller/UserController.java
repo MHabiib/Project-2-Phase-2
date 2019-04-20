@@ -30,5 +30,6 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
         return userService.updateUser(id,user);
     }
+
 }
 

@@ -1,6 +1,5 @@
 package com.future.tcfm.model;
 
-import com.future.tcfm.model.list.Approver;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +17,13 @@ import java.util.List;
 public class Expense {
     @Id
     private String idExpense;
+    private String title;
     private String detail;
     private Double price;
     private List<User>contributorList;
-    private Long date;
     private List<User>approverList;
+    private Long createdDate;
+    private Long rejectedDate;
+    private Long approvedDate;
+    private Boolean status;
 }
