@@ -13,22 +13,5 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
-    UserService userService;
-
-    @GetMapping("/user")
-    public List<User> loadAll (){
-        return userService.loadAll();
-    }
-
-    @PostMapping("/user")
-    public ResponseEntity createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
-        return userService.updateUser(id,user);
-    }
 }
 

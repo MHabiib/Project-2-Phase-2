@@ -1,3 +1,4 @@
+/*
 package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.User;
@@ -58,6 +59,7 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }
 }
+*/
 
 /*    @Override
     public ResponseEntity<?> deleteUser(String id) {
