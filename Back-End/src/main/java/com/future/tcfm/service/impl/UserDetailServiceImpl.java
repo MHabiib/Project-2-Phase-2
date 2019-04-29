@@ -1,4 +1,4 @@
-package com.future.tcfm.service;
+package com.future.tcfm.service.impl;
 
 import com.future.tcfm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class UserDetailService implements UserDetailsService {
+public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository repository;
     @Override

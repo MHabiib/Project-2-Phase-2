@@ -1,6 +1,6 @@
 package com.future.tcfm.config.security;
 
-import com.future.tcfm.model.JwtUser;
+import com.future.tcfm.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
@@ -12,25 +12,23 @@ public class JwtValidator {
 
     private String secret = "futureProgram";
 
-    public JwtUser validate(String token) {
+    public User validate(String token) {
 
-        JwtUser jwtUser = null;
+        User user= null;
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
 
-            jwtUser = new JwtUser();
-
-            jwtUser.setUserName(body.getSubject());
-            jwtUser.setId(Long.parseLong((String) body.get("userId")));
-            jwtUser.setRole((String) body.get("role"));
+            user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null);
+            user.setEmail(body.getSubject());
+            user.setRole((String) body.get("role"));
         }
         catch (Exception e) {
             System.out.println(e);
         }
 
-        return jwtUser;
+        return user;
     }
 }

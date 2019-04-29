@@ -1,6 +1,6 @@
 package com.future.tcfm.config.security;
 
-import com.future.tcfm.model.JwtUser;
+import com.future.tcfm.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Component;
 public class JwtGenerator {
 
 
-    public String generate(JwtUser jwtUser) {
+    public String generate(User user) {
 
 
         Claims claims = Jwts.claims()
-                .setSubject(jwtUser.getUserName());
-        claims.put("userId", String.valueOf(jwtUser.getId()));
-        claims.put("role", jwtUser.getRole());
+                .setSubject(user.getEmail());
+        claims.put("role", user.getRole());
 
 
         return Jwts.builder()

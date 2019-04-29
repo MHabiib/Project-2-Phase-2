@@ -1,8 +1,8 @@
 package com.future.tcfm.config.security;
 
 import com.future.tcfm.model.JwtAuthenticationToken;
-import com.future.tcfm.model.JwtUser;
 import com.future.tcfm.model.JwtUserDetails;
+import com.future.tcfm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -31,15 +31,15 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
         JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
         String token = jwtAuthenticationToken.getToken();
 
-        JwtUser jwtUser = validator.validate(token);
+        User user = validator.validate(token);
 
-        if (jwtUser == null) {
+        if (user == null) {
             throw new RuntimeException("JWT Token is incorrect");
         }
 
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList(jwtUser.getRole());
-        return new JwtUserDetails(jwtUser.getUserName(), jwtUser.getId(),
+                .commaSeparatedStringToAuthorityList(user.getRole());
+        return new JwtUserDetails(user.getEmail(), user.getIdUser(),
                 token,
                 grantedAuthorities);
     }
