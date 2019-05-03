@@ -11,11 +11,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import sun.java2d.windows.GDIRenderer;
-
-import java.util.List;
-
-import static com.sun.prism.impl.Disposer.cleanUp;
 
 @Component
 public class DbSeeder {
@@ -109,7 +104,6 @@ public class DbSeeder {
             expense2.setApproverList(null);
             expense2.setDate(null);
             expenseRepository.save(expense2);
-
     }
     private void cleanUp() {
         userRepository.deleteAll();
