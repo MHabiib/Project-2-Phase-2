@@ -23,7 +23,7 @@ public class JwtValidator {
 
             user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null);
             user.setEmail(body.getSubject());
-            user.setRole((String) body.get("role"));
+            user.setPassword((String) body.get("password"));
         }
         catch (Exception e) {
             System.out.println(e);
