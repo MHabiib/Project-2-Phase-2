@@ -30,15 +30,15 @@
         let dataLogin = {
           email: this.emailInput,
           password: this.passwordInput
-        }
+        };
         this.axios
           .post('http://localhost:8088/token',dataLogin)
           .then((res) => {
 
-            let token = res.data
+            let token = res.data;
             this.$store.dispatch("login", token)
               .then(res => {
-                alert('Login Berhasil')
+                alert('Login Berhasil');
                 this.$router.push('/');
             })
           })
