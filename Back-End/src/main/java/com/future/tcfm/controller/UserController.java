@@ -29,5 +29,6 @@ public class UserController {
     public ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user) {
         return userService.updateUser(id,user);
     }
+
 }
 

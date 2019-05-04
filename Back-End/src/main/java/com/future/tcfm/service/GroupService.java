@@ -10,5 +10,5 @@ import java.util.List;
 public interface GroupService {
     List<Group> loadAll();
     ResponseEntity createGroup(Group group);
-    ResponseEntity updateGroup(@PathVariable("id") String id, @RequestBody Group group);
+    ResponseEntity updateGroup(String id,Group group);
 }

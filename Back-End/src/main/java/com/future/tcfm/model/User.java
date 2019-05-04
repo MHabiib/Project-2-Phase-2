@@ -30,5 +30,4 @@ public class User {
     private String rekening;
     private Double balance;
     private List<Map> periodPayed;
-
 }

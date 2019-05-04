@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +38,12 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setRegularPayment(group.getRegularPayment());
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setMember(group.getMember());
-        return new ResponseEntity<>(groupExist, HttpStatus.OK);
+        groupExist.setActive(group.getActive());
+        groupExist.setCreatedDate(new Date().getTime());
+        groupExist.setMember(group.getMember());
+        groupExist.setExpenseList(group.getExpenseList());
 
+
+        return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 }
