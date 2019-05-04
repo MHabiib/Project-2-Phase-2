@@ -17,10 +17,13 @@
          'logout'
        ]),
       hello() {
-        fetch('/api/hello',{
-          headers: {'Authorization': localStorage.getItem('token')}
+        fetch('http://localhost:8088/api/hello',{
+          method:'get',
+          dataType: 'jsonp',
+          crossDomain:true,
+          headers: new Headers({'Authorization': localStorage.getItem('token')})
         })
-          .then(response => console.log(response))
+          .then(response => console.log(response.json()))
       }
     }
   }
