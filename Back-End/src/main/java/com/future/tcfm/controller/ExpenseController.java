@@ -10,23 +10,23 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/expense")
 public class ExpenseController {
 
     @Autowired
     ExpenseService expenseService;
 
-    @GetMapping("/expense")
+    @GetMapping
     public List<Expense> loadAll (){
         return expenseService.loadAll();
     }
 
-    @PostMapping("/expense")
+    @PostMapping
     public ResponseEntity createExpense(@RequestBody Expense expense) {
         return expenseService.createExpense(expense);
     }
 
-    @PutMapping("/expense/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable("id") String id, @RequestBody Expense expense) {
         return expenseService.updateExpense(id,expense);
     }

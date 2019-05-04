@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './app'
-import Store from './store/store.js'
 import router from './router'
 import axios from 'axios'
+import store from './store/store'
 
 Object.defineProperties(Vue.prototype, {
   axios: {
@@ -19,6 +19,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  Store,
+  store,
   render: h => h(App)
 })

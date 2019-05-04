@@ -12,22 +12,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-
     @Autowired
     UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping
     public List<User> loadAll (){
         return userService.loadAll();
     }
 
-    @PostMapping("/user")
+    @PostMapping
     public ResponseEntity createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
+    @PutMapping("/{id}")
+    public ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user) {
         return userService.updateUser(id,user);
     }
 }

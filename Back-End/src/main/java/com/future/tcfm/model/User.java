@@ -26,6 +26,7 @@ public class User {
     private Boolean active;
     private String idGroup;
     private String rekening;
-    private double balance;
+    private Double balance;
     private List<Map> periodPayed;
+
 }

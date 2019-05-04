@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-        user.setBalance(0);//FOR HANDLING NOT NULL PARAMATER
+        user.setBalance((double) 0);//FOR HANDLING NOT NULL PARAMATER
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

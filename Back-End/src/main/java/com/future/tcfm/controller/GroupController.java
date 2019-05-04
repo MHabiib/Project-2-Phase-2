@@ -10,22 +10,22 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/group")
 public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @GetMapping("/group")
+    @GetMapping
     public List<Group> loadAll (){
         return groupService.loadAll();
     }
 
-    @PostMapping("/group")
+    @PostMapping
     public ResponseEntity createGroup(@RequestBody Group group) {
         return groupService.createGroup(group);
     }
 
-    @PutMapping("/group/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) {
         return groupService.updateGroup(id,group);
     }

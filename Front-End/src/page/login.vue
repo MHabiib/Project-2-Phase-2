@@ -7,7 +7,7 @@
       <form @submit="loginHandler">
 
         <div class="loginBody">
-          <input type="text" name="username" placeholder="Username" v-model="usernameInput" /><br />
+          <input type="text" name="email" placeholder="email" v-model="emailInput" /><br />
           <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
           <button @click.prevent="loginHandler">Go</button>
         </div>
@@ -21,32 +21,31 @@
   export default {
     data: function() {
       return {
-        usernameInput: '',
+        emailInput: '',
         passwordInput: ''
       }
     },
     methods: {
       loginHandler() {
         let dataLogin = {
-          username: this.usernameInput,
-          passwordInput: this.passwordInput
-        }
+          email: this.emailInput,
+          password: this.passwordInput
+        };
         this.axios
-          .post('http://localhost:8088/login',dataLogin)
+          .post('http://localhost:8088/token',dataLogin)
           .then((res) => {
-            if (res.loginSuccess) {
-              alert('Login Berhasil')
-              this.$router.push("/")
-            } else {
-              alert('Login Gagal')
-            }
+
+            let token = res.data;
+            this.$store.dispatch("login", token)
+              .then(res => {
+                alert('Login Berhasil');
+                this.$router.push('/');
+            })
           })
           .catch(e => {
-
-            if (e.response) {
-              console.log(e.message)
-            }
+            alert('Login Gagal')
           })
+
       }
 
 
@@ -59,7 +58,7 @@
       //       'Content-Type': 'application/json'
       //     },
       //     body: JSON.stringify({
-      //       username: this.usernameInput,
+      //       email: this.emailInput,
       //       password: this.passwordInput
       //     })
       //   })

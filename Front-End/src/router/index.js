@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import Home from '../page/home'
 import Login from '../page/login'
 
-Vue.use(Router)
-import store from '../store/store.js'
+Vue.use(Router);
+import Store from '../store/store.js'
 
 let router = new Router({
     routes: [
@@ -18,5 +18,5 @@ let router = new Router({
         }],
   mode: "history"
 }
-)
+);
 export default router
