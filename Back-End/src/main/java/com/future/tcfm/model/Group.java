@@ -25,4 +25,6 @@ public class Group {
     private double groupBalance;
     private List<Expense>expenseList;
     private List<User> member;
+//    private List<PaymentDetail> paymentDetail;
+    private Boolean active;
 }

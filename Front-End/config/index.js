@@ -19,6 +19,27 @@ module.exports = {
     "env": require('./dev.env'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:8088',
+        changeOrigin: true,
+        secure:false,
+        ws:true,
+        pathRewrite:{
+          '^/api':''
+        }
+      }
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8088',
+        changeOrigin: true,
+        secure:false,
+        ws:true,
+        pathRewrite:{
+          '^/api':''
+        }}
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

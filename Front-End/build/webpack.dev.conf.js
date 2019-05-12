@@ -27,6 +27,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
       ],
+
     },
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
@@ -39,11 +40,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       : false,
     publicPath: config.dev.assetsPublicPath,
     //proxy: config.dev.proxyTable,
-    proxy:{
-      'api':{
-        target:'http://localhost:8088',
-        ws:true,
-        changeOrigin:true
+    proxy: {
+      "/api": {
+        target: 'localhost:8088',
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true,
+        secure: false
       }
     },
     quiet: true, // necessary for FriendlyErrorsPlugin
