@@ -12,8 +12,6 @@ Object.defineProperties(Vue.prototype, {
   }
 })
 
-
-
 Vue.config.productionTip = false
 
 new Vue({

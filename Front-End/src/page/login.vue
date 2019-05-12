@@ -32,9 +32,8 @@
           password: this.passwordInput
         };
         this.axios
-          .post('http://localhost:8088/token',dataLogin)
+          .post('http://localhost:8088/token', dataLogin)
           .then((res) => {
-
             let token = res.data;
             this.$store.dispatch("login", token)
               .then(res => {
@@ -46,6 +45,17 @@
             alert('Login Gagal')
           })
 
+        // fetch('/token', {
+        //   method: 'POST',
+        //   headers: {
+        //     Accept: 'application/json',
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     email: this.emailInput,
+        //     password: this.passwordInput
+        //   })
+        // })
       }
 
 

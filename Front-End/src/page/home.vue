@@ -17,8 +17,11 @@
          'logout'
        ]),
       hello() {
-        fetch('/api/hello',{
-          headers: {'Authorization': localStorage.getItem('token')}
+        fetch('http://localhost:8088/api/hello', {
+          method: 'GET',
+          headers: {
+            'Authorization': localStorage.getItem('token')
+          }
         })
           .then(response => console.log(response))
       }
@@ -27,5 +30,5 @@
 </script>
 
 <style>
-    
+
 </style>

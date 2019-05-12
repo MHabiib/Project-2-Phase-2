@@ -1,4 +1,3 @@
-
 package com.future.tcfm.config;
 
 import com.future.tcfm.config.security.JwtAuthenticationEntryPoint;
@@ -26,9 +25,9 @@ import java.util.Collections;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
+
     @Autowired
     private JwtAuthenticationEntryPoint entryPoint;
 
@@ -52,17 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.csrf().disable()
                 .authorizeRequests().antMatchers("**/api/**").authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
-
     }
 }
  /*@Override
