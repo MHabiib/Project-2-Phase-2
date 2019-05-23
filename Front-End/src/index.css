@@ -1,0 +1,14 @@
+body {
+    margin: 0;
+    background-color: white;
+}
+
+:root {
+    --darkColor: #223254;
+    --lightColor: #F2F4F6;
+    --primary-0: #4C8BD2;
+    --primary-1: #A0C5EF;
+    --primary-2: #70A5E1;
+    --primary-3: #2D73C2;
+    --primary-4: #0C5AB2;
+}

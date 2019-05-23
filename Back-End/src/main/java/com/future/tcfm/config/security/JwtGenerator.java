@@ -8,15 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtGenerator {
-
-
     public String generate(User user) {
-
-
         Claims claims = Jwts.claims()
                 .setSubject(user.getEmail());
         claims.put("password", user.getPassword());
-
 
         return Jwts.builder()
                 .setClaims(claims)

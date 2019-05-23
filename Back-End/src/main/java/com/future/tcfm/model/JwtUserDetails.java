@@ -1,6 +1,5 @@
 package com.future.tcfm.model;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,9 +13,7 @@ public class JwtUserDetails implements UserDetails {
     private String id;
     private Collection<? extends GrantedAuthority> authorities;
 
-
     public JwtUserDetails(String email, String id, String token, List<GrantedAuthority> grantedAuthorities) {
-
         this.email = email;
         this.id = id;
         this.token= token;
@@ -58,18 +55,13 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 
-
     public String getUserName() {
         return email;
     }
-
     public String getToken() {
         return token;
     }
-
-
     public String getId() {
         return id;
     }
-
 }

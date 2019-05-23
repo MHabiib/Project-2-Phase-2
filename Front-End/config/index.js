@@ -5,17 +5,41 @@
 const path = require('path')
 
 module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8088',
+        ws: true,
+        changeOrigin: true
+      }
+    }
+  },
   dev: {
-
     // Paths
+    "env": require('./dev.env'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
         target: 'http://localhost:8088',
         changeOrigin: true,
+        secure:false,
+        ws:true,
+        pathRewrite:{
+          '^/api':''
         }
-      },
+      }
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8088',
+        changeOrigin: true,
+        secure:false,
+        ws:true,
+        pathRewrite:{
+          '^/api':''
+        }}
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -25,7 +49,6 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
     /**
      * Source Maps
      */
