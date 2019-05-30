@@ -26,6 +26,7 @@ public class TokenController {
 
     @PostMapping
     public String generate(@RequestBody final User user) {
+        System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
         if (userExist!=null)
             if (!passwordEncoder.matches(user.getPassword(),userExist.getPassword()))
