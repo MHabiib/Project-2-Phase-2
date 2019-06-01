@@ -22,16 +22,37 @@
 
           <div class="spacer" v-show="groupDetailExpand"></div>
 
-          <div class="menuChild" v-show="groupDetailExpand">
-            Overview
+          <div
+            class="menuChild"
+            v-show="groupDetailExpand"
+            :class='{ activeSmallMenu: isOverview }'
+            @click='changeView("/overview")'
+          >
+            <div :class='{litteSmallBlue: isOverview}'></div>
+            <div>Overview</div>
+            <div />
           </div>
 
-          <div class="menuChild" v-show="groupDetailExpand">
+          <div
+            class="menuChild"
+            v-show="groupDetailExpand"
+            :class='{ activeSmallMenu: isExpenses }'
+            @click='changeView("/expenses")'
+          >
+            <div :class='{litteSmallBlue: isExpenses}'></div>
             Expenses
+            <div />
           </div>
 
-          <div class="menuChild" v-show="groupDetailExpand">
+          <div
+            class="menuChild"
+            v-show="groupDetailExpand"
+            :class='{ activeSmallMenu: isMembers }'
+            @click='changeView("/members")'
+          >
+            <div :class='{litteSmallBlue: isMembers}'></div>
             Members
+            <div />
           </div>
         </div>
 
@@ -61,6 +82,9 @@
         groupDetailExpand: true,
         isDashboard: window.location.href === 'http://localhost:3000/dashboard',
         isPayment: window.location.href === 'http://localhost:3000/payment',
+        isOverview: window.location.href === 'http://localhost:3000/overview',
+        isExpenses: window.location.href === 'http://localhost:3000/expenses',
+        isMembers: window.location.href === 'http://localhost:3000/members',
       }
     },
     methods: {
@@ -119,9 +143,13 @@
   .menuChild {
     color: var(--darkColor);
     font-size: 14px;
-    padding: 12px 0;
-    width: 50px;
+    width: 100%;
+    text-align: center;
     margin: auto;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .activeMenu {
@@ -134,6 +162,7 @@
   }
 
   .logoutButton {
+    /* background-color: #FC1818; */
     background-color: var(--darkColor);
     text-align: center;
     color: var(--lightColor);
@@ -151,5 +180,15 @@
     width: 9px;
     position: absolute;
     margin-top: -17px;
+  }
+
+  .activeSmallMenu {
+    background-color: white;
+  }
+
+  .litteSmallBlue {
+    background-color: var(--primary-0);
+    height: 40px;
+    width: 7px;
   }
 </style>

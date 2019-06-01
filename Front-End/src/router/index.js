@@ -3,6 +3,9 @@ import Router from 'vue-router';
 import DashboardPage from '../page/Dashboard';
 import PaymentPage from '../page/Payment';
 import LoginPage from '../page/Login';
+import OverviewPage from '../page/Overview';
+import ExpensesPage from '../page/Expenses';
+import MembersPage from '../page/Members';
 import SidebarComponent from '../components/Sidebar';
 import HeaderSection from '../components/HeaderSection';
 import '../index.css';
@@ -30,6 +33,18 @@ export default new Router({
     {
       path: '/login',
       component: LoginPage
+    },
+    {
+      path: '/overview',
+      component: OverviewPage
+    },
+    {
+      path: '/expenses',
+      component: ExpensesPage
+    },
+    {
+      path: '/members',
+      component: MembersPage
     }
   ],
   mode: "history"

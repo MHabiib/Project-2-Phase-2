@@ -101,7 +101,7 @@
 
   .bodySection {
     display: flex;
-    padding-top: 30px;
+    padding-top: 10px;
     justify-content: space-between;
   }
 
