@@ -14,13 +14,14 @@ Vue.use(Router);
 Vue.component('SidebarComponent', SidebarComponent);
 Vue.component('HeaderSection', HeaderSection);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       redirect: to => { // Ini pakai function untuk nantinya ngecek udah login atau belum. Kalau udah balikin Dashboard, kalau belum balikin Login
         return '/login'
-      }
+      },
+      // meta: { requiresAuth: true }
     },
     {
       path: '/dashboard',
@@ -49,3 +50,24 @@ export default new Router({
   ],
   mode: "history"
 });
+
+// let isAuthenticated = false;
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (isAuthenticated) {
+//       next({
+//         path: '/login',
+//         query: {
+//           redirect: to.fullPath,
+//         },
+//       });
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// })
+
+export default router;

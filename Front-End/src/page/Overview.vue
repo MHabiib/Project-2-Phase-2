@@ -2,7 +2,7 @@
   <div class='overviewComponent'>
     <SidebarComponent />
 
-    <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
+    <div class='rightPanelOverview' :style="{ width: rightPanelWidth + 'px' }">
       <HeaderSection headerTitle='Overview'/>
 
       <div class='bodySection'>
@@ -298,7 +298,7 @@
 <style>
   .overviewComponent { display: flex; }
 
-  .rightPanel {
+  .rightPanelOverview {
     padding: 20px 20px 0 30px;
     box-sizing: border-box;
   }
@@ -307,7 +307,7 @@
 
   .bodySection {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 20px;
     display: flex;
   }
 
