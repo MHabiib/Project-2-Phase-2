@@ -11,4 +11,5 @@ public interface GroupService {
     List<Group> loadAll();
     ResponseEntity createGroup(Group group);
     ResponseEntity updateGroup(String id,Group group);
+    Group getGroup(String id);
 }

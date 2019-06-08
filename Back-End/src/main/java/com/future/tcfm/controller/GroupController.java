@@ -20,6 +20,11 @@ public class GroupController {
         return groupService.loadAll();
     }
 
+    @GetMapping("/{id}")
+    public Group getGroup(@PathVariable("id") String id) {
+        return groupService.getGroup(id);
+    }
+
     @PostMapping
     public ResponseEntity createGroup(@RequestBody Group group) {
         return groupService.createGroup(group);
