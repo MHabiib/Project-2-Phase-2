@@ -21,7 +21,7 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
-public class UserServiceImpl implements UserService e{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService e{
     @Override
     public ResponseEntity<?> createUser(User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
-        Group groupExist = groupRepository.findByName(user.getGroupName())
+        Group groupExist = groupRepository.findByName(user.getGroupName());
         if (userExist != null)
             return new ResponseEntity<>("Failed to save User!\nEmail already exists!", HttpStatus.BAD_REQUEST);
         if(user.getEmail()==null)
