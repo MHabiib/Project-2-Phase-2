@@ -14,6 +14,14 @@ Vue.use(Router);
 Vue.component('SidebarComponent', SidebarComponent);
 Vue.component('HeaderSection', HeaderSection);
 
+Vue.mixin({
+  data: function() {
+    return {
+      usernameGloballyStored: 'Global'
+    }
+  }
+})
+
 const router = new Router({
   routes: [
     {

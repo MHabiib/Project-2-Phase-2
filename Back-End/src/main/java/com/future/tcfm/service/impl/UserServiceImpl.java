@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public ResponseEntity<?> createUser(User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
         if (userExist != null)

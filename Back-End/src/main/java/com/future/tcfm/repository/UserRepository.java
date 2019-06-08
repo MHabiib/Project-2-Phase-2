@@ -6,9 +6,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface UserRepository extends MongoRepository<User, String> {
-    User findByEmail(String email);
     User findByIdUser(String id);
     //List<User> findAllByActive(Boolean bool);
-
+    User findByEmail(String email);
 }
 

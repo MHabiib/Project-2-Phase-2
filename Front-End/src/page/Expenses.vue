@@ -208,7 +208,7 @@
   }
 
   .expensesTableBody tbody {
-    height: 65vh;
+    height: 63vh;
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;

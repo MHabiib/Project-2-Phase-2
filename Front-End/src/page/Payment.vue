@@ -95,7 +95,7 @@
   }
 
   .rightPanel {
-    padding: 20px 30px;
+    padding: 20px 30px 0 30px;
     box-sizing: border-box;
   }
 

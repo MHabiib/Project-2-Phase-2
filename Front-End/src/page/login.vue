@@ -35,13 +35,14 @@
 
         this.axios
           .post('http://localhost:8088/token', dataLogin)
-          .then((res) => {
+          .then(res => {
             let token = res.data;
-            this.$store.dispatch("login", token)
-              .then(res => {
-                alert('Login Berhasil');
-                this.$router.push('/dashboard');
-            })
+            this.$store.dispatch("login", token);
+            localStorage.setItem("userEmail", this.emailInput);
+          })
+          .then(()=> {
+            alert('Login Berhasil');
+            this.$router.push('/dashboard');
           })
           .catch(e => {
             alert('Login Gagal')
@@ -52,13 +53,10 @@
 </script>
 
 <style>
-  body {
+  .loginWrapper {
     background-color: #F2F4F6;
     font-family: 'Helvetica Neue';
-  }
-
-  .loginWrapper {
-    height: 90vh;
+    height: 100vh;
     display: flex;
   }
 

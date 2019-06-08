@@ -393,7 +393,7 @@
     position: relative;
     top: -30px;
     padding-top: 40px;
-    height: 430px;
+    height: 405px;
     box-sizing: border-box;
     line-height: 35px;
     text-align: center;
@@ -409,7 +409,7 @@
   }
 
   .overviewLeftLowerBody tbody {
-    height: 350px;
+    height: 330px;
     overflow-y: auto;
     overflow-x: hidden;
     margin: auto;
@@ -482,7 +482,7 @@
     position: relative;
     top: -30px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
-    height: 415px;
+    height: 390px;
     box-sizing: border-box;
     margin-bottom: 0;
     overflow: auto;

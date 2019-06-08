@@ -190,6 +190,17 @@
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
       }
+    },
+    created() {
+      console.log(localStorage.getItem('userEmail'));
+      console.log(localStorage.getItem('token'));
+      fetch(`http://localhost:8088/api/user/email?email=${localStorage.getItem('userEmail')}`, {
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      })
+      .then(response => response.json())
+      .then(res => {console.log(res);})
     }
   }
 </script>
@@ -302,8 +313,8 @@
     display: flex;
     justify-content: space-between;
     height: 115px;
-    margin-top: 30px;
-    margin-bottom: 60px;
+    margin-top: 12px;
+    margin-bottom: 47px;
   }
 
   .secondRowCardContainer {
