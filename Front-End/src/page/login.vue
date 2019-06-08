@@ -37,8 +37,9 @@
           .post('http://localhost:8088/token', dataLogin)
           .then(res => {
             let token = res.data;
-            this.$store.dispatch("login", token);
-            localStorage.setItem("userEmail", this.emailInput);
+            // this.$store.dispatch("login", token);
+            localStorage.setItem('token', `Token ${token}`);
+            localStorage.setItem('userEmail', this.emailInput);
           })
           .then(()=> {
             alert('Login Berhasil');

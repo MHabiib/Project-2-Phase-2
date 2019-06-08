@@ -58,7 +58,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp 3.000.000
+                Rp {{groupData.groupBalance}}
               </div>
             </div>
 
@@ -156,51 +156,42 @@
         </div>
       </div>
     </div>
-
-    <!-- <button @click.prevent="hello">Tes Hello</button> -->
   </div>
 </template>
 
 <script>
   export default {
-    // data: function() {
-    //   return {
-
-    //   }
-    // },
-    methods : {
-      // hello() {
-      //   fetch('http://localhost:8088/api/hello',{
-      //     headers: {'Authorization': localStorage.getItem('token')}
-      //   })
-      //   .then(response => {
-      //     response.json().then(
-      //       res => {
-      //         if(response.status === 500) {
-      //           this.$router.push('/login')
-      //         } else {
-      //           console.log(res);
-      //         }
-      //       }
-      //     )
-      //   })
-      // }
+    data: function() {
+      return {
+        userData: {},
+        groupData: {}
+      }
     },
+    // methods : {
+
+    // },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
       }
     },
     created() {
-      console.log(localStorage.getItem('userEmail'));
-      console.log(localStorage.getItem('token'));
       fetch(`http://localhost:8088/api/user/email?email=${localStorage.getItem('userEmail')}`, {
         headers: {
           'Authorization': localStorage.getItem('token')
         }
       })
       .then(response => response.json())
-      .then(res => {console.log(res);})
+      .then(res => {this.userData = res;})
+      .then(()=> {
+        fetch(`http://localhost:8088/api/group/${this.userData.idGroup}`, {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
+        })
+        .then(response => response.json())
+        .then(res => {this.groupData = res;})
+      })
     }
   }
 </script>
