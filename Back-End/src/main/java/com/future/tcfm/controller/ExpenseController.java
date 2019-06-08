@@ -2,6 +2,7 @@ package com.future.tcfm.controller;
 
 import com.future.tcfm.model.Expense;
 import com.future.tcfm.service.ExpenseService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@NoArgsConstructor
 @RequestMapping("/api/expense")
 public class ExpenseController {
 

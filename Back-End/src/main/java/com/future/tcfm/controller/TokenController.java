@@ -4,6 +4,7 @@ import com.future.tcfm.config.security.JwtGenerator;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 

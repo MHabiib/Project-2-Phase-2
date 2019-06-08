@@ -1,3 +1,4 @@
+/*
 package com.future.tcfm.seeder;
 
 import com.future.tcfm.model.Expense;
@@ -47,6 +48,7 @@ public class DbSeeder {
         user1.setActive(true);
         user1.setJoinDate((long) 1);
         user1.setLeaveDate(null);
+        user1.setGroupName("LOA");
         user1.setRekening("Rekening");
         user1.setPeriodPayed(null);
         userRepository.save(user1);
@@ -61,6 +63,7 @@ public class DbSeeder {
         user2.setActive(true);
         user2.setJoinDate((long) 1);
         user2.setLeaveDate(null);
+        user2.setGroupName("BDZ");
         user2.setRekening("Rekening");
         user2.setPeriodPayed(null);
         userRepository.save(user2);
@@ -106,3 +109,4 @@ public class DbSeeder {
     }
 
 }
+*/

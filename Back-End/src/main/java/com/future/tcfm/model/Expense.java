@@ -26,4 +26,7 @@ public class Expense {
     private Long rejectedDate;
     private Long approvedDate;
     private Boolean status;
+
+    public void setDate(Object o) {
+    }
 }

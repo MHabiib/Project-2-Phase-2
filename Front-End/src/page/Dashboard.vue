@@ -7,7 +7,7 @@
 
       <div class='dashboardFirstRow'>
         <div class='cardStyleOne'>
-          <div class='cardStyleOneHeader'>
+          <div class  ='cardStyleOneHeader'>
 
           </div>
 
