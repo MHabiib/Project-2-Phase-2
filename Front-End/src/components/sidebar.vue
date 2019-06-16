@@ -16,7 +16,7 @@
 
         <div class="menuParent">
           <div class="menuWrapper" @click="groupDetailExpand = !groupDetailExpand">
-            <img src="../assets/invoice-icon.png" alt="Dashboard" class='menuIcon'>
+            <img src="../assets/detail-icon.png" alt="Dashboard" class='menuIcon'>
             Group Detail
           </div>
 
@@ -66,7 +66,7 @@
 
         <div class="menuParent">
           <div class="menuWrapper" @click="managementExpand = !managementExpand">
-            <img src="../assets/invoice-icon.png" alt="Dashboard" class='menuIcon'>
+            <img src="../assets/management-icon.png" alt="Dashboard" class='menuIcon'>
             Management
           </div>
 
