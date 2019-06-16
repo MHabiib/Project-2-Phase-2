@@ -21,7 +21,7 @@ public class JwtValidator {
                     .parseClaimsJws(token)
                     .getBody();
 
-            user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null);
+            user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null);
             user.setEmail(body.getSubject());
             user.setPassword((String) body.get("password"));
         }

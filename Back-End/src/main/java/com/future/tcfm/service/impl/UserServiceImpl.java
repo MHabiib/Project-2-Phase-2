@@ -1,5 +1,6 @@
 package com.future.tcfm.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
 import com.future.tcfm.model.list.Members;
@@ -14,14 +15,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
+    public static String UPLOADED_FOLDER="D:\\Blibli_Futureprogram\\Fase2\\Project\\TCFM\\asset\\img\\";
 
     @Autowired
     UserRepository userRepository;
@@ -41,6 +50,27 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+
+    public static void saveUploadedFile(MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Files.write(path, bytes);
+        }
+    }
+
+    public static boolean checkImageFile(MultipartFile file) {
+        if (file != null) {
+            String fileName = file.getOriginalFilename();
+            if (StringUtils.isEmpty(fileName)) {
+                return false;
+            }
+            if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/bmp")) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public ResponseEntity<?> createUser(User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
@@ -48,7 +78,7 @@ public class UserServiceImpl implements UserService {
         if (userExist != null)
             return new ResponseEntity<>("Failed to save User!\nEmail already exists!", HttpStatus.BAD_REQUEST);
         if(user.getEmail()==null)
-            return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to save User!\nEmail can't be null!", HttpStatus.BAD_REQUEST);
         if (groupExist == null)
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         if(user.getGroupName()==null)
@@ -59,10 +89,72 @@ public class UserServiceImpl implements UserService {
                 new Update().set("sections.$.name", "Hi there"),
                 Collection.class
         );*/
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setBalance((double) 0);//FOR HANDLING NOT NULL PARAMATER
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity updateUserV2(String id, String userJSONString, MultipartFile file) throws IOException {
+        User user  = new ObjectMapper().readValue(userJSONString, User.class);
+        User userExist = userRepository.findByIdUser(id);
+        if(userExist==null){
+            return new ResponseEntity("Username not found!", HttpStatus.NOT_FOUND);
+        }
+        if(checkImageFile(file)){
+            try{
+                if(userExist.getImagePath()!=null) {
+                    Path deletePath = Paths.get(UPLOADED_FOLDER + userExist.getImagePath());
+                    Files.delete(deletePath);
+                }
+                saveUploadedFile(file);
+                userExist.setImagePath(file.getOriginalFilename());
+            }catch (IOException e){
+                return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
+            }
+        }
+        if(userExist.getGroupName()!=user.getGroupName())
+            userExist.setJoinDate(new Date().getTime());
+        userExist.setGroupName(user.getGroupName());
+        userExist.setEmail(user.getEmail());
+        userExist.setName(user.getName());
+        userExist.setPhone(user.getPhone());
+        userExist.setPassword(user.getPassword());
+        userExist.setRole(user.getRole());
+        userExist.setBalance(user.getBalance());
+        userExist.setPeriodPayed(user.getPeriodPayed());
+        userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        userRepository.save(userExist);
+        return new ResponseEntity(userExist,HttpStatus.OK);
+    }
+
+
+    @Override
+    public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
+        User user  = new ObjectMapper().readValue(userJSONString, User.class);
+        User userExist = userRepository.findByEmail(user.getEmail());
+        Group groupExist = groupRepository.findByName(user.getGroupName());
+        if(userExist!=null){
+            return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
+        }
+        if (groupExist == null){
+            return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
+        }
+        if(checkImageFile(file)){
+            try{
+                saveUploadedFile(file);
+                user.setImagePath(file.getOriginalFilename());
+            }catch (IOException e){
+                return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
+            }
+        }
+        user.setJoinDate(new Date().getTime());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        user.setActive(true);
+        userRepository.save(user);
+        return new ResponseEntity("Succeed to create user!",HttpStatus.OK);
     }
 
     @Override
@@ -74,12 +166,16 @@ public class UserServiceImpl implements UserService {
             if(userRepository.findByEmail(user.getEmail())!=null)
                 return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST); ;
         }
+        if(userExist.getGroupName()!=user.getGroupName())
+            userExist.setJoinDate(new Date().getTime());
+        userExist.setGroupName(user.getGroupName());
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
         userExist.setRole(user.getRole());
         userExist.setBalance(user.getBalance());
+        userExist.setPeriodPayed(user.getPeriodPayed());
         userRepository.save(userExist);
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }
