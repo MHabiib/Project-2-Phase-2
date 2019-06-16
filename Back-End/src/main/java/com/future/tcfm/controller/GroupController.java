@@ -20,9 +20,9 @@ public class GroupController {
         return groupService.loadAll();
     }
 
-    @GetMapping("/{id}")
-    public Group getGroup(@PathVariable("id") String id) {
-        return groupService.getGroup(id);
+    @GetMapping("/{groupName}")
+    public Group getGroup(@PathVariable("groupName") String groupName) {
+        return groupService.getGroup(groupName);
     }
 
     @PostMapping

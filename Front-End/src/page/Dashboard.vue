@@ -58,7 +58,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp {{groupData.groupBalance}}
+                Rp {{groupData.groupBalance | thousandSeparators}}
               </div>
             </div>
 
@@ -80,7 +80,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                35
+                {{groupData.member.length}}
               </div>
             </div>
 
@@ -167,9 +167,21 @@
         groupData: {}
       }
     },
-    // methods : {
-
-    // },
+    filters : {
+      thousandSeparators: function(numbers) {
+        let result = '';
+        let counter = 0;
+        for (let i = numbers.toString().length ; i >= 0 ; i--){
+            if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
+                result = '.' + numbers.toString().substr(i, 1) + result;
+            } else {
+                result = numbers.toString().substr(i, 1) + result;
+            }
+            counter += 1;
+        }
+        return result
+      }
+    },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
@@ -184,7 +196,7 @@
       .then(response => response.json())
       .then(res => {this.userData = res;})
       .then(()=> {
-        fetch(`http://localhost:8088/api/group/${this.userData.idGroup}`, {
+        fetch(`http://localhost:8088/api/group/${this.userData.groupName}`, {
           headers: {
             Authorization: localStorage.getItem('token')
           }

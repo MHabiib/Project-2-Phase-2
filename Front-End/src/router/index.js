@@ -6,6 +6,8 @@ import LoginPage from '../page/Login';
 import OverviewPage from '../page/Overview';
 import ExpensesPage from '../page/Expenses';
 import MembersPage from '../page/Members';
+import ManageUserPage from '../page/ManageUser';
+import ManageGroupPage from '../page/ManageGroup';
 import SidebarComponent from '../components/Sidebar';
 import HeaderSection from '../components/HeaderSection';
 import '../index.css';
@@ -54,6 +56,14 @@ const router = new Router({
     {
       path: '/members',
       component: MembersPage
+    },
+    {
+      path: '/manage-user',
+      component: ManageUserPage
+    },
+    {
+      path: '/manage-group',
+      component: ManageGroupPage
     }
   ],
   mode: "history"

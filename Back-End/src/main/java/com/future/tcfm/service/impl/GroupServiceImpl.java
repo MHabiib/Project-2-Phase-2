@@ -46,7 +46,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group getGroup(String id) {
-        return groupRepository.findByIdGroup(id);
+    public Group getGroup(String groupName) {
+        return groupRepository.findByName(groupName);
     }
 }

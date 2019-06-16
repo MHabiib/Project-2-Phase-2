@@ -63,6 +63,37 @@
             Payment
           </div>
         </div>
+
+        <div class="menuParent">
+          <div class="menuWrapper" @click="managementExpand = !managementExpand">
+            <img src="../assets/invoice-icon.png" alt="Dashboard" class='menuIcon'>
+            Management
+          </div>
+
+          <div class="spacer" v-show="managementExpand"></div>
+
+          <div
+            class="menuChild"
+            v-show="managementExpand"
+            :class='{ activeSmallMenu: isManageUser }'
+            @click='changeView("/manage-user")'
+          >
+            <div :class='{litteSmallBlue: isManageUser}'></div>
+            <div>User</div>
+            <div />
+          </div>
+
+          <div
+            class="menuChild"
+            v-show="managementExpand"
+            :class='{ activeSmallMenu: isManageGroup }'
+            @click='changeView("/manage-group")'
+          >
+            <div :class='{litteSmallBlue: isManageGroup}'></div>
+            Group
+            <div />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -80,11 +111,14 @@
     data() {
       return {
         groupDetailExpand: true,
+        managementExpand: true,
         isDashboard: window.location.href === 'http://localhost:3000/dashboard',
         isPayment: window.location.href === 'http://localhost:3000/payment',
         isOverview: window.location.href === 'http://localhost:3000/overview',
         isExpenses: window.location.href === 'http://localhost:3000/expenses',
         isMembers: window.location.href === 'http://localhost:3000/members',
+        isManageGroup: window.location.href === 'http://localhost:3000/manage-group',
+        isManageUser: window.location.href === 'http://localhost:3000/manage-user',
       }
     },
     methods: {
