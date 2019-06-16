@@ -26,7 +26,7 @@ public class User {
     private Long joinDate;
     private Long leaveDate;
     private Boolean active;
-    private String idGroup;
+    private String groupName;
     private String rekening;
     private Double balance;
     private List<Map> periodPayed;

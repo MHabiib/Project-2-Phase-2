@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     UserService userService;
@@ -18,6 +18,11 @@ public class UserController {
     @GetMapping
     public List<User> loadAll (){
         return userService.loadAll();
+    }
+
+    @GetMapping("/email")
+    public User getUser(@RequestParam("email") String email) {
+        return userService.getUser(email);
     }
 
     @PostMapping

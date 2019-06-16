@@ -4,20 +4,21 @@
       <div class="loginTitle">
         Login
       </div>
-      <form @submit="loginHandler">
 
+      <form @submit="loginHandler">
         <div class="loginBody">
-          <input type="text" name="email" placeholder="email" v-model="emailInput" /><br />
+          <input type="text" name="email" placeholder="Email" v-model="emailInput" /><br />
           <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
           <button @click.prevent="loginHandler">Go</button>
         </div>
-
       </form>
     </div>
   </div>
 </template>
 
 <script>
+  document.title = 'Login | Team Cash Flow Management';
+
   export default {
     data: function() {
       return {
@@ -31,71 +32,32 @@
           email: this.emailInput,
           password: this.passwordInput
         };
+
         this.axios
           .post('http://localhost:8088/token', dataLogin)
-          .then((res) => {
+          .then(res => {
             let token = res.data;
-            this.$store.dispatch("login", token)
-              .then(res => {
-                alert('Login Berhasil');
-                this.$router.push('/');
-            })
+            // this.$store.dispatch("login", token);
+            localStorage.setItem('token', `Token ${token}`);
+            localStorage.setItem('userEmail', this.emailInput);
+          })
+          .then(()=> {
+            alert('Login Berhasil');
+            this.$router.push('/dashboard');
           })
           .catch(e => {
             alert('Login Gagal')
           })
-
-        // fetch('/token', {
-        //   method: 'POST',
-        //   headers: {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     email: this.emailInput,
-        //     password: this.passwordInput
-        //   })
-        // })
       }
-
-
-
-        // loginHandler: function() {
-      //   fetch('/api/login', {
-      //     method: 'POST',
-      //     headers: {
-      //       Accept: 'application/json',
-      //       'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({
-      //       email: this.emailInput,
-      //       password: this.passwordInput
-      //     })
-      //   })
-      //   .then(response => response.json())
-      //   .then(res => {
-      //     if(res.loginSuccess) {
-      //       alert('Login Berhasil')
-      //     } else {
-      //       alert('Login Gagal')
-      //     }
-      //   })
-      // }
-    },
-    beforeCreate() {
-      document.title = 'Login | Team Cash Flow Management'
     }
   }
 </script>
 
 <style>
-  body {
+  .loginWrapper {
     background-color: #F2F4F6;
     font-family: 'Helvetica Neue';
-  }
-
-  .loginWrapper {
-    height: 90vh;
+    height: 100vh;
     display: flex;
   }
 

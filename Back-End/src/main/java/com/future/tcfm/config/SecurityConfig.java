@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint entryPoint;
 
-    @Bean
+/*    @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration cors = new CorsConfiguration();
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         cors.addAllowedMethod("*");
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", cors);
         return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
+    }*/
     @Bean
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(Collections.singletonList(authenticationProvider));

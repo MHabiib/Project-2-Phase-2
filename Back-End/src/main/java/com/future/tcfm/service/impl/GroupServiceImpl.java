@@ -42,8 +42,11 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setCreatedDate(new Date().getTime());
         groupExist.setMember(group.getMember());
         groupExist.setExpenseList(group.getExpenseList());
-
-
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
+    }
+
+    @Override
+    public Group getGroup(String id) {
+        return groupRepository.findByIdGroup(id);
     }
 }

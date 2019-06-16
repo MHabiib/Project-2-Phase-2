@@ -9,6 +9,7 @@ const LOGOUT = "LOGOUT";
 const state =  {
   isLoggedIn: !!localStorage.getItem("token")
 }
+
 const mutations =  {
   [LOGIN] (state) {
     state.pending = true;

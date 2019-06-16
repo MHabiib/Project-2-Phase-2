@@ -1,22 +1,81 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '../page/home'
-import Login from '../page/login'
+import Vue from 'vue';
+import Router from 'vue-router';
+import DashboardPage from '../page/Dashboard';
+import PaymentPage from '../page/Payment';
+import LoginPage from '../page/Login';
+import OverviewPage from '../page/Overview';
+import ExpensesPage from '../page/Expenses';
+import MembersPage from '../page/Members';
+import SidebarComponent from '../components/Sidebar';
+import HeaderSection from '../components/HeaderSection';
+import '../index.css';
 
 Vue.use(Router);
-import Store from '../store/store.js'
+Vue.component('SidebarComponent', SidebarComponent);
+Vue.component('HeaderSection', HeaderSection);
 
-let router = new Router({
-    routes: [
-        {
-            path: '/',
-            component: Home
-        },
-        {
-            path: '/login',
-            component: Login
-        }],
+Vue.mixin({
+  data: function() {
+    return {
+      usernameGloballyStored: 'Global'
+    }
+  }
+})
+
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      redirect: to => { // Ini pakai function untuk nantinya ngecek udah login atau belum. Kalau udah balikin Dashboard, kalau belum balikin Login
+        return '/login'
+      },
+      // meta: { requiresAuth: true }
+    },
+    {
+      path: '/dashboard',
+      component: DashboardPage
+    },
+    {
+      path: '/payment',
+      component: PaymentPage
+    },
+    {
+      path: '/login',
+      component: LoginPage
+    },
+    {
+      path: '/overview',
+      component: OverviewPage
+    },
+    {
+      path: '/expenses',
+      component: ExpensesPage
+    },
+    {
+      path: '/members',
+      component: MembersPage
+    }
+  ],
   mode: "history"
-}
-);
-export default router
+});
+
+// let isAuthenticated = false;
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (isAuthenticated) {
+//       next({
+//         path: '/login',
+//         query: {
+//           redirect: to.fullPath,
+//         },
+//       });
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// })
+
+export default router;
