@@ -305,10 +305,15 @@
 
   .overviewLeftSection, .overviewRightSection { width: 50%; }
 
-  .bodySection {
+  .overviewComponent .overviewLeftSection {
+    height: 10vh;
+  }
+
+  .overviewComponent .bodySection {
     width: 100%;
     margin-top: 20px;
     display: flex;
+    height: 10vh;
   }
 
   .overviewLeftUpper {

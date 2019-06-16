@@ -58,7 +58,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp {{groupData.groupBalance | thousandSeparators}}
+                Rp {{dashboardData.groupBalance | thousandSeparators}}
               </div>
             </div>
 
@@ -80,7 +80,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                {{groupData.member.length}}
+                {{dashboardData.totalMembers}}
               </div>
             </div>
 
@@ -102,7 +102,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp 300.000
+                Rp {{dashboardData.pendingPayment | thousandSeparators}}
               </div>
             </div>
 
@@ -124,7 +124,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp 217.390
+                Rp {{dashboardData.yourContribution | thousandSeparators}}
               </div>
             </div>
 
@@ -163,23 +163,26 @@
   export default {
     data: function() {
       return {
-        userData: {},
-        groupData: {}
+        dashboardData: {}
       }
     },
     filters : {
       thousandSeparators: function(numbers) {
-        let result = '';
-        let counter = 0;
-        for (let i = numbers.toString().length ; i >= 0 ; i--){
-            if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
-                result = '.' + numbers.toString().substr(i, 1) + result;
-            } else {
-                result = numbers.toString().substr(i, 1) + result;
-            }
-            counter += 1;
+        if(numbers === undefined) {
+          return '';
+        } else {
+          let result = '';
+          let counter = 0;
+          for (let i = numbers.toString().length ; i >= 0 ; i--){
+              if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
+                  result = '.' + numbers.toString().substr(i, 1) + result;
+              } else {
+                  result = numbers.toString().substr(i, 1) + result;
+              }
+              counter += 1;
+          }
+          return result;
         }
-        return result
       }
     },
     computed: {
@@ -188,22 +191,13 @@
       }
     },
     created() {
-      fetch(`http://localhost:8088/api/user/email?email=${localStorage.getItem('userEmail')}`, {
+      fetch(`http://localhost:8088/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
         headers: {
           'Authorization': localStorage.getItem('token')
         }
       })
       .then(response => response.json())
-      .then(res => {this.userData = res;})
-      .then(()=> {
-        fetch(`http://localhost:8088/api/group/${this.userData.groupName}`, {
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
-        })
-        .then(response => response.json())
-        .then(res => {this.groupData = res;})
-      })
+      .then(res => {this.dashboardData = res;})
     }
   }
 </script>
