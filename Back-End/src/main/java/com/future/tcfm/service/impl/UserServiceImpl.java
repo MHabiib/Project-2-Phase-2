@@ -51,10 +51,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public static void saveUploadedFile(MultipartFile file) throws IOException {
+    public static void saveUploadedFile(MultipartFile file,String fileName) throws IOException {
         if (!file.isEmpty()) {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Path path = Paths.get(UPLOADED_FOLDER + fileName);
             Files.write(path, bytes);
         }
     }
@@ -109,8 +109,9 @@ public class UserServiceImpl implements UserService {
                     Path deletePath = Paths.get(UPLOADED_FOLDER + userExist.getImagePath());
                     Files.delete(deletePath);
                 }
-                saveUploadedFile(file);
-                userExist.setImagePath(file.getOriginalFilename());
+                String fileName=userExist.getEmail()+"_"+file.getOriginalFilename();
+                saveUploadedFile(file,fileName);
+                userExist.setImagePath(fileName);
             }catch (IOException e){
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
@@ -144,8 +145,9 @@ public class UserServiceImpl implements UserService {
         }
         if(checkImageFile(file)){
             try{
-                saveUploadedFile(file);
-                user.setImagePath(file.getOriginalFilename());
+                String fileName=userExist.getEmail()+"_"+file.getOriginalFilename();
+                saveUploadedFile(file,fileName);
+                user.setImagePath(fileName);
             }catch (IOException e){
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
