@@ -9,5 +9,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByIdUser(String id);
     //List<User> findAllByActive(Boolean bool);
     User findByEmail(String email);
+    Integer countByGroupName(String groupName);
 }
 

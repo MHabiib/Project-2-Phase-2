@@ -15,6 +15,10 @@ public class Dashboard {
     private int totalMembers;
     private double pendingPayment;
     private double yourContribution;
+    private double totalExpenseByValue;
+    //yourPayment
+    //totalExpenseByQuantity
+
 
     public double getGroupBalance() {
         return groupBalance;
@@ -46,5 +50,13 @@ public class Dashboard {
 
     public void setYourContribution(double yourContribution) {
         this.yourContribution = yourContribution;
+    }
+
+    public double getTotalExpenseByValue() {
+        return totalExpenseByValue;
+    }
+
+    public void setTotalExpenseByValue(double totalExpenseByValue) {
+        this.totalExpenseByValue = totalExpenseByValue;
     }
 }

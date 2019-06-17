@@ -17,6 +17,7 @@ import java.util.List;
 public class Expense {
     @Id
     private String idExpense;
+    private String groupName;
     private String title;
     private String detail;
     private Double price;

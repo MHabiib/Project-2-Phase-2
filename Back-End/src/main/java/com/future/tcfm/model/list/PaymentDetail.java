@@ -7,8 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class PeriodPayed {
+public class PaymentDetail {
     private String month;
     private String year;
-    private Boolean payed;
 }

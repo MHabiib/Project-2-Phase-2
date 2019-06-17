@@ -1,5 +1,6 @@
 package com.future.tcfm.model;
 
+import com.future.tcfm.model.list.PaymentDetail;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,6 @@ public class User {
     private String groupName;
     private String rekening;
     private Double balance;
-    private List<Map<String, Boolean>> periodPayed;
+    private List<PaymentDetail> periodPayed;
     private String imagePath;
 }

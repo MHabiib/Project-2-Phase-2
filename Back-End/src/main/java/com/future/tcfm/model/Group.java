@@ -1,6 +1,5 @@
 package com.future.tcfm.model;
 
-import com.future.tcfm.model.detail.PaymentDetail;
 import com.future.tcfm.model.list.Members;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +22,10 @@ public class Group {
     private Double regularPayment;
     private Long createdDate;
     private Long closedDate;
-    private double groupBalance;
-    private List<Expense>expenseList;
-    private List<Members> member;
+    private Double groupBalance;
+    private Double totalExpense;
+//    private List<Expense>expenseList;
+//    private List<Members> member;
 //    private List<PaymentDetail> paymentDetail;
     private Boolean active;
 }
