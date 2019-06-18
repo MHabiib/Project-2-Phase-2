@@ -30,7 +30,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static String UPLOADED_FOLDER="D:\\Blibli_Futureprogram\\Fase2\\Project\\TCFM\\asset\\img\\";
+    public static String UPLOADED_FOLDER="D:\\Blibli_Futureprogram\\Fase2\\Project\\TCFM\\asset\\img\\";
 
     @Autowired
     UserRepository userRepository;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private static void saveUploadedFile(MultipartFile file) throws IOException {
+    public static void saveUploadedFile(MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private static boolean checkImageFile(MultipartFile file) {
+    public static boolean checkImageFile(MultipartFile file) {
         if (file != null) {
             String fileName = file.getOriginalFilename();
             if (StringUtils.isEmpty(fileName)) {
@@ -75,25 +75,20 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> createUser(User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
         Group groupExist = groupRepository.findByName(user.getGroupName());
-
-
         if (userExist != null)
             return new ResponseEntity<>("Failed to save User!\nEmail already exists!", HttpStatus.BAD_REQUEST);
         if(user.getEmail()==null)
             return new ResponseEntity<>("Failed to save User!\nEmail can't be null!", HttpStatus.BAD_REQUEST);
-
-        if(user.getRole().equals("SUPER_ADMIN")){
-            user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-            user.setBalance((double) 0);//FOR HANDLING NOT NULL PARAMATER
-            userRepository.save(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
         if (groupExist == null)
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         if(user.getGroupName()==null)
             return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
-        if(!groupExist.getActive())
-            return new ResponseEntity<>("Failed to save User!\nGroup not Active!", HttpStatus.BAD_REQUEST);
+/*
+        WriteResult wr = mongoTemplate.updateMulti(
+                new Query(where("sections.sectionId").is("56cc3c908f5e6c56e677bd2e")),
+                new Update().set("sections.$.name", "Hi there"),
+                Collection.class
+        );*/
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setBalance((double) 0);//FOR HANDLING NOT NULL PARAMATER
@@ -144,22 +139,7 @@ public class UserServiceImpl implements UserService {
         if(userExist!=null){
             return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
         }
-        if(user.getRole().equals("SUPER_ADMIN")){
-            if(checkImageFile(file)){
-                try{
-                    saveUploadedFile(file);
-                    user.setImagePath(file.getOriginalFilename());
-                }catch (IOException e){
-                    return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
-                }
-            }
-            user.setJoinDate(new Date().getTime());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-            user.setActive(true);
-            userRepository.save(user);
-            return new ResponseEntity("Succeed to create user!",HttpStatus.OK);
-        }
-        if (groupExist == null ){
+        if (groupExist == null){
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         }
         if(checkImageFile(file)){
@@ -200,14 +180,6 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(userExist, HttpStatus.OK);
     }
 }
-
-/*
-        WriteResult wr = mongoTemplate.updateMulti(
-                new Query(where("sections.sectionId").is("56cc3c908f5e6c56e677bd2e")),
-                new Update().set("sections.$.name", "Hi there"),
-                Collection.class
-        );*/
-
 
 /*    @Override
     public ResponseEntity<?> deleteUser(String id) {
