@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/notification")
 public class NotificationController {
-    @Autowired
+//    @Autowired
     NotificationService notificationService;
 
 }

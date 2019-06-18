@@ -30,7 +30,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
-    public static String UPLOADED_FOLDER="D:\\Blibli_Futureprogram\\Fase2\\Project\\TCFM\\asset\\img\\";
+    public static String UPLOADED_FOLDER="..\\asset\\img\\";
 
     @Autowired
     UserRepository userRepository;
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
         }
         if(checkImageFile(file)){
             try{
-                String fileName=userExist.getEmail()+"_"+file.getOriginalFilename();
+                String fileName=user.getEmail()+"_"+file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 user.setImagePath(fileName);
             }catch (IOException e){

@@ -37,11 +37,8 @@ public class GroupServiceImpl implements GroupService {
             return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
         groupExist.setRegularPayment(group.getRegularPayment());
         groupExist.setGroupBalance(group.getGroupBalance());
-        groupExist.setMember(group.getMember());
         groupExist.setActive(group.getActive());
         groupExist.setCreatedDate(new Date().getTime());
-        groupExist.setMember(group.getMember());
-        groupExist.setExpenseList(group.getExpenseList());
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 
