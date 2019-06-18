@@ -33,4 +33,8 @@ public class User {
     private Double balance;
     private List<PaymentDetail> periodPayed;
     private String imagePath;
+
+    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
+        this.periodPayed = periodPayed;
+    }
 }

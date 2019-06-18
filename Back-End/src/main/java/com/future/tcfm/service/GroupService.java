@@ -1,6 +1,8 @@
 package com.future.tcfm.service;
 
+import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Group;
+import com.future.tcfm.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,5 +13,5 @@ public interface GroupService {
     List<Group> loadAll();
     ResponseEntity createGroup(Group group);
     ResponseEntity updateGroup(String id,Group group);
-    Group getGroup(String id);
+    List<User> membersGroup(String groupName);
 }

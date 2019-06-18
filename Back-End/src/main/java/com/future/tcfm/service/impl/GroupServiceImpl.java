@@ -1,7 +1,10 @@
 package com.future.tcfm.service.impl;
 
+import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Group;
+import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
+import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +18,19 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     GroupRepository groupRepository;
+    @Autowired
+    UserRepository userRepository;
     
     @Override
     public List<Group> loadAll() {
         return groupRepository.findAll();
     }
+
+    @Override
+    public List<User> membersGroup(String groupName) {
+        return userRepository.findByGroupNameLike(groupName);
+    }
+
 
     @Override
     public ResponseEntity<?> createGroup(Group group) {
@@ -37,16 +48,8 @@ public class GroupServiceImpl implements GroupService {
             return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
         groupExist.setRegularPayment(group.getRegularPayment());
         groupExist.setGroupBalance(group.getGroupBalance());
-        groupExist.setMember(group.getMember());
         groupExist.setActive(group.getActive());
         groupExist.setCreatedDate(new Date().getTime());
-        groupExist.setMember(group.getMember());
-        groupExist.setExpenseList(group.getExpenseList());
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
-    }
-
-    @Override
-    public Group getGroup(String groupName) {
-        return groupRepository.findByName(groupName);
     }
 }

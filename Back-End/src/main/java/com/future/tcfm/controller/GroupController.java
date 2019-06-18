@@ -1,6 +1,7 @@
 package com.future.tcfm.controller;
 
 import com.future.tcfm.model.Group;
+import com.future.tcfm.model.User;
 import com.future.tcfm.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class GroupController {
         return groupService.loadAll();
     }
 
-    @GetMapping("/{groupName}")
-    public Group getGroup(@PathVariable("groupName") String groupName) {
-        return groupService.getGroup(groupName);
+    @GetMapping("/members") //body fill with group name without ""
+    public List<User> membersGroup (@RequestBody String groupName){
+        return groupService.membersGroup(groupName);
     }
 
     @PostMapping

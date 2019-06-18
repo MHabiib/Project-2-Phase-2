@@ -29,11 +29,6 @@ public class UserController {
         return userService.getUser(email);
     }
 
-//    @PostMapping
-//    public ResponseEntity createUser(@RequestBody User user) {
-//        return userService.createUser(user);
-//    }
-
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(
             @Nullable @RequestPart("file") MultipartFile file,
@@ -48,6 +43,16 @@ public class UserController {
                                  @RequestPart("user") String userJSONString) throws IOException {
         return userService.updateUserV2(id, userJSONString, file);
     }
+}
+
+
+
+
+
+//    @PostMapping
+//    public ResponseEntity createUser(@RequestBody User user) {
+//        return userService.createUser(user);
+//    }
 
 //    @DeleteMapping(value = "/user/{id}",produces = MediaType.APPLICATION_JSON_VALUE  )
 //    public ResponseEntity delete(@PathVariable("id")int id){
@@ -58,6 +63,3 @@ public class UserController {
 //    public ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user) {
 //        return userService.updateUser(id,user);
 //    }
-
-}
-

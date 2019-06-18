@@ -24,8 +24,5 @@ public class Group {
     private Long closedDate;
     private Double groupBalance;
     private Double totalExpense;
-//    private List<Expense>expenseList;
-//    private List<Members> member;
-//    private List<PaymentDetail> paymentDetail;
     private Boolean active;
 }

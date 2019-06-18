@@ -29,19 +29,18 @@ public class DashboardServiceImpl implements DashboardService {
         User dUser = userRepository.findByEmail(email);
         Group dGroup = groupRepository.findByName(dUser.getGroupName());
         Integer totalMembers = userRepository.countByGroupName(dGroup.getName());
-        //Integer totalValue = expenseRepository.co
 
         Dashboard d = new Dashboard();
 
         d.setGroupBalance(dGroup.getGroupBalance());
         d.setTotalMembers(totalMembers);
 
+        return d;
+    }
+}
+
 
 //        Aggregation aggregation = Aggregation.newAggregation(
 //                Aggregation.match(where("name").is(dUser.getGroupName())),
 //                Aggregation.project().and("member").project("size").as("count"));
 //        d.setTotalMembers(dGroup.getMember().size());
-
-        return d;
-    }
-}

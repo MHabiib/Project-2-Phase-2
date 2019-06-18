@@ -1,6 +1,7 @@
 package com.future.tcfm.controller;
 
 import com.future.tcfm.model.Expense;
+import com.future.tcfm.model.request.ExpenseRequest;
 import com.future.tcfm.service.ExpenseService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,18 @@ public class ExpenseController {
         return expenseService.loadAll();
     }
 
+    @GetMapping("/group") //body fill with group name without ""
+    public List<Expense> expenseGroup (@RequestBody String groupName){
+        return expenseService.expenseGroup(groupName);
+    }
+
     @PostMapping
     public ResponseEntity createExpense(@RequestBody Expense expense) {
         return expenseService.createExpense(expense);
     }
+
+    @PostMapping("/management")
+    public ResponseEntity management(@RequestBody ExpenseRequest request){return expenseService.management(request);}
 
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable("id") String id, @RequestBody Expense expense) {
