@@ -240,9 +240,9 @@
     background-color: var(--primary-4);
   }
 
-  .managementTableBody table {
+  .manageGroupComponent .managementTableBody table {
     width: 100%;
-    text-align: left;
+    text-align: center;
   }
 
   .managementTableBody tbody {
@@ -255,8 +255,8 @@
   }
 
   .manageGroupComponent .managementTableBody thead tr, .managementTableBody tbody { display: block; box-sizing: border-box; }
-  .manageGroupComponent .managementTableBody tbody td:nth-child(1), .managementTableBody thead tr th:nth-child(1) { width: 25vw; }
-  .manageGroupComponent .managementTableBody tbody td:nth-child(2), .managementTableBody thead tr th:nth-child(2) { width: 10vw; }
-  .manageGroupComponent .managementTableBody tbody td:nth-child(3), .managementTableBody thead tr th:nth-child(3) { width: 25vw; text-align: center;}
-  .manageGroupComponent .managementTableBody tbody td:nth-child(4), .managementTableBody thead tr th:nth-child(4) { width: 10vw;}
+  .manageGroupComponent .managementTableBody tbody td:nth-child(1), .manageGroupComponent .managementTableBody thead tr th:nth-child(1) { width: 25vw; text-align: left;}
+  .manageGroupComponent .managementTableBody tbody td:nth-child(2), .manageGroupComponent .managementTableBody thead tr th:nth-child(2) { width: 10vw; }
+  .manageGroupComponent .managementTableBody tbody td:nth-child(3), .manageGroupComponent .managementTableBody thead tr th:nth-child(3) { width: 25vw;}
+  .manageGroupComponent .managementTableBody tbody td:nth-child(4), .manageGroupComponent .managementTableBody thead tr th:nth-child(4) { width: 10vw;}
 </style>

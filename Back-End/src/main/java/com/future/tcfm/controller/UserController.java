@@ -24,7 +24,7 @@ public class UserController {
         return userService.loadAll();
     }
 
-    @GetMapping("/email")// ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
+    @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
     public User getUser(@RequestParam("email") String email) {
         return userService.getUser(email);
     }

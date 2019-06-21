@@ -62,7 +62,7 @@
 
                 <tbody>
                   <tr>
-                    <td>1 Maret 2019</td>
+                    <td>29 September 2019</td>
                     <td>Beli Meja Bulat</td>
                     <td>Rp 350.000</td>
                   </tr>
@@ -401,7 +401,7 @@
     height: 405px;
     box-sizing: border-box;
     line-height: 35px;
-    text-align: center;
+    text-align: left;
     font-size: 14px;
     color: var(--primary-0);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
@@ -414,7 +414,7 @@
   }
 
   .overviewLeftLowerBody tbody {
-    height: 330px;
+    height: 320px;
     overflow-y: auto;
     overflow-x: hidden;
     margin: auto;
@@ -422,9 +422,8 @@
   }
 
   .overviewLeftLowerBody tbody, .overviewLeftLowerBody thead tr { display: block; }
-  .overviewLeftLowerBody tbody td:nth-child(1), .overviewLeftLowerBody thead tr th:nth-child(1) { width: 130px; }
-  .overviewLeftLowerBody tbody td:nth-child(2), .overviewLeftLowerBody thead tr th:nth-child(2) { width: 270px; }
-  .overviewLeftLowerBody tbody td:nth-child(3), .overviewLeftLowerBody thead tr th:nth-child(3) { width: 130px; }
+  .overviewLeftLowerBody tbody td:nth-child(1), .overviewLeftLowerBody thead tr th:nth-child(1) { width: 150px; }
+  .overviewLeftLowerBody tbody td:nth-child(2), .overviewLeftLowerBody thead tr th:nth-child(2) { width: 200px; }
 
   .overviewRightUpper {
     display: flex;
@@ -500,6 +499,10 @@
     padding: 13px 0;
     color: var(--primary-0);
     border-bottom: solid 1px var(--primary-1);
+  }
+
+  .overviewRightLowerBodyContent:last-child {
+    border-bottom: none;
   }
 
   .overviewRightLowerBodyContentText {

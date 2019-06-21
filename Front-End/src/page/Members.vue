@@ -189,7 +189,7 @@
     position: relative;
     top: -35px;
     color: var(--primary-0);
-    text-align: center;
+    text-align: left;
     line-height: 35px;
   }
 
@@ -206,8 +206,7 @@
   }
 
   .membersTableBody thead tr, .membersTableBody tbody { display: block; box-sizing: border-box; }
-  .membersTableBody tbody td:nth-child(1), .membersTableBody thead tr th:nth-child(1) { width: 17vw; }
-  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) { width: 27vw; }
-  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) { width: 39vw; }
-  .membersTableBody tbody td:nth-child(4), .membersTableBody thead tr th:nth-child(4) { width: 17vw; }
+  .membersTableBody tbody td:nth-child(1), .membersTableBody thead tr th:nth-child(1) {width: 13vw;}
+  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) {width: 16vw;}
+  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) {width: 30vw;}
 </style>

@@ -5,15 +5,43 @@
     </div>
 
     <div class="headerMenu">
-      <img src="../assets/notifications.png" alt="Notifications" width='20px' height='70%'>
+      <img src="../assets/notifications.png" alt="Notifications" width='20px' height='70%' @click="showNotification = !showNotification">
       <img src="../assets/profile.png" alt="Notifications" width='23px' height='70%'>
+    </div>
+
+    <div class="notificationContainer" v-show="showNotification">
+
+      <div class="notificationItems">
+        <div class="notificationText">
+          You don't have any notifications yet.
+        </div>
+
+        <div class="notificationTime">
+          a moment ago
+        </div>
+      </div>
+
+      <div class="notificationItems">
+        <div class="notificationText">
+          Second row of notification.
+        </div>
+
+        <div class="notificationTime">
+          a week ago
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    props: ['headerTitle']
+    props: ['headerTitle'],
+    data: function() {
+      return {
+        showNotification: false
+      }
+    }
   }
 </script>
 
@@ -37,5 +65,38 @@
   .headerMenu img {
     margin-right: 12px;
     cursor: pointer;
+  }
+
+  .notificationContainer {
+    position: absolute;
+    top: 60px;
+    right: 75px;
+    background-color: var(--lightColor);
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+    z-index: 10;
+  }
+
+  .notificationItems {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--primary-1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .notificationItems:last-child {
+    border-bottom: none;
+  }
+
+  .notificationText {
+    font-size: 14px;
+    margin-right: 30px;
+    color: var(--darkColor);
+  }
+
+  .notificationTime {
+    font-size: 11px;
+    color: var(--primary-2);
   }
 </style>

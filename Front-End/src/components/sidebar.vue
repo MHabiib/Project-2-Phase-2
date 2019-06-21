@@ -29,7 +29,7 @@
             @click='changeView("/overview")'
           >
             <div :class='{litteSmallBlue: isOverview}'></div>
-            <div>Overview</div>
+            <div class="menuChildText">Overview</div>
             <div />
           </div>
 
@@ -40,7 +40,7 @@
             @click='changeView("/expenses")'
           >
             <div :class='{litteSmallBlue: isExpenses}'></div>
-            Expenses
+            <div class="menuChildText">Expenses</div>
             <div />
           </div>
 
@@ -51,7 +51,7 @@
             @click='changeView("/members")'
           >
             <div :class='{litteSmallBlue: isMembers}'></div>
-            Members
+            <div class="menuChildText">Members</div>
             <div />
           </div>
         </div>
@@ -79,7 +79,7 @@
             @click='changeView("/manage-user")'
           >
             <div :class='{litteSmallBlue: isManageUser}'></div>
-            <div>User</div>
+            <div class="menuChildText">User</div>
             <div />
           </div>
 
@@ -90,7 +90,7 @@
             @click='changeView("/manage-group")'
           >
             <div :class='{litteSmallBlue: isManageGroup}'></div>
-            Group
+            <div class="menuChildText">Group</div>
             <div />
           </div>
         </div>
@@ -224,5 +224,10 @@
     background-color: var(--primary-0);
     height: 40px;
     width: 7px;
+  }
+
+  .menuChildText {
+    width: 50px;
+    text-align: left;
   }
 </style>

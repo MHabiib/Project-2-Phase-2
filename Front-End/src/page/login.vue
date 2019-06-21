@@ -7,7 +7,7 @@
 
       <form @submit="loginHandler">
         <div class="loginBody">
-          <input type="text" name="email" placeholder="Email" v-model="emailInput" /><br />
+          <input type="email" name="email" placeholder="Email" v-model="emailInput" /><br />
           <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
           <button @click.prevent="loginHandler">Go</button>
         </div>
@@ -45,9 +45,7 @@
             alert('Login Berhasil');
             this.$router.push('/dashboard');
           })
-          .catch(e => {
-            alert('Login Gagal')
-          })
+          .catch(err => {alert(`Catch an error: ${err}`)})
       }
     }
   }

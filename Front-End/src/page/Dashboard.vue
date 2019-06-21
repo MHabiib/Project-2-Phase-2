@@ -172,13 +172,19 @@
       }
     },
     created() {
-      fetch(`http://localhost:8088/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
-        headers: {
-          'Authorization': localStorage.getItem('token')
-        }
-      })
-      .then(response => response.json())
-      .then(res => {this.dashboardData = res;})
+      this.getDashboardData();
+    },
+    methods: {
+      getDashboardData() {
+        fetch(`http://localhost:8088/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
+          headers: {
+            'Authorization': localStorage.getItem('token')
+          }
+        })
+        .then(response => response.json())
+        .then(res => {this.dashboardData = res;})
+        .catch(err => {console.log(err);})
+      }
     }
   }
 </script>

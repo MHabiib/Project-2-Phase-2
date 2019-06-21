@@ -19,7 +19,7 @@ Vue.component('HeaderSection', HeaderSection);
 Vue.mixin({
   data: function() {
     return {
-      usernameGloballyStored: 'Global'
+
     }
   },
   filters: {
@@ -68,18 +68,23 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: to => { // Ini pakai function untuk nantinya ngecek udah login atau belum. Kalau udah balikin Dashboard, kalau belum balikin Login
-        return '/login'
-      },
-      // meta: { requiresAuth: true }
+      redirect: to => {
+        if(localStorage.getItem('token')) {
+          return '/dashboard'
+        } else {
+          return '/login'
+        }
+      }
     },
     {
       path: '/dashboard',
-      component: DashboardPage
+      component: DashboardPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/payment',
-      component: PaymentPage
+      component: PaymentPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -87,45 +92,64 @@ const router = new Router({
     },
     {
       path: '/overview',
-      component: OverviewPage
+      component: OverviewPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/expenses',
-      component: ExpensesPage
+      component: ExpensesPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/members',
-      component: MembersPage
+      component: MembersPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/manage-user',
-      component: ManageUserPage
+      component: ManageUserPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/manage-group',
-      component: ManageGroupPage
+      component: ManageGroupPage,
+      meta: { requiresAuth: true }
     }
   ],
   mode: "history"
 });
 
-// let isAuthenticated = false;
-
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (isAuthenticated) {
-//       next({
-//         path: '/login',
-//         query: {
-//           redirect: to.fullPath,
-//         },
-//       });
-//     } else {
-//       next();
-//     }
-//   } else {
-//     next();
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('token') === null) {
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath }
+      })
+    } else {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if(to.matched.some(record => record.meta.is_admin)) {
+        if(user.is_admin == 1){
+          next()
+        }
+        else{
+          next({ name: 'userboard'})
+        }
+      } else {
+        next()
+      }
+    }
+  }
+  else if(to.matched.some(record => record.meta.guest)) {
+    if(localStorage.getItem('token') === null) {
+      next()
+    }
+    else {
+      next({ name: 'userboard'})
+    }
+  } else {
+    next()
+  }
+})
 
 export default router;

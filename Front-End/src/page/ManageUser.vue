@@ -281,10 +281,10 @@
     line-height: 42px;
   }
 
-  .manageUserComponent .managementTableBody thead tr, .managementTableBody tbody { display: block; box-sizing: border-box; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(1), .managementTableBody thead tr th:nth-child(1) { width: 10vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(2), .managementTableBody thead tr th:nth-child(2) { width: 15vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(3), .managementTableBody thead tr th:nth-child(3) { width: 28vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(4), .managementTableBody thead tr th:nth-child(4) { width: 10vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(5), .managementTableBody thead tr th:nth-child(5) { width: 6vw; text-align: center;}
+  .manageUserComponent .managementTableBody thead tr, .manageUserComponent .managementTableBody tbody { display: block; box-sizing: border-box; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 10vw; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 15vw; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 28vw; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 10vw; text-align: center;}
+  .manageUserComponent .managementTableBody tbody td:nth-child(5), .manageUserComponent .managementTableBody thead tr th:nth-child(5) { width: 6vw; text-align: center;}
 </style>

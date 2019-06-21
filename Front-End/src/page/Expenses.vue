@@ -121,9 +121,9 @@
     border-top: solid 1px var(--primary-1);
   }
 
-  .expensesTableBody thead tr, .expensesTableBody tbody { display: block; box-sizing: border-box; }
-  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) { width: 15vw; }
-  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) { width: 325px; text-align: left; }
-  .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) { width: 15vw; }
-  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) { width: 15vw; }
+  .expensesTableBody thead tr, .expensesTableBody tbody {display: block; box-sizing: border-box;}
+  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {width: 15vw; text-align: left;}
+  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {width: 325px; text-align: left;}
+  .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {width: 15vw;}
+  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 15vw;}
 </style>
