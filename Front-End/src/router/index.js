@@ -21,7 +21,47 @@ Vue.mixin({
     return {
       usernameGloballyStored: 'Global'
     }
-  }
+  },
+  filters: {
+    thousandSeparators: function(numbers) {
+      if(numbers === undefined) {
+        return '';
+      } else {
+        let result = '';
+        let counter = 0;
+        for (let i = numbers.toString().length ; i >= 0 ; i--){
+            if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
+                result = '.' + numbers.toString().substr(i, 1) + result;
+            } else {
+                result = numbers.toString().substr(i, 1) + result;
+            }
+            counter += 1;
+        }
+        return result;
+      }
+    },
+    dateFormatter(dateToFormat) {
+      const monthToString = (month)=> {
+        switch(month) {
+          case 0: return 'January'
+          case 1: return 'February'
+          case 2: return 'March'
+          case 3: return 'April'
+          case 4: return 'May'
+          case 5: return 'June'
+          case 6: return 'July'
+          case 7: return 'August'
+          case 8: return 'September'
+          case 9: return 'October'
+          case 10: return 'November'
+          case 11: return 'December'
+        }
+      }
+
+      const dateObjected = new Date(dateToFormat);
+      return `${dateObjected.getDate()} ${monthToString(dateObjected.getMonth())} ${dateObjected.getFullYear()}`
+    }
+  },
 })
 
 const router = new Router({

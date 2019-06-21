@@ -113,6 +113,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         return new ResponseEntity<>("Expense Approved!", HttpStatus.OK);
     }
+
+    @Override
+    public List<Expense> expenseGroupByEmail(String userEmail) {
+        User userSelected = userRepository.findByEmail(userEmail);
+        String userGroup = userSelected.getGroupName();
+        return expenseRepository.findByGroupNameLike(userGroup);
+    }
 }
 
 

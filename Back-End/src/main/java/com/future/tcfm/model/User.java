@@ -1,7 +1,7 @@
 package com.future.tcfm.model;
 
 import com.future.tcfm.model.list.PaymentDetail;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

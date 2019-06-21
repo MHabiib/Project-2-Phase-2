@@ -166,25 +166,6 @@
         dashboardData: {}
       }
     },
-    filters : {
-      thousandSeparators: function(numbers) {
-        if(numbers === undefined) {
-          return '';
-        } else {
-          let result = '';
-          let counter = 0;
-          for (let i = numbers.toString().length ; i >= 0 ; i--){
-              if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
-                  result = '.' + numbers.toString().substr(i, 1) + result;
-              } else {
-                  result = numbers.toString().substr(i, 1) + result;
-              }
-              counter += 1;
-          }
-          return result;
-        }
-      }
-    },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);

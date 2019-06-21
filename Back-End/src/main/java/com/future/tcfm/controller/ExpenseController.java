@@ -24,9 +24,15 @@ public class ExpenseController {
         return expenseService.loadAll();
     }
 
+//    @GetMapping("/group") //body fill with group name without ""
+//    public List<Expense> expenseGroup (@RequestBody String groupName){
+//        System.out.println(groupName);
+//        return expenseService.expenseGroup(groupName);
+//    }
+
     @GetMapping("/group") //body fill with group name without ""
-    public List<Expense> expenseGroup (@RequestBody String groupName){
-        return expenseService.expenseGroup(groupName);
+    public List<Expense> expenseGroup (@RequestParam("email") String userEmail){
+        return expenseService.expenseGroupByEmail(userEmail);
     }
 
     @PostMapping

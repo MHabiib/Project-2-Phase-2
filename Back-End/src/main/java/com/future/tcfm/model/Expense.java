@@ -23,7 +23,7 @@ public class Expense {
     private String detail;
     private Double price;
     private List<ApproverContributor>contributorList;
-    private List<ApproverContributor>approverList;
+    private List<ApproverContributor>approverList; // Ini cancel
     private Long createdDate;
     private Long rejectedDate;
     private Long approvedDate;

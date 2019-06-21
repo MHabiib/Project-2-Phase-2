@@ -22,125 +22,10 @@
             </thead>
 
             <tbody>
-              <tr>
-                <td>16 September 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
-                <td>31 Members</td>
-              </tr>
-
-
-              <tr>
-                <td>16 March 2019</td>
-                <td>Beli Meja Kotak</td>
-                <td>Rp 350.000</td>
+              <tr v-for='(expense, index) in dataExpense' :key='index'>
+                <td>{{expense.createdDate | dateFormatter}}</td>
+                <td>{{expense.title}}</td>
+                <td>Rp {{expense.price | thousandSeparators}}</td>
                 <td>31 Members</td>
               </tr>
             </tbody>
@@ -160,7 +45,28 @@
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
       }
-    }
+    },
+    data: function() {
+      return {
+        dataExpense: []
+      }
+    },
+    created() {
+      this.getExpenseData();
+    },
+    methods: {
+      getExpenseData() {
+        fetch(`http://localhost:8088/api/expense/group?email=${localStorage.getItem('userEmail')}`, {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
+        })
+        .then(response => response.json())
+        .then(res => {
+          this.dataExpense = res
+        })
+      }
+    },
   }
 </script>
 
