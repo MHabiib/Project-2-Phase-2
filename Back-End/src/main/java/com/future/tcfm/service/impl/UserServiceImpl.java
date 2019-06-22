@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.FileTypeMap;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +33,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
-    public static String UPLOADED_FOLDER="..\\asset\\img\\";
+    public static final String UPLOADED_FOLDER="..\\asset\\img\\";
+    public static final String UPLOADED_URL = "http://localhost:8088/api/user/img/";
 
     @Autowired
     UserRepository userRepository;
@@ -50,11 +54,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-
-    public static void saveUploadedFile(MultipartFile file) throws IOException {
+    public static void saveUploadedFile(MultipartFile file,String name) throws IOException {
         if (!file.isEmpty()) {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Path path = Paths.get(UPLOADED_FOLDER +name);
+            System.out.println(UPLOADED_FOLDER+name);
             Files.write(path, bytes);
         }
     }
@@ -71,6 +75,7 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
     @Override
     public ResponseEntity<?> createUser(User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
@@ -109,8 +114,10 @@ public class UserServiceImpl implements UserService {
                     Path deletePath = Paths.get(UPLOADED_FOLDER + userExist.getImagePath());
                     Files.delete(deletePath);
                 }
-                saveUploadedFile(file);
-                userExist.setImagePath(file.getOriginalFilename());
+                String fileName=userExist.getEmail()+"_"+file.getOriginalFilename();
+                saveUploadedFile(file,fileName);
+                userExist.setImagePath(fileName);
+                userExist.setImageURL(UPLOADED_URL+fileName);
             }catch (IOException e){
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
@@ -130,7 +137,15 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity(userExist,HttpStatus.OK);
     }
 
-
+    @Override
+    public ResponseEntity getImage(String imageName) throws IOException {
+        Path path = Paths.get(UPLOADED_FOLDER +imageName);
+        File img = new File(String.valueOf(path));
+        String mimetype = FileTypeMap.getDefaultFileTypeMap().getContentType(img);
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(mimetype))
+                .body(Files.readAllBytes(img.toPath()));
+    }
     @Override
     public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);
@@ -144,8 +159,10 @@ public class UserServiceImpl implements UserService {
         }
         if(checkImageFile(file)){
             try{
-                saveUploadedFile(file);
-                user.setImagePath(file.getOriginalFilename());
+                String fileName=user.getEmail()+"_"+file.getOriginalFilename();
+                saveUploadedFile(file,fileName);
+                user.setImagePath(fileName);
+                user.setImageURL(UPLOADED_URL+fileName);
             }catch (IOException e){
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }

@@ -33,7 +33,7 @@ public class User {
     private Double balance;
     private List<PaymentDetail> periodPayed;
     private String imagePath;
-
+    private String imageURL;
     public void setPeriodPayed(List<PaymentDetail> periodPayed) {
         this.periodPayed = periodPayed;
     }
