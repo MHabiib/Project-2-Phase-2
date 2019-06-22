@@ -30,7 +30,7 @@ public class ExpenseController {
 //        return expenseService.expenseGroup(groupName);
 //    }
 
-    @GetMapping("/group") //body fill with group name without ""
+    @GetMapping("/group")
     public List<Expense> expenseGroup (@RequestParam("email") String userEmail){
         return expenseService.expenseGroupByEmail(userEmail);
     }

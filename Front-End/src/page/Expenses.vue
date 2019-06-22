@@ -26,19 +26,29 @@
                 <td>{{expense.createdDate | dateFormatter}}</td>
                 <td>{{expense.title}}</td>
                 <td>Rp {{expense.price | thousandSeparators}}</td>
-                <td>31 Members</td>
+                <td class='showMembersButton' @click="showUserContributed(expense.title, expense.userContributed)">
+                  {{expense.userContributed.length}} Members
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+
+    <UserContributedWindow
+      v-if='showUserContributedWindow'
+      :expenseName="this.selectedExpense"
+      :userList="this.selectedUserList"
+      @closeContributedWindow="closeUserContributedWindow"
+    />
   </div>
 </template>
 
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
+  import UserContributedWindow from '../components/userContributedWindow';
 
   export default {
     computed: {
@@ -48,7 +58,10 @@
     },
     data: function() {
       return {
-        dataExpense: []
+        dataExpense: [],
+        showUserContributedWindow: false,
+        selectedExpense: '',
+        selectedUserList: []
       }
     },
     created() {
@@ -65,8 +78,19 @@
         .then(res => {
           this.dataExpense = res
         })
+      },
+      showUserContributed(selectedExpense, userList) {
+        this.selectedExpense = selectedExpense;
+        this.selectedUserList = userList;
+        this.showUserContributedWindow = true;
+      },
+      closeUserContributedWindow() {
+        this.showUserContributedWindow = false;
       }
     },
+    components: {
+      'UserContributedWindow': UserContributedWindow
+    }
   }
 </script>
 
@@ -104,7 +128,7 @@
     padding: 50px 20px 20px 20px;
     position: relative;
     top: -35px;
-    color: var(--primary-0);
+    color: var(--primary-3);
     text-align: center;
     line-height: 35px;
   }
@@ -126,4 +150,13 @@
   .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {width: 325px; text-align: left;}
   .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {width: 15vw;}
   .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 15vw;}
+
+  .showMembersButton {
+    cursor: pointer;
+  }
+
+  .showMembersButton:hover {
+    text-decoration: underline;
+    color: var(--primary-0);
+  }
 </style>

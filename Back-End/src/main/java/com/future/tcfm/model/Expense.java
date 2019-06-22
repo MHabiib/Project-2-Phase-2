@@ -22,20 +22,21 @@ public class Expense {
     private String title;
     private String detail;
     private Double price;
-    private List<ApproverContributor>contributorList;
-    private List<ApproverContributor>approverList; // Ini cancel
+    private List<ApproverContributor> contributorList;
+    private List<User> userContributed;
+    private List<ApproverContributor> approverList; // Ini cancel
     private Long createdDate;
     private Long rejectedDate;
     private Long approvedDate;
     private Boolean status;
     private Integer percentageApproved;
 
-    public void setContributorList(List<ApproverContributor> contributorList) {
-        this.contributorList = contributorList;
-    }
-
-    public void setApproverList(List<ApproverContributor> approverList) {
-        this.approverList = approverList;
-    }
+//    public void setContributorList(List<ApproverContributor> contributorList) {
+//        this.contributorList = contributorList;
+//    }
+//
+//    public void setApproverList(List<ApproverContributor> approverList) {
+//        this.approverList = approverList;
+//    }
 
 }

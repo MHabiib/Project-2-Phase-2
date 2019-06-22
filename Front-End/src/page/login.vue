@@ -36,9 +36,8 @@
         this.axios
           .post('http://localhost:8088/token', dataLogin)
           .then(res => {
-            let token = res.data;
-            // this.$store.dispatch("login", token);
-            localStorage.setItem('token', `Token ${token}`);
+            // this.$store.dispatch("login", res.data);
+            localStorage.setItem('token', `Token ${res.data}`);
             localStorage.setItem('userEmail', this.emailInput);
           })
           .then(()=> {
