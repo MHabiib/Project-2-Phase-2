@@ -36,7 +36,6 @@ public class JwtValidator {
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException("JWT Claims String is empty");
         }
-
         return user;
     }
 }
