@@ -14,12 +14,12 @@
           <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" />
 
           <select class='managementTableHeadSort' name="sortBy" id="sortBy">
-            <option style='display: none' value="default">Sort By</option>
-            <option value="default">Group</option>
-            <option value="default">Name</option>
-            <option value="default">Email</option>
-            <option value="default">Phone</option>
-            <option value="default">Role</option>
+            <option style='display: none' value="none">Sort By</option>
+            <option value="group">Group</option>
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+            <option value="role">Role</option>
           </select>
 
           <div class="managementTableHeadAddNew">
@@ -56,7 +56,6 @@
                 <td>Admin</td>
               </tr>
 
-
               <tr>
                 <td>Nadem Ecno</td>
                 <td>Bambang Hermansyah</td>
@@ -65,7 +64,6 @@
                 <td>Admin</td>
               </tr>
 
-
               <tr>
                 <td>Nadem Ecno</td>
                 <td>Bambang Hermansyah</td>
@@ -73,52 +71,6 @@
                 <td>081234567890</td>
                 <td>Admin</td>
               </tr>
-
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
 
               <tr>
                 <td>Nadem Ecno</td>
@@ -136,6 +88,13 @@
                 <td>Admin</td>
               </tr>
 
+              <tr>
+                <td>Nadem Ecno</td>
+                <td>Bambang Hermansyah</td>
+                <td>bambang.hermansyah@gdn-commerce.com</td>
+                <td>081234567890</td>
+                <td>Admin</td>
+              </tr>
 
               <tr>
                 <td>Nadem Ecno</td>
@@ -145,6 +104,13 @@
                 <td>Admin</td>
               </tr>
 
+              <tr>
+                <td>Nadem Ecno</td>
+                <td>Bambang Hermansyah</td>
+                <td>bambang.hermansyah@gdn-commerce.com</td>
+                <td>081234567890</td>
+                <td>Admin</td>
+              </tr>
 
               <tr>
                 <td>Nadem Ecno</td>
@@ -154,6 +120,21 @@
                 <td>Admin</td>
               </tr>
 
+              <tr>
+                <td>Nadem Ecno</td>
+                <td>Bambang Hermansyah</td>
+                <td>bambang.hermansyah@gdn-commerce.com</td>
+                <td>081234567890</td>
+                <td>Admin</td>
+              </tr>
+
+              <tr>
+                <td>Nadem Ecno</td>
+                <td>Bambang Hermansyah</td>
+                <td>bambang.hermansyah@gdn-commerce.com</td>
+                <td>081234567890</td>
+                <td>Admin</td>
+              </tr>
 
               <tr>
                 <td>Nadem Ecno</td>
