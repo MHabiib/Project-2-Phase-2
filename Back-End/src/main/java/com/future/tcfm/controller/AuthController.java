@@ -32,7 +32,7 @@ public class AuthController {
         this.jwtGenerator = jwtGenerator;
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "signin",produces = MediaType.APPLICATION_JSON_VALUE)
     public String generate(@RequestBody final User user) {
         User userExist = userRepository.findByEmail(user.getEmail());
         if (userExist!=null)
