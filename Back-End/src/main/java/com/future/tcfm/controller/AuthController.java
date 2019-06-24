@@ -14,8 +14,8 @@ import javax.print.attribute.standard.Media;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/token")
-public class TokenController {
+@RequestMapping("/auth")
+public class AuthController {
 
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
@@ -28,13 +28,12 @@ public class TokenController {
 
     private JwtGenerator jwtGenerator;
 
-    public TokenController(JwtGenerator jwtGenerator) {
+    public AuthController(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "signin",produces = MediaType.APPLICATION_JSON_VALUE)
     public String generate(@RequestBody final User user) {
-//        System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
         if (userExist!=null)
             if (!passwordEncoder.matches(user.getPassword(),userExist.getPassword()))
