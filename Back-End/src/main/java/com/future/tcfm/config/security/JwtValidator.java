@@ -25,16 +25,8 @@ public class JwtValidator {
             user.setEmail(body.getSubject());
             user.setPassword((String) body.get("password"));
             user.setRole((String)body.get("role"));
-        } catch (SignatureException ex) {
-            throw new RuntimeException("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            throw new RuntimeException("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            throw new RuntimeException("Expired JWT token"); // muungkin disini bisa ditambahkan fungsi refresh token bila refresh token msh ada
-        } catch (UnsupportedJwtException ex) {
-            throw new RuntimeException("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("JWT Claims String is empty");
+        } catch (JwtException e){
+            throw new JwtException(e.getMessage());
         }
         return user;
     }

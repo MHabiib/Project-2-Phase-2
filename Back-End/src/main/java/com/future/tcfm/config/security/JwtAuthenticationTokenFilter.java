@@ -1,5 +1,8 @@
 package com.future.tcfm.config.security;
 import com.future.tcfm.model.JwtAuthenticationToken;
+import com.future.tcfm.model.User;
+import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -15,16 +18,26 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         super("/api/**");
     }
 
+    @Value("${app.jwtSecret}")
+    private String secretKey = "futureProgram";
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String header = httpServletRequest.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
             throw new RuntimeException("JWT Token is missing");
         }
+
         String authenticationToken = header.substring(6); // ambil nilai dari tokeno dimulai dari index ke 7
         JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
-        return getAuthenticationManager().authenticate(token);
 
+        try { Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authenticationToken);
+        } catch (JwtException ex) {
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,ex.getMessage());
+            return null;
+        }
+
+        return getAuthenticationManager().authenticate(token);
     }
 
     @Override
