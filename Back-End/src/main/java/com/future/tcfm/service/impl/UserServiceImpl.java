@@ -33,7 +33,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
-    public static final String UPLOADED_FOLDER="..\\asset\\img\\";
+//    public static final String UPLOADED_FOLDER="..\\asset\\img\\";
+    public static final String UPLOADED_FOLDER="../assets/";
     public static final String UPLOADED_URL = "http://localhost:8088/api/user/img/";
 
     @Autowired
@@ -139,13 +140,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity getImage(String imageName) throws IOException {
-        Path path = Paths.get(UPLOADED_FOLDER +imageName);
+        Path path = Paths.get(UPLOADED_FOLDER + imageName);
         File img = new File(String.valueOf(path));
         String mimetype = FileTypeMap.getDefaultFileTypeMap().getContentType(img);
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(mimetype))
                 .body(Files.readAllBytes(img.toPath()));
     }
+
     @Override
     public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);

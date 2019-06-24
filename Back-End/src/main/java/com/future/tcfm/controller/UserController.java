@@ -45,16 +45,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/img/{imageName:.+}")
-    public ResponseEntity getImage(
-            @PathVariable("imageName") String imageName
-    ) throws IOException {
+    public ResponseEntity getImage(@PathVariable("imageName") String imageName) throws IOException {
         return userService.getImage(imageName);
     }
 }
-
-
-
-
 
 //    @PostMapping
 //    public ResponseEntity createUser(@RequestBody User user) {

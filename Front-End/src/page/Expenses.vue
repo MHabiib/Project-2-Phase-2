@@ -37,12 +37,19 @@
             </thead>
 
             <tbody>
-              <tr v-for='(expense, index) in dataExpense' :key='index'>
+              <tr
+                class='expenseRow'
+                v-for='(expense, index) in dataExpense' :key='index'
+                @click="openExpenseDetailWindow(expense)"
+              >
                 <td>{{expense.createdDate | dateFormatter}}</td>
                 <td>{{expense.title}}</td>
                 <td>{{expense.status | statusChecker}}</td>
                 <td>Rp {{expense.price | thousandSeparators}}</td>
-                <td class='showMembersButton' @click="showUserContributed(expense.title, expense.userContributed)">
+                <td
+                  class='showMembersButton'
+                  @click.stop="showUserContributed(expense.title, expense.userContributed)"
+                >
                   {{expense.userContributed.length}} Members
                 </td>
               </tr>
@@ -54,9 +61,15 @@
 
     <UserContributedWindow
       v-if='showUserContributedWindow'
+      @closeContributedWindow="closeUserContributedWindow"
       :expenseName="this.selectedExpense"
       :userList="this.selectedUserList"
-      @closeContributedWindow="closeUserContributedWindow"
+    />
+
+    <expenseDetailWindow
+      v-if='showExpenseDetailWindow'
+      @closeExpenseDetailWindow="closeExpenseDetailWindow"
+      :detailExpenseSelected="this.detailExpenseSelected"
     />
   </div>
 </template>
@@ -65,6 +78,7 @@
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
   import UserContributedWindow from '../components/userContributedWindow';
+  import expenseDetailWindow from '../components/expenseDetailWindow';
 
   export default {
     computed: {
@@ -77,7 +91,9 @@
         dataExpense: [],
         showUserContributedWindow: false,
         selectedExpense: '',
-        selectedUserList: []
+        selectedUserList: [],
+        showExpenseDetailWindow: false,
+        detailExpenseSelected: {}
       }
     },
     created() {
@@ -102,10 +118,18 @@
       },
       closeUserContributedWindow() {
         this.showUserContributedWindow = false;
+      },
+      openExpenseDetailWindow(expense) {
+        this.showExpenseDetailWindow = true;
+        this.detailExpenseSelected = expense;
+      },
+      closeExpenseDetailWindow() {
+        this.showExpenseDetailWindow = false;
       }
     },
     components: {
-      'UserContributedWindow': UserContributedWindow
+      'UserContributedWindow': UserContributedWindow,
+      'expenseDetailWindow': expenseDetailWindow
     },
     filters: {
       statusChecker(status) {
@@ -178,10 +202,10 @@
   }
 
   .expensesTableBody thead tr, .expensesTableBody tbody {display: block; box-sizing: border-box;}
-  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {width: 13vw; text-align: left;}
-  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {width: 325px; text-align: left;}
+  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {width: 13vw; text-align: left; padding-left: 10px;}
+  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {width: 300px; text-align: left; padding-left: 10px;}
   .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {width: 10vw;}
-  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 10vw;}
+  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 11vw;}
   .expensesTableBody tbody td:nth-child(5), .expensesTableBody thead tr th:nth-child(5) {width: 10vw;}
 
   .showMembersButton {
@@ -230,5 +254,17 @@
 
   .expenseTableAddNew:active {
     background-color: var(--primary-4);
+  }
+
+  .expenseRow {
+    cursor: pointer;
+  }
+
+  .expenseRow:hover {
+    background-color: white;
+  }
+
+  .expenseRow:active {
+    background-color: rgba(255, 255, 255, .5);
   }
 </style>

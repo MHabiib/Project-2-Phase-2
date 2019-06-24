@@ -10,8 +10,7 @@
         <div class="userContributedBody">
           <div v-for='(dataUser, index) in dataUserContributed' :key='index' class='userContributedBodyContent'>
             <div class='userContributedBodyContentLeft'>
-              <!-- <img :src="dataUser.picture.medium" :alt="dataUser.name"/> -->
-              GAMBAR
+              <img :src="'http://localhost:8088/img/' + dataUser.imagePath" :alt="dataUser.name"/>
             </div>
 
             <div class="userContributedBodyContentRight">
@@ -56,6 +55,8 @@
     align-items: center;
     justify-content: space-evenly;
     background-color: rgba(0, 0, 0, .2);
+    z-index: 2;
+    position: absolute;
   }
 
   .userContributedHeader {
