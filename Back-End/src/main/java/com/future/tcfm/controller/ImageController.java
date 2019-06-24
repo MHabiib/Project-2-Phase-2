@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/img/")
+@RequestMapping("/img")
 public class ImageController {
     @Autowired
     UserService userService;

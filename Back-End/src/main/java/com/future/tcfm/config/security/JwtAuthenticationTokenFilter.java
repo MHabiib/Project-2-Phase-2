@@ -18,14 +18,13 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String header = httpServletRequest.getHeader("Authorization");
-
         if (header == null || !header.startsWith("Token ")) {
             throw new RuntimeException("JWT Token is missing");
         }
-
-        String authenticationToken = header.substring(6);
+        String authenticationToken = header.substring(6); // ambil nilai dari tokeno dimulai dari index ke 7
         JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
         return getAuthenticationManager().authenticate(token);
+
     }
 
     @Override
@@ -33,4 +32,14 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         super.successfulAuthentication(request, response, chain, authResult);
         chain.doFilter(request, response);
     }
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"401 UNAUTHORIZED ACCESS");
+    }
+
+
+
+
 }

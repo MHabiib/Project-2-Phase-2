@@ -1,9 +1,6 @@
 package com.future.tcfm.config;
 
-import com.future.tcfm.config.security.JwtAuthenticationEntryPoint;
-import com.future.tcfm.config.security.JwtAuthenticationProvider;
-import com.future.tcfm.config.security.JwtAuthenticationTokenFilter;
-import com.future.tcfm.config.security.JwtSuccessHandler;
+import com.future.tcfm.config.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,11 +38,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
-    @Bean
+//    @Bean //kalau pakai @Bean nth kenapa filternya dijalankan dua kali, bisa di cek pas authentication success bakalan print successfuly authentication2x
     public JwtAuthenticationTokenFilter authenticationTokenFilter() {
         JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
+        filter.setAuthenticationFailureHandler(new JwtFailureHandler());
         return filter;
     }
 

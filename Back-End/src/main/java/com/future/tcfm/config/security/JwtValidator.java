@@ -30,7 +30,7 @@ public class JwtValidator {
         } catch (MalformedJwtException ex) {
             throw new RuntimeException("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            throw new RuntimeException("Expired JWT token");
+            throw new RuntimeException("Expired JWT token"); // muungkin disini bisa ditambahkan fungsi refresh token bila refresh token msh ada
         } catch (UnsupportedJwtException ex) {
             throw new RuntimeException("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {

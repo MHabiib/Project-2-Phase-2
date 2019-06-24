@@ -2,6 +2,8 @@ package com.future.tcfm.model;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import java.util.ArrayList;
+
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken{
 
     private String token;
@@ -19,12 +21,12 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken{
     }
 
     @Override
-    public Object getCredentials() {
+    public Object getCredentials() {//password
         return null;
     }
 
     @Override
-    public Object getPrincipal() {
+    public Object getPrincipal() { //email
         return null;
     }
 }
