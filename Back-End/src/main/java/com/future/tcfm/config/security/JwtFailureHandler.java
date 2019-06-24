@@ -12,7 +12,8 @@ public class JwtFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         System.out.println("Failed Authentication");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);    }
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UNAUTHORIZED" + exception.getMessage());
 
+    }
 
 }

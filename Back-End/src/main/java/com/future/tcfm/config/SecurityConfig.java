@@ -4,6 +4,7 @@ import com.future.tcfm.config.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -56,7 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and().csrf().disable()
-                .authorizeRequests().antMatchers("**/api/**").authenticated()
+                .authorizeRequests()
+//                .antMatchers("**/api/**").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/expense").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/user","/api/group").hasAuthority("ADMIN")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
