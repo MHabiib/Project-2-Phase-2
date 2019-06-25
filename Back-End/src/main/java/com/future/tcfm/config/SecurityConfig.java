@@ -60,7 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
 //                .antMatchers("**/api/**").authenticated()
+                //hanya user dengan role/authority ADMIN yang bisa akses PUT ke api dibawah
                 .antMatchers(HttpMethod.PUT,"/api/expense").hasAuthority("ADMIN")
+                //hanya Admin yang bisa akses POST ke api dibawah (buat group dan buat user)
                 .antMatchers(HttpMethod.POST,"/api/user","/api/group").hasAuthority("ADMIN")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)

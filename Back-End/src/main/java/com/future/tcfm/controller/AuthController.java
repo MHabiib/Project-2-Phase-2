@@ -21,7 +21,11 @@ public class AuthController {
     private JwtGenerator jwtGenerator;
 
     @PostMapping(value = "/signin",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity generate(@RequestBody final LoginRequest loginRequest) {
+    public ResponseEntity signIn(@RequestBody final LoginRequest loginRequest) {
+        return jwtGenerator.tokenResponse(loginRequest);
+    }
+    @PostMapping(value = "/refreshToken",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getRefreshToken(@RequestBody final LoginRequest loginRequest) {
         return jwtGenerator.tokenResponse(loginRequest);
     }
 }

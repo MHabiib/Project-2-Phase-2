@@ -2,6 +2,7 @@ package com.future.tcfm.config.security;
 import com.future.tcfm.model.JwtAuthenticationToken;
 import com.future.tcfm.model.User;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,12 +21,14 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
     @Value("${app.jwtSecret}")
     private String secretKey = "futureProgram";
+    @Autowired
+    private JwtValidator jwtValidator;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String header = httpServletRequest.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
-            throw new RuntimeException("JWT Token is missing");
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"JWTs is missing");
         }
 
         String authenticationToken = header.substring(6); // ambil nilai dari tokeno dimulai dari index ke 7
@@ -36,15 +39,16 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,ex.getMessage());
             return null;
         }
-
         return getAuthenticationManager().authenticate(token);
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
+        jwtValidator.onSuccessAuth(authResult.getName());
         chain.doFilter(request, response);
     }
+
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
