@@ -70,6 +70,10 @@ public class JwtValidator {
         if(jwtUserDetails==null){
             return new ResponseEntity("404 RefreshToken not found", HttpStatus.NOT_FOUND);
         }
+        if(jwtUserDetails.getRefreshTokenExpiredAt()<System.currentTimeMillis()){
+            jwtUserDetailsRepository.delete(jwtUserDetails);
+            return new ResponseEntity("RefreshToken is expired. Please re-login",HttpStatus.UNAUTHORIZED);
+        }
         String newToken = jwtGenerator.generateToken(jwtUserDetails.getEmail());
         String newRefreshToken = jwtGenerator.generateRefreshToken(jwtUserDetails.getId());
         jwtUserDetails.setToken(newToken);
