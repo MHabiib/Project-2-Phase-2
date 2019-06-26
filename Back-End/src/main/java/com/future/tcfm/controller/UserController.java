@@ -20,8 +20,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public List<User> loadAll() {
-        return userService.loadAll();
+    public ResponseEntity loadAll() {
+        return ResponseEntity.ok(userService.loadAll());
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value

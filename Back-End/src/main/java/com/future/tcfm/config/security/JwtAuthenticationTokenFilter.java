@@ -1,18 +1,25 @@
 package com.future.tcfm.config.security;
 import com.future.tcfm.model.JwtAuthenticationToken;
-import com.future.tcfm.model.User;
-import io.jsonwebtoken.*;
+import com.future.tcfm.model.JwtUserDetails;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
     public JwtAuthenticationTokenFilter() {
@@ -21,17 +28,18 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
     @Value("${app.jwtSecret}")
     private String secretKey = "futureProgram";
+
     @Autowired
-    private JwtValidator jwtValidator;
+    private JwtValidator validator;
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException {
         String header = httpServletRequest.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"JWTs is missing");
         }
 
-        String authenticationToken = header.substring(6); // ambil nilai dari tokeno dimulai dari index ke 7
+        String authenticationToken = header.substring(6); // ambil nilai dari token dimulai dari index ke 7
         JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
 
         try { Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authenticationToken);
@@ -45,7 +53,13 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
-        jwtValidator.onSuccessAuth(authResult.getName());
+        JwtUserDetails jwtUserDetails = (JwtUserDetails)authResult.getPrincipal();
+        System.out.println(jwtUserDetails.getEmail());
+        String newToken=validator.onSuccessAuth(jwtUserDetails.getEmail());
+        System.out.println("NewToken : "+newToken);
+        if(newToken == null) newToken = "NULL_TOKEN";
+        response.addHeader("Authorization",newToken);
+        response.setStatus(HttpServletResponse.SC_OK);
         chain.doFilter(request, response);
     }
 

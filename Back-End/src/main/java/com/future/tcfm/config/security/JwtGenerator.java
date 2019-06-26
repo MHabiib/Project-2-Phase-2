@@ -16,19 +16,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component
+@Service
 public class JwtGenerator {
     @Value("${app.jwtSecret}")
-    private String secretKey;
+    private static String secretKey="futureProgram";
 
     @Value("${app.jwtExpirationInMs}")
-    private Long jwtExpirationInMs;
+    private static Long jwtExpirationInMs = 180000L;
 
     @Value("${app.jwtExpirationInMs}")
-    private Long refreshTokenExpirationInMs;
+    private static Long refreshTokenExpirationInMs = 1800000L;
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
 
@@ -52,10 +53,16 @@ public class JwtGenerator {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
-    public String generateRefreshToken(String userId){
-        return UUID.randomUUID().toString()+userId;
+    public String generateRefreshToken(String id){
+        return UUID.randomUUID().toString()+id;
     }
 
+    /**
+     * loginHandler below
+     *
+     * @param loginRequest
+     * @return
+     */
     public ResponseEntity tokenResponse(LoginRequest loginRequest){
         System.out.println(loginRequest);
         User userExist = userRepository.findByEmail(loginRequest.getEmail());
@@ -66,16 +73,21 @@ public class JwtGenerator {
                 String token = generateToken(userExist.getEmail());
                 tokenMap.put("token",token);
                 tokenMap.put("refreshToken",refreshToken);
-
-                List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                        .commaSeparatedStringToAuthorityList(userExist.getRole());
-                JwtUserDetails jwtUserDetails = new JwtUserDetails(
-                        userExist.getEmail(),
-                        tokenMap.get("token"),
-                        tokenMap.get("accessToken"),
-                        new Date().getTime()+refreshTokenExpirationInMs,
-                        grantedAuthorities
-                );
+                List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userExist.getRole());
+//                        jwtUserDetails = new JwtUserDetails(
+//                        userExist.getEmail(),
+//                        tokenMap.get("token"),
+//                        tokenMap.get("refreshToken"),
+//                        new Date().getTime()+refreshTokenExpirationInMs,
+//                        grantedAuthorities
+//                );
+                JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(loginRequest.getEmail());
+                if(jwtUserDetails== null) jwtUserDetails = new JwtUserDetails();
+                jwtUserDetails.setEmail(userExist.getEmail());
+                jwtUserDetails.setToken(tokenMap.get("token"));
+                jwtUserDetails.setRefreshToken(tokenMap.get("refreshToken"));
+                jwtUserDetails.setRefreshTokenExpiredAt(new Date().getTime()+refreshTokenExpirationInMs);
+                jwtUserDetails.setAuthorities(grantedAuthorities);
                 jwtUserDetailsRepository.save(jwtUserDetails);
                 return new ResponseEntity(tokenMap, HttpStatus.OK);
             }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +17,14 @@ import java.io.IOException;
 public class JwtSuccessHandler implements AuthenticationSuccessHandler{
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
         System.out.println("Successfully Authentication");
         System.out.println("Email/Username : " +((JwtUserDetails)authentication.getPrincipal()).getUserName());
         System.out.println("Authorities: " +((JwtUserDetails)authentication.getPrincipal()).getAuthorities());
         System.out.println("Access token : " +((JwtUserDetails)authentication.getPrincipal()).getToken());
-
-
-
     }
+
+
+
+
 }
