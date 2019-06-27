@@ -43,7 +43,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
         expense.setUserContributed(userContributed);
-
+        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
         expenseRepository.save(expense);
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }

@@ -6,4 +6,5 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class DashboardServiceImplTest {
+
 }
