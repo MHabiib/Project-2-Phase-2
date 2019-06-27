@@ -11,16 +11,12 @@
             All Expenses
           </div>
 
-          <input class='expenseTableSearch' type="text" placeholder="Search by anything" />
+          <div style='display: flex;'>
+            <input class='expenseTableSearch' type="text" placeholder="Search by anything" />
 
-          <select class='expenseTableSort' name="sortBy" id="sortBy">
-            <option style='display: none' value="none">Sort By</option>
-            <option value="date">Date</option>
-            <option value="price">Price</option>
-          </select>
-
-          <div class="expenseTableAddNew" @click='openCreateNewExpenseWindow'>
-            Request Expense
+            <div class="expenseTableAddNew" @click='openCreateNewExpenseWindow'>
+              Request Expense
+            </div>
           </div>
         </div>
 
@@ -36,7 +32,7 @@
               </tr>
             </thead>
 
-            <tbody>
+            <tbody id='infiniteScroll'>
               <tr
                 class='expenseRow'
                 v-for='(expense, index) in dataExpense' :key='index'
@@ -143,6 +139,18 @@
       },
       closeCreateNewExpenseWindow() {
         this.showCreateNewExpenseWindow = false;
+      },
+      scroll() {
+        document.getElementById('infiniteScroll').onscroll = (e) => {
+          const scrollY = e.target.scrollTop
+          const visible = e.target.clientHeight
+          const pageHeight = e.target.scrollHeight
+          const bottomOfPage = visible + scrollY >= pageHeight
+
+          if (bottomOfPage || pageHeight < visible) {
+            console.log('Infinite Triggered')
+          }
+        };
       }
     },
     components: {
@@ -158,6 +166,9 @@
           case null: return 'Waiting'
         }
       }
+    },
+    mounted() {
+      this.scroll()
     }
   }
 </script>
@@ -248,15 +259,6 @@
     color: var(--primary-1)
   }
 
-  .expenseTableSort {
-    outline: none;
-    border: none;
-    color: var(--primary-0);
-    border-radius: 4px;
-    width: 100px;
-    height: 29px;
-  }
-
   .expenseTableAddNew {
     background-color: var(--lightColor);
     color: var(--primary-0);
@@ -264,6 +266,7 @@
     font-weight: 500;
     border-radius: 5px;
     font-size: 14px;
+    margin-left: 10px;
   }
 
   .expenseTableAddNew:hover {
