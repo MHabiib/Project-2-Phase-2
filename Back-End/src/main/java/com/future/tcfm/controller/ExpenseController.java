@@ -40,12 +40,14 @@ public class ExpenseController {
         return expenseService.createExpense(expense);
     }
 
-    @PostMapping("/management")
-    public ResponseEntity management(@RequestBody ExpenseRequest request){return expenseService.management(request);}
-
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable("id") String id, @RequestBody Expense expense) {
         return expenseService.updateExpense(id,expense);
+    }
+
+    @PutMapping("/managementExpense")
+    public ResponseEntity managementExpense(ExpenseRequest expenseRequest) {
+        return expenseService.managementExpense(expenseRequest);
     }
 }
 

@@ -11,6 +11,7 @@ public interface ExpenseService {
     List<Expense> expenseGroup(String groupName);
     ResponseEntity createExpense(Expense expense);
     ResponseEntity updateExpense(String id,Expense expense);
-    ResponseEntity management(ExpenseRequest request);
+    ResponseEntity managementExpense(ExpenseRequest expenseRequest);
+    //ResponseEntity management(ExpenseRequest request);
     List<Expense> expenseGroupByEmail(String userEmail);
 }
