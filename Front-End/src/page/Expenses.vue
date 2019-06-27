@@ -19,7 +19,7 @@
             <option value="price">Price</option>
           </select>
 
-          <div class="expenseTableAddNew">
+          <div class="expenseTableAddNew" @click='openCreateNewExpenseWindow'>
             Add New Expense
           </div>
         </div>
@@ -71,6 +71,11 @@
       @closeExpenseDetailWindow="closeExpenseDetailWindow"
       :detailExpenseSelected="this.detailExpenseSelected"
     />
+
+    <createNewExpenseWindow
+      v-if='showCreateNewExpenseWindow'
+      @closeCreateNewExpenseWindow='closeCreateNewExpenseWindow'
+    />
   </div>
 </template>
 
@@ -79,6 +84,7 @@
   import HeaderSection from '../components/HeaderSection';
   import UserContributedWindow from '../components/userContributedWindow';
   import expenseDetailWindow from '../components/expenseDetailWindow';
+  import createNewExpenseWindow from '../components/createNewExpense';
 
   export default {
     computed: {
@@ -89,14 +95,12 @@
     data: function() {
       return {
         dataExpense: [],
-        showUserContributedWindow: false,
-        selectedExpense: '',
         selectedUserList: [],
-        showExpenseDetailWindow: false,
         detailExpenseSelected: {},
-        dummyData: [
-
-        ]
+        selectedExpense: '',
+        showUserContributedWindow: false,
+        showExpenseDetailWindow: false,
+        showCreateNewExpenseWindow: false
       }
     },
     created() {
@@ -106,12 +110,15 @@
       getExpenseData() {
         fetch(`http://localhost:8088/api/expense/group?email=${localStorage.getItem('userEmail')}`, {
           headers: {
-            Authorization: localStorage.getItem('token')
+            Authorization: localStorage.getItem('accessToken')
           }
         })
-        .then(response => response.json())
-        .then(res => {
-          this.dataExpense = res
+        .then(response => {
+          response.json().then(
+            res => {
+              this.dataExpense = res
+            }
+          )
         })
       },
       showUserContributed(selectedExpense, userList) {
@@ -128,11 +135,18 @@
       },
       closeExpenseDetailWindow() {
         this.showExpenseDetailWindow = false;
+      },
+      openCreateNewExpenseWindow() {
+        this.showCreateNewExpenseWindow = true;
+      },
+      closeCreateNewExpenseWindow() {
+        this.showCreateNewExpenseWindow = false;
       }
     },
     components: {
       'UserContributedWindow': UserContributedWindow,
-      'expenseDetailWindow': expenseDetailWindow
+      'expenseDetailWindow': expenseDetailWindow,
+      'createNewExpenseWindow': createNewExpenseWindow
     },
     filters: {
       statusChecker(status) {

@@ -37,13 +37,16 @@ public class ExpenseServiceImpl implements ExpenseService {
             return new ResponseEntity<>("Failed to request Expense!\nTitle already exists!", HttpStatus.BAD_REQUEST);
 
         expense.setCreatedDate(new Date().getTime());
-        expense.setGroupName(expense.getGroupName());
+
+        expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
         if (expense.getGroupName() == null)
             return new ResponseEntity<>("Failed to request Expense!\nGroup not Found!", HttpStatus.BAD_REQUEST);
 
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
         expense.setUserContributed(userContributed);
+
         expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
+
         expenseRepository.save(expense);
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
