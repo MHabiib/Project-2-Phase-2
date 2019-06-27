@@ -1,6 +1,5 @@
 package com.future.tcfm.model;
 
-import com.future.tcfm.model.list.ApproverContributor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,14 +22,11 @@ public class Expense {
     private String detail;
     private Double price;
     private String requester;
-    private List<ApproverContributor> contributorList;
     private List<User> userContributed;
-    private List<ApproverContributor> approverList; // Ini cancel
     private Long createdDate;
     private Long rejectedDate;
     private Long approvedDate;
     private Boolean status;
-    private Integer percentageApproved;
 
 //    public void setContributorList(List<ApproverContributor> contributorList) {
 //        this.contributorList = contributorList;
