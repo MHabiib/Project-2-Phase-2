@@ -34,10 +34,12 @@
         };
 
         this.axios
-          .post('http://localhost:8088/token', dataLogin)
+          .post('http://localhost:8088/auth/signin', dataLogin)
           .then(res => {
-            // this.$store.dispatch("login", res.data);
-            localStorage.setItem('token', `Token ${res.data}`);
+            // console.log(res.data.accessToken);
+            // this.$store.dispatch(lo"login", res.data);
+            localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);
+            localStorage.setItem('refreshToken', `${res.data.refreshToken}`);
             localStorage.setItem('userEmail', this.emailInput);
           })
           .then(()=> {

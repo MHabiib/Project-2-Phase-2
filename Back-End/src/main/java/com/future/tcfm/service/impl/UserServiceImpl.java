@@ -34,7 +34,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Service
 public class UserServiceImpl implements UserService {
     public static final String UPLOADED_FOLDER="..\\assets\\";
-    public static final String UPLOADED_URL = "http://localhost:8088/api/user/img/";
+    public static final String UPLOADED_URL = "http://localhost:8088/img/";
 
     @Autowired
     UserRepository userRepository;
