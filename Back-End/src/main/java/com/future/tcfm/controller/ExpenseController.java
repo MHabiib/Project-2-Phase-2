@@ -46,8 +46,8 @@ public class ExpenseController {
     }
 
     @PutMapping("/managementExpense")
-    public ResponseEntity managementExpense( String id, ExpenseRequest expenseRequest) {
-        return expenseService.managementExpense(id,expenseRequest);
+    public ResponseEntity managementExpense(ExpenseRequest expenseRequest) {
+        return expenseService.managementExpense(expenseRequest);
     }
 }
 

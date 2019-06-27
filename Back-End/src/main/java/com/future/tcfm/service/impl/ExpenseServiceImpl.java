@@ -86,7 +86,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity managementExpense(String id, ExpenseRequest expenseRequest){
+    public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
