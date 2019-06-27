@@ -21,7 +21,7 @@ const mutations =  {
   [LOGOUT](state) {
     state.isLoggedIn = false;
   }
-}
+};
 const actions = {
   login({ commit }, TOKEN) {
     commit(LOGIN); // show spinner

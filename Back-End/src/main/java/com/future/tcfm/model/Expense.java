@@ -22,6 +22,7 @@ public class Expense {
     private String title;
     private String detail;
     private Double price;
+    private String requester;
     private List<ApproverContributor> contributorList;
     private List<User> userContributed;
     private List<ApproverContributor> approverList; // Ini cancel

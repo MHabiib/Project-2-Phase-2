@@ -115,10 +115,11 @@ public class ExpenseServiceImpl implements ExpenseService {
             groupDtl.setTotalExpense(groupDtl.getTotalExpense()+expense.getPrice());
             expenseRepository.save(expense);
             groupRepository.save(groupDtl);
-            return new ResponseEntity<>("Expense Approved and Got More Than 25% Approver!", HttpStatus.OK);
+            return new ResponseEntity<>("Expense Approved and Got More Than 2Approved!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Expense Approved!", HttpStatus.OK);
+        return new ResponseEntity<>("Expense Approved",HttpStatus.OK);
     }
+
 
     @Override
     public List<Expense> expenseGroupByEmail(String userEmail) {

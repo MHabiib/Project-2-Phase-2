@@ -50,6 +50,7 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setActive(group.getActive());
         groupExist.setCreatedDate(new Date().getTime());
+        groupRepository.save(groupExist);
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 }
