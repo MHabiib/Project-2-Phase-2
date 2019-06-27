@@ -26,19 +26,27 @@ public class ExpenseServiceImplTest {
     @Mock
     ExpenseRepository expenseRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     @InjectMocks
     ExpenseServiceImpl expenseService;
 
     private Expense expense;
+    private User user;
 
     @Before
     public void init(){
         expense = new Expense();
+        user = new User();
+        user.setGroupName("BDZ");
+        user.setEmail("sana@jyp.com");
         expense.setGroupName("BDZ");
         expense.setTitle("Sound");
         expense.setDetail("Marshall");
         expense.setPrice((double) 15000000);
-//        expense.setUserContributed();
+        expense.setUserContributed(Arrays.asList(user,user,user));
+        expense.setRequester("sana@jyp.com");
     }
 
     @Test

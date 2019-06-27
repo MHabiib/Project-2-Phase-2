@@ -35,6 +35,11 @@ public class ExpenseController {
         return expenseService.expenseGroupByEmail(userEmail);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Expense> singleExpense(@PathVariable("id") String id) {
+        return expenseService.singleExpense(id);
+    }
+
     @PostMapping
     public ResponseEntity createExpense(@RequestBody Expense expense) {
         return expenseService.createExpense(expense);
@@ -46,7 +51,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/managementExpense")
-    public ResponseEntity managementExpense(ExpenseRequest expenseRequest) {
+    public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) {
         return expenseService.managementExpense(expenseRequest);
     }
 }
