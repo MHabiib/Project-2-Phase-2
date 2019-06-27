@@ -1,7 +1,7 @@
 package com.future.tcfm.service;
 
 import com.future.tcfm.model.Expense;
-import com.future.tcfm.model.request.ExpenseRequest;
+import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

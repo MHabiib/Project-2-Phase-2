@@ -20,7 +20,7 @@
           </select>
 
           <div class="expenseTableAddNew" @click='openCreateNewExpenseWindow'>
-            Add New Expense
+            Request Expense
           </div>
         </div>
 
@@ -40,7 +40,7 @@
               <tr
                 class='expenseRow'
                 v-for='(expense, index) in dataExpense' :key='index'
-                @click="openExpenseDetailWindow(expense)"
+                @click="openExpenseDetailWindow(expense.idExpense)"
               >
                 <td>{{expense.createdDate | dateFormatter}}</td>
                 <td>{{expense.title}}</td>
@@ -69,12 +69,14 @@
     <expenseDetailWindow
       v-if='showExpenseDetailWindow'
       @closeExpenseDetailWindow="closeExpenseDetailWindow"
-      :detailExpenseSelected="this.detailExpenseSelected"
+      @refreshData="getExpenseData"
+      :expenseId="this.detailExpenseSelected"
     />
 
     <createNewExpenseWindow
       v-if='showCreateNewExpenseWindow'
       @closeCreateNewExpenseWindow='closeCreateNewExpenseWindow'
+      @refreshData="getExpenseData"
     />
   </div>
 </template>
@@ -96,7 +98,7 @@
       return {
         dataExpense: [],
         selectedUserList: [],
-        detailExpenseSelected: {},
+        detailExpenseSelected: '',
         selectedExpense: '',
         showUserContributedWindow: false,
         showExpenseDetailWindow: false,
@@ -129,9 +131,9 @@
       closeUserContributedWindow() {
         this.showUserContributedWindow = false;
       },
-      openExpenseDetailWindow(expense) {
+      openExpenseDetailWindow(expenseId) {
         this.showExpenseDetailWindow = true;
-        this.detailExpenseSelected = expense;
+        this.detailExpenseSelected = expenseId;
       },
       closeExpenseDetailWindow() {
         this.showExpenseDetailWindow = false;
@@ -259,8 +261,9 @@
     background-color: var(--lightColor);
     color: var(--primary-0);
     padding: 10px;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 5px;
+    font-size: 14px;
   }
 
   .expenseTableAddNew:hover {

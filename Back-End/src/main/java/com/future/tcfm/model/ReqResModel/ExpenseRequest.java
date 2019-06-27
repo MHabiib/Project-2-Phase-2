@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExpenseRequest {
     private String id;
-    private String status;
+    private Boolean status;
 }

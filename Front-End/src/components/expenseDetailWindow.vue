@@ -44,11 +44,11 @@
             </div>
 
             <div class="expenseDetailButton">
-              <div class="rejectButton">
+              <div :class="{disableButton: disableButton ,rejectButton: !disableButton}" @click="updateExpenseStatus(expenseDetail.idExpense ,false)">
                 Reject
               </div>
 
-              <div class="acceptButton">
+              <div :class="{disableButton: disableButton ,acceptButton: !disableButton}" @click="updateExpenseStatus(expenseDetail.idExpense ,true)">
                 Accept
               </div>
             </div>
@@ -60,19 +60,63 @@
 
 <script>
   export default {
-    props: ['detailExpenseSelected'],
+    props: ['expenseId'],
     methods: {
       closeExpenseDetailWindow() {
         this.$emit('closeExpenseDetailWindow')
+      },
+      updateExpenseStatus(id, status) {
+        if(this.disableButton !== true) {
+          this.disableButton = true;
+          fetch(`http://localhost:8088/api/expense/managementExpense`, {
+            method: 'POST',
+            headers: {
+              'Authorization': localStorage.getItem('accessToken'),
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: id,
+              status: status
+            })
+          })
+          .then(response => {
+            if(response.ok) {
+              this.getExpenseData(this.expenseId);
+              this.$emit('refreshData')
+            }
+          })
+        }
+      },
+      checkStatus(status) {
+        console.log(status !== null)
+        if(status !== null) {
+          this.disableButton = true
+        }
+      },
+      getExpenseData(id) {
+        fetch(`http://localhost:8088/api/expense/${id}`, {
+          headers: {
+            'Authorization': localStorage.getItem('accessToken')
+          }
+        })
+        .then(response => {
+          response.json().then(
+            res => {
+              this.expenseDetail = res;
+              this.checkStatus(res.status);
+            }
+          )
+        })
       }
     },
     created() {
-      this.expenseDetail = this.detailExpenseSelected;
-      console.log(this.detailExpenseSelected);
+      this.getExpenseData(this.expenseId);
     },
     data: function() {
       return {
-        expenseDetail: {}
+        expenseDetail: {},
+        disableButton: false
       }
     },
     filters: {
@@ -173,7 +217,7 @@
     font-size: 12px;
   }
 
-  .acceptButton, .rejectButton {
+  .acceptButton, .rejectButton, .disableButton {
     padding: 7px 10px;
     border-radius: 4px;
     width: 50px;
@@ -208,5 +252,9 @@
   .expenseDetailLabel {
     width: 105px;
     font-weight: 600;
+  }
+
+  .disableButton {
+    background-color: #999;
   }
 </style>

@@ -1,7 +1,7 @@
 package com.future.tcfm.controller;
 
 import com.future.tcfm.model.Expense;
-import com.future.tcfm.model.request.ExpenseRequest;
+import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.service.ExpenseService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class ExpenseController {
         return expenseService.updateExpense(id,expense);
     }
 
-    @PutMapping("/managementExpense")
+    @PostMapping("/managementExpense")
     public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) {
         return expenseService.managementExpense(expenseRequest);
     }

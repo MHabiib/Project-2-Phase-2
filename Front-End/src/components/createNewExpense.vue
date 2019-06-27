@@ -1,14 +1,19 @@
 <template>
   <div class='fixedPosition'>
-    <div class='userContributedWindow'>
-      <div class='windowSize'>
-        <div class="userContributedHeader">
-          <div>Add New Expense</div>
-          <div class="closeButton" @click="closeCreateNewExpenseWindow">Close</div>
+    <div class='createNewExpenseWindow'>
+      <div class='createNewExpenseWindowSize'>
+        <div class="createNewExpenseHeader">
+          <div>Request Expense</div>
+          <div class='buttonGroup'>
+            <div class="closeButton" @click="closeCreateNewExpenseWindow">Close</div>
+            <div class="okButton" @click="createNewExpense">OK</div>
+          </div>
         </div>
 
-        <div class="userContributedBody">
-
+        <div class="createNewExpenseBody">
+          <input class='singleLineInput' type="text" placeholder='Perkiraan Biaya' v-model='biaya' @keypress="checkChar" @change='checkChange'/>
+          <input class='singleLineInput' type="text" placeholder='Nama Pengeluaran' v-model='namaPengeluaran'/>
+          <textarea class='multiLineInput' type="text" placeholder='Jelaskan lebih lengkap tentang pengeluaran ini di sini...' v-model='deskripsiPengeluaran'/>
         </div>
       </div>
     </div>
@@ -19,7 +24,9 @@
   export default {
     data: function() {
       return {
-
+        biaya: '',
+        namaPengeluaran: '',
+        deskripsiPengeluaran: ''
       }
     },
     created() {
@@ -28,6 +35,62 @@
     methods: {
       closeCreateNewExpenseWindow() {
         this.$emit('closeCreateNewExpenseWindow')
+      },
+      checkChar(e) {
+        if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode === 8) {} else {
+          e.preventDefault();
+        }
+      },
+      checkChange(e) {
+        let biayaWithOutDot = '';
+        this.biaya.toString().split('').forEach(element => {
+          if(element !== '.') {biayaWithOutDot += element}
+        })
+        this.biaya = this.thousandSeparators(biayaWithOutDot);
+      },
+      thousandSeparators: function(numbers) {
+        if(numbers === undefined) {
+          return '';
+        } else {
+          let result = '';
+          let counter = 0;
+          for (let i = numbers.toString().length ; i >= 0 ; i--){
+              if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
+                  result = '.' + numbers.toString().substr(i, 1) + result;
+              } else {
+                  result = numbers.toString().substr(i, 1) + result;
+              }
+              counter += 1;
+          }
+          return result;
+        }
+      },
+      createNewExpense() {
+        let biayaWithOutDot = '';
+        this.biaya.toString().split('').forEach(element => {
+          if(element !== '.') {biayaWithOutDot += element}
+        })
+
+        fetch(`http://localhost:8088/api/expense`, {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "detail": this.deskripsiPengeluaran,
+            "price": biayaWithOutDot,
+            "title": this.namaPengeluaran,
+            "requester": localStorage.getItem('userEmail')
+          })
+        })
+        .then(response => {
+          if(response.ok) {
+            this.$emit('refreshData');
+            this.$emit('closeCreateNewExpenseWindow');
+          }
+        })
       }
     }
   }
@@ -38,7 +101,7 @@
     position: absolute;
   }
 
-  .userContributedWindow {
+  .createNewExpenseWindow {
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -49,7 +112,7 @@
     position: absolute;
   }
 
-  .userContributedHeader {
+  .createNewExpenseHeader {
     background-color: var(--primary-0);
     color: var(--lightColor);
     padding: 16px 12px;
@@ -62,14 +125,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: 600;
   }
 
-  .windowSize {
+  .createNewExpenseWindowSize {
     width: 35%;
-    height: 50%;
+    height: 30%;
   }
 
-  .userContributedBody {
+  .createNewExpenseBody {
     background-color: white;
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
@@ -78,36 +142,46 @@
     padding: 20px;
     padding-top: 32px;
     height: 100%;
-    overflow: auto;
-  }
-
-  .userContributedBodyContent {
-    display: flex;
-    margin-top: 15px;
-    align-items: center;
-  }
-
-  .userContributedBodyContentLeft img {
-    border-radius: 50%;
-    width: 50px;
-  }
-
-  .userContributedBodyContentLeft {
-    margin-right: 15px;
-  }
-
-  .userContributedName {
-    color: var(--primary-3);
-    font-weight: 600;
-  }
-
-  .userContributedEmail {
-    font-size: 13px;
-    color: var(--primary-2);
   }
 
   .closeButton {
     font-size: 12px;
     cursor: pointer;
+    font-weight: 400;
+  }
+
+  .okButton {
+    background-color: #fff;
+    padding: 7px;
+    color: var(--primary-0);
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 400;
+    margin-left: 10px;
+  }
+
+  .buttonGroup {
+    display: flex;
+    align-items: center;
+  }
+
+  .singleLineInput, .multiLineInput {
+    outline: none;
+    padding: 10px;
+    border: solid 1px var(--primary-1);
+    color: var(--primary-4);
+    width: 100%;
+    margin-top: 10px;
+    box-sizing: border-box;
+  }
+
+  .singleLineInput::placeholder, .multiLineInput::placeholder {
+    color: var(--primary-1);
+  }
+
+  .multiLineInput {
+    height: 50%;
+    resize: none;
   }
 </style>
