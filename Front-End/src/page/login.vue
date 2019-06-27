@@ -36,9 +36,10 @@
         this.axios
           .post('http://localhost:8088/auth/signin', dataLogin)
           .then(res => {
-            // console.log(res.data.accessToken);
+            console.log(`Access Token diterima: ${res.data.token}`);
+            console.log(`Refresh Token diterima: ${res.data.refreshToken}`);
             // this.$store.dispatch(lo"login", res.data);
-            localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);
+            localStorage.setItem('accessToken', `Token ${res.data.token}`);
             localStorage.setItem('refreshToken', `${res.data.refreshToken}`);
             localStorage.setItem('userEmail', this.emailInput);
           })

@@ -182,34 +182,12 @@
           }
         })
         .then(response => {
-          if(response.status === 401) {
-            fetch(`http://localhost:8088/auth/refreshToken`, {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                token: localStorage.getItem('accessToken'),
-                refreshToken: localStorage.getItem('refreshToken')
-              })
-            })
-            .then(response => response.json())
-            .then(res => {
-              console.log(res);
-              localStorage.setItem('accessToken', res.data.accessToken);
-              localStorage.setItem('refreshToken', res.data.refreshToken);
-              this.getDashboardData();
-            })
-          } else {
-            response => response.json();
-          }
+          response.json().then(
+            res => {
+              this.dashboardData = res;
+            }
+          )
         })
-        .then(res => {
-          console.log(res);
-          this.dashboardData = res;
-        })
-        .catch(err => {console.log(err);})
       }
     }
   }

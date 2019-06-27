@@ -93,7 +93,10 @@
         selectedExpense: '',
         selectedUserList: [],
         showExpenseDetailWindow: false,
-        detailExpenseSelected: {}
+        detailExpenseSelected: {},
+        dummyData: [
+
+        ]
       }
     },
     created() {
