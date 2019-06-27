@@ -56,6 +56,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    public ResponseEntity singleExpense(String id) {
+        Expense expenseExist = expenseRepository.findByIdExpense(id);
+        if (expenseExist!=null)
+            return new ResponseEntity<>(expenseExist, HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Expense Not Found!", HttpStatus.NOT_FOUND);
+    }
+
+    @Override
     public List<Expense> expenseGroupByEmail(String userEmail) {
         User userSelected = userRepository.findByEmail(userEmail);
         String userGroup = userSelected.getGroupName();

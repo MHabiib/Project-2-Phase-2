@@ -10,6 +10,7 @@ public interface ExpenseService {
     List<Expense> loadAll();
     List<Expense> expenseGroup(String groupName);
     ResponseEntity createExpense(Expense expense);
+    ResponseEntity singleExpense(String id);
     ResponseEntity updateExpense(String id,Expense expense);
     ResponseEntity managementExpense(ExpenseRequest expenseRequest);
     //ResponseEntity management(ExpenseRequest request);
