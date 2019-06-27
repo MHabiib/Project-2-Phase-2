@@ -45,8 +45,8 @@ public class ExpenseController {
         return expenseService.updateExpense(id,expense);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity managementExpense(@PathVariable("id") String id, ExpenseRequest expenseRequest) {
+    @PutMapping("/managementExpense")
+    public ResponseEntity managementExpense( String id, ExpenseRequest expenseRequest) {
         return expenseService.managementExpense(id,expenseRequest);
     }
 }
