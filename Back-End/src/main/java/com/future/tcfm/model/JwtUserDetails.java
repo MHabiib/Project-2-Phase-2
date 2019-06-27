@@ -1,27 +1,38 @@
 package com.future.tcfm.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "JwtUserDetails")
 public class JwtUserDetails implements UserDetails {
-
-    private String email;
-    private String token;
+    @Id
     private String id;
+    private String email;
+    private String token; // ini yang digunakan sbg akses Token
     private String refreshToken;
+    private Long refreshTokenExpiredAt;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUserDetails(String email, String id, String token, List<GrantedAuthority> grantedAuthorities) {
+    public JwtUserDetails(String email,String token,String refreshToken, Long refTokenExpAt,List<GrantedAuthority> grantedAuthorities){
         this.email = email;
-        this.id = id;
         this.token= token;
+        this.refreshToken = refreshToken;
+        this.refreshTokenExpiredAt = refTokenExpAt;
         this.authorities = grantedAuthorities;
-    }
 
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -56,19 +67,10 @@ public class JwtUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(id);
-    }
-
     public String getUserName() {
         return email;
     }
     public String getToken() {
         return token;
-    }
-    public String getId() {
-        return id;
     }
 }

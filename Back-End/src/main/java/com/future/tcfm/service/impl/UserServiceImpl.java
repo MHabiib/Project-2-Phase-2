@@ -69,9 +69,7 @@ public class UserServiceImpl implements UserService {
             if (StringUtils.isEmpty(fileName)) {
                 return false;
             }
-            if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/bmp")) {
-                return true;
-            }
+            return file.getContentType().equals("image/png") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/bmp");
         }
         return false;
     }
@@ -182,7 +180,7 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Failed to update User!\nUserId not found!", HttpStatus.NOT_FOUND);
         if(!userExist.getEmail().equals(user.getEmail())) {
             if(userRepository.findByEmail(user.getEmail())!=null)
-                return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST); ;
+                return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST);
         }
         if(userExist.getGroupName()!=user.getGroupName())
             userExist.setJoinDate(new Date().getTime());

@@ -1,6 +1,7 @@
 package com.future.tcfm.config;
 
 import com.future.tcfm.config.security.*;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
-//    @Bean //kalau pakai @Bean nth kenapa filternya dijalankan dua kali, bisa di cek pas authentication success bakalan print successfuly authentication2x
+
+    @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilter() {
         JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
         filter.setAuthenticationManager(authenticationManager());
@@ -60,7 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
 //                .antMatchers("**/api/**").authenticated()
+                //hanya user dengan role/authority ADMIN yang bisa akses PUT ke api dibawah
                 .antMatchers(HttpMethod.PUT,"/api/expense").hasAuthority("ADMIN")
+                //hanya Admin yang bisa akses POST ke api dibawah (buat group dan buat user)
                 .antMatchers(HttpMethod.POST,"/api/user","/api/group").hasAuthority("ADMIN")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
