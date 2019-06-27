@@ -41,4 +41,8 @@ public class AuthController {
             ) {
         return jwtValidator.getRefreshToken(tokenResponse.getToken(),tokenResponse.getRefreshToken());
     }
+    @DeleteMapping(value = "/signout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity signOut(@RequestBody TokenResponse tokenResponse){
+        return jwtValidator.signOut(tokenResponse.getToken(),tokenResponse.getRefreshToken());
+    }
 }

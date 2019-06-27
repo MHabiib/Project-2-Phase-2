@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Service
@@ -36,8 +35,6 @@ public class JwtValidator {
     @Autowired
     private JwtUserDetailsRepository jwtUserDetailsRepository;
 
-    @Autowired
-    private UserRepository userRepository;
     public JwtUserDetails validate(String token) {
 
         JwtUserDetails jwtUserDetails= null;
@@ -68,7 +65,7 @@ public class JwtValidator {
         System.out.println(token+"_"+refreshToken);
         JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByTokenAndRefreshToken(token,refreshToken);
         if(jwtUserDetails==null){
-            return new ResponseEntity("404 RefreshToken not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("401 Unauthorized access", HttpStatus.NOT_FOUND);
         }
         if(jwtUserDetails.getRefreshTokenExpiredAt()<System.currentTimeMillis()){
             jwtUserDetailsRepository.delete(jwtUserDetails);
@@ -84,6 +81,15 @@ public class JwtValidator {
         tokenMap.put("refreshToken",newRefreshToken);
         jwtUserDetailsRepository.save(jwtUserDetails);
         return new ResponseEntity(tokenMap,HttpStatus.OK);
+    }
+
+    public ResponseEntity signOut(String token,String refreshToken){
+        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByTokenAndRefreshToken(token,refreshToken);
+        if(jwtUserDetails==null){
+            return new ResponseEntity("404 CurrentUser not found", HttpStatus.NOT_FOUND);
+        }
+        jwtUserDetailsRepository.delete(jwtUserDetails);
+        return new ResponseEntity("Logout succeed",HttpStatus.OK);
     }
 
 }

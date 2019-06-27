@@ -58,7 +58,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         String newToken=validator.onSuccessAuth(jwtUserDetails.getEmail());
         System.out.println("NewToken : "+newToken);
         if(newToken == null) newToken = "NULL_TOKEN";
-        response.addHeader("Authorization",newToken);
+        response.setHeader("Authorization",newToken);
         response.setStatus(HttpServletResponse.SC_OK);
         chain.doFilter(request, response);
     }
