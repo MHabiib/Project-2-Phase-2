@@ -44,11 +44,17 @@
             </div>
 
             <div class="expenseDetailButton">
-              <div :class="{disableButton: disableButton ,rejectButton: !disableButton}" @click="updateExpenseStatus(expenseDetail.idExpense ,false)">
+              <div
+                :class="{disableButton: disableButton ,rejectButton: !disableButton}"
+                @click="updateExpenseStatus(expenseDetail.idExpense ,false)"
+              >
                 Reject
               </div>
 
-              <div :class="{disableButton: disableButton ,acceptButton: !disableButton}" @click="updateExpenseStatus(expenseDetail.idExpense ,true)">
+              <div
+                :class="{disableButton: disableButton ,acceptButton: !disableButton}"
+                @click="updateExpenseStatus(expenseDetail.idExpense ,true)"
+              >
                 Accept
               </div>
             </div>
@@ -62,9 +68,7 @@
   export default {
     props: ['expenseId'],
     methods: {
-      closeExpenseDetailWindow() {
-        this.$emit('closeExpenseDetailWindow')
-      },
+      closeExpenseDetailWindow() {this.$emit('closeExpenseDetailWindow')},
       updateExpenseStatus(id, status) {
         if(this.disableButton !== true) {
           this.disableButton = true;
@@ -88,17 +92,10 @@
           })
         }
       },
-      checkStatus(status) {
-        console.log(status !== null)
-        if(status !== null) {
-          this.disableButton = true
-        }
-      },
+      checkStatus(status) {if(status !== null) {this.disableButton = true}},
       getExpenseData(id) {
         fetch(`http://localhost:8088/api/expense/${id}`, {
-          headers: {
-            'Authorization': localStorage.getItem('accessToken')
-          }
+          headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
           response.json().then(
@@ -110,9 +107,7 @@
         })
       }
     },
-    created() {
-      this.getExpenseData(this.expenseId);
-    },
+    created() {this.getExpenseData(this.expenseId);},
     data: function() {
       return {
         expenseDetail: {},
@@ -132,9 +127,7 @@
 </script>
 
 <style>
-  .fixedPosition {
-    position: absolute;
-  }
+  .fixedPosition {position: absolute;}
 
   .expenseDetailWindow {
     display: flex;
@@ -189,15 +182,17 @@
     font-size: 14px;
   }
 
-  .expenseDetailFirstRow, .expenseDetailFifthRow, .expenseDetailButton, .expenseDetailRequester, .expenseDetailSecondRow {
+  .expenseDetailFirstRow,
+  .expenseDetailFifthRow,
+  .expenseDetailButton,
+  .expenseDetailRequester,
+  .expenseDetailSecondRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .expenseDetailRow {
-    margin-top: 15px;
-  }
+  .expenseDetailRow {margin-top: 15px;}
 
   .expenseDetailContainer {
     display: flex;
@@ -225,36 +220,14 @@
     margin-left: 5px;
   }
 
-  .acceptButton {
-    background-color: var(--primary-0);
-  }
-
-  .acceptButton:hover {
-    opacity: .9;
-  }
-
-  .acceptButton:active {
-    opacity: 1;
-  }
-
-  .rejectButton {
-    background-color: var(--warning);
-  }
-
-  .rejectButton:hover {
-    opacity: .9;
-  }
-
-  .rejectButton:active {
-    opacity: 1;
-  }
+  .acceptButton {background-color: var(--primary-0);}
+  .rejectButton {background-color: var(--warning);}
+  .disableButton {background-color: #999;}
+  .acceptButton:hover, .rejectButton:hover {opacity: .9;}
+  .acceptButton:active, .rejectButton:active {opacity: 1;}
 
   .expenseDetailLabel {
     width: 105px;
     font-weight: 600;
-  }
-
-  .disableButton {
-    background-color: #999;
   }
 </style>

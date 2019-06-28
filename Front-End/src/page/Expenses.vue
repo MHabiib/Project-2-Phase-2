@@ -12,7 +12,7 @@
           </div>
 
           <div style='display: flex;'>
-            <input class='expenseTableSearch' type="text" placeholder="Search by anything" />
+            <input class='expenseTableSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
 
             <div class="expenseTableAddNew" @click='openCreateNewExpenseWindow'>
               Request Expense
@@ -35,7 +35,7 @@
             <tbody id='infiniteScroll'>
               <tr
                 class='expenseRow'
-                v-for='(expense, index) in dataExpense' :key='index'
+                v-for='(expense, index) in dataExpenseShown' :key='index'
                 @click="openExpenseDetailWindow(expense.idExpense)"
               >
                 <td>{{expense.createdDate | dateFormatter}}</td>
@@ -85,36 +85,31 @@
   import createNewExpenseWindow from '../components/createNewExpense';
 
   export default {
-    computed: {
-      rightPanelWidth: function() {
-        return (document.documentElement.clientWidth - 280);
-      }
-    },
+    computed: {rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);}},
     data: function() {
       return {
         dataExpense: [],
+        dataExpenseShown: [],
         selectedUserList: [],
         detailExpenseSelected: '',
         selectedExpense: '',
         showUserContributedWindow: false,
         showExpenseDetailWindow: false,
-        showCreateNewExpenseWindow: false
+        showCreateNewExpenseWindow: false,
+        searchQuery: ''
       }
     },
-    created() {
-      this.getExpenseData();
-    },
+    created() {this.getExpenseData();},
     methods: {
       getExpenseData() {
         fetch(`http://localhost:8088/api/expense/group?email=${localStorage.getItem('userEmail')}`, {
-          headers: {
-            Authorization: localStorage.getItem('accessToken')
-          }
+          headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
           response.json().then(
             res => {
-              this.dataExpense = res
+              this.dataExpense = res;
+              this.dataExpenseShown = res;
             }
           )
         })
@@ -124,33 +119,50 @@
         this.selectedUserList = userList;
         this.showUserContributedWindow = true;
       },
-      closeUserContributedWindow() {
-        this.showUserContributedWindow = false;
-      },
+      closeUserContributedWindow() {this.showUserContributedWindow = false;},
       openExpenseDetailWindow(expenseId) {
         this.showExpenseDetailWindow = true;
         this.detailExpenseSelected = expenseId;
       },
-      closeExpenseDetailWindow() {
-        this.showExpenseDetailWindow = false;
-      },
-      openCreateNewExpenseWindow() {
-        this.showCreateNewExpenseWindow = true;
-      },
-      closeCreateNewExpenseWindow() {
-        this.showCreateNewExpenseWindow = false;
-      },
+      closeExpenseDetailWindow() {this.showExpenseDetailWindow = false;},
+      openCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = true;},
+      closeCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = false;},
       scroll() {
         document.getElementById('infiniteScroll').onscroll = (e) => {
           const scrollY = e.target.scrollTop
           const visible = e.target.clientHeight
           const pageHeight = e.target.scrollHeight
           const bottomOfPage = visible + scrollY >= pageHeight
-
-          if (bottomOfPage || pageHeight < visible) {
-            console.log('Infinite Triggered')
-          }
+          if (bottomOfPage || pageHeight < visible) {console.log('Infinite Triggered')}
         };
+      },
+      dateFormatter(dateToFormat) {
+        const monthToString = (month)=> {
+          switch(month) {
+            case 0: return 'January'
+            case 1: return 'February'
+            case 2: return 'March'
+            case 3: return 'April'
+            case 4: return 'May'
+            case 5: return 'June'
+            case 6: return 'July'
+            case 7: return 'August'
+            case 8: return 'September'
+            case 9: return 'October'
+            case 10: return 'November'
+            case 11: return 'December'
+          }
+        }
+
+        const dateObjected = new Date(dateToFormat);
+        return `${dateObjected.getDate()} ${monthToString(dateObjected.getMonth())} ${dateObjected.getFullYear()}`
+      },
+      statusChecker(status) {
+        switch(status) {
+          case true: return 'Accepted'
+          case false: return 'Rejected'
+          case null: return 'Waiting'
+        }
       }
     },
     components: {
@@ -167,25 +179,47 @@
         }
       }
     },
-    mounted() {
-      this.scroll()
-    }
+    mounted() {this.scroll()},
+    watch: {
+      searchQuery: function (newQuery, oldQuery) {
+        if(newQuery === '') {
+          this.dataExpenseShown = this.dataExpense;
+        } else {
+          let dataFiltered = [];
+          const queryBaru = newQuery.toString().toLowerCase();
+
+          this.dataExpense.forEach(element => {
+            const dateElement = this.dateFormatter(element.createdDate).toString().toLowerCase();
+            const titleElement = element.title.toString().toLowerCase();
+            const statusElement = this.statusChecker(element.status).toString().toLowerCase();
+            const priceElement = element.price.toString();
+
+            if(
+              dateElement.includes(queryBaru) ||
+              titleElement.includes(queryBaru) ||
+              statusElement.includes(queryBaru) ||
+              priceElement.includes(queryBaru)
+            ) {
+              dataFiltered.push(element)
+            }
+          })
+
+          this.dataExpenseShown = dataFiltered;
+        }
+      }
+    },
   }
 </script>
 
 <style>
-  .expensesComponent {
-    display: flex;
-  }
+  .expensesComponent {display: flex;}
 
   .rightPanel {
     padding: 20px 20px 0 30px;
     box-sizing: border-box;
   }
 
-  .expensesBodySection {
-    margin-top: 30px;
-  }
+  .expensesBodySection {margin-top: 30px;}
 
   .expensesTableHeader {
     background-color: var(--primary-0);
@@ -219,9 +253,7 @@
     line-height: 35px;
   }
 
-  .expensesTableBody table {
-    width: 100%;
-  }
+  .expensesTableBody table {width: 100%;}
 
   .expensesTableBody tbody {
     height: 60vh;
@@ -232,15 +264,24 @@
   }
 
   .expensesTableBody thead tr, .expensesTableBody tbody {display: block; box-sizing: border-box;}
-  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {width: 13vw; text-align: left; padding-left: 10px;}
-  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {width: 300px; text-align: left; padding-left: 10px;}
+
+  .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {
+    width: 13vw;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {
+    width: 300px;
+    text-align: left;
+    padding-left: 10px;
+  }
+
   .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {width: 10vw;}
   .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 11vw;}
   .expensesTableBody tbody td:nth-child(5), .expensesTableBody thead tr th:nth-child(5) {width: 10vw;}
 
-  .showMembersButton {
-    cursor: pointer;
-  }
+  .showMembersButton {cursor: pointer;}
 
   .showMembersButton:hover {
     text-decoration: underline;
@@ -255,9 +296,7 @@
     border-radius: 4px;
   }
 
-  .expenseTableSearch::placeholder {
-    color: var(--primary-1)
-  }
+  .expenseTableSearch::placeholder {color: var(--primary-1)}
 
   .expenseTableAddNew {
     background-color: var(--lightColor);
@@ -275,19 +314,8 @@
     cursor: pointer;
   }
 
-  .expenseTableAddNew:active {
-    background-color: var(--primary-4);
-  }
-
-  .expenseRow {
-    cursor: pointer;
-  }
-
-  .expenseRow:hover {
-    background-color: white;
-  }
-
-  .expenseRow:active {
-    background-color: rgba(255, 255, 255, .5);
-  }
+  .expenseTableAddNew:active {background-color: var(--primary-4);}
+  .expenseRow {cursor: pointer;}
+  .expenseRow:hover {background-color: white;}
+  .expenseRow:active {background-color: rgba(255, 255, 255, .5);}
 </style>
