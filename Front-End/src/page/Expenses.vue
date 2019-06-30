@@ -109,7 +109,7 @@
           response.json().then(
             res => {
               this.dataExpense = res;
-              this.dataExpenseShown = res;
+              this.filterData(this.searchQuery);
             }
           )
         })
@@ -129,11 +129,9 @@
       closeCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = false;},
       scroll() {
         document.getElementById('infiniteScroll').onscroll = (e) => {
-          const scrollY = e.target.scrollTop
-          const visible = e.target.clientHeight
-          const pageHeight = e.target.scrollHeight
-          const bottomOfPage = visible + scrollY >= pageHeight
-          if (bottomOfPage || pageHeight < visible) {console.log('Infinite Triggered')}
+          if(e.target.clientHeight + e.target.scrollTop >= e.target.scrollHeight) {
+            console.log('Infinite Triggered')
+          }
         };
       },
       dateFormatter(dateToFormat) {
@@ -163,6 +161,32 @@
           case false: return 'Rejected'
           case null: return 'Waiting'
         }
+      },
+      filterData(newQuery) {
+        let dataFiltered = [];
+        const queryBaru = newQuery.toString().toLowerCase();
+
+        this.dataExpense.forEach(element => {
+          const dateElement = this.dateFormatter(element.createdDate).toString().toLowerCase();
+          const titleElement = element.title.toString().toLowerCase();
+          const statusElement = this.statusChecker(element.status).toString().toLowerCase();
+          const priceElement = element.price.toString();
+
+          if(
+            dateElement.includes(queryBaru) ||
+            titleElement.includes(queryBaru) ||
+            statusElement.includes(queryBaru) ||
+            priceElement.includes(queryBaru)
+          ) {
+            dataFiltered.push(element)
+          }
+        })
+
+        this.dataExpenseShown = dataFiltered;
+        const e = document.getElementById('infiniteScroll');
+        if (e.scrollHeight <= e.clientHeight) {
+          console.log('Infinite Triggered')
+        }
       }
     },
     components: {
@@ -185,26 +209,7 @@
         if(newQuery === '') {
           this.dataExpenseShown = this.dataExpense;
         } else {
-          let dataFiltered = [];
-          const queryBaru = newQuery.toString().toLowerCase();
-
-          this.dataExpense.forEach(element => {
-            const dateElement = this.dateFormatter(element.createdDate).toString().toLowerCase();
-            const titleElement = element.title.toString().toLowerCase();
-            const statusElement = this.statusChecker(element.status).toString().toLowerCase();
-            const priceElement = element.price.toString();
-
-            if(
-              dateElement.includes(queryBaru) ||
-              titleElement.includes(queryBaru) ||
-              statusElement.includes(queryBaru) ||
-              priceElement.includes(queryBaru)
-            ) {
-              dataFiltered.push(element)
-            }
-          })
-
-          this.dataExpenseShown = dataFiltered;
+          this.filterData(newQuery);
         }
       }
     },
@@ -248,21 +253,21 @@
     padding: 50px 20px 20px 20px;
     position: relative;
     top: -35px;
-    color: var(--primary-3);
+    color: var(--primary-4);
     text-align: center;
-    line-height: 35px;
   }
 
   .expensesTableBody table {width: 100%;}
 
   .expensesTableBody tbody {
-    height: 60vh;
+    height: 63vh;
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
     border-top: solid 1px var(--primary-1);
   }
 
+  .expensesTableBody tbody tr td {padding-top: 12px; padding-bottom: 12px;}
   .expensesTableBody thead tr, .expensesTableBody tbody {display: block; box-sizing: border-box;}
 
   .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {

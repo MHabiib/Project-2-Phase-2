@@ -3,14 +3,10 @@ package com.future.tcfm.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
-import com.future.tcfm.model.list.Members;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.UserService;
-import com.mongodb.WriteResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 public class UserServiceImpl implements UserService {
