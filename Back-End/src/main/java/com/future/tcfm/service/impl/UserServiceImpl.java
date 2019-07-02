@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setActive(true);
         userRepository.save(user);
-        return new ResponseEntity("Succeed to create user!",HttpStatus.OK);
+        return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }
 
     @Override

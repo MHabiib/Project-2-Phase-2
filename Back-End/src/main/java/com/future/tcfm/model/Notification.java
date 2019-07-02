@@ -18,7 +18,10 @@ public class Notification {
 
     @Id
     private String id;
-    private User user;
+    private String email;
+    private String groupName;
     private String message;
     private Boolean isRead;
+    private Long timestamp;
+    private Long isReadAt;
 }

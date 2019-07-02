@@ -26,7 +26,7 @@ public class JwtValidator {
     private String secretKey;
 
 
-    @Value("${app.jwtExpirationInMs}")
+    @Value("${app.refreshTokenExpirationInMS}")
     private Long refreshTokenExpirationInMs;
 
     @Autowired
@@ -57,7 +57,7 @@ public class JwtValidator {
         currentUser.setToken(newToken);
         currentUser.setRefreshTokenExpiredAt(System.currentTimeMillis()+refreshTokenExpirationInMs);
         jwtUserDetailsRepository.save(currentUser);
-        System.out.println("Refresh token expired at : "+ currentUser.getRefreshTokenExpiredAt());
+        System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
         return newToken;
 //        return null;
     }

@@ -10,6 +10,9 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification,String> {
-    List<Notification> findByUser(String user);
-    List<Notification> findByUserAndIsRead(String user, Boolean bool);
+    List<Notification> findByEmail(String email);
+    List<Notification> findByEmailOrGroupNameAndIsRead(String email,String GroupName, Boolean bool);
+    List<Notification> findByEmailOrGroupName(String email,String groupName);
+
+
 }

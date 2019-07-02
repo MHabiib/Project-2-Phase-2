@@ -63,7 +63,7 @@ public class JwtGenerator {
      * @param loginRequest
      * @return
      */
-    public ResponseEntity tokenResponse(LoginRequest loginRequest){
+    public ResponseEntity loginResponse(LoginRequest loginRequest){
         System.out.println(loginRequest);
         User userExist = userRepository.findByEmail(loginRequest.getEmail());
         if (userExist!=null) {
@@ -73,6 +73,8 @@ public class JwtGenerator {
                 String token = generateToken(userExist.getEmail());
                 tokenMap.put("token",token);
                 tokenMap.put("refreshToken",refreshToken);
+                tokenMap.put("role",userExist.getRole());
+                tokenMap.put("groupName",userExist.getGroupName());
                 List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userExist.getRole());
 //                        jwtUserDetails = new JwtUserDetails(
 //                        userExist.getEmail(),

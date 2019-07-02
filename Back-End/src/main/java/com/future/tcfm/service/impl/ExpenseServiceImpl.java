@@ -79,7 +79,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseExist.setTitle(expense.getTitle());
         expenseExist.setDetail(expense.getDetail());
         expenseExist.setPrice(expense.getPrice());
-
         if (expense.getStatus()){
             expense.setApprovedDate(new Date().getTime());
             group.setTotalExpense(group.getTotalExpense()+expense.getPrice());//total expense group
