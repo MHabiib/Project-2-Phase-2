@@ -3,7 +3,7 @@ package com.future.tcfm.service.impl;
 import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
-import com.future.tcfm.model.request.ExpenseRequest;
+import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -46,7 +45,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 */
 
         expense.setCreatedDate(new Date().getTime());
-        expense.setGroupName(expense.getGroupName());
+        expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
 
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
         expense.setUserContributed(userContributed);
@@ -94,16 +93,17 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.save(expenseExist);
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
+
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
-        if(expenseRequest.getApproveStatus()) {
+        if(expenseRequest.getStatus()) {
             expenseExist.setStatus(true);
             expenseRepository.save(expenseExist);
         }
-        else if(!expenseRequest.getApproveStatus()) {
+        else if(!expenseRequest.getStatus()) {
             expenseExist.setStatus(false);
             expenseRepository.save(expenseExist);
         }

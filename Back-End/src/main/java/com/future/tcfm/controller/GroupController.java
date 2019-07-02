@@ -22,7 +22,7 @@ public class GroupController {
     }
 
     @GetMapping("/members") //body fill with group name without ""
-    public List<User> membersGroup (@RequestBody String groupName){
+    public List<User> membersGroup(@RequestBody String groupName){
         return groupService.membersGroup(groupName);
     }
 
@@ -34,5 +34,10 @@ public class GroupController {
     @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) {
         return groupService.updateGroup(id,group);
+    }
+
+    @GetMapping("/membersByEmail")
+    public List<User> membersGroupByEmail(@RequestParam("email") String email) {
+        return groupService.membersGroupByEmail(email);
     }
 }

@@ -196,7 +196,6 @@
   }
 
   .logoutButton {
-    /* background-color: #FC1818; */
     background-color: var(--darkColor);
     text-align: center;
     color: var(--lightColor);

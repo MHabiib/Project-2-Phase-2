@@ -36,7 +36,7 @@
             </div>
           </div>
 
-          <div class="bigButton bigButtonKanan">
+          <div class="bigButton bigButtonKanan" @click="openCreateNewExpenseWindow">
             <div>
               <img src="../assets/expense.png" alt="Pay Now">
               <div class="bigButtonText">Request Expense</div>
@@ -156,14 +156,23 @@
         </div>
       </div>
     </div>
+
+    <createNewExpenseWindow
+      v-if='showCreateNewExpenseWindow'
+      @closeCreateNewExpenseWindow='closeCreateNewExpenseWindow'
+      @refreshData="getExpenseData"
+    />
   </div>
 </template>
 
 <script>
+  import createNewExpenseWindow from '../components/createNewExpense';
+
   export default {
     data: function() {
       return {
-        dashboardData: {}
+        dashboardData: {},
+        showCreateNewExpenseWindow: false
       }
     },
     computed: {
@@ -188,7 +197,12 @@
             }
           )
         })
-      }
+      },
+      openCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = true;},
+      closeCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = false;},
+    },
+    components: {
+      'createNewExpenseWindow': createNewExpenseWindow
     }
   }
 </script>

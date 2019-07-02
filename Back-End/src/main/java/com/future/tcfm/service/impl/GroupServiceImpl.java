@@ -1,6 +1,5 @@
 package com.future.tcfm.service.impl;
 
-import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
@@ -31,6 +30,13 @@ public class GroupServiceImpl implements GroupService {
         return userRepository.findByGroupNameLike(groupName);
     }
 
+//  EMAIL -> GET GROUP NAME -> GET ALL MEMBER IN THE GROUP; Robin
+    @Override
+    public List<User> membersGroupByEmail(String email) {
+        String userGroup = userRepository.findByEmail(email).getGroupName();
+        return userRepository.findByGroupNameLike(userGroup);
+    }
+//  --- Get Members List by Email ---
 
     @Override
     public ResponseEntity<?> createGroup(Group group) {
