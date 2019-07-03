@@ -24,7 +24,7 @@ public class JwtUserDetails implements UserDetails {
     private String refreshToken;
     private Long refreshTokenExpiredAt;
     private Collection<? extends GrantedAuthority> authorities;
-
+    private Long lastModifiedAt;
     public JwtUserDetails(String email,String token,String refreshToken, Long refTokenExpAt,List<GrantedAuthority> grantedAuthorities){
         this.email = email;
         this.token= token;

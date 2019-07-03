@@ -39,6 +39,7 @@ public class ExpenseServiceImplTest {
     public void init(){
         expense = new Expense();
         user = new User();
+        user.setName("Sana");
         user.setGroupName("BDZ");
         user.setEmail("sana@jyp.com");
         expense.setGroupName("BDZ");
@@ -46,7 +47,7 @@ public class ExpenseServiceImplTest {
         expense.setDetail("Marshall");
         expense.setPrice((double) 15000000);
         expense.setUserContributed(Arrays.asList(user,user,user));
-        expense.setRequester("sana@jyp.com");
+        expense.setRequester(user.getEmail());
     }
 
     @Test

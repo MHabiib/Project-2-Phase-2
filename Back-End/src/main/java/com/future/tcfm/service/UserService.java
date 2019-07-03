@@ -12,12 +12,12 @@ public interface UserService {
     User getUser(String email);
     ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException;
 
-    ResponseEntity<?> createUser(User user);
+//    ResponseEntity<?> createUser(User user);
 
     ResponseEntity updateUserV2(String id, String userJSONString, MultipartFile file) throws IOException;
     ResponseEntity getImage(String imageName) throws IOException;
 
-    ResponseEntity<?> updateUser(String id, User user);
+//    ResponseEntity<?> updateUser(String id, User user);
 
 //    ResponseEntity deleteUser(String id);
 }

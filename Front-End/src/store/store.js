@@ -37,7 +37,7 @@ const actions = {
     localStorage.removeItem("token");
     commit(LOGOUT);
   }
-}
+};
 const getters = {
   isLoggedIn: state => {
     return state.isLoggedIn

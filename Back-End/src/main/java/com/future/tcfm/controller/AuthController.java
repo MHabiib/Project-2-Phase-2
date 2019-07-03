@@ -22,7 +22,7 @@ public class AuthController {
 
     @PostMapping(value = "/signin",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signIn(@RequestBody final LoginRequest loginRequest) {
-        return jwtGenerator.tokenResponse(loginRequest);
+        return jwtGenerator.loginResponse(loginRequest);
     }
     @PostMapping(value = "/refreshtoken",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRefreshToken(

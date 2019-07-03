@@ -40,6 +40,7 @@
             localStorage.setItem('accessToken', `Token ${res.data.token}`);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('userEmail', this.emailInput);
+            localStorage.setItem('groupName', res.data.groupName )
           })
           .then(()=> {
             alert('Login Berhasil');

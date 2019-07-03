@@ -26,7 +26,7 @@ public class JwtValidator {
     private String secretKey;
 
 
-    @Value("${app.jwtExpirationInMs}")
+    @Value("${app.refreshTokenExpirationInMS}")
     private Long refreshTokenExpirationInMs;
 
     @Autowired
@@ -56,8 +56,9 @@ public class JwtValidator {
         String newToken =  jwtGenerator.generateToken(email);
         currentUser.setToken(newToken);
         currentUser.setRefreshTokenExpiredAt(System.currentTimeMillis()+refreshTokenExpirationInMs);
+        currentUser.setLastModifiedAt(System.currentTimeMillis());
         jwtUserDetailsRepository.save(currentUser);
-        System.out.println("Refresh token expired at : "+ currentUser.getRefreshTokenExpiredAt());
+        System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
         return newToken;
 //        return null;
     }
@@ -79,6 +80,7 @@ public class JwtValidator {
         Map<String,String> tokenMap = new HashMap<>();
         tokenMap.put("token",newToken);
         tokenMap.put("refreshToken",newRefreshToken);
+        jwtUserDetails.setLastModifiedAt(System.currentTimeMillis());
         jwtUserDetailsRepository.save(jwtUserDetails);
         return new ResponseEntity(tokenMap,HttpStatus.OK);
     }

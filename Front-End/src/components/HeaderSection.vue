@@ -39,7 +39,18 @@
     props: ['headerTitle'],
     data: function() {
       return {
-        showNotification: false
+        showNotification: false,
+        email:'',
+        groupName:''
+      }
+    },
+    created(){
+      this.email=localStorage.getItem('email')
+      this.groupName=localStorage.getItem('groupName')
+    },
+    methods:{
+      getNotification(email,groupName){
+
       }
     }
   }

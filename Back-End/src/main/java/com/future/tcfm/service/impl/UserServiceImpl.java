@@ -5,6 +5,7 @@ import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,10 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_APPROVED_MESSAGE;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.USER_JOINED_GROUP;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.USER_LEFT_GROUP;
+
 @Service
 public class UserServiceImpl implements UserService {
     public static final String UPLOADED_FOLDER="../assets/";
@@ -37,6 +42,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    NotificationService notificationService;
+
+    private String notifMessage;
     @Override
     public List<User> loadAll() {
         return userRepository.findAll();
@@ -66,30 +75,14 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
-
     @Override
-    public ResponseEntity<?> createUser(User user) {
-        User userExist = userRepository.findByEmail(user.getEmail());
-        Group groupExist = groupRepository.findByName(user.getGroupName());
-        if (userExist != null)
-            return new ResponseEntity<>("Failed to save User!\nEmail already exists!", HttpStatus.BAD_REQUEST);
-        if(user.getEmail()==null)
-            return new ResponseEntity<>("Failed to save User!\nEmail can't be null!", HttpStatus.BAD_REQUEST);
-        if (groupExist == null)
-            return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
-        if(user.getGroupName()==null)
-            return new ResponseEntity<>("Failed to save User!\nGroup can't be null!", HttpStatus.BAD_REQUEST);
-/*
-        WriteResult wr = mongoTemplate.updateMulti(
-                new Query(where("sections.sectionId").is("56cc3c908f5e6c56e677bd2e")),
-                new Update().set("sections.$.name", "Hi there"),
-                Collection.class
-        );*/
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-        user.setBalance((double) 0);//FOR HANDLING NOT NULL PARAMATER
-        userRepository.save(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity getImage(String imageName) throws IOException {
+        Path path = Paths.get(UPLOADED_FOLDER + imageName);
+        File img = new File(String.valueOf(path));
+        String mimetype = FileTypeMap.getDefaultFileTypeMap().getContentType(img);
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(mimetype))
+                .body(Files.readAllBytes(img.toPath()));
     }
 
     @Override
@@ -113,9 +106,16 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
-        if(userExist.getGroupName()!=user.getGroupName())
+        if(userExist.getGroupName()!=user.getGroupName()) {
+            //notification untuk group lamanya
+            notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
+            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName());
+            //notification untuk group barunya
+            notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
+            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName());
             userExist.setJoinDate(new Date().getTime());
-        userExist.setGroupName(user.getGroupName());
+            userExist.setGroupName(user.getGroupName());
+        }
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
@@ -125,18 +125,10 @@ public class UserServiceImpl implements UserService {
         userExist.setPeriodPayed(user.getPeriodPayed());
         userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         userRepository.save(userExist);
+
         return new ResponseEntity(userExist,HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity getImage(String imageName) throws IOException {
-        Path path = Paths.get(UPLOADED_FOLDER + imageName);
-        File img = new File(String.valueOf(path));
-        String mimetype = FileTypeMap.getDefaultFileTypeMap().getContentType(img);
-        return ResponseEntity.ok()
-                .contentType(MediaType.valueOf(mimetype))
-                .body(Files.readAllBytes(img.toPath()));
-    }
 
     @Override
     public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
@@ -163,31 +155,10 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setActive(true);
         userRepository.save(user);
-        return new ResponseEntity("Succeed to create user!",HttpStatus.OK);
+        return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<?> updateUser(String id, User user) {
-        User userExist = userRepository.findByIdUser(id);
-        if (userExist == null)
-            return new ResponseEntity<>("Failed to update User!\nUserId not found!", HttpStatus.NOT_FOUND);
-        if(!userExist.getEmail().equals(user.getEmail())) {
-            if(userRepository.findByEmail(user.getEmail())!=null)
-                return new ResponseEntity<>("Failed to update User!\nEmail already used!", HttpStatus.BAD_REQUEST);
-        }
-        if(userExist.getGroupName()!=user.getGroupName())
-            userExist.setJoinDate(new Date().getTime());
-        userExist.setGroupName(user.getGroupName());
-        userExist.setEmail(user.getEmail());
-        userExist.setName(user.getName());
-        userExist.setPhone(user.getPhone());
-        userExist.setPassword(user.getPassword());
-        userExist.setRole(user.getRole());
-        userExist.setBalance(user.getBalance());
-        userExist.setPeriodPayed(user.getPeriodPayed());
-        userRepository.save(userExist);
-        return new ResponseEntity<>(userExist, HttpStatus.OK);
-    }
+
 }
 
 /*    @Override
