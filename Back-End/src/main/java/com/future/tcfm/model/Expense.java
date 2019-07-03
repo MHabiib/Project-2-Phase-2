@@ -27,13 +27,4 @@ public class Expense {
     private Long rejectedDate;
     private Long approvedDate;
     private Boolean status;
-
-//    public void setContributorList(List<ApproverContributor> contributorList) {
-//        this.contributorList = contributorList;
-//    }
-//
-//    public void setApproverList(List<ApproverContributor> approverList) {
-//        this.approverList = approverList;
-//    }
-
 }

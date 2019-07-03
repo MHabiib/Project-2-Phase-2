@@ -76,13 +76,6 @@ public class JwtGenerator {
                 tokenMap.put("role",userExist.getRole());
                 tokenMap.put("groupName",userExist.getGroupName());
                 List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userExist.getRole());
-//                        jwtUserDetails = new JwtUserDetails(
-//                        userExist.getEmail(),
-//                        tokenMap.get("token"),
-//                        tokenMap.get("refreshToken"),
-//                        new Date().getTime()+refreshTokenExpirationInMs,
-//                        grantedAuthorities
-//                );
                 JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(loginRequest.getEmail());
                 if(jwtUserDetails== null) jwtUserDetails = new JwtUserDetails();
                 jwtUserDetails.setEmail(userExist.getEmail());

@@ -1,10 +1,13 @@
 package com.future.tcfm.controller;
 
+import com.future.tcfm.model.Notification;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.print.attribute.standard.Media;
 
 
 @CrossOrigin
@@ -28,6 +31,4 @@ public class NotificationController {
             @PathVariable("id") String id){
         return notificationService.updateNotificationIsRead(id);
     }
-
-
 }

@@ -8,6 +8,7 @@ import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.ExpenseService;
+import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_MESSAGE;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -24,6 +27,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     GroupRepository groupRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    NotificationService notificationService;
     @Override
     public List<Expense> loadAll() {
         return expenseRepository.findAll();
@@ -43,14 +49,21 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (expense.getGroupName() == null)
             return new ResponseEntity<>("Failed to request Expense!\nGroup not Found!", HttpStatus.BAD_REQUEST);
 */
-
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
 
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
         expense.setUserContributed(userContributed);
-        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
+//        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
+
+        expense.setRequester(expense.getRequester());
         expenseRepository.save(expense);
+        /*
+        Bagian notifikasi...
+         */
+        String message = expense.getRequester() + EXPENSE_MESSAGE +"(" +expense.getTitle()+")";
+        notificationService.createNotification(message,expense.getRequester(),expense.getGroupName());
+
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
 

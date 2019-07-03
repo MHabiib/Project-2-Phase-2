@@ -12,8 +12,15 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
+
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
+
+    public static final String EXPENSE_MESSAGE = " requested new expense ";
+    public static final String PAYMENT_MESSAGE = " had made payment ";
+    public static final String PAYMENT_APPROVED_MESSAGE = " 's payment had been approved/confirmed by ";
+    public static final String PAYMENT_REJECTED_MESSAGE = " 's payment had been rejected by ";
 
     @Autowired
     NotificationRepository notificationRepository;
@@ -41,7 +48,6 @@ public class NotificationServiceImpl implements NotificationService {
         if(notification.isPresent()) {
             notification.get().setIsRead(true);
             notification.get().setIsReadAt(System.currentTimeMillis());
-
             notificationRepository.save(notification.get());
             return new ResponseEntity<>(notification.get(),HttpStatus.OK);
         }
@@ -54,6 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void createNotification(String message,String email, String groupName) {
         Notification notification = Notification.builder()
                 .email(email)
+                .message(message)
                 .isRead(false)
                 .timestamp(System.currentTimeMillis())
                 .groupName(groupName).build();
