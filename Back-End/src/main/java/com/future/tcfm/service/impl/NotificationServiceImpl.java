@@ -18,6 +18,10 @@ import java.util.Optional;
 public class NotificationServiceImpl implements NotificationService {
 
     public static final String EXPENSE_MESSAGE = " requested new expense ";
+    public static final String EXPENSE_APPROVED_MESSAGE = " 's requested expense had been approved ";
+    public static final String EXPENSE_REJECTED_MESSAGE = " 's requested expense had been rejected ";
+    public static final String USER_LEFT_GROUP = " just left this group ";
+    public static final String USER_JOINED_GROUP = " just joined this group ";
     public static final String PAYMENT_MESSAGE = " had made payment ";
     public static final String PAYMENT_APPROVED_MESSAGE = " 's payment had been approved/confirmed by ";
     public static final String PAYMENT_REJECTED_MESSAGE = " 's payment had been rejected by ";

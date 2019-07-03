@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @NoArgsConstructor
 @RequestMapping("/api/expense")
@@ -50,7 +50,7 @@ public class ExpenseController {
         return expenseService.updateExpense(id,expense);
     }
 
-    @PostMapping("/managementExpense")
+    @PutMapping("/managementExpense")
     public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) {
         return expenseService.managementExpense(expenseRequest);
     }

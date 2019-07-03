@@ -27,4 +27,6 @@ public class Expense {
     private Long rejectedDate;
     private Long approvedDate;
     private Boolean status;
+    private Long lastModifiedAt;
+    private String approvedOrRejectedBy;
 }

@@ -51,13 +51,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-                .and().csrf().disable()
+//        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        http.cors().and().csrf().disable()
+
+//        .and().csrf().disable()
                 .authorizeRequests()
 //                .antMatchers("**/api/**").authenticated()
                 //hanya user dengan role/authority ADMIN yang bisa akses PUT ke api dibawah
-                .antMatchers(HttpMethod.PUT,"/api/expense").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/expense/**").hasAuthority("ADMIN")
                 //hanya Admin yang bisa akses POST ke api dibawah (buat group dan buat user)
+                .antMatchers(HttpMethod.GET,"/api/user").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/user","/api/group").hasAuthority("ADMIN")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
