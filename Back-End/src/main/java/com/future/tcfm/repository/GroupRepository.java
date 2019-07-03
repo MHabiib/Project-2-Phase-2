@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface GroupRepository extends MongoRepository<Group, String> {
-    Group findByName (String name);
-    Group findByIdGroup (String id);
+    Group findByName(String name);
+    Group findByIdGroup(String id);
 }

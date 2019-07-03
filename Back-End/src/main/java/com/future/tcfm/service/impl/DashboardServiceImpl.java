@@ -19,8 +19,10 @@ import java.io.Console;
 public class DashboardServiceImpl implements DashboardService {
     @Autowired
     GroupRepository groupRepository;
+
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     ExpenseRepository expenseRepository;
 

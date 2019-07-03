@@ -29,7 +29,7 @@
         </div>
 
         <div class='bigButtonContainer'>
-          <div class="bigButton bigButtonKiri">
+          <div class="bigButton bigButtonKiri" @click='openPayNowWindow'>
             <div>
               <img src="../assets/pay-icon.png" alt="Pay Now">
               <div class="bigButtonText">Pay Now</div>
@@ -162,17 +162,24 @@
       @closeCreateNewExpenseWindow='closeCreateNewExpenseWindow'
       @refreshData="getExpenseData"
     />
+
+    <payNowWindow
+      v-if='showPayNowWindow'
+      @closePayNowWindow='closePayNowWindow'
+    />
   </div>
 </template>
 
 <script>
   import createNewExpenseWindow from '../components/createNewExpense';
+  import payNowWindow from '../components/payNow';
 
   export default {
     data: function() {
       return {
         dashboardData: {},
-        showCreateNewExpenseWindow: false
+        showCreateNewExpenseWindow: false,
+        showPayNowWindow: false
       }
     },
     computed: {
@@ -200,9 +207,12 @@
       },
       openCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = true;},
       closeCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = false;},
+      openPayNowWindow() {this.showPayNowWindow = true},
+      closePayNowWindow() {this.showPayNowWindow = false}
     },
     components: {
-      'createNewExpenseWindow': createNewExpenseWindow
+      'createNewExpenseWindow': createNewExpenseWindow,
+      'payNowWindow': payNowWindow
     }
   }
 </script>

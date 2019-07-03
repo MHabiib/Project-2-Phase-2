@@ -20,10 +20,13 @@ import java.util.List;
 public class ExpenseServiceImpl implements ExpenseService {
     @Autowired
     ExpenseRepository expenseRepository;
+
     @Autowired
     GroupRepository groupRepository;
+
     @Autowired
     UserRepository userRepository;
+
     @Override
     public List<Expense> loadAll() {
         return expenseRepository.findAll();
@@ -31,7 +34,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<Expense> expenseGroup(String groupName) {
-        return expenseRepository.findByGroupNameLike(groupName);
+        return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(groupName);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     public List<Expense> expenseGroupByEmail(String userEmail) {
         User userSelected = userRepository.findByEmail(userEmail);
         String userGroup = userSelected.getGroupName();
-        return expenseRepository.findByGroupNameLike(userGroup);
+        return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(userGroup);
     }
 
     @Override

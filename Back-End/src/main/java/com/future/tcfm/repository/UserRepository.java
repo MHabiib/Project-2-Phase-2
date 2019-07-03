@@ -14,5 +14,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByEmail(String email);
     Integer countByGroupName(String groupName);
     List<User> findByGroupNameLike(String groupName);
+    List<User> findByGroupNameLikeOrderByJoinDateDesc(String groupName);
 }
 

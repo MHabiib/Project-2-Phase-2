@@ -68,14 +68,14 @@ public class ExpenseServiceImplTest {
     public void expenseGroup() {
         // Data preparation
         List<Expense> expenses= Arrays.asList(expense,expense,expense);
-        Mockito.when(expenseRepository.findByGroupNameLike(expense.getGroupName())).thenReturn(expenses);
+        Mockito.when(expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(expense.getGroupName())).thenReturn(expenses);
 
         // Method call
         List<Expense> expenseList= expenseService.expenseGroup(expense.getGroupName());
 
         // Verification
         Assert.assertThat(expenseList, Matchers.hasSize(3));
-        Mockito.verify(expenseRepository, Mockito.times(1)).findByGroupNameLike(expense.getGroupName());
+        Mockito.verify(expenseRepository, Mockito.times(1)).findByGroupNameLikeOrderByCreatedDateDesc(expense.getGroupName());
         Mockito.verifyNoMoreInteractions(expenseRepository);
     }
 

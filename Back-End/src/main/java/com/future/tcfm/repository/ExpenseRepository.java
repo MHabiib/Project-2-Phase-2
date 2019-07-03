@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ExpenseRepository extends MongoRepository<Expense, String> {
     Expense findByTitle(String title);
-    List<Expense> findByGroupNameLike(String groupName);
+    List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);
     Expense findByIdExpense(String id);
+    List<Expense> findTop10ByGroupNameLikeOrderByCreatedDateDesc(String groupName);
 }
