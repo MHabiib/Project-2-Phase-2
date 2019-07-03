@@ -1,3 +1,4 @@
+/*
 package com.future.tcfm.config.mail;
 
 import lombok.AllArgsConstructor;
@@ -54,3 +55,4 @@ public class EmailConfig {
         this.password = password;
     }
 }
+*/

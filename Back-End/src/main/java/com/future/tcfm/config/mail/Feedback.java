@@ -1,3 +1,4 @@
+/*
 package com.future.tcfm.config.mail;
 
 import lombok.AllArgsConstructor;
@@ -45,3 +46,4 @@ public class Feedback {
         this.feedback = feedback;
     }
 }
+*/

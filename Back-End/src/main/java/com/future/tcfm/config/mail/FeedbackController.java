@@ -1,3 +1,4 @@
+/*
 package com.future.tcfm.config.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,3 +43,4 @@ public class FeedbackController {
         mailSender.send(mailMessage);
     }
 }
+*/
