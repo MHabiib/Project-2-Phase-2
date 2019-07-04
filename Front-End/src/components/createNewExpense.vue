@@ -11,7 +11,7 @@
         </div>
 
         <div class="createNewExpenseBody">
-          <input class='singleLineInput' type="text" placeholder='Perkiraan Biaya' v-model='biaya' @keypress="checkChar" @change='checkChange'/>
+          <input class='singleLineInput' type="text" placeholder='Perkiraan Biaya' v-model='biaya' @keypress="checkChar" @change="checkChange"/>
           <input class='singleLineInput' type="text" placeholder='Nama Pengeluaran' v-model='namaPengeluaran'/>
           <textarea class='multiLineInput' type="text" placeholder='Jelaskan lebih lengkap tentang pengeluaran ini di sini...' v-model='deskripsiPengeluaran'/>
         </div>
@@ -131,6 +131,8 @@
   .createNewExpenseWindowSize {
     width: 35%;
     height: 30%;
+    position: relative;
+    top: -60px;
   }
 
   .createNewExpenseBody {

@@ -1,20 +1,49 @@
 <template>
   <div class='fixedPosition'>
-    <div class='createNewExpenseWindow'>
-      <div class='createNewExpenseWindowSize'>
-        <div class="createNewExpenseHeader">
-          <div>Pay Now</div>
+    <div class='payNowWindow'>
+      <div class='payNowWindowSize'>
+        <div class="payNowHeader">
+          <div>
+            <div class='textPayNow'>Pay Now</div>
+            <div class='pembayaranTerakhir'>Pembayaran terakhir Anda: {{data.pembayaranTerakhir}}</div>
+          </div>
+
           <div class='buttonGroup'>
             <div class="closeButton" @click="closePayNowWindow">Close</div>
             <div class="okButton">OK</div>
           </div>
         </div>
 
-        <div class="createNewExpenseBody">
-          Ini belum gw edit ya guys
-          <input class='singleLineInput' type="text" placeholder='Perkiraan Biaya' v-model='biaya' @keypress="checkChar" @change='checkChange'/>
-          <input class='singleLineInput' type="text" placeholder='Nama Pengeluaran' v-model='namaPengeluaran'/>
-          <textarea class='multiLineInput' type="text" placeholder='Jelaskan lebih lengkap tentang pengeluaran ini di sini...' v-model='deskripsiPengeluaran'/>
+        <div class="payNowBody">
+          <div class="payNowOneRow">
+            Rek Tujuan Transfer: 2420115451{{data.nomor}} a.n. Robin Robin{{data.penerima}}
+          </div>
+
+          <div class="payNowOneRow">
+            <div>
+              <input type="number" name="periode" id="periode" placeholder="Jumlah Periode" v-model='periode'/>
+            </div>
+
+            <div>
+              Total harus dibayar: Rp {{totalTagihan | thousandSeparators}}
+            </div>
+          </div>
+
+          <div class="payNowOneRow">
+            <input type="text" name="rekeningPengirim" id="rekeningPengirim" placeholder="No. Rekening Anda" @keypress='checkChar'/>
+            <input style="flex: 1" type="text" name="namaPengirim" id="namaPengirim" placeholder="Rekening Atas Nama"/>
+          </div>
+
+          <div class="payNowOneRow">
+            <input type="date" name="tanggalTransfer" id="tanggalTransfer" placeholder="dd/mm/yyyy"/>
+            <input type="file" name="buktiTransfer" id="buktiTransfer"/>
+          </div>
+
+          <div class="payNowOneRow">
+            <input @click="setUntukMemberLain" type="checkbox" name="untukMemberLain" id="untukMemberLain"/>
+            <div style="margin-right: 10px;">Bayar untuk member lain?</div>
+            <input style="flex: 1" type="text" name="emailMemberLain" id="emailMemberLain" placeholder="Email Member Lain" v-if="untukMemberLain" v-model="emailMemberLain"/>
+          </div>
         </div>
       </div>
     </div>
@@ -27,11 +56,12 @@
       return {
         biaya: '',
         namaPengeluaran: '',
-        deskripsiPengeluaran: ''
+        deskripsiPengeluaran: '',
+        data: {},
+        periode: '',
+        untukMemberLain: false,
+        emailMemberLain: ''
       }
-    },
-    created() {
-
     },
     methods: {
       closePayNowWindow() {
@@ -42,58 +72,18 @@
           e.preventDefault();
         }
       },
-      checkChange(e) {
-        let biayaWithOutDot = '';
-        this.biaya.toString().split('').forEach(element => {
-          if(element !== '.') {biayaWithOutDot += element}
-        })
-        this.biaya = this.thousandSeparators(biayaWithOutDot);
-      },
-      thousandSeparators: function(numbers) {
-        if(numbers === undefined) {
-          return '';
-        } else {
-          let result = '';
-          let counter = 0;
-          for (let i = numbers.toString().length ; i >= 0 ; i--){
-              if(counter % 3 === 0 && counter !== 0 && counter !== numbers.toString().length){
-                  result = '.' + numbers.toString().substr(i, 1) + result;
-              } else {
-                  result = numbers.toString().substr(i, 1) + result;
-              }
-              counter += 1;
-          }
-          return result;
+      setUntukMemberLain() {
+        this.untukMemberLain = !this.untukMemberLain;
+        if(this.untukMemberLain === false) {
+          this.emailMemberLain = '';
         }
-      },
-      createNewExpense() {
-        let biayaWithOutDot = '';
-        this.biaya.toString().split('').forEach(element => {
-          if(element !== '.') {biayaWithOutDot += element}
-        })
-
-        fetch(`http://localhost:8088/api/expense`, {
-          method: 'POST',
-          headers: {
-            Authorization: localStorage.getItem('accessToken'),
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "detail": this.deskripsiPengeluaran,
-            "price": biayaWithOutDot,
-            "title": this.namaPengeluaran,
-            "requester": localStorage.getItem('userEmail')
-          })
-        })
-        .then(response => {
-          if(response.ok) {
-            this.$emit('refreshData');
-            this.$emit('closeCreateNewExpenseWindow');
-          }
-        })
       }
-    }
+    },
+    computed: {
+      totalTagihan: function() {
+        return (this.periode * 100000)
+      }
+    },
   }
 </script>
 
@@ -102,7 +92,7 @@
     position: absolute;
   }
 
-  .createNewExpenseWindow {
+  .payNowWindow {
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -113,28 +103,30 @@
     position: absolute;
   }
 
-  .createNewExpenseHeader {
+  .payNowHeader {
     background-color: var(--primary-0);
     color: var(--lightColor);
-    padding: 16px 12px;
+    padding: 16px;
+    box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
-    width: 90%;
+    width: 95%;
     margin: auto;
     position: relative;
     z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: 600;
   }
 
-  .createNewExpenseWindowSize {
+  .payNowWindowSize {
     width: 35%;
     height: 30%;
+    position: relative;
+    top: -60px;
   }
 
-  .createNewExpenseBody {
+  .payNowBody {
     background-color: white;
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
@@ -143,6 +135,8 @@
     padding: 20px;
     padding-top: 32px;
     height: 100%;
+    color: var(--primary-4);
+    font-size: 14px;
   }
 
   .closeButton {
@@ -167,22 +161,34 @@
     align-items: center;
   }
 
-  .singleLineInput, .multiLineInput {
-    outline: none;
-    padding: 10px;
-    border: solid 1px var(--primary-1);
-    color: var(--primary-4);
-    width: 100%;
+  .textPayNow {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .pembayaranTerakhir {
+    font-size: 12px;
+    font-weight: lighter;
+  }
+
+  .payNowOneRow {
+    display: flex;
+    align-items: center;
     margin-top: 10px;
-    box-sizing: border-box;
+    height: 30px;
   }
 
-  .singleLineInput::placeholder, .multiLineInput::placeholder {
+  .payNowOneRow input {
+    border: none;
+    outline: none;
+    border-bottom: solid 1px var(--primary-1);
+    margin-right: 11px;
+    color: var(--primary-4);
+    padding: 5px;
+    background: transparent;
+  }
+
+  .payNowOneRow input::placeholder {
     color: var(--primary-1);
-  }
-
-  .multiLineInput {
-    height: 50%;
-    resize: none;
   }
 </style>
