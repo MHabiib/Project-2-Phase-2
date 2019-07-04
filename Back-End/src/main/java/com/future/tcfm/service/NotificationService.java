@@ -9,6 +9,7 @@ public interface NotificationService {
     void createNotification(String message,String email,String groupName);
     ResponseEntity findByEmail(String id);
     ResponseEntity findAll();
-    ResponseEntity findNotificationBy(String email,String groupName, Boolean bool);
+    ResponseEntity getGroupNotification(String groupName, Boolean bool);
     ResponseEntity updateNotificationIsRead(String id);
+    ResponseEntity getPersonalNotification(String email,Boolean isRead);
 }

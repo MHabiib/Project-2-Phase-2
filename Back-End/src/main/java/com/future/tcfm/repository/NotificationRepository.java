@@ -10,9 +10,10 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification,String> {
-    List<Notification> findByEmail(String email);
+    List<Notification> findByEmailOrderByTimestampDesc(String email);
+    List<Notification> findByGroupNameOrderByTimestampDesc(String email);
     List<Notification> findByEmailOrGroupNameAndIsRead(String email,String GroupName, Boolean bool);
     List<Notification> findByEmailOrGroupName(String email,String groupName);
-
-
+    List<Notification> findByEmailAndIsReadOrderByTimestampDesc(String email,Boolean bool);
+    List<Notification> findByGroupNameAndIsReadOrderByTimestampDesc(String email,Boolean bool);
 }

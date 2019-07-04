@@ -22,6 +22,7 @@ public class JwtUserDetails implements UserDetails {
     private String email;
     private String token; // ini yang digunakan sbg akses Token
     private String refreshToken;
+    private String groupName;
     private Long refreshTokenExpiredAt;
     private Collection<? extends GrantedAuthority> authorities;
     private Long lastModifiedAt;

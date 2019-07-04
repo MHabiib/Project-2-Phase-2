@@ -1,6 +1,7 @@
 package com.future.tcfm.config;
 
 import com.future.tcfm.config.security.*;
+import com.future.tcfm.model.JwtUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -49,11 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
+    public static JwtUserDetails getCurrentUser(){
+        return (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-        http.cors().and().csrf().disable()
-
+        http.cors().and().csrf().disable()//disable cors
 //        .and().csrf().disable()
                 .authorizeRequests()
 //                .antMatchers("**/api/**").authenticated()

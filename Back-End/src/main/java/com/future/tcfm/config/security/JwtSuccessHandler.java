@@ -5,6 +5,7 @@ import com.future.tcfm.repository.JwtUserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,6 @@ public class JwtSuccessHandler implements AuthenticationSuccessHandler{
         System.out.println("Email/Username : " +((JwtUserDetails)authentication.getPrincipal()).getUserName());
         System.out.println("Authorities: " +((JwtUserDetails)authentication.getPrincipal()).getAuthorities());
         System.out.println("Access token : " +((JwtUserDetails)authentication.getPrincipal()).getToken());
+
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_APPROVED_MESSAGE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_MESSAGE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_REJECTED_MESSAGE;
@@ -42,6 +43,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     public List<Expense> loadAll() {
         return expenseRepository.findAll();
     }
+
+    String notificationMessage;
 
     @Override
     public List<Expense> expenseGroup(String groupName) {
@@ -117,20 +120,16 @@ public class ExpenseServiceImpl implements ExpenseService {
         if(expenseRequest.getStatus()) {
             expenseExist.setStatus(true);
             //notif...
-            String message = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
-            notificationService.createNotification(message,expenseExist.getRequester(),expenseExist.getGroupName());
+             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         else if(!expenseRequest.getStatus()) {
             expenseExist.setStatus(false);
             //notif...
-            String message = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
-            notificationService.createNotification(message,expenseExist.getRequester(),expenseExist.getGroupName());
+            notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
-
+        notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName());
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
-        JwtUserDetails jwtUserDetails = (JwtUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        expenseExist.setApprovedOrRejectedBy(jwtUserDetails.getEmail());
+        expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
         expenseRepository.save(expenseExist);
 
         return new ResponseEntity<>("Expense Updated", HttpStatus.OK);

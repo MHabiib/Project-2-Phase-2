@@ -36,13 +36,24 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseEntity findNotificationBy(String email,String groupName, Boolean isRead) {
+    public ResponseEntity getGroupNotification(String groupName, Boolean isRead) {
         List<Notification> notificationList;
         if(isRead==null){
-            notificationList=notificationRepository.findByEmailOrGroupName(email,groupName);
+            notificationList=notificationRepository.findByGroupNameOrderByTimestampDesc(groupName);
             return new ResponseEntity<>(notificationList,HttpStatus.OK);
         }
-        notificationList= notificationRepository.findByEmailOrGroupNameAndIsRead(email,groupName,isRead);
+        notificationList= notificationRepository.findByGroupNameAndIsReadOrderByTimestampDesc(groupName,isRead);
+        return new ResponseEntity<>(notificationList,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity getPersonalNotification(String email,Boolean isRead) {
+        List<Notification> notificationList;
+        if(isRead==null){
+            notificationList=notificationRepository.findByEmailOrderByTimestampDesc(email);
+            return new ResponseEntity<>(notificationList,HttpStatus.OK);
+        }
+        notificationList= notificationRepository.findByEmailAndIsReadOrderByTimestampDesc(email,isRead);
         return new ResponseEntity<>(notificationList,HttpStatus.OK);
     }
 
@@ -58,8 +69,6 @@ public class NotificationServiceImpl implements NotificationService {
         return new ResponseEntity<>("err: Notification Not found 404",HttpStatus.NOT_FOUND);
     }
 
-
-
     @Override
     public void createNotification(String message,String email, String groupName) {
         Notification notification = Notification.builder()
@@ -73,7 +82,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ResponseEntity findByEmail(String email) {
-        List<Notification> notifications = notificationRepository.findByEmail(email);
+        List<Notification> notifications = notificationRepository.findByEmailOrderByTimestampDesc(email);
         return new ResponseEntity(notifications, HttpStatus.OK);
 
     }

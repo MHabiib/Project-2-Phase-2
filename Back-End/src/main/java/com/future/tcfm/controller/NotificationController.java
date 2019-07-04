@@ -12,18 +12,23 @@ import javax.print.attribute.standard.Media;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/notification")
 public class NotificationController {
     @Autowired
     NotificationService notificationService;
 
 
-    @GetMapping(value = "/notification",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getNotification(
-            @RequestParam(value = "email") String email,
-            @RequestParam(value = "groupName", required = false,defaultValue = "-1") String groupName,
+    @GetMapping(value = "/personal",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getPersonalNotification(
+            @RequestParam(value = "ref") String email,
             @RequestParam(value = "isRead",required = false) Boolean isRead) {
-        return notificationService.findNotificationBy(email,groupName, isRead);
+        return notificationService.getPersonalNotification(email, isRead);
+    }
+    @GetMapping(value = "/group",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getGroupNotification(
+            @RequestParam(value = "ref") String email,
+            @RequestParam(value = "isRead",required = false) Boolean isRead) {
+        return notificationService.getGroupNotification(email, isRead);
     }
 
     @PutMapping(value = "/notification/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
