@@ -47,6 +47,8 @@
         newNotificationList:[]
       }
     },
+    computed,
+    watch,
     created(){
         this.streamPersonalNotification()
       }
@@ -54,6 +56,7 @@
     methods: {
         streamPersonalNotification(){
           let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
+          
           es.addEventListener('notification',event=>{
           this.notificationList = JSON.parse(event.data)
           console.log('Notification : '+this.notificationList.length)
@@ -61,19 +64,15 @@
           es.addEventListener('update',event =>{
           this.newNotificationList = (JSON.parse(event.data))
           console.log('Update notification : ' + this.newNotificationList.length)
-          })     
-          es.addEventListener('error', event => {
-          if (event.readyState == EventSource.CLOSED) {          
-              console.log('Event was closed')
-              console.log(EventSource)
-               es.close()
+          })       
+          es.onerror = function(){
+             es.close()
+             console.log(es)
           }
-        });    
+          
         }
     },
-
   }
-     
 </script>
 
 <style>
