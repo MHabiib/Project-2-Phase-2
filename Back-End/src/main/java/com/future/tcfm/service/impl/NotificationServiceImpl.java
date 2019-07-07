@@ -142,21 +142,30 @@ public class NotificationServiceImpl implements NotificationService {
      * @param email
      * @return
      */
+
+
     @Override
     public SseEmitter streamPersonalNotification(String email) {
         SseEmitter emitter = new SseEmitter();
         ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        this.notificationList=notificationRepository.findByEmailOrderByTimestampDesc(email);
         sseMvcExecutor.execute(() -> {
+        SseEmitter.SseEventBuilder event = SseEmitter.event();
             try {
+                event.id(UUID.randomUUID().toString());
+                event.name("notification");
+                event.data(this.notificationList);
+                emitter.send(event);
+                System.out.println("first notification is sent");
                 for (int i = 0; true; i++) {
                     if(this.notificationList.size()!=notificationRepository.findByEmailOrderByTimestampDesc(email).size()) {
-                        this.notificationList=notificationRepository.findByEmailOrderByTimestampDesc(email);
-                        SseEmitter.SseEventBuilder event = SseEmitter.event()
+                        this.notificationList = notificationRepository.findByEmailOrderByTimestampDesc(email);
+                        event = SseEmitter.event()
                                 .id(String.valueOf(i+"_"+UUID.randomUUID().toString()))
                                 .name("update")
-                                .reconnectTime(30_000L)
                                 .data(this.notificationList);
                         emitter.send(event);
+                        System.out.println("new update on notification is sent");
                     }
                     Thread.sleep(1000);
                 }
@@ -164,6 +173,7 @@ public class NotificationServiceImpl implements NotificationService {
                 emitter.completeWithError(ex);
             }
         });
+
         return emitter;
     }
 

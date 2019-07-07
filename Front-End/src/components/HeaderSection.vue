@@ -35,6 +35,7 @@
 </template>
 
 <script>
+
   export default {
     props: ['headerTitle'],
     data: function() {
@@ -42,30 +43,35 @@
         showNotification: false,
         email:'',
         groupName:'',
-        es:''
+        notificationList:[],
+        newNotificationList:[]
       }
     },
     created(){
-        this.es = new EventSource('http://localhost:8088/notification/personal2?ref='+localStorage.getItem('userEmail'))
-        
-        this.es.addEventListener('message',event =>{
-          console.log(event.data);
-        },false)     
-        this.es.addEventListener('error', event => {
-          if (event.readyState == EventSource.CLOSED) {
-              this.es.close()
-              console.log('Event was closed');
-              console.log(EventSource);
-          }
-      }, false);    
+        this.streamPersonalNotification()
       }
     ,
     methods: {
-
+        streamPersonalNotification(){
+          let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
+          es.addEventListener('notification',event=>{
+          this.notificationList = JSON.parse(event.data)
+          console.log('Notification : '+this.notificationList.length)
+          })
+          es.addEventListener('update',event =>{
+          this.newNotificationList = (JSON.parse(event.data))
+          console.log('Update notification : ' + this.newNotificationList.length)
+          })     
+          es.addEventListener('error', event => {
+          if (event.readyState == EventSource.CLOSED) {          
+              console.log('Event was closed')
+              console.log(EventSource)
+               es.close()
+          }
+        });    
+        }
     },
-    beforeDestroy(){
-      this.es.close()
-    }
+
   }
      
 </script>
