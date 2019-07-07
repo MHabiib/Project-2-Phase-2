@@ -37,6 +37,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         String header = httpServletRequest.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"JWTs is missing");
+            return null;
         }
 
         String authenticationToken = header.substring(6); // ambil nilai dari token dimulai dari index ke 7
@@ -60,6 +61,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         if(newToken == null) newToken = "NULL_TOKEN";
         response.setHeader("Authorization",newToken);
         response.setStatus(HttpServletResponse.SC_OK);
+        System.out.println("============================================================================================================\n");
         chain.doFilter(request, response);
     }
 

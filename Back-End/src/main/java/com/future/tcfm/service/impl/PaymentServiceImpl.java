@@ -23,6 +23,7 @@ import java.sql.Date;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_APPROVED_MESSAGE;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_MESSAGE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_REJECTED_MESSAGE;
 import static com.future.tcfm.service.impl.UserServiceImpl.*;
 
@@ -67,6 +68,9 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPaymentDate(System.currentTimeMillis());
         payment.setGroupName(payment.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());
+        paymentRepository.save(payment);
+        notificationMessage = payment.getEmail()+ PAYMENT_MESSAGE; //getCurrentUser() = get current logged in user
+        notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName());
         return new ResponseEntity<>("Succeed to create payment!",HttpStatus.OK);
     }
 
@@ -114,7 +118,7 @@ public class PaymentServiceImpl implements PaymentService {
             paymentExist.setIsPaid(false);
             notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
         }
-        notificationService.createNotification(getCurrentUser().getEmail(),getCurrentUser().getEmail(),getCurrentUser().getGroupName());
+        notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName());
 
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);

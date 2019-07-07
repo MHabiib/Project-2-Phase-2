@@ -41,19 +41,33 @@
       return {
         showNotification: false,
         email:'',
-        groupName:''
+        groupName:'',
+        es:''
       }
     },
     created(){
-      this.email=localStorage.getItem('email')
-      this.groupName=localStorage.getItem('groupName')
-    },
-    methods:{
-      getNotification(email,groupName){
-
+        this.es = new EventSource('http://localhost:8088/notification/personal2?ref='+localStorage.getItem('userEmail'))
+        
+        this.es.addEventListener('message',event =>{
+          console.log(event.data);
+        },false)     
+        this.es.addEventListener('error', event => {
+          if (event.readyState == EventSource.CLOSED) {
+              this.es.close()
+              console.log('Event was closed');
+              console.log(EventSource);
+          }
+      }, false);    
       }
+    ,
+    methods: {
+
+    },
+    beforeDestroy(){
+      this.es.close()
     }
   }
+     
 </script>
 
 <style>

@@ -10,6 +10,6 @@ import java.util.List;
 public interface PaymentRepository extends MongoRepository<Payment,String> {
     Payment findByIdPayment(String id);
     List<Payment> findAll();
-    List<Payment> findAllByIdGroupOrderByPaymentDate(String idGroup);
-    List<Payment> findAllByIdUser(String id);
+    List<Payment> findAllByGroupNameOrderByLastModifiedAt(String groupName);
+    List<Payment> findAllByEmailOrderByLastModifiedAt(String id);
 }
