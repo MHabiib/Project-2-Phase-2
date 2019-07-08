@@ -19,5 +19,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(byPass)
+  render: h => h(App)
 })

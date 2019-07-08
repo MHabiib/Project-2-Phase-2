@@ -73,7 +73,7 @@
         if(this.disableButton !== true) {
           this.disableButton = true;
           fetch(`http://localhost:8088/api/expense/managementExpense`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
               'Authorization': localStorage.getItem('accessToken'),
               Accept: 'application/json',
