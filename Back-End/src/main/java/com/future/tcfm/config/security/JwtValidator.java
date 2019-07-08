@@ -37,7 +37,7 @@ public class JwtValidator {
 
     public JwtUserDetails validate(String token) {
 
-        JwtUserDetails jwtUserDetails= null;
+        JwtUserDetails jwtUserDetails;
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(secretKey)
@@ -57,6 +57,7 @@ public class JwtValidator {
         currentUser.setToken(newToken);
         currentUser.setRefreshTokenExpiredAt(System.currentTimeMillis()+refreshTokenExpirationInMs);
         currentUser.setLastModifiedAt(System.currentTimeMillis());
+        currentUser.setGroupName(currentUser.getGroupName());
         jwtUserDetailsRepository.save(currentUser);
         System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
         return newToken;

@@ -291,6 +291,11 @@
             <artifactId>spring-beans</artifactId>
             <version>5.1.3.RELEASE</version>
         </dependency>
+        <!--webflux reactive-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

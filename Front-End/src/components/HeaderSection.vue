@@ -35,24 +35,43 @@
 </template>
 
 <script>
+
   export default {
     props: ['headerTitle'],
     data: function() {
       return {
         showNotification: false,
         email:'',
-        groupName:''
+        groupName:'',
+        notificationList:[],
+        newNotificationList:[]
       }
     },
+    computed,
+    watch,
     created(){
-      this.email=localStorage.getItem('email')
-      this.groupName=localStorage.getItem('groupName')
-    },
-    methods:{
-      getNotification(email,groupName){
-
+        this.streamPersonalNotification()
       }
-    }
+    ,
+    methods: {
+        streamPersonalNotification(){
+          let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
+          
+          es.addEventListener('notification',event=>{
+          this.notificationList = JSON.parse(event.data)
+          console.log('Notification : '+this.notificationList.length)
+          })
+          es.addEventListener('update',event =>{
+          this.newNotificationList = (JSON.parse(event.data))
+          console.log('Update notification : ' + this.newNotificationList.length)
+          })       
+          es.onerror = function(){
+             es.close()
+             console.log(es)
+          }
+          
+        }
+    },
   }
 </script>
 

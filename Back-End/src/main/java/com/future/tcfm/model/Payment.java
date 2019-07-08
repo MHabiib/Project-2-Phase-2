@@ -1,4 +1,4 @@
-package com.future.tcfm.model.detail;
+package com.future.tcfm.model;
 
 import com.future.tcfm.model.list.PaymentDetail;
 import lombok.AllArgsConstructor;
@@ -14,13 +14,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "payment_detail")
+@Document(collection = "payment")
 public class Payment {
     @Id
     private String idPayment;
-    private String idUser;
-    private String idGroup;
+    private String email;
+    private String groupName;
     private Long paymentDate;
+    private Long lastModifiedAt;
+    private Double price;
     private Boolean isPaid;
+    private String imagePath;
+    private String imageURL;
     private List<PaymentDetail> paymentDetail;
 }
