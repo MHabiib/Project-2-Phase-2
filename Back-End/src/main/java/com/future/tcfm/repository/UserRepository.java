@@ -1,6 +1,5 @@
 package com.future.tcfm.repository;
 
-import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +14,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     Integer countByGroupName(String groupName);
     List<User> findByGroupNameLike(String groupName);
     List<User> findByGroupNameLikeOrderByJoinDateDesc(String groupName);
+    User findByGroupNameAndRole(String groupName, String role);
 }
 

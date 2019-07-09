@@ -13,13 +13,13 @@ import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_APPROVED_MESSAGE;
@@ -27,6 +27,7 @@ import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_MESSA
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_REJECTED_MESSAGE;
 import static com.future.tcfm.service.impl.UserServiceImpl.*;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
     @Autowired
     PaymentRepository paymentRepository;
@@ -44,27 +45,32 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ResponseEntity createPayment(String paymentJSONString, MultipartFile file) throws IOException {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
+        System.out.print("Isi payment:");
+        System.out.print(payment);
         Group groupExist = groupRepository.findByName(payment.getGroupName());
         User userExist = userRepository.findByIdUser(payment.getEmail());
-        if(payment==null || payment.getEmail() == null || payment.getGroupName() == null){
+        if(payment.getEmail() == null || payment.getGroupName() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }
         if(userExist==null){
             return new ResponseEntity("User email does not exist", HttpStatus.NOT_FOUND);
         }
-        if(groupExist==null){
+        if(groupExist==null) {
             return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
         }
+
         if(checkImageFile(file)){
-            try{
-                String fileName=String.valueOf(System.currentTimeMillis())+"_"+payment.getEmail()+"_"+file.getOriginalFilename();
+            try {
+//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin ya
+                String fileName = System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
                 payment.setImageURL(UPLOADED_URL+fileName);
-            }catch (IOException e){
-                return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
+            } catch (IOException e){
+                return new ResponseEntity<>("Some error occurred. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
+
         payment.setPaymentDate(System.currentTimeMillis());
         payment.setGroupName(payment.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());

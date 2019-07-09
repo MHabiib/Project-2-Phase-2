@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/overview")
 public class OverviewController {
-    @Autowired
+    private final
     OverviewService overviewService;
+
+    @Autowired
+    public OverviewController(OverviewService overviewService) {
+        this.overviewService = overviewService;
+    }
 
     @GetMapping
     public Overview getData(@RequestParam("email") String email) {

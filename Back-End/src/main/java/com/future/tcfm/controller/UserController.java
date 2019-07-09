@@ -38,9 +38,11 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity update(@PathVariable("id") String id,
-                                 @Nullable @RequestPart("file") MultipartFile file,
-                                 @RequestPart("user") String userJSONString) throws IOException {
+    public ResponseEntity update(
+            @PathVariable("id") String id,
+            @Nullable @RequestPart("file") MultipartFile file,
+            @RequestPart("user") String userJSONString
+    ) throws IOException {
         return userService.updateUserV2(id, userJSONString, file);
     }
 
