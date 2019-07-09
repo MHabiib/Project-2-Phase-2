@@ -166,6 +166,7 @@
     <payNowWindow
       v-if='showPayNowWindow'
       @closePayNowWindow='closePayNowWindow'
+      :dataPayNow='this.dataPayNow'
     />
   </div>
 </template>
@@ -179,7 +180,8 @@
       return {
         dashboardData: {},
         showCreateNewExpenseWindow: false,
-        showPayNowWindow: false
+        showPayNowWindow: false,
+        dataPayNow: {}
       }
     },
     computed: {
@@ -200,7 +202,12 @@
         .then(response => {
           response.json().then(
             res => {
+              console.log(res);
               this.dashboardData = res;
+              this.dataPayNow = {
+                nomorRekening: res.adminAccountNumber,
+                namaAdmin: res.adminName
+              }
             }
           )
         })
