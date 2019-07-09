@@ -45,6 +45,8 @@
           .then(()=> {
             alert('Login Berhasil');
             this.$router.push('/dashboard');
+            
+            // this.$router.push('/tugasweb');// hanya sebuah tugas web (coba-coba punya) #abaikanSaja
           })
           .catch(err => {alert(`Catch an error: ${err}`)})
       }

@@ -48,7 +48,7 @@ public class JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+9999999999999L))//development phase token last for days
+                .setExpiration(new Date(System.currentTimeMillis()+9999999999999999L))//development phase token last for days
 //                .setExpiration(new Date(System.currentTimeMillis()+jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();

@@ -45,11 +45,6 @@ public class UserController {
     ) throws IOException {
         return userService.updateUserV2(id, userJSONString, file);
     }
-
-    @GetMapping(value = "/img/{imageName:.+}")
-    public ResponseEntity getImage(@PathVariable("imageName") String imageName) throws IOException {
-        return userService.getImage(imageName);
-    }
 }
 
 //    @PostMapping

@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.util.List;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_APPROVED_MESSAGE;
@@ -147,7 +149,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity findByIdGroup() {
-        return null;
+    public ResponseEntity findByGroupName(String groupName) {
+        List<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName);
+        if(paymentList==null) return new ResponseEntity("Error: 404 Not Found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity(paymentList,HttpStatus.OK);
     }
 }
