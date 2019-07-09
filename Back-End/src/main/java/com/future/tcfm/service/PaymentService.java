@@ -14,5 +14,5 @@ public interface PaymentService {
     ResponseEntity findAll();
     ResponseEntity findById();
     ResponseEntity findByIdUser();
-    ResponseEntity findByIdGroup();
+    ResponseEntity findByGroupName(String groupName);
 }

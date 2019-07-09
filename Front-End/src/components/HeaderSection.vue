@@ -47,8 +47,7 @@
         newNotificationList:[]
       }
     },
-    computed,
-    watch,
+  
     created(){
         this.streamPersonalNotification()
       }

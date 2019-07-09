@@ -13,6 +13,7 @@ import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.List;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_APPROVED_MESSAGE;
@@ -27,6 +29,7 @@ import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_MESSA
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_REJECTED_MESSAGE;
 import static com.future.tcfm.service.impl.UserServiceImpl.*;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
     @Autowired
     PaymentRepository paymentRepository;
@@ -141,7 +144,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity findByIdGroup() {
-        return null;
+    public ResponseEntity findByGroupName(String groupName) {
+        List<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName);
+        if(paymentList==null) return new ResponseEntity("Error: 404 Not Found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity(paymentList,HttpStatus.OK);
     }
 }
