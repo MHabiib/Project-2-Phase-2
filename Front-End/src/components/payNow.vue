@@ -87,13 +87,15 @@ import { backEndAddress } from '../../Helper';
       submitPembayaran() {
         let formData = new FormData();
 
-        formData.append('paymentModel', JSON.stringify({
-          periode: this.periode,
-          nomorRekeningPengirim: this.nomorRekeningPengirim,
-          namaPengirim: this.namaPengirim,
-          tanggalTransfer: this.tanggalTransfer,
-          emailMemberLain: this.emailMemberLain,
-          email: localStorage.getItem('userEmail')
+        formData.append('payment', JSON.stringify({
+          // periode: this.periode,
+          // nomorRekeningPengirim: this.nomorRekeningPengirim,
+          // namaPengirim: this.namaPengirim,
+          // paymentDate: this.tanggalTransfer,
+          // emailMemberLain: this.emailMemberLain,
+          // email: localStorage.getItem('userEmail'),
+          email: 'momo@jyp.com',
+          groupName: 'BDZ'
         }))
 
         formData.append('file', this.buktiTransfer);
@@ -101,12 +103,21 @@ import { backEndAddress } from '../../Helper';
         console.log(formData.getAll('payment'));
         console.log(formData.getAll('file'));
 
+        const myHeader = new Headers();
+        myHeader.append('Authorization', localStorage.getItem('accessToken'));
+        myHeader.delete('Content-Type');
+
+        console.log(myHeader.get('Content-Type'));
+
         fetch(`${backEndAddress}/payment`, {
           method: 'POST',
-          headers: {
-            Authorization: localStorage.getItem('accessToken'),
-            'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
-          },
+          headers: myHeader
+          // {
+            // Authorization: localStorage.getItem('accessToken'),
+            // 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryIn312MOjBWdkffIM',
+            // // 'Content-Type': undefined
+          // }
+          ,
           body: {formData}
         })
         .then(response => {

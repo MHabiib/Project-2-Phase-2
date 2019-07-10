@@ -20,11 +20,12 @@ public class Payment {
     private String idPayment;
     private String email;
     private String groupName;
-    private Long paymentDate;
+    private Long paymentDate; // tanggalTransfer
     private Long lastModifiedAt;
     private Double price;
     private Boolean isPaid;
     private String imagePath;
     private String imageURL;
     private List<PaymentDetail> paymentDetail;
+    //    jumlahPeriode, nomorRekening, namaRekening, emailMemberLain
 }

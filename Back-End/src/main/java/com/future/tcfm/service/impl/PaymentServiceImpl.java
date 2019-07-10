@@ -50,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.print("Isi payment:");
         System.out.print(payment);
         Group groupExist = groupRepository.findByName(payment.getGroupName());
-        User userExist = userRepository.findByIdUser(payment.getEmail());
+        User userExist = userRepository.findByEmail(payment.getEmail());
         if(payment.getEmail() == null || payment.getGroupName() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }
