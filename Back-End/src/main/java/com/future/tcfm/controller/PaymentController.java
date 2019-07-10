@@ -45,7 +45,7 @@ public class PaymentController {
     }
 
     @PostMapping("/managementPayment")
-    public ResponseEntity managementPayment(ExpenseRequest thisPayment){
+    public ResponseEntity managementPayment(ExpenseRequest thisPayment) {
         return paymentService.managementPayment(thisPayment);
     }
 }

@@ -63,7 +63,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         if(checkImageFile(file)){
             try {
-//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin ya
+//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
+
                 String fileName = System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
