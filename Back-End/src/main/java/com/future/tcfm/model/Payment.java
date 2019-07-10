@@ -20,6 +20,10 @@ public class Payment {
     private String idPayment;
     private String email;
     private String groupName;
+    private String emailMemberLain;
+    private String namaPengirim;
+    private Integer periode;
+    private String nomorRekeningPengirim;
     private Long paymentDate;
     private Long lastModifiedAt;
     private Double price;

@@ -50,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.print("Isi payment:");
         System.out.print(payment);
         Group groupExist = groupRepository.findByName(payment.getGroupName());
-        User userExist = userRepository.findByIdUser(payment.getEmail());
+        User userExist = userRepository.findByEmail(payment.getEmail());
         if(payment.getEmail() == null || payment.getGroupName() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }
@@ -63,7 +63,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         if(checkImageFile(file)){
             try {
-//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin ya
+//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
+
                 String fileName = System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
