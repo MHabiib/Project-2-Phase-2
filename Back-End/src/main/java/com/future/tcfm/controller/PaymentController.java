@@ -30,7 +30,6 @@ public class PaymentController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(
-            @RequestBody
             @Nullable @RequestPart("file") MultipartFile file,
             @RequestPart("payment") String paymentJSONString
     ) throws IOException {

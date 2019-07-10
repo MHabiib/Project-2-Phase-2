@@ -88,6 +88,7 @@ import { backEndAddress } from '../../Helper';
         let formData = new FormData();
 
         formData.append('payment', JSON.stringify({
+<<<<<<< HEAD
           // periode: this.periode,
           // nomorRekeningPengirim: this.nomorRekeningPengirim,
           // namaPengirim: this.namaPengirim,
@@ -96,10 +97,21 @@ import { backEndAddress } from '../../Helper';
           // email: localStorage.getItem('userEmail'),
           email: 'momo@jyp.com',
           groupName: 'BDZ'
+=======
+          periode: this.periode,
+          nomorRekeningPengirim: this.nomorRekeningPengirim,
+          namaPengirim: this.namaPengirim,
+          emailMemberLain: this.emailMemberLain,
+          email: localStorage.getItem('userEmail'),
+          groupName: "BDZ",
+          price:this.totalTagihan
+>>>>>>> 90eb1795d3841c953cee24645fc748ea328ac201
         }))
+        console.log(formData.get("payment"))
 
         formData.append('file', this.buktiTransfer);
 
+<<<<<<< HEAD
         console.log(formData.getAll('payment'));
         console.log(formData.getAll('file'));
 
@@ -119,6 +131,15 @@ import { backEndAddress } from '../../Helper';
           // }
           ,
           body: {formData}
+=======
+        fetch(`${backEndAddress}/payment`, {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            // 'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
+          },
+          body: formData
+>>>>>>> 90eb1795d3841c953cee24645fc748ea328ac201
         })
         .then(response => {
           console.log(response);
