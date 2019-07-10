@@ -311,12 +311,12 @@
     border-radius: 5px;
     font-size: 14px;
     margin-left: 10px;
+    cursor: pointer;
   }
 
   .expenseTableAddNew:hover {
     background-color: var(--primary-3);
     color: var(--lightColor);
-    cursor: pointer;
   }
 
   .expenseTableAddNew:active {background-color: var(--primary-4);}
