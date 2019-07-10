@@ -35,7 +35,6 @@
 </template>
 
 <script>
-
   export default {
     props: ['headerTitle'],
     data: function() {
@@ -47,29 +46,32 @@
         newNotificationList:[]
       }
     },
+<<<<<<< HEAD
+=======
   
+>>>>>>> 60e4bdb6552e6bdf7549935376a457be08ad33df
     created(){
-        this.streamPersonalNotification()
-      }
-    ,
+      this.streamPersonalNotification()
+    },
     methods: {
-        streamPersonalNotification(){
-          let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
-          
-          es.addEventListener('notification',event=>{
+      streamPersonalNotification(){
+        let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
+        
+        es.addEventListener('notification', event => {
           this.notificationList = JSON.parse(event.data)
           console.log('Notification : '+this.notificationList.length)
-          })
-          es.addEventListener('update',event =>{
+        })
+
+        es.addEventListener('update', event => {
           this.newNotificationList = (JSON.parse(event.data))
           console.log('Update notification : ' + this.newNotificationList.length)
-          })       
-          es.onerror = function(){
-             es.close()
-             console.log(es)
-          }
-          
+        })    
+
+        es.onerror = function(){
+          es.close()
+          console.log(es)
         }
+      }
     },
   }
 </script>

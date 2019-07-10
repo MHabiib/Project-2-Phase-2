@@ -5,18 +5,18 @@
         <div class="payNowHeader">
           <div>
             <div class='textPayNow'>Pay Now</div>
-            <div class='pembayaranTerakhir'>Pembayaran terakhir Anda: {{data.pembayaranTerakhir}}</div>
+            <div class='pembayaranTerakhir'>Pembayaran terakhir Anda: {{dataPayNow.pembayaranTerakhir}}</div>
           </div>
 
           <div class='buttonGroup'>
             <div class="closeButton" @click="closePayNowWindow">Close</div>
-            <div class="okButton">OK</div>
+            <div class="okButton" @click='submitPembayaran'>OK</div>
           </div>
         </div>
 
         <div class="payNowBody">
           <div class="payNowOneRow">
-            Rek Tujuan Transfer: 2420115451{{data.nomor}} a.n. Robin Robin{{data.penerima}}
+            Rek Tujuan Transfer: {{dataPayNow.nomorRekening}} a.n. {{dataPayNow.namaAdmin}}
           </div>
 
           <div class="payNowOneRow">
@@ -30,13 +30,13 @@
           </div>
 
           <div class="payNowOneRow">
-            <input type="text" name="rekeningPengirim" id="rekeningPengirim" placeholder="No. Rekening Anda" @keypress='checkChar'/>
-            <input style="flex: 1" type="text" name="namaPengirim" id="namaPengirim" placeholder="Rekening Atas Nama"/>
+            <input type="text" name="rekeningPengirim" id="rekeningPengirim" placeholder="No. Rekening Anda" @keypress='checkChar' v-model='nomorRekeningPengirim'/>
+            <input style="flex: 1" type="text" name="namaPengirim" id="namaPengirim" placeholder="Rekening Atas Nama" v-model='namaPengirim'/>
           </div>
 
           <div class="payNowOneRow">
-            <input type="date" name="tanggalTransfer" id="tanggalTransfer" placeholder="dd/mm/yyyy"/>
-            <input type="file" name="buktiTransfer" id="buktiTransfer"/>
+            <input type="date" name="tanggalTransfer" id="tanggalTransfer" placeholder="dd/mm/yyyy" v-model='tanggalTransfer'/>
+            <input type="file" name="buktiTransfer" id="buktiTransfer" @change="selectFile($event)"/>
           </div>
 
           <div class="payNowOneRow">
@@ -51,16 +51,19 @@
 </template>
 
 <script>
+import { backEndAddress } from '../../Helper';
   export default {
+    props: ['dataPayNow'],
     data: function() {
       return {
         biaya: '',
-        namaPengeluaran: '',
-        deskripsiPengeluaran: '',
-        data: {},
         periode: '',
         untukMemberLain: false,
-        emailMemberLain: ''
+        emailMemberLain: '',
+        nomorRekeningPengirim: '',
+        namaPengirim: '',
+        tanggalTransfer: '',
+        buktiTransfer: null
       }
     },
     methods: {
@@ -77,6 +80,38 @@
         if(this.untukMemberLain === false) {
           this.emailMemberLain = '';
         }
+      },
+      selectFile(e) {
+        this.buktiTransfer = e.target.files[0];
+      },
+      submitPembayaran() {
+        let formData = new FormData();
+
+        formData.append('paymentModel', JSON.stringify({
+          periode: this.periode,
+          nomorRekeningPengirim: this.nomorRekeningPengirim,
+          namaPengirim: this.namaPengirim,
+          tanggalTransfer: this.tanggalTransfer,
+          emailMemberLain: this.emailMemberLain,
+          email: localStorage.getItem('userEmail')
+        }))
+
+        formData.append('file', this.buktiTransfer);
+
+        console.log(formData.getAll('payment'));
+        console.log(formData.getAll('file'));
+
+        fetch(`${backEndAddress}/payment`, {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
+          },
+          body: {formData}
+        })
+        .then(response => {
+          console.log(response);
+        })
       }
     },
     computed: {
@@ -84,6 +119,9 @@
         return (this.periode * 100000)
       }
     },
+    created() {
+      console.log(this.dataPayNow);
+    }
   }
 </script>
 
