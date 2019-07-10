@@ -87,27 +87,26 @@ import { backEndAddress } from '../../Helper';
       submitPembayaran() {
         let formData = new FormData();
 
-        formData.append('paymentModel', JSON.stringify({
+        formData.append('payment', JSON.stringify({
           periode: this.periode,
           nomorRekeningPengirim: this.nomorRekeningPengirim,
           namaPengirim: this.namaPengirim,
-          tanggalTransfer: this.tanggalTransfer,
           emailMemberLain: this.emailMemberLain,
-          email: localStorage.getItem('userEmail')
+          email: localStorage.getItem('userEmail'),
+          groupName: "BDZ",
+          price:this.totalTagihan
         }))
+        console.log(formData.get("payment"))
 
         formData.append('file', this.buktiTransfer);
-
-        console.log(formData.getAll('payment'));
-        console.log(formData.getAll('file'));
 
         fetch(`${backEndAddress}/payment`, {
           method: 'POST',
           headers: {
             Authorization: localStorage.getItem('accessToken'),
-            'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
+            // 'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
           },
-          body: {formData}
+          body: formData
         })
         .then(response => {
           console.log(response);

@@ -46,10 +46,6 @@
         newNotificationList:[]
       }
     },
-<<<<<<< HEAD
-=======
-  
->>>>>>> 60e4bdb6552e6bdf7549935376a457be08ad33df
     created(){
       this.streamPersonalNotification()
     },
