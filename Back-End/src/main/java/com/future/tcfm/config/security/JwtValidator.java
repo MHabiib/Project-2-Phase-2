@@ -50,6 +50,12 @@ public class JwtValidator {
         return jwtUserDetails;
     }
 
+    /**
+     * kasih user aksestoken baru
+     * perpanjang durasi refreshToken user yngbersangkutan
+     * @param email
+     * @return
+     */
     public String onSuccessAuth(String email){
         JwtUserDetails currentUser = jwtUserDetailsRepository.findByEmail(email);
         if(currentUser == null) throw new RuntimeException("Current user is null!");
