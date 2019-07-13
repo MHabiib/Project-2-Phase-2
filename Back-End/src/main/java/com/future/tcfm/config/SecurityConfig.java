@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers("**/api/**").authenticated()
                 //hanya user dengan role/authority ADMIN yang bisa akses PUT ke api dibawah
-                .antMatchers("/api/payment" ).authenticated()
+//                .antMatchers("/api/payment" ).authenticated()
                 .antMatchers(HttpMethod.PUT,"/api/expense/**").hasAuthority("ADMIN")
                 //hanya Admin yang bisa akses POST ke api dibawah (buat group dan buat user)
                 .antMatchers(HttpMethod.GET,"/api/user").hasAuthority("ADMIN")

@@ -23,6 +23,6 @@ public class JwtSuccessHandler implements AuthenticationSuccessHandler{
         System.out.println("Successfully Authentication");
         System.out.println("Email/Username : " + getCurrentUser().getEmail());
         System.out.println("Authorities: " +((JwtUserDetails)authentication.getPrincipal()).getAuthorities());
-        System.out.println("Access token : " +((JwtUserDetails)authentication.getPrincipal()).getToken());
+        System.out.println("Access token : " +((JwtUserDetails)authentication.getPrincipal()).getAccessToken());
     }
 }

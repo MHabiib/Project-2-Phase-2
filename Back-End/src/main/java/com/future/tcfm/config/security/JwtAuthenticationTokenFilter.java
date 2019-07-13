@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -59,7 +60,11 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         String newToken=validator.onSuccessAuth(jwtUserDetails.getEmail());
         System.out.println("NewToken : "+newToken);
         if(newToken == null) newToken = "NULL_TOKEN";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization",newToken);
+        headers.add("Access-Control-Request-Headers","Authorization");
         response.setHeader("Authorization",newToken);
+        response.setHeader("Access-Control-Expose-Headers","Authorization"); //agar client bisa akses header Authorization
         response.setStatus(HttpServletResponse.SC_OK);
         System.out.println("============================================================================================================\n");
         chain.doFilter(request, response);

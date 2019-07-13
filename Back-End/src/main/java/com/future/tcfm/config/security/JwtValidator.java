@@ -54,7 +54,7 @@ public class JwtValidator {
         JwtUserDetails currentUser = jwtUserDetailsRepository.findByEmail(email);
         if(currentUser == null) throw new RuntimeException("Current user is null!");
         String newToken =  jwtGenerator.generateToken(email);
-        currentUser.setToken(newToken);
+        currentUser.setAccessToken(newToken);
         currentUser.setRefreshTokenExpiredAt(System.currentTimeMillis()+refreshTokenExpirationInMs);
         currentUser.setLastModifiedAt(System.currentTimeMillis());
         currentUser.setGroupName(currentUser.getGroupName());
@@ -63,11 +63,11 @@ public class JwtValidator {
         return newToken;
 //        return null;
     }
-    public ResponseEntity getRefreshToken(String token, String refreshToken){
-        System.out.println(token+"_"+refreshToken);
-        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByTokenAndRefreshToken(token,refreshToken);
+    public ResponseEntity getRefreshToken(String accesToken, String refreshToken){
+        System.out.println(accesToken+"\n"+refreshToken);
+        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByAccessTokenAndRefreshToken(accesToken,refreshToken);
         if(jwtUserDetails==null){
-            return new ResponseEntity("401 Unauthorized access", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("404 token not found", HttpStatus.NOT_FOUND);
         }
         if(jwtUserDetails.getRefreshTokenExpiredAt()<System.currentTimeMillis()){
             jwtUserDetailsRepository.delete(jwtUserDetails);
@@ -75,19 +75,19 @@ public class JwtValidator {
         }
         String newToken = jwtGenerator.generateToken(jwtUserDetails.getEmail());
         String newRefreshToken = jwtGenerator.generateRefreshToken(jwtUserDetails.getId());
-        jwtUserDetails.setToken(newToken);
+        jwtUserDetails.setAccessToken(newToken);
         jwtUserDetails.setRefreshToken(newRefreshToken);
         jwtUserDetails.setRefreshTokenExpiredAt(new Date().getTime()+refreshTokenExpirationInMs);
         Map<String,String> tokenMap = new HashMap<>();
-        tokenMap.put("token",newToken);
+        tokenMap.put("accessToken",newToken);
         tokenMap.put("refreshToken",newRefreshToken);
         jwtUserDetails.setLastModifiedAt(System.currentTimeMillis());
         jwtUserDetailsRepository.save(jwtUserDetails);
         return new ResponseEntity(tokenMap,HttpStatus.OK);
     }
 
-    public ResponseEntity signOut(String token,String refreshToken){
-        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByTokenAndRefreshToken(token,refreshToken);
+    public ResponseEntity signOut(String accessToken,String refreshToken){
+        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByAccessTokenAndRefreshToken(accessToken,refreshToken);
         if(jwtUserDetails==null){
             return new ResponseEntity("404 CurrentUser not found", HttpStatus.NOT_FOUND);
         }

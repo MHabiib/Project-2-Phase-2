@@ -48,7 +48,7 @@ public class JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+9999999999999999L))//development phase token last for days
+                .setExpiration(new Date(System.currentTimeMillis()+1000000000000000L))//development phase token last for days
 //                .setExpiration(new Date(System.currentTimeMillis()+jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
@@ -56,7 +56,6 @@ public class JwtGenerator {
     public String generateRefreshToken(String id){
         return UUID.randomUUID().toString()+id;
     }
-
     /**
      * loginHandler below
      *
@@ -70,8 +69,8 @@ public class JwtGenerator {
             if (passwordEncoder.matches(loginRequest.getPassword(), userExist.getPassword())){
                 Map<String,String> tokenMap = new HashMap<>();
                 String refreshToken = generateRefreshToken(userExist.getIdUser());
-                String token = generateToken(userExist.getEmail());
-                tokenMap.put("token",token);
+                String accessToken = generateToken(userExist.getEmail());
+                tokenMap.put("accessToken",accessToken);
                 tokenMap.put("refreshToken",refreshToken);
                 tokenMap.put("role",userExist.getRole());
                 tokenMap.put("groupName",userExist.getGroupName());
@@ -80,7 +79,7 @@ public class JwtGenerator {
                 if(jwtUserDetails== null)
                     jwtUserDetails = new JwtUserDetails();
                 jwtUserDetails.setEmail(userExist.getEmail());
-                jwtUserDetails.setToken(tokenMap.get("token"));
+                jwtUserDetails.setAccessToken(tokenMap.get("accessToken"));
                 jwtUserDetails.setRefreshToken(tokenMap.get("refreshToken"));
                 jwtUserDetails.setRefreshTokenExpiredAt(new Date().getTime()+refreshTokenExpirationInMs);
                 jwtUserDetails.setAuthorities(grantedAuthorities);

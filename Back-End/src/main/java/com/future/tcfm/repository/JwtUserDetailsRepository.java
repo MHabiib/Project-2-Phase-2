@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JwtUserDetailsRepository extends MongoRepository<JwtUserDetails, String> {
     JwtUserDetails findByEmail(String email);
-    JwtUserDetails findByTokenAndRefreshToken(String token,String refreshToken);
+    JwtUserDetails findByAccessTokenAndRefreshToken(String accessToken,String refreshToken);
 }

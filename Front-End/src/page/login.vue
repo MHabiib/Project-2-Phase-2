@@ -37,7 +37,7 @@
           .post('http://localhost:8088/auth/signin', dataLogin)
           .then(res => {
             // this.$store.dispatch("login", res.data);
-            localStorage.setItem('accessToken', `Token ${res.data.token}`);
+            localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('userEmail', this.emailInput);
             localStorage.setItem('groupName', res.data.groupName )

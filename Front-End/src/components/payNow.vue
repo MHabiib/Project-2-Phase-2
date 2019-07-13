@@ -52,6 +52,7 @@
 
 <script>
 import { backEndAddress } from '../../Helper';
+import { getNewToken } from '../../Helper';
   export default {
     props: ['dataPayNow'],
     data: function() {
@@ -93,7 +94,7 @@ import { backEndAddress } from '../../Helper';
           namaPengirim: this.namaPengirim,
           emailMemberLain: this.emailMemberLain,
           email: localStorage.getItem('userEmail'),
-          groupName: "BDZ",
+          groupName: localStorage.getItem('groupName'),
           price:this.totalTagihan
         }))
         console.log(formData.get("payment"))

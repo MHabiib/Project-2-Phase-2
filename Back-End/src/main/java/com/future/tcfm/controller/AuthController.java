@@ -28,10 +28,10 @@ public class AuthController {
     public ResponseEntity getRefreshToken(
             @RequestBody TokenResponse tokenResponse
             ) {
-        return jwtValidator.getRefreshToken(tokenResponse.getToken(),tokenResponse.getRefreshToken());
+        return jwtValidator.getRefreshToken(tokenResponse.getAccessToken(),tokenResponse.getRefreshToken());
     }
     @DeleteMapping(value = "/signout", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signOut(@RequestBody TokenResponse tokenResponse){
-        return jwtValidator.signOut(tokenResponse.getToken(),tokenResponse.getRefreshToken());
+        return jwtValidator.signOut(tokenResponse.getAccessToken(),tokenResponse.getRefreshToken());
     }
 }

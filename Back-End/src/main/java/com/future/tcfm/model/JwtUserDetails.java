@@ -20,15 +20,15 @@ public class JwtUserDetails implements UserDetails {
     @Id
     private String id;
     private String email;
-    private String token; // ini yang digunakan sbg akses Token
+    private String accessToken; // ini yang digunakan sbg akses Token
     private String refreshToken;
     private String groupName;
     private Long refreshTokenExpiredAt;
     private Collection<? extends GrantedAuthority> authorities;
     private Long lastModifiedAt;
-    public JwtUserDetails(String email,String token,String refreshToken, Long refTokenExpAt,List<GrantedAuthority> grantedAuthorities){
+    public JwtUserDetails(String email,String accessToken,String refreshToken, Long refTokenExpAt,List<GrantedAuthority> grantedAuthorities){
         this.email = email;
-        this.token= token;
+        this.accessToken= accessToken;
         this.refreshToken = refreshToken;
         this.refreshTokenExpiredAt = refTokenExpAt;
         this.authorities = grantedAuthorities;
@@ -71,7 +71,7 @@ public class JwtUserDetails implements UserDetails {
     public String getUserName() {
         return email;
     }
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 }
