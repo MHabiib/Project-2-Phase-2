@@ -66,7 +66,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         response.setHeader("Authorization",newToken);
         response.setHeader("Access-Control-Expose-Headers","Authorization"); //agar client bisa akses header Authorization
         response.setStatus(HttpServletResponse.SC_OK);
-        System.out.println("============================================================================================================\n");
+//        System.out.println("============================================================================================================\n");
         chain.doFilter(request, response);
     }
 

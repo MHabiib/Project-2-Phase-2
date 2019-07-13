@@ -148,13 +148,14 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public SseEmitter streamPersonalNotification(String email) {
         SseEmitter emitter = new SseEmitter();
+
         ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
         this.notificationList=notificationRepository.findByEmailOrderByTimestampDesc(email);
         sseMvcExecutor.execute(() -> {
         SseEmitter.SseEventBuilder event = SseEmitter.event();
             try {
                 event.id(UUID.randomUUID().toString());
-                event.name("notification");
+                event.name("start");
                 event.data(this.notificationList);
                 emitter.send(event);
                 System.out.println("first notification is sent");
@@ -163,7 +164,7 @@ public class NotificationServiceImpl implements NotificationService {
                         this.notificationList = notificationRepository.findByEmailOrderByTimestampDesc(email);
                         event = SseEmitter.event()
                                 .id(String.valueOf(i+"_"+UUID.randomUUID().toString()))
-                                .name("update")
+                                .name("message")
                                 .data(this.notificationList);
                         emitter.send(event);
                         System.out.println("new update on notification is sent");

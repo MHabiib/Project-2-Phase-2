@@ -10,24 +10,22 @@
     </div>
 
     <div class="notificationContainer" v-show="showNotification">
-
-      <div class="notificationItems">
-        <div class="notificationText">
-          You don't have any notifications yet.
+      <div class="notificationItems" v-show="isNotifNull">
+          <div class="notificationText">
+            There is no notification at this moment
+          </div>
+          <div class="notificationTime"></div>
         </div>
-
-        <div class="notificationTime">
-          a moment ago
-        </div>
-      </div>
-
-      <div class="notificationItems">
-        <div class="notificationText">
-          Second row of notification.
-        </div>
-
-        <div class="notificationTime">
-          a week ago
+      <div 
+        v-for='(notif,index) in notificationList' :key='index'
+          >
+        <div class="notificationItems">
+          <div class="notificationText">
+            {{notif.message}}
+          </div>
+          <div class="notificationTime">
+            {{new Date(notif.timestamp).toLocaleString()}}
+          </div>
         </div>
       </div>
     </div>
@@ -40,6 +38,7 @@
     data: function() {
       return {
         showNotification: false,
+        isNotifNull:true,
         email:'',
         groupName:'',
         notificationList:[],
@@ -49,23 +48,36 @@
     created(){
       this.streamPersonalNotification()
     },
+    watch:{
+      notificationList: function(oldVal,newVal){
+        if(this.notificationList.length>0) {this.isNotifNull=false}
+        console.log('Watcher triggered!')
+      }
+    },
+    computed:{
+      updateNotif(){
+        return this.notificationList.length
+      }
+    },
     methods: {
       streamPersonalNotification(){
         let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
         
-        es.addEventListener('notification', event => {
+        es.addEventListener('start', event => {
           this.notificationList = JSON.parse(event.data)
+          console.log('Notification stream started')
           console.log('Notification : '+this.notificationList.length)
+          console.log('=================================')
         })
 
-        es.addEventListener('update', event => {
-          this.newNotificationList = (JSON.parse(event.data))
-          console.log('Update notification : ' + this.newNotificationList.length)
-        })    
+        es.onmessage = (event) =>{
+          this.notificationList = JSON.parse(event.data)
+          console.log('Notification Updates: '+this.notificationList.length)
+        }
 
         es.onerror = function(){
-          es.close()
-          console.log(es)
+          // es.close()
+          console.log("Notification stream errored")
         }
       }
     },
