@@ -1,6 +1,5 @@
 package com.future.tcfm.controller;
 
-
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @CrossOrigin
-
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentController {

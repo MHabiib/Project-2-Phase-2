@@ -10,7 +10,6 @@ import ManageUserPage from '../page/ManageUser';
 import ManageGroupPage from '../page/ManageGroup';
 import SidebarComponent from '../components/Sidebar';
 import HeaderSection from '../components/HeaderSection';
-import tugasWeb from '../page/tugasWeb';
 import '../index.css';
 
 Vue.use(Router);
@@ -70,17 +69,12 @@ const router = new Router({
     {
       path: '/',
       redirect: to => {
-        if(localStorage.getItem('token')) {
+        if(localStorage.getItem('accessToken')) {
           return '/dashboard'
         } else {
           return '/login'
         }
       }
-    },
-    {
-      path: '/tugasweb',
-      component: tugasWeb,
-      meta: { requiresAuth: true }
     },
     {
       path: '/dashboard',

@@ -11,19 +11,9 @@
             All User
           </div>
 
-          <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" />
-
-          <select class='managementTableHeadSort' name="sortBy" id="sortBy">
-            <option style='display: none' value="none">Sort By</option>
-            <option value="group">Group</option>
-            <option value="name">Name</option>
-            <option value="email">Email</option>
-            <option value="phone">Phone</option>
-            <option value="role">Role</option>
-          </select>
-
-          <div class="managementTableHeadAddNew">
-            Add New User
+          <div style='display: flex;'>
+            <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" />
+            <div class="managementTableHeadAddNew" @click='openAddNewUserWindow'>Add New User</div>
           </div>
         </div>
 
@@ -40,126 +30,79 @@
             </thead>
 
             <tbody>
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
-              </tr>
-
-              <tr>
-                <td>Nadem Ecno</td>
-                <td>Bambang Hermansyah</td>
-                <td>bambang.hermansyah@gdn-commerce.com</td>
-                <td>081234567890</td>
-                <td>Admin</td>
+              <tr v-for='(user, index) in dataUser' :key='index'>
+                <td>{{user.groupName}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.role}}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+
+    <AddNewUserWindow
+      v-if='showAddNewUserWindow'
+      @closeAddNewUserWindow='closeAddNewUserWindow'
+    />
   </div>
 </template>
 
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
+  import { backEndAddress } from '../../Helper';
+  import AddNewUserWindow from '../components/addNewUser';
 
   export default {
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
       }
+    },
+    data: function() {
+      return {
+        dataUser: [],
+        showAddNewUserWindow: false
+      }
+    },
+    methods: {
+      getAllUsers() {
+        fetch(`${backEndAddress}/user`, {
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          }
+        })
+        .then(response => {
+          if(response.ok) {
+            response.json().then(
+              res => {
+                this.dataUser = res;
+              }
+            )
+          } else {
+            alert('Sesi Anda telah berakhir, silahkan refresh halaman ini.');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          alert('Terjadi kesalahan ketika mengambil data. Silahkan periksa koneksi Anda.')
+        })
+      },
+      closeAddNewUserWindow() {
+        this.showAddNewUserWindow = false;
+      },
+      openAddNewUserWindow() {
+        this.showAddNewUserWindow = true;
+      }
+    },
+    created() {
+      this.getAllUsers();
+    },
+    components: {
+      'AddNewUserWindow': AddNewUserWindow
     }
   }
 </script>
@@ -201,7 +144,7 @@
 
   .managementTableHeadSearch {
     outline: none;
-    padding: 8px 10px;
+    padding: 12px 10px;
     border: none;
     color: var(--primary-0);
     border-radius: 4px;
@@ -222,7 +165,7 @@
 
   .managementTableBody {
     background-color: var(--lightColor);
-    color: var(--primary-0);
+    color: var(--primary-4);
     position: relative;
     top: -45px;
     border-radius: 5px;
@@ -234,14 +177,16 @@
     background-color: var(--lightColor);
     color: var(--primary-0);
     padding: 10px;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
   }
 
   .managementTableHeadAddNew:hover {
     background-color: var(--primary-3);
     color: var(--lightColor);
-    cursor: pointer;
   }
 
   .managementTableHeadAddNew:active {
@@ -265,7 +210,7 @@
   .manageUserComponent .managementTableBody thead tr, .manageUserComponent .managementTableBody tbody { display: block; box-sizing: border-box; }
   .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 10vw; }
   .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 15vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 28vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 10vw; text-align: center;}
-  .manageUserComponent .managementTableBody tbody td:nth-child(5), .manageUserComponent .managementTableBody thead tr th:nth-child(5) { width: 6vw; text-align: center;}
+  .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 22vw; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 12vw; }
+  /* .manageUserComponent .managementTableBody tbody td:nth-child(5), .manageUserComponent .managementTableBody thead tr th:nth-child(5) { width: 2vw; text-align: 'center' } */
 </style>

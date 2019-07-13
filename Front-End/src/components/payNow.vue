@@ -30,19 +30,55 @@
           </div>
 
           <div class="payNowOneRow">
-            <input type="text" name="rekeningPengirim" id="rekeningPengirim" placeholder="No. Rekening Anda" @keypress='checkChar' v-model='nomorRekeningPengirim'/>
-            <input style="flex: 1" type="text" name="namaPengirim" id="namaPengirim" placeholder="Rekening Atas Nama" v-model='namaPengirim'/>
+            <input
+              type="text"
+              name="rekeningPengirim"
+              id="rekeningPengirim"
+              placeholder="No. Rekening Anda"
+              @keypress='checkChar'
+              v-model='nomorRekeningPengirim'
+            />
+
+            <input
+              style="flex: 1"
+              type="text"
+              name="namaPengirim"
+              id="namaPengirim"
+              placeholder="Rekening Atas Nama"
+              v-model='namaPengirim'
+            />
           </div>
 
           <div class="payNowOneRow">
-            <input type="date" name="tanggalTransfer" id="tanggalTransfer" placeholder="dd/mm/yyyy" v-model='tanggalTransfer'/>
-            <input type="file" name="buktiTransfer" id="buktiTransfer" @change="selectFile($event)"/>
+            <input
+              type="date"
+              name="tanggalTransfer"
+              id="tanggalTransfer"
+              placeholder="dd/mm/yyyy"
+              v-model='tanggalTransfer'
+            />
+            
+            <input
+              type="file"
+              name="buktiTransfer"
+              id="buktiTransfer"
+              @change="selectFile($event)"
+            />
           </div>
 
           <div class="payNowOneRow">
             <input @click="setUntukMemberLain" type="checkbox" name="untukMemberLain" id="untukMemberLain"/>
             <div style="margin-right: 10px;">Bayar untuk member lain?</div>
-            <input style="flex: 1" type="text" name="emailMemberLain" id="emailMemberLain" placeholder="Email Member Lain" v-if="untukMemberLain" v-model="emailMemberLain"/>
+
+            <input
+              style="flex: 1"
+              type="text"
+              name="emailMemberLain"
+              id="emailMemberLain"
+              placeholder="Email Member Lain"
+              v-if="untukMemberLain"
+              v-model="emailMemberLain"
+            />
           </div>
         </div>
       </div>
@@ -52,7 +88,6 @@
 
 <script>
 import { backEndAddress } from '../../Helper';
-import { getNewToken } from '../../Helper';
   export default {
     props: ['dataPayNow'],
     data: function() {
@@ -83,7 +118,13 @@ import { getNewToken } from '../../Helper';
         }
       },
       selectFile(e) {
-        this.buktiTransfer = e.target.files[0];
+        if(e.target.files[0].size > 5000000) {
+          alert('Ukuran file maksimum adalah 5 MB. Harap upload foto dengan resolusi yang lebih kecil.');
+          this.buktiTransfer = null;
+          e.target.value = null;
+        } else {
+          this.buktiTransfer = e.target.files[0];
+        }
       },
       submitPembayaran() {
         let formData = new FormData();
@@ -94,23 +135,30 @@ import { getNewToken } from '../../Helper';
           namaPengirim: this.namaPengirim,
           emailMemberLain: this.emailMemberLain,
           email: localStorage.getItem('userEmail'),
-          groupName: localStorage.getItem('groupName'),
-          price:this.totalTagihan
+          price: this.totalTagihan
         }))
-        console.log(formData.get("payment"))
 
         formData.append('file', this.buktiTransfer);
 
         fetch(`${backEndAddress}/payment`, {
           method: 'POST',
           headers: {
-            Authorization: localStorage.getItem('accessToken'),
-            // 'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p'
+            Authorization: localStorage.getItem('accessToken')
           },
           body: formData
         })
         .then(response => {
-          console.log(response);
+          if(response.ok) {
+            alert('Berhasil!');
+            this.closePayNowWindow();
+          } else {
+            console.log(response);
+            alert('Terjadi kesalahan. Harap periksa kembali input Anda.')
+          }
+        })
+        .catch(err => {
+          alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
+          console.log(err);
         })
       }
     },

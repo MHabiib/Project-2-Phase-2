@@ -161,6 +161,8 @@
   .expenseWindowSize {
     width: 40%;
     height: 40%;
+    position: relative;
+    top: -50px;
   }
 
   .closeButton {
@@ -204,6 +206,7 @@
     padding: 10px;
     height: 100px;
     overflow: scroll;
+    border-radius: 5px;
   }
 
   .expenseDetailButton {

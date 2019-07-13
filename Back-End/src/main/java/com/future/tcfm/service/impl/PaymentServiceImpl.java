@@ -49,22 +49,22 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
         System.out.print("Isi payment:");
         System.out.print(payment);
-        Group groupExist = groupRepository.findByName(payment.getGroupName());
+//        Group groupExist = groupRepository.findByName(payment.getGroupName());
+
         User userExist = userRepository.findByEmail(payment.getEmail());
-        if(payment.getEmail() == null || payment.getGroupName() == null){
+        if(payment.getEmail() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }
         if(userExist==null){
             return new ResponseEntity("User email does not exist", HttpStatus.NOT_FOUND);
         }
-        if(groupExist==null) {
-            return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
-        }
+//        if(groupExist==null) {
+//            return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
+//        }
 
         if(checkImageFile(file)){
             try {
 //              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
-
                 String fileName = System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
@@ -75,7 +75,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         payment.setPaymentDate(System.currentTimeMillis());
-        payment.setGroupName(payment.getGroupName());
+        payment.setGroupName(userExist.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(payment);
         notificationMessage = payment.getEmail()+ PAYMENT_MESSAGE; //getCurrentUser() = get current logged in user
