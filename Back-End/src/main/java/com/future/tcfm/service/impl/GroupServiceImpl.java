@@ -5,6 +5,7 @@ import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.GroupService;
+import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,17 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+import static com.future.tcfm.service.impl.NotificationServiceImpl.GROUP_PROFILE_UPDATE;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
+
 @Service
 public class GroupServiceImpl implements GroupService {
     @Autowired
     GroupRepository groupRepository;
     @Autowired
     UserRepository userRepository;
-    
+    @Autowired
+    NotificationService notificationService;
     @Override
     public List<Group> loadAll() {
         return groupRepository.findAll();
@@ -57,6 +62,7 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setActive(group.getActive());
         groupExist.setCreatedDate(new Date().getTime());
         groupRepository.save(groupExist);
+        notificationService.createNotification(GROUP_PROFILE_UPDATE,null,groupExist.getName(),TYPE_GROUP);
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 }

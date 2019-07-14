@@ -1,37 +1,36 @@
 package com.future.tcfm.service.impl;
 
-import com.future.tcfm.model.JwtUserDetails;
+import com.future.tcfm.model.NotificationEvent;
 import com.future.tcfm.model.Notification;
 import com.future.tcfm.repository.NotificationRepository;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
-import java.io.IOException;
-import java.sql.Date;
 import java.time.Duration;
-import java.time.LocalTime;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
-import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
-
-
 
 @Service
 @EnableScheduling
 public class NotificationServiceImpl implements NotificationService {
+    public static final String TYPE_PERSONAL = "PERSONAL";
+    public static final String TYPE_GROUP = "GROUP";
+    public static final String GROUP_PROFILE_UPDATE = "GROUP";
     public static final String PAYMENT_DUE_DATE = " please make your payment now ";
     public static final String EXPENSE_MESSAGE = " requested new expense ";
     public static final String EXPENSE_APPROVED_MESSAGE = " 's requested expense had been approved ";
@@ -45,6 +44,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+
 
     @Override
     public ResponseEntity findAll(){
@@ -87,14 +91,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotification(String message,String email, String groupName) {
+    public void createNotification(String message, String email, String groupName, String type) {
         Notification notification = Notification.builder()
                 .email(email)
                 .message(message)
                 .isRead(false)
                 .timestamp(System.currentTimeMillis())
-                .groupName(groupName).build();
+                .groupName(groupName)
+                .type(type).build();
         notificationRepository.save(notification);
+        NotificationEvent notificationEvent = new NotificationEvent(this,type,email,groupName);
+        applicationEventPublisher.publishEvent(notificationEvent);
     }
 
     @Override
@@ -122,7 +129,6 @@ public class NotificationServiceImpl implements NotificationService {
                 .map(this::getNotificationByEmail)
                 .flatMapIterable(x -> x);
     }
-
     /**
      *
      * @Return notificationList every X secodns
@@ -131,52 +137,107 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Flux<List<Notification>> getPersonalNotificationReactiveV2(String email){
 //        this.email = getCurrentUser().getEmail();
-        this.notificationList = notificationRepository.findByEmailOrderByTimestampDesc(email);//problem disini
+        this.notificationList = notificationRepository.findTop10ByEmailOrderByTimestampDesc(email);//problem disini
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
         Flux<List<Notification>> notificationFlux = Flux.fromStream(Stream.generate(() -> this.notificationList));
         return Flux.zip(interval, notificationFlux).map(Tuple2::getT2);
     }
 
-    /**
-     * Stream Notifikasi yang digunakan adalah yang dibawah ini.
-     * Hanya mengirim event ketika ada perubahan pada database
-     * @param email
-     * @return
-     */
-
+//    /**
+//     * Stream Notifikasi yang digunakan adalah yang dibawah ini.
+//     * Hanya mengirim event ketika ada perubahan pada database
+//     * @param email
+//     * @return
+//     */
+//    @Override
+//    public SseEmitter streamPersonalNotification(String email) {
+//        SseEmitter emitter = new SseEmitter();
+//
+//        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+//        this.notificationList=notificationRepository.findTop10ByEmailOrderByTimestampDesc(email);
+//        sseMvcExecutor.execute(() -> {
+//        SseEmitter.SseEventBuilder event = SseEmitter.event();
+//            try {
+//                event.id(UUID.randomUUID().toString());
+//                event.name("start");
+//                event.data(this.notificationList);
+//                emitter.send(event);
+//                System.out.println("first notification is sent");
+//                for (int i = 0; true; i++) {
+//                    if(this.notificationList.size()!=notificationRepository.findTop10ByEmailOrderByTimestampDesc(email).size()) {
+//                        this.notificationList = notificationRepository.findTop10ByEmailOrderByTimestampDesc(email);
+//                        event = SseEmitter.event()
+//                                .id(String.valueOf(i+"_"+UUID.randomUUID().toString()))
+//                                .name("message")
+//                                .data(this.notificationList);
+//                        emitter.send(event);
+//                        System.out.println("new update on notification is sent");
+//                    }
+//                    Thread.sleep(1000);
+//                }
+//            } catch (Exception ex) {
+//                emitter.completeWithError(ex);
+//            }
+//        });
+//
+//        return emitter;
+//    }
 
     @Override
-    public SseEmitter streamPersonalNotification(String email) {
+    public SseEmitter streamNotification(String ref,String type) {
         SseEmitter emitter = new SseEmitter();
-
-        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
-        this.notificationList=notificationRepository.findByEmailOrderByTimestampDesc(email);
-        sseMvcExecutor.execute(() -> {
-        SseEmitter.SseEventBuilder event = SseEmitter.event();
-            try {
-                event.id(UUID.randomUUID().toString());
-                event.name("start");
-                event.data(this.notificationList);
-                emitter.send(event);
-                System.out.println("first notification is sent");
-                for (int i = 0; true; i++) {
-                    if(this.notificationList.size()!=notificationRepository.findByEmailOrderByTimestampDesc(email).size()) {
-                        this.notificationList = notificationRepository.findByEmailOrderByTimestampDesc(email);
-                        event = SseEmitter.event()
-                                .id(String.valueOf(i+"_"+UUID.randomUUID().toString()))
-                                .name("message")
-                                .data(this.notificationList);
-                        emitter.send(event);
-                        System.out.println("new update on notification is sent");
-                    }
-                    Thread.sleep(1000);
-                }
-            } catch (Exception ex) {
-                emitter.completeWithError(ex);
-            }
+        List<Notification> notificationList;
+        if(type.equalsIgnoreCase(TYPE_GROUP)) {
+           notificationList = notificationRepository.findTop10ByGroupNameOrderByTimestampDesc(ref);
+        }
+        else{
+            notificationList = notificationRepository.findTop10ByEmailOrderByTimestampDesc(ref);
+        }
+        this.emitters.add(emitter);
+        try{
+            SseEmitter.SseEventBuilder event = SseEmitter.event();
+            event.data(notificationList);
+            event.id(UUID.randomUUID().toString());
+            event.name("start");
+            emitter.send(event);
+        }catch (Exception ex){
+            this.emitters.remove(emitter);
+        }
+        emitter.onCompletion(() -> this.emitters.remove(emitter));
+        emitter.onTimeout(() -> {
+            emitter.complete();
+            this.emitters.remove(emitter);
         });
-
         return emitter;
     }
 
+    @Async
+    @EventListener
+    public void onNewNotification(NotificationEvent notificationEvent){
+        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        List<SseEmitter> deadEmitters = new ArrayList<>();
+        List<Notification> notificationList;
+        if (notificationEvent.getType().equalsIgnoreCase(TYPE_GROUP)) {
+            notificationList = notificationRepository.findTop10ByGroupNameOrderByTimestampDesc(notificationEvent.getGroupName());
+            System.out.println("Event Group triggered!");
+        } else {
+            notificationList = notificationRepository.findTop10ByEmailOrderByTimestampDesc(notificationEvent.getEmail());
+            System.out.println("Event Personal triggered!");
+
+        }
+        sseMvcExecutor.execute(() -> {
+            SseEmitter.SseEventBuilder event = SseEmitter.event();
+            this.emitters.forEach(emitter -> {
+                try {
+                    event.name("message");
+                    event.id(UUID.randomUUID().toString());
+                    event.data(notificationList);
+                    emitter.send(event);
+                } catch (Exception e) {
+                    deadEmitters.add(emitter);
+                }
+            });
+            this.emitters.remove(deadEmitters);
+            });
+    }
 }

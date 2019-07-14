@@ -22,9 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_APPROVED_MESSAGE;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_MESSAGE;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_REJECTED_MESSAGE;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -73,7 +71,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         Bagian notifikasi...
          */
         String message = expense.getRequester() + EXPENSE_MESSAGE +"(" +expense.getTitle()+")";
-        notificationService.createNotification(message,expense.getRequester(),expense.getGroupName());
+        notificationService.createNotification(message,expense.getRequester(),expense.getGroupName(),TYPE_GROUP);
 
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
@@ -125,9 +123,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         else if(!expenseRequest.getStatus()) {
             expenseExist.setStatus(false);
             //notif...
-            notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
+            notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
-        notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName());
+        notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
         expenseRepository.save(expenseExist);

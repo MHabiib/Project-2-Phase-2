@@ -35,30 +35,26 @@ public class NotificationController {
 //    }
 
     /**
-     * ini yang dipakai
+     * ini bakalan return notifikasi secara live non stop
      * @param email
      * @return
      */
-    @GetMapping(value = "/personal2",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<List<Notification>> getPersonalNotificationV2(@RequestParam(value = "ref") String email){
-        return notificationService.getPersonalNotificationReactiveV2(email);
+//    @GetMapping(value = "/personal2",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public Flux<List<Notification>> getPersonalNotificationV2(@RequestParam(value = "ref") String email){
+//        return notificationService.getPersonalNotificationReactiveV2(email);
+//    }
+
+    /**
+     * ini yang dipakai oleh client di simbol notifikasi
+     * @param email
+     * @return
+     */
+    @GetMapping(value = "/{type}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamPersonalNotification(
+            @PathVariable("type")String type,
+            @RequestParam(value = "ref") String email){
+        return notificationService.streamNotification(email,type);
     }
-
-    @GetMapping(value = "/personal",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamPersonalNotification(@RequestParam(value = "ref") String email){
-        return notificationService.streamPersonalNotification(email);
-    }
-
-
-    @GetMapping(value = "/group",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getGroupNotification(
-            @RequestParam(value = "ref") String email,
-            @RequestParam(value = "isRead",required = false) Boolean isRead) {
-        return notificationService.getGroupNotification(email, isRead);
-    }
-
-
-
     @PutMapping(value = "/notification/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateNotification(
             @PathVariable("id") String id){

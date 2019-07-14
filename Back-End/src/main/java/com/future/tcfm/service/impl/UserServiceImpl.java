@@ -25,9 +25,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
-import static com.future.tcfm.service.impl.NotificationServiceImpl.EXPENSE_APPROVED_MESSAGE;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.USER_JOINED_GROUP;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.USER_LEFT_GROUP;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -109,10 +107,10 @@ public class UserServiceImpl implements UserService {
         if(userExist.getGroupName()!=user.getGroupName()) {
             //notification untuk group lamanya
             notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
-            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName());
+            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
             //notification untuk group barunya
             notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
-            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName());
+            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
             userExist.setJoinDate(new Date().getTime());
             userExist.setGroupName(user.getGroupName());
         }

@@ -12,10 +12,14 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification,String> {
+    List<Notification> findTop10ByEmailOrderByTimestampDesc(String email);
+    List<Notification> findTop10ByGroupNameOrderByTimestampDesc(String groupName);
+
     List<Notification> findByEmailOrderByTimestampDesc(String email);
-    List<Notification> findByGroupNameOrderByTimestampDesc(String email);
-    List<Notification> findByEmailOrGroupNameAndIsRead(String email,String GroupName, Boolean bool);
+    List<Notification> findByGroupNameOrderByTimestampDesc(String groupName);
+
+    List<Notification> findByEmailOrGroupNameAndIsRead(String email,String groupName, Boolean bool);
     List<Notification> findByEmailOrGroupName(String email,String groupName);
     List<Notification> findByEmailAndIsReadOrderByTimestampDesc(String email,Boolean bool);
-    List<Notification> findByGroupNameAndIsReadOrderByTimestampDesc(String email,Boolean bool);
+    List<Notification> findByGroupNameAndIsReadOrderByTimestampDesc(String groupName,Boolean bool);
 }

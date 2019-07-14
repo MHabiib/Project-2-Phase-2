@@ -25,4 +25,5 @@ public class Notification {
     private Boolean isRead;
     private Long timestamp;
     private Long isReadAt;
+    private String type;
 }

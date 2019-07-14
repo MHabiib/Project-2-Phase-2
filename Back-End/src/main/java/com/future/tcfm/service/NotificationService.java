@@ -2,16 +2,14 @@ package com.future.tcfm.service;
 
 import com.future.tcfm.model.Notification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface NotificationService {
-    void createNotification(String message,String email,String groupName);
+    void createNotification(String message, String email, String groupName, String type);
+
     ResponseEntity findByEmail(String id);
     ResponseEntity findAll();
     ResponseEntity getGroupNotification(String groupName, Boolean bool);
@@ -23,5 +21,7 @@ public interface NotificationService {
     //    Flux<Notification> getPersonalNotificationReactive();
     Flux<List<Notification>> getPersonalNotificationReactiveV2(String email);
 
-    SseEmitter streamPersonalNotification(String email);
+//    SseEmitter streamPersonalNotification(String email);
+
+    SseEmitter streamNotification(String ref,String type);
 }
