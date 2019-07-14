@@ -251,10 +251,31 @@
       },
       closeExpenseDetailWindow() {
         this.showExpenseDetailWindow = false;
+      },
+      streamPersonalNotification(){
+        let es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('groupName'))
+        
+        es.addEventListener('start', event => {
+          this.notificationList = JSON.parse(event.data)
+          console.log('GroupNotification stream started')
+          console.log('G_Notification : '+this.notificationList.length)
+          console.log('=================================')
+        })
+
+        es.onmessage = (event) =>{
+          this.notificationList = JSON.parse(event.data)
+          console.log('G_Notification Updates: '+this.notificationList.length)
+        }
+
+        es.onerror = function(){
+          // es.close()
+          console.log("G_Notification stream errored")
+        }
       }
-    },
+    },//methods end here
     created() {
       this.getOverviewData();
+      this.streamGroupNotification();
     },
     data: function() {
       return {
