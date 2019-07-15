@@ -26,10 +26,10 @@ public class JwtGenerator {
     private static String secretKey="futureProgram";
 
     @Value("${app.jwtExpirationInMs}")
-    private static Long jwtExpirationInMs = 180000L;
+    private static Long jwtExpirationInMs = 1800000L;
 
     @Value("${app.jwtExpirationInMs}")
-    private static Long refreshTokenExpirationInMs = 1800000L;
+    private static Long refreshTokenExpirationInMs = 10800000L;
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
 

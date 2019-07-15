@@ -223,7 +223,6 @@ public class NotificationServiceImpl implements NotificationService {
         } else {
             notificationList = notificationRepository.findTop10ByEmailOrderByTimestampDesc(notificationEvent.getEmail());
             System.out.println("Event Personal triggered!");
-
         }
         sseMvcExecutor.execute(() -> {
             SseEmitter.SseEventBuilder event = SseEmitter.event();

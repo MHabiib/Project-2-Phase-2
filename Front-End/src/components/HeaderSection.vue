@@ -42,7 +42,6 @@
         email:'',
         groupName:'',
         notificationList:[],
-        newNotificationList:[]
       }
     },
     created(){
@@ -65,19 +64,19 @@
         
         es.addEventListener('start', event => {
           this.notificationList = JSON.parse(event.data)
-          console.log('Notification stream started')
-          console.log('Notification : '+this.notificationList.length)
+          console.log('PersonalNotification stream started')
+          console.log('P_Notification : '+this.notificationList.length)
           console.log('=================================')
         })
 
         es.onmessage = (event) =>{
           this.notificationList = JSON.parse(event.data)
-          console.log('Notification Updates: '+this.notificationList.length)
+          console.log('P_Notification Updates: '+this.notificationList.length)
         }
 
         es.onerror = function(){
           // es.close()
-          console.log("Notification stream errored")
+          console.log("P_Notification stream errored")
         }
       }
     },

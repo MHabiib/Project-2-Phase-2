@@ -100,19 +100,22 @@
               Latest Activity
             </div>
 
-            <div class="overviewRightLowerBody">
-              <div class="overviewRightLowerBodyContent">
+            <div 
+              class="overviewRightLowerBody">
+              <div 
+                class="overviewRightLowerBodyContent"            
+                v-for='(notif,index) in groupNotificationList' :key='index'>
                 <div class="overviewRightLowerBodyContentText">
-                  Mina requested an expense: Beli Meja
+                  {{notif.message}}
                 </div>
 
                 <div class="overviewRightLowerBodyContentTime">
                   <div />
-                  1 mins ago
+                  {{new Date(notif.timestamp) | fromNow}}
                 </div>
               </div>
 
-              <div class="overviewRightLowerBodyContent">
+              <!-- <div class="overviewRightLowerBodyContent">
                 <div class="overviewRightLowerBodyContentText">
                   Nancy has joined the group. Welcome Nancy!
                 </div>
@@ -198,7 +201,7 @@
                   <div />
                   last year
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -221,9 +224,22 @@
   import expenseDetailWindow from '../components/expenseDetailWindow';
 
   export default {
+    data: function() {
+      return {
+        overviewData: {},
+        showExpenseDetailWindow: false,
+        detailExpenseSelected: '',
+        groupNotificationList:[]
+      }
+    },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
+      }
+    },
+    watch:{
+      groupNotificationList: function(oldVal,newVal){
+        console.log('Group Watcher triggered!')
       }
     },
     methods: {
@@ -252,19 +268,19 @@
       closeExpenseDetailWindow() {
         this.showExpenseDetailWindow = false;
       },
-      streamPersonalNotification(){
+      streamGroupNotification(){
         let es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('groupName'))
         
         es.addEventListener('start', event => {
-          this.notificationList = JSON.parse(event.data)
+          this.groupNotificationList = JSON.parse(event.data)
           console.log('GroupNotification stream started')
-          console.log('G_Notification : '+this.notificationList.length)
+          console.log('G_Notification : '+this.groupNotificationList.length)
           console.log('=================================')
         })
 
         es.onmessage = (event) =>{
-          this.notificationList = JSON.parse(event.data)
-          console.log('G_Notification Updates: '+this.notificationList.length)
+          this.groupNotificationList = JSON.parse(event.data)
+          console.log('G_Notification Updates: '+this.groupNotificationList.length)
         }
 
         es.onerror = function(){
@@ -277,13 +293,7 @@
       this.getOverviewData();
       this.streamGroupNotification();
     },
-    data: function() {
-      return {
-        overviewData: {},
-        showExpenseDetailWindow: false,
-        detailExpenseSelected: ''
-      }
-    },
+    
     filters: {
       fromNow(date) {
         return moment(date).fromNow()
