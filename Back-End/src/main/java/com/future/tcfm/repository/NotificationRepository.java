@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Repository
@@ -17,9 +18,10 @@ public interface NotificationRepository extends MongoRepository<Notification,Str
 
     List<Notification> findByEmailOrderByTimestampDesc(String email);
     List<Notification> findByGroupNameOrderByTimestampDesc(String groupName);
-
-    List<Notification> findByEmailOrGroupNameAndIsRead(String email,String groupName, Boolean bool);
-    List<Notification> findByEmailOrGroupName(String email,String groupName);
+//    List<Notification> findByEmailOrderByTimestampDesc(String email, Pageable pageable);
+//    List<Notification> findByGroupNameOrderByTimestampDesc(String groupName,Pageable pageable);
+//    List<Notification> findByEmailOrGroupNameAndIsRead(String email,String groupName, Boolean bool);
+//    List<Notification> findByEmailOrGroupName(String email,String groupName);
     List<Notification> findByEmailAndIsReadOrderByTimestampDesc(String email,Boolean bool);
     List<Notification> findByGroupNameAndIsReadOrderByTimestampDesc(String groupName,Boolean bool);
 }

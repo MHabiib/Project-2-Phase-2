@@ -11,6 +11,10 @@ import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.ExpenseService;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -92,6 +96,21 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(userGroup);
     }
 
+    /**
+     * Paging dibawah
+     * @param userEmail
+     * @return
+     */
+    @Override
+    public Page<Expense> expensePageGroupByEmail(String userEmail, int page, int size) {
+        User userSelected = userRepository.findByEmail(userEmail);
+        String userGroup = userSelected.getGroupName();
+        return expenseRepository.findByGroupNameOrderByCreatedDateDesc(userGroup,createPageRequest(page,size));
+}
+
+    private Pageable createPageRequest(int page, int size) {
+        return PageRequest.of(page,size,new Sort(Sort.Direction.DESC,"createdDate"));
+    }
 
     //ini hanya untuk di akses oleh user utk edit request expense mereka
     @Override
@@ -105,7 +124,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseRepository.save(expenseExist);
         return new ResponseEntity<>(expense, HttpStatus.OK);
-
     }
 
 

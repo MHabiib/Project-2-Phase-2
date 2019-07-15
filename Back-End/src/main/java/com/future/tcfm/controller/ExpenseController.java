@@ -5,6 +5,7 @@ import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.service.ExpenseService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +31,23 @@ public class ExpenseController {
 //        return expenseService.expenseGroup(groupName);
 //    }
 
-    @GetMapping("/group")
-    public List<Expense> expenseGroup (@RequestParam("email") String userEmail){
-        return expenseService.expenseGroupByEmail(userEmail);
-    }
+//    @GetMapping("/group")
+//    public List<Expense> expenseGroup (@RequestParam("email") String userEmail){
+//        return expenseService.expenseGroupByEmail(userEmail);
+//    }
 
+    /**
+     * paging
+     * @param userEmail
+     * @return
+     */
+    @GetMapping("/group")
+    public Page<Expense> expenseGroup (
+            @RequestParam("email") String userEmail,
+            @RequestParam(value = "page",defaultValue = "0") int page,
+            @RequestParam(value = "size",defaultValue = "10") int size){
+        return expenseService.expensePageGroupByEmail(userEmail,page,size);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Expense> singleExpense(@PathVariable("id") String id) {
         return expenseService.singleExpense(id);
