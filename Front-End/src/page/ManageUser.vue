@@ -82,7 +82,12 @@
                 this.dataUser = res;
               }
             )
-          } else {
+          } 
+          else if(response.status==403){
+            alert('Error 403, Anda tidak memiliki hak akses terhadap halaman ini.\nKembali ke dashboard');
+            this.$router.push('/dashboard')
+          }
+          else {
             alert('Sesi Anda telah berakhir, silahkan refresh halaman ini.');
           }
         })

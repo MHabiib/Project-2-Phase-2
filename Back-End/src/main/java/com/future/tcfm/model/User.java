@@ -31,10 +31,12 @@ public class User {
     private String groupName;
     private String rekening;
     private Double balance;
-    private List<PaymentDetail> periodPayed;
+    private Integer periodeTertinggal;
+    private Integer totalPeriodPayed; //save total period payed by user in number
+//    private List<PaymentDetail> periodPayed;
     private String imagePath;
     private String imageURL;
-    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
-        this.periodPayed = periodPayed;
-    }
+//    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
+//        this.periodPayed = periodPayed;
+//    }
 }

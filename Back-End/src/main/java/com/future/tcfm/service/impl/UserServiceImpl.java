@@ -119,8 +119,8 @@ public class UserServiceImpl implements UserService {
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
         userExist.setRole(user.getRole());
-        userExist.setBalance(user.getBalance());
-        userExist.setPeriodPayed(user.getPeriodPayed());
+//        userExist.setBalance(user.getBalance());
+//        userExist.setPeriodeTertinggal(userExist.g);
         userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         userRepository.save(userExist);
 

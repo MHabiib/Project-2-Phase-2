@@ -22,7 +22,7 @@ public class Payment {
     private String groupName;
     private String emailMemberLain;
     private String namaPengirim;
-    private Integer periode;
+    private Integer periode; //bayar beraapa periode
     private String nomorRekeningPengirim;
     private Long paymentDate;
     private Long lastModifiedAt;
@@ -30,5 +30,6 @@ public class Payment {
     private Boolean isPaid;
     private String imagePath;
     private String imageURL;
-    private List<PaymentDetail> paymentDetail;
+//    private Integer lastPeriod;
+//    private List<PaymentDetail> paymentDetail;
 }

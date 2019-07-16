@@ -12,7 +12,7 @@ public interface PaymentService {
     ResponseEntity updatePayment(String id, String paymentJSONString, MultipartFile file) throws IOException;
     ResponseEntity managementPayment(ExpenseRequest thisPayment); // pakai ExpenseRequest karena hanya butuh id dan status
     ResponseEntity findAll();
-    ResponseEntity findById();
-    ResponseEntity findByIdUser();
-    ResponseEntity findByGroupName(String groupName);
+    ResponseEntity findById(String id);
+    ResponseEntity findByEmail(String email, int page, int size);
+    ResponseEntity findByGroupName(String groupName, int page, int size);
 }

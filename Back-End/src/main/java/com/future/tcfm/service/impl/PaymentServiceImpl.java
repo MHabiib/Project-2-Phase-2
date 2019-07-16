@@ -11,6 +11,7 @@ import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.sql.Date;
 import java.util.List;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
+import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
 import static com.future.tcfm.service.impl.UserServiceImpl.*;
 
@@ -47,8 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
         System.out.print("Isi payment:");
         System.out.print(payment);
-//        Group groupExist = groupRepository.findByName(payment.getGroupName());
-
+        Group groupExist = groupRepository.findByName(payment.getGroupName());
         User userExist = userRepository.findByEmail(payment.getEmail());
         if(payment.getEmail() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
@@ -56,10 +57,9 @@ public class PaymentServiceImpl implements PaymentService {
         if(userExist==null){
             return new ResponseEntity("User email does not exist", HttpStatus.NOT_FOUND);
         }
-//        if(groupExist==null) {
-//            return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
-//        }
-
+        if(groupExist==null) {
+            return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
+        }
         if(checkImageFile(file)){
             try {
 //              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
@@ -79,6 +79,7 @@ public class PaymentServiceImpl implements PaymentService {
         notificationMessage = payment.getEmail()+ PAYMENT_MESSAGE; //getCurrentUser() = get current logged in user
         notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName(),TYPE_PERSONAL);
         return new ResponseEntity<>("Succeed to create payment!",HttpStatus.OK);
+
     }
 
     @Override
@@ -104,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
         paymentExist.setPrice(payment.getPrice());
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
-        paymentExist.setPaymentDetail(payment.getPaymentDetail());
+        paymentExist.setPeriode(payment.getPeriode());
 
         paymentRepository.save(payment);
         return new ResponseEntity(paymentExist, HttpStatus.OK);
@@ -119,6 +120,16 @@ public class PaymentServiceImpl implements PaymentService {
         }
         if(thisPayment.getStatus()){
             paymentExist.setIsPaid(true);
+            User user = userRepository.findByEmail(paymentExist.getEmail());
+            Group group = groupRepository.findByName(paymentExist.getGroupName());
+
+            user.setTotalPeriodPayed(user.getTotalPeriodPayed()+paymentExist.getPeriode());
+            user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());// jika minus bearti user surplus
+            userRepository.save(user);
+
+            group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
+            groupRepository.save(group);
+
             notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
         }
         else if(!thisPayment.getStatus()){
@@ -126,30 +137,41 @@ public class PaymentServiceImpl implements PaymentService {
             notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
         }
         notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName(),TYPE_PERSONAL);
-
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
+
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }
 
+
     @Override
     public ResponseEntity findAll() {
-        return null;
+        return ResponseEntity.ok(paymentRepository.findAll());
     }
 
     @Override
-    public ResponseEntity findById() {
-        return null;
+    public ResponseEntity findById(String id) {
+        Payment paymentExist = paymentRepository.findByIdPayment(id);
+        if(paymentExist==null){
+            return new ResponseEntity("\"\\\"{\\\"error\\\":\\\"404 not found\\\"\"",HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(paymentExist,HttpStatus.OK);
+
     }
 
     @Override
-    public ResponseEntity findByIdUser() {
-        return null;
+    public ResponseEntity findByEmail(String email,int page, int size) {
+        Page<Payment> paymentExist = paymentRepository.findAllByEmailOrderByLastModifiedAt(email,createPageRequest(page,size));
+        if(paymentExist==null){
+            return new ResponseEntity("\"\\\"{\\\"error\\\":\\\"404 not found\\\"\"",HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(paymentExist,HttpStatus.OK);
+
     }
 
     @Override
-    public ResponseEntity findByGroupName(String groupName) {
-        List<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName);
+    public ResponseEntity findByGroupName(String groupName, int page, int size) {
+        Page<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName,createPageRequest(page,size));
         if(paymentList==null) return new ResponseEntity("Error: 404 Not Found",HttpStatus.NOT_FOUND);
         return new ResponseEntity(paymentList,HttpStatus.OK);
     }

@@ -65,8 +65,8 @@
         .then(response => {
           response.json().then(
             res => {
-              this.membersData = res;
-              this.dataMembersShown = res;
+              this.membersData = res.content;
+              this.dataMembersShown = res.content;
             }
           )
         })
