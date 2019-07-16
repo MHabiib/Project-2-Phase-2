@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class EmailRequest {
     private String email;
     private String file;
+    private Integer period;
     private Boolean multipart;
 }

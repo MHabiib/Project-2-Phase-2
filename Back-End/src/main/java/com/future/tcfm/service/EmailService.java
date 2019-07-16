@@ -9,4 +9,5 @@ import javax.mail.MessagingException;
 public interface EmailService {
     ResponseEntity simpleEmail(EmailRequest emailRequest);
     ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException;
+    void periodicMailSender (String email, Integer range) throws MessagingException;
 }
