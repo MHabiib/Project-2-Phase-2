@@ -108,7 +108,7 @@
         .then(response => {
           response.json().then(
             res => {
-              this.dataExpense = res;
+              this.dataExpense = res.content;
               this.filterData(this.searchQuery);
             }
           )

@@ -108,7 +108,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRepository.findByGroupNameOrderByCreatedDateDesc(userGroup,createPageRequest(page,size));
 }
 
-    private Pageable createPageRequest(int page, int size) {
+    static Pageable createPageRequest(int page, int size) {
         return PageRequest.of(page,size,new Sort(Sort.Direction.DESC,"createdDate"));
     }
 

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_PERSONAL;
 
 @Service
 public class SchedulerServiceImpl implements SchedulerService {
@@ -77,11 +78,11 @@ public class SchedulerServiceImpl implements SchedulerService {
                if(range>1)
                     notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_GROUP);
                else
-                    notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthBeforeStr+" - "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_GROUP);
+                    notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthBeforeStr+" - "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
             }
             else{
                 emailService.periodicMailSender(user.getEmail(),range);
-                notificationService.createNotification("Anda Telah Membayar Iuran Bulan "+monthNowStr , user.getEmail(),user.getGroupName(),TYPE_GROUP);
+                notificationService.createNotification("Anda Telah Membayar Iuran Bulan "+monthNowStr , user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
             }
 
                 //emailService.sendMailWithUsername(user.getEmail(),user.getName());
