@@ -58,10 +58,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         /*Expense expenseExist = expenseRepository.findByTitle(expense.getTitle());
         if (expenseExist != null)
             return new ResponseEntity<>("Failed to request Expense!\nTitle already exists!", HttpStatus.BAD_REQUEST);*/
-/*
-        if (expense.getGroupName() == null)
-            return new ResponseEntity<>("Failed to request Expense!\nGroup not Found!", HttpStatus.BAD_REQUEST);
-*/
+        User userExist = userRepository.findByEmail(expense.getRequester());
+        Group groupExist = groupRepository.findByName(userExist.getGroupName());
+        if (groupExist == null)
+            return new ResponseEntity<>("404 :\nGroup not Found!", HttpStatus.NOT_FOUND);
+        if(groupExist.getGroupBalance()<expense.getPrice()){
+            return new ResponseEntity<>("{\"message\":\"Group balance is not enough\"}",HttpStatus.BAD_REQUEST);//terakhir sampaidisini;anthony
+        }
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
 
@@ -131,12 +134,18 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
+
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
         if(expenseRequest.getStatus()) {
             expenseExist.setStatus(true);
             //notif...
-             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
+            Group group = groupRepository.findByName(expenseExist.getGroupName());
+            group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
+
+
+            groupRepository.save(group);//terakhir sampai disini... 17/07/19
+            notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         else if(!expenseRequest.getStatus()) {
             expenseExist.setStatus(false);
@@ -146,6 +155,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
+
+
         expenseRepository.save(expenseExist);
 
         return new ResponseEntity<>("Expense Updated", HttpStatus.OK);

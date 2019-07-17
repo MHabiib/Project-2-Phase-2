@@ -56,9 +56,9 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
         JwtUserDetails jwtUserDetails = (JwtUserDetails)authResult.getPrincipal();
-        System.out.println(jwtUserDetails.getEmail());
+//        System.out.println(jwtUserDetails.getEmail());
         String newToken=validator.onSuccessAuth(jwtUserDetails.getEmail());
-        System.out.println("NewToken : "+newToken);
+//        System.out.println("NewToken : "+newToken);
         if(newToken == null) newToken = "NULL_TOKEN";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization",newToken);

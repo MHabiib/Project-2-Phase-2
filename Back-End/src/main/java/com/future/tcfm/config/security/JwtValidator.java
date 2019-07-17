@@ -65,7 +65,7 @@ public class JwtValidator {
         currentUser.setLastModifiedAt(System.currentTimeMillis());
         currentUser.setGroupName(currentUser.getGroupName());
         jwtUserDetailsRepository.save(currentUser);
-        System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
+//        System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
         return newToken;
 //        return null;
     }

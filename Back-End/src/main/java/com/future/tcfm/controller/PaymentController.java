@@ -46,7 +46,7 @@ public class PaymentController {
         return paymentService.updatePayment(id, paymentJSONString, file);
     }
 
-    @PostMapping("/managementPayment")
+    @PutMapping("/managementPayment")
     public ResponseEntity managementPayment(@RequestBody ExpenseRequest thisPayment) {
         return paymentService.managementPayment(thisPayment);
     }

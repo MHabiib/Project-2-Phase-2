@@ -6,6 +6,7 @@ import com.future.tcfm.service.ExpenseService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class ExpenseController {
         return expenseService.singleExpense(id);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createExpense(@RequestBody Expense expense) {
         return expenseService.createExpense(expense);
     }

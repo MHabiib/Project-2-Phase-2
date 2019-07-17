@@ -185,7 +185,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SseEmitter streamNotification(String ref,String type) {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(60*1000L);
         List<Notification> notificationList;
         if(type.equalsIgnoreCase(TYPE_GROUP)) {
            notificationList = notificationRepository.findTop10ByGroupNameOrderByTimestampDesc(ref);
