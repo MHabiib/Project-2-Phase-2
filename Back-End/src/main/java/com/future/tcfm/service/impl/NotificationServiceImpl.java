@@ -2,7 +2,9 @@ package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.NotificationEvent;
 import com.future.tcfm.model.Notification;
+import com.future.tcfm.model.User;
 import com.future.tcfm.repository.NotificationRepository;
+import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.*;
 import java.util.List;
@@ -47,7 +52,8 @@ public class NotificationServiceImpl implements NotificationService {
     NotificationRepository notificationRepository;
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
-
+    @Autowired
+    UserRepository userRepository;
 
 
     @Override
@@ -187,11 +193,15 @@ public class NotificationServiceImpl implements NotificationService {
     public SseEmitter streamNotification(String ref,String type) {
         SseEmitter emitter = new SseEmitter(60*1000L);
         List<Notification> notificationList;
+        User userExist = userRepository.findByEmailAndActive(ref,true);
+        if(userExist==null){
+            throw new RuntimeException("404 Error : user not found!");
+        }
         if(type.equalsIgnoreCase(TYPE_GROUP)) {
-           notificationList = notificationRepository.findTop10ByGroupNameAndTypeOrderByTimestampDesc(ref,TYPE_GROUP);
+           notificationList = notificationRepository.findTop10ByGroupNameAndTypeOrderByTimestampDesc(userExist.getGroupName(),TYPE_GROUP);
         }
         else{
-            notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(ref,TYPE_PERSONAL);
+            notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(userExist.getEmail(),TYPE_PERSONAL);
         }
         this.emitters.put(ref,emitter);
         try{
@@ -213,7 +223,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final Map<String,SseEmitter> emitters = new ConcurrentHashMap<>();
 
-//    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+
+    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
     @Async
     @EventListener
@@ -224,29 +235,30 @@ public class NotificationServiceImpl implements NotificationService {
         if (notificationEvent.getType().equalsIgnoreCase(TYPE_GROUP)) {
             notificationList = notificationRepository.findTop10ByGroupNameAndTypeOrderByTimestampDesc(notificationEvent.getGroupName(),TYPE_GROUP);
             System.out.println("Event Group triggered!");
-            eventName = notificationEvent.getGroupName();
+            eventName = "group";
         } else {
             notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(notificationEvent.getEmail(),TYPE_PERSONAL);
             System.out.println("Event Personal triggered!");
-            eventName = notificationEvent.getEmail();
+            eventName = "personal";
         }
-        List a = new ArrayList();
-//        sseMvcExecutor.execute(() -> {
+        sseMvcExecutor.execute(() -> {
             SseEmitter.SseEventBuilder event = SseEmitter.event();
-            this.emitters.forEach((k,emitter) -> {
+            this.emitters.forEach((email,emitter) -> { //key = email
                 try {
-                    event.name(eventName);
+                    event.name(email+eventName);
                     event.id(UUID.randomUUID().toString());
                     event.data(notificationList);
+//                    event.reconnectTime(15*1000L);
                     emitter.send(event);
-                    System.out.println( notificationEvent.getType()+" and sent!");
+                    System.out.println( notificationEvent.getType()+" notification sent to " + email +", eventName : "+email+eventName);
                 } catch (Exception e) {
 //                    deadEmitters.add(k);
-                    System.out.println("Exception! : removing emitter "+k);
-                    this.emitters.remove(k);
+                    this.emitters.remove(email);
+                    System.out.println("Exception! : removed emitter "+email);
                 }
             });
-//            this.emitters.remove(deadEmitters);
-//            });
+            System.out.println("Client listener Total : "+this.emitters.size());
+            this.emitters.remove(deadEmitters);
+            });
     }
 }
