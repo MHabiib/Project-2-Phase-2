@@ -37,11 +37,13 @@
         this.axios
           .post(`${Helper.backEndAddress}/auth/signin`, dataLogin)
           .then(res => {
+            console.log(res);
             // this.$store.dispatch("login", res.data);
             localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('userEmail', this.emailInput);
-            localStorage.setItem('groupName', res.data.groupName )
+            localStorage.setItem('groupName', res.data.groupName);
+            localStorage.setItem('role', res.data.role);
           })
           .then(()=> {
             alert('Login Berhasil');

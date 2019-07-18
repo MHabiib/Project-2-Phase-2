@@ -12,7 +12,7 @@
           </div>
 
           <div style='display: flex;'>
-            <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" />
+            <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
             <div class="managementTableHeadAddNew" @click='openAddNewUserWindow'>Add New User</div>
           </div>
         </div>
@@ -29,8 +29,8 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr v-for='(user, index) in dataUser' :key='index'>
+            <tbody id='infiniteScroll'>
+              <tr v-for='(user, index) in dataUserShown' :key='index'>
                 <td>{{user.groupName}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.email}}</td>
@@ -46,6 +46,7 @@
     <AddNewUserWindow
       v-if='showAddNewUserWindow'
       @closeAddNewUserWindow='closeAddNewUserWindow'
+      @refreshData="getAllUsers"
     />
   </div>
 </template>
@@ -53,7 +54,7 @@
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
-  import { backEndAddress } from '../../Helper';
+  import {backEndAddress} from '../../Helper';
   import AddNewUserWindow from '../components/addNewUser';
 
   export default {
@@ -65,7 +66,9 @@
     data: function() {
       return {
         dataUser: [],
-        showAddNewUserWindow: false
+        dataUserShown: [],
+        showAddNewUserWindow: false,
+        searchQuery: ''
       }
     },
     methods: {
@@ -80,14 +83,14 @@
             response.json().then(
               res => {
                 this.dataUser = res;
+                this.dataUserShown = res;
               }
             )
-          } 
-          else if(response.status==403){
+          } else if(response.status === 403) {
             alert('Error 403, Anda tidak memiliki hak akses terhadap halaman ini.\nKembali ke dashboard');
             this.$router.push('/dashboard')
-          }
-          else {
+          } else {
+            console.log(response);
             alert('Sesi Anda telah berakhir, silahkan refresh halaman ini.');
           }
         })
@@ -101,13 +104,50 @@
       },
       openAddNewUserWindow() {
         this.showAddNewUserWindow = true;
-      }
+      },
+      filterData(newQuery) {
+        let dataFiltered = [];
+        const queryBaru = newQuery.toString().toLowerCase();
+
+        this.dataUser.forEach(element => {
+          const groupElement = element.groupName.toString().toLowerCase();
+          const nameElement = element.name.toString().toLowerCase();
+          const emailElement = element.email.toString().toLowerCase();
+          const phoneElement = element.phone.toString();
+          const roleElement = element.role.toString().toLowerCase();
+
+          if(
+            groupElement.includes(queryBaru) ||
+            nameElement.includes(queryBaru) ||
+            emailElement.includes(queryBaru) ||
+            phoneElement.includes(queryBaru) ||
+            roleElement.includes(queryBaru)
+          ) {
+            dataFiltered.push(element)
+          }
+        })
+
+        this.dataUserShown = dataFiltered;
+        const e = document.getElementById('infiniteScroll');
+        if (e.scrollHeight <= e.clientHeight) {
+          console.log('Infinite Triggered')
+        }
+      },
+    },
+    components: {
+      'AddNewUserWindow': AddNewUserWindow
     },
     created() {
       this.getAllUsers();
     },
-    components: {
-      'AddNewUserWindow': AddNewUserWindow
+    watch: {
+      searchQuery: function (newQuery, oldQuery) {
+        if(newQuery === '') {
+          this.dataUserShown = this.dataUser;
+        } else {
+          this.filterData(newQuery);
+        }
+      }
     }
   }
 </script>
@@ -213,7 +253,7 @@
   }
 
   .manageUserComponent .managementTableBody thead tr, .manageUserComponent .managementTableBody tbody { display: block; box-sizing: border-box; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 10vw; }
+  .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 10vw; padding-left: 12px}
   .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 15vw; }
   .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 22vw; }
   .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 12vw; }

@@ -114,12 +114,12 @@ const router = new Router({
     {
       path: '/manage-user',
       component: ManageUserPage,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, adminOnly: true }
     },
     {
       path: '/manage-group',
       component: ManageGroupPage,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, adminOnly: true }
     }
   ],
   mode: "history"
@@ -131,20 +131,19 @@ router.beforeEach((to, from, next) => {
       next({
         path: '/login'
       })
-    }
-    else {
-      // let user = JSON.parse(localStorage.getItem('user'));
-      // if(to.matched.some(record => record.meta.is_admin)) {
-      //   if(user.is_admin == 1){
-      //     next()
-      //   }
-      //   else{
-      //     next({ name: 'userboard'})
-      //   }
-      // } else {
-      //   next()
-      // }
-      next();
+    } else {
+      if(to.matched.some(record => record.meta.adminOnly)) {
+        if(localStorage.getItem('role') !== 'ADMIN') {
+          alert('Menu ini hanya boleh diakses oleh admin.');
+          next({
+            path: '/dashboard'
+          })
+        } else {
+          next();
+        }
+      } else {
+        next();
+      }
     }
   } else {
     next()

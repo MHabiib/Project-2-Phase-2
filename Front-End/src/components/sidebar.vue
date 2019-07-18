@@ -64,7 +64,7 @@
           </div>
         </div>
 
-        <div class="menuParent">
+        <div class="menuParent" v-if='isAdmin'>
           <div class="menuWrapper" @click="managementExpand = !managementExpand">
             <img src="../assets/management-icon.png" alt="Dashboard" class='menuIcon'>
             Management
@@ -119,6 +119,7 @@
         isMembers: window.location.href === 'http://localhost:3000/members',
         isManageGroup: window.location.href === 'http://localhost:3000/manage-group',
         isManageUser: window.location.href === 'http://localhost:3000/manage-user',
+        isAdmin: localStorage.getItem('role') === 'ADMIN'
       }
     },
     methods: {
@@ -130,8 +131,8 @@
       },
       changeView(view) {
         this.$router.push(view)
-      }
-    }
+      },
+    },
   }
 </script>
 

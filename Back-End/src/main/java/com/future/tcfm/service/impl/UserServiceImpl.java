@@ -131,6 +131,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);
+        System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
         Group groupExist = groupRepository.findByName(user.getGroupName());
         if(userExist!=null){
@@ -152,6 +153,7 @@ public class UserServiceImpl implements UserService {
         user.setJoinDate(new Date().getTime());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setActive(true);
+
         userRepository.save(user);
         return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }

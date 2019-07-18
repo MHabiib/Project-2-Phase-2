@@ -29,6 +29,7 @@ public class User {
     private Long leaveDate;
     private Boolean active;
     private String groupName;
+//    private String namaBank;
     private String rekening;
     private Double balance;
     private Integer periodeTertinggal;

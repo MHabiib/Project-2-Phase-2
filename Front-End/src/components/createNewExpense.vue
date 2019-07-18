@@ -90,10 +90,16 @@
         })
         .then(response => {
           if(response.ok) {
-            alert('expense berhasil diajukan!\nMenunggu persetujuan dari group admin')
+            alert('Expense berhasil diajukan!\nMenunggu persetujuan dari group admin')
             this.$emit('refreshData');
             this.$emit('closeCreateNewExpenseWindow');
+          } else {
+            alert('Gagal meminta expense baru. Silahkan cek kembali input Anda atau refresh halaman ini.');
           }
+        })
+        .catch(err => {
+          alert('Terjadi kesalahan. Harap periksa kembali koneksi internet Anda.');
+          console.log(err);
         })
       }
     }
