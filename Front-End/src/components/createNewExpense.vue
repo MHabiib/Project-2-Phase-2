@@ -79,6 +79,7 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
+            "groupName": localStorage.getItem('groupName'),
             "detail": this.deskripsiPengeluaran,
             "price": biayaWithOutDot,
             "title": this.namaPengeluaran,
@@ -87,6 +88,7 @@
         })
         .then(response => {
           if(response.ok) {
+            alert('expense berhasil diajukan!\nMenunggu persetujuan dari group admin')
             this.$emit('refreshData');
             this.$emit('closeCreateNewExpenseWindow');
           }

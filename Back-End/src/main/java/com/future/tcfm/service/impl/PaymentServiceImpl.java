@@ -49,8 +49,9 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
         System.out.print("Isi payment:");
         System.out.print(payment);
-        Group groupExist = groupRepository.findByName(payment.getGroupName());
         User userExist = userRepository.findByEmail(payment.getEmail());
+        Group groupExist = groupRepository.findByName(userExist.getGroupName());
+
         if(payment.getEmail() == null){
             return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }

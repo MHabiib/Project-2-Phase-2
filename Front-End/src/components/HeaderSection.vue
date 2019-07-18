@@ -42,10 +42,14 @@
         email:'',
         groupName:'',
         notificationList:[],
+        ess:null,
       }
     },
     created(){
       this.streamPersonalNotification()
+    },
+    destroyed(){
+      this.ess.close()
     },
     watch:{
       notificationList: function(oldVal,newVal){
@@ -60,22 +64,22 @@
     },
     methods: {
       streamPersonalNotification(){
-        let es = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
+        this.ess = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
         
-        es.addEventListener('start', event => {
+        this.ess.addEventListener('start', event => {
           this.notificationList = JSON.parse(event.data)
           console.log('PersonalNotification stream started')
           console.log('P_Notification : '+this.notificationList.length)
           console.log('=================================')
         })
 
-        es.onmessage = (event) =>{
+        this.ess.addEventListener(localStorage.getItem('userEmail'), event =>{
           this.notificationList = JSON.parse(event.data)
           console.log('P_Notification Updates: '+this.notificationList.length)
-        }
+        })
 
-        es.onerror = function(){
-          // es.close()
+        this.ess.onerror = function(){
+          // this.ess.close()
           console.log("P_Notification stream errored")
         }
       }

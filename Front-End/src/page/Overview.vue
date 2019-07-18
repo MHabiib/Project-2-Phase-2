@@ -229,7 +229,8 @@
         overviewData: {},
         showExpenseDetailWindow: false,
         detailExpenseSelected: '',
-        groupNotificationList:[]
+        groupNotificationList:[],
+        es:null
       }
     },
     computed: {
@@ -269,22 +270,22 @@
         this.showExpenseDetailWindow = false;
       },
       streamGroupNotification(){
-        let es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('groupName'))
+        this.es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('groupName'))
         
-        es.addEventListener('start', event => {
+        this.es.addEventListener('start', event => {
           this.groupNotificationList = JSON.parse(event.data)
           console.log('GroupNotification stream started')
           console.log('G_Notification : '+this.groupNotificationList.length)
           console.log('=================================')
         })
 
-        es.onmessage = (event) =>{
+        this.es.addEventListener(localStorage.getItem('groupName'),(event) =>{
           this.groupNotificationList = JSON.parse(event.data)
           console.log('G_Notification Updates: '+this.groupNotificationList.length)
-        }
+        })
 
-        es.onerror = function(){
-          // es.close()
+        this.es.onerror = function(){
+          // this.es.close()
           console.log("G_Notification stream errored")
         }
       }
@@ -292,6 +293,9 @@
     created() {
       this.getOverviewData();
       this.streamGroupNotification();
+    },
+    destroyed(){
+      this.es.close()
     },
     
     filters: {
