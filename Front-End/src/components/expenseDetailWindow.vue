@@ -65,6 +65,8 @@
   </div></template>
 
 <script>
+  import Helper from '../../Helper';
+
   export default {
     props: ['expenseId'],
     methods: {
@@ -72,7 +74,7 @@
       updateExpenseStatus(id, status) {
         if(this.disableButton !== true) {
           this.disableButton = true;
-          fetch(`http://localhost:8088/api/expense/managementExpense`, {
+          fetch(`${Helper.backEndAddress}/api/expense/managementExpense`, {
             method: 'PUT',
             headers: {
               'Authorization': localStorage.getItem('accessToken'),
@@ -94,7 +96,7 @@
       },
       checkStatus(status) {if(status !== null) {this.disableButton = true}},
       getExpenseData(id) {
-        fetch(`http://localhost:8088/api/expense/${id}`, {
+        fetch(`${Helper.backEndAddress}/api/expense/${id}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {

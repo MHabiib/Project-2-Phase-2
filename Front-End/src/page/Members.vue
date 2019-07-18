@@ -45,6 +45,7 @@
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
+  import Helper from '../../Helper';
 
   export default {
     computed: {
@@ -57,7 +58,7 @@
     },
     methods: {
       getMembersData() {
-        fetch(`http://localhost:8088/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}`, {
+        fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }

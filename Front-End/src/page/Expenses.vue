@@ -83,6 +83,7 @@
   import UserContributedWindow from '../components/userContributedWindow';
   import expenseDetailWindow from '../components/expenseDetailWindow';
   import createNewExpenseWindow from '../components/createNewExpense';
+  import Helper from '../../Helper';
 
   export default {
     computed: {rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);}},
@@ -102,7 +103,7 @@
     created() {this.getExpenseData();},
     methods: {
       getExpenseData() {
-        fetch(`http://localhost:8088/api/expense/group?email=${localStorage.getItem('userEmail')}`, {
+        fetch(`${Helper.backEndAddress}/api/expense/group?email=${localStorage.getItem('userEmail')}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {

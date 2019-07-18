@@ -8,7 +8,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8088',
+        target: 'http://0.0.0.0:8088',
         ws: true,
         changeOrigin: true
       }
@@ -21,7 +21,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:8088',
+        target: 'http://0.0.0.0:8088',
         changeOrigin: true,
         secure:false,
         ws:true,
@@ -32,7 +32,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:8088',
+        target: 'http://0.0.0.0:8088',
         changeOrigin: true,
         secure:false,
         ws:true,
@@ -42,7 +42,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

@@ -15,15 +15,18 @@
           <input class='singleLineInput' type="text" placeholder='Email' v-model='emailInput'/>
           <input class='singleLineInput' type="text" placeholder='Nomor Handphone' v-model='nomorHpInput' @keypress="checkChar"/>
           
-          <select name="selectGroup" id="selectGroup" class='selectGroup'>
+          <select name="selectGroup" id="selectGroup" class='selectGroup' @change="changeGroup($event)">
             <option value="none" style="display: none">Select Group</option>
-            <option value="group">group</option>
+            <option v-for="(group, index) in groupList" :key="index" :value="group.name">{{group.name}}</option>
           </select>
 
-          <select name="selectRole" id="selectRole" class='selectRole'>
+          <select name="selectRole" id="selectRole" class='selectRole' @change="changeRole($event)">
             <option value="none" style="display: none">Select Role</option>
-            <option value="group">role</option>
+            <option value="group">User</option>
+            <option value="group">Admin</option>
           </select>
+
+          <input type="file" @change="changeFile($event)" class="selectFile"/>
         </div>
       </div>
     </div>
@@ -31,12 +34,17 @@
 </template>
 
 <script>
+  import Helper from '../../Helper';
+
   export default {
     data: function() {
       return {
         namaInput: '',
         emailInput: '',
-        nomorHpInput: ''
+        nomorHpInput: '',
+        groupInput: '',
+        roleInput: '',
+        groupList: [],
       }
     },
     methods: {
@@ -47,8 +55,40 @@
         if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode === 8) {} else {
           e.preventDefault();
         }
+      },
+      getAllGroup() {
+        fetch(`${Helper.backEndAddress}/api/group`, {
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          }
+        })
+        .then(response => {
+          if(response.ok) {
+            response.json().then(
+              res => {
+                this.groupList = res;
+              }
+            )
+          } else {
+            alert('Sesi Anda telah berakhir, harap refresh kembali halaman ini.');
+            window.location.reload();
+          }
+        })
+        .catch(err => {
+          alert('Terjadi kesalahan ketika mengambil data. Harap pastikan koneksi internet Anda tersedia.');
+          console.log(err);
+        })
+      },
+      changeGroup(e) {
+        this.groupInput = e.target.value;
+      },
+      changeRole(e) {
+        this.roleInput = e.target.value;
       }
-    }
+    },
+    created() {
+      this.getAllGroup();
+    },
   }
 </script>
 

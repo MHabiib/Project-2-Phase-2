@@ -140,7 +140,7 @@ import { backEndAddress } from '../../Helper';
 
         formData.append('file', this.buktiTransfer);
 
-        fetch(`${backEndAddress}/payment`, {
+        fetch(`${backEndAddress}/api/payment`, {
           method: 'POST',
           headers: {
             Authorization: localStorage.getItem('accessToken')

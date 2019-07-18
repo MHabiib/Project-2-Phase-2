@@ -248,7 +248,7 @@
         this.$router.push(uri)
       },
       getOverviewData() {
-        fetch(`${Helper.backEndAddress}/overview?email=${localStorage.getItem('userEmail')}`, {
+        fetch(`${Helper.backEndAddress}/api/overview?email=${localStorage.getItem('userEmail')}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }

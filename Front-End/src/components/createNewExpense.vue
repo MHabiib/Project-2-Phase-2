@@ -21,6 +21,8 @@
 </template>
 
 <script>
+  import Helper from '../../Helper';
+
   export default {
     data: function() {
       return {
@@ -71,7 +73,7 @@
           if(element !== '.') {biayaWithOutDot += element}
         })
 
-        fetch(`http://localhost:8088/api/expense`, {
+        fetch(`${Helper.backEndAddress}/api/expense`, {
           method: 'POST',
           headers: {
             Authorization: localStorage.getItem('accessToken'),

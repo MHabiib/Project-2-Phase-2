@@ -174,6 +174,7 @@
 <script>
   import createNewExpenseWindow from '../components/createNewExpense';
   import payNowWindow from '../components/payNow';
+  import Helper from '../../Helper';
 
   export default {
     data: function() {
@@ -194,7 +195,7 @@
     },
     methods: {
       getDashboardData() {
-        fetch(`http://localhost:8088/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
+        fetch(`${Helper.backEndAddress}/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
           headers: {
             'Authorization': localStorage.getItem('accessToken')
           }

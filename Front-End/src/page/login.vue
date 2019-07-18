@@ -18,6 +18,7 @@
 
 <script>
   document.title = 'Login | Team Cash Flow Management';
+  import Helper from '../../Helper';
 
   export default {
     data: function() {
@@ -34,7 +35,7 @@
         };
 
         this.axios
-          .post('http://localhost:8088/auth/signin', dataLogin)
+          .post(`${Helper.backEndAddress}/auth/signin`, dataLogin)
           .then(res => {
             // this.$store.dispatch("login", res.data);
             localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);

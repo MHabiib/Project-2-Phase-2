@@ -28,9 +28,4 @@ getNewToken = function(callback){
   }
 
 exports.getNewToken = this.getNewToken
-exports.backEndAddress = 'http://localhost:8088/api'
-
-
-
-
-
+exports.backEndAddress = 'http://192.168.1.12:8088'

@@ -70,7 +70,7 @@
     },
     methods: {
       getAllUsers() {
-        fetch(`${backEndAddress}/user`, {
+        fetch(`${backEndAddress}/api/user`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
