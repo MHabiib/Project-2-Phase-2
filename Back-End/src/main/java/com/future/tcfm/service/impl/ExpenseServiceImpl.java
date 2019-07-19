@@ -142,6 +142,12 @@ public class ExpenseServiceImpl implements ExpenseService {
             //notif...
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
+            List<User> listUser = userRepository.findByGroupNameLike(group.getName());
+
+            for (User user : listUser) {
+                List<String>addExpenseId = user.getExpenseId();
+                addExpenseId.add(expenseRequest.getId());
+            }
 
 
             groupRepository.save(group);//terakhir sampai disini... 17/07/19

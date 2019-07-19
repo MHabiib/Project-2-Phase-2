@@ -45,12 +45,14 @@ public class UserController {
     ) throws IOException {
         return userService.updateUserV2(id, userJSONString, file);
     }
+
+    @PostMapping
+    public ResponseEntity deleteUser(String email) {
+        return userService.deleteUser(email);
+    }
+
 }
 
-//    @PostMapping
-//    public ResponseEntity createUser(@RequestBody User user) {
-//        return userService.createUser(user);
-//    }
 
 //    @DeleteMapping(value = "/user/{id}",produces = MediaType.APPLICATION_JSON_VALUE  )
 //    public ResponseEntity delete(@PathVariable("id")int id){

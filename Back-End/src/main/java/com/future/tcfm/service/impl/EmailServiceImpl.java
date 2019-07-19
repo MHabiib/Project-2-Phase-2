@@ -1,5 +1,7 @@
 package com.future.tcfm.service.impl;
 
+import com.future.tcfm.model.Notification;
+import com.future.tcfm.model.NotificationEvent;
 import com.future.tcfm.model.ReqResModel.EmailRequest;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.UserRepository;
@@ -27,6 +29,16 @@ import java.util.Locale;
 @Service
 public class EmailServiceImpl implements EmailService {
 
+    public static final String GROUP_PROFILE_UPDATE = "GROUP";
+    public static final String PAYMENT_DUE_DATE = " please make your payment now ";
+    public static final String EXPENSE_MESSAGE = " requested new expense ";
+    public static final String EXPENSE_APPROVED_MESSAGE = " 's requested expense had been approved ";
+    public static final String EXPENSE_REJECTED_MESSAGE = " 's requested expense had been rejected ";
+    public static final String USER_LEFT_GROUP = " just left this group ";
+    public static final String USER_JOINED_GROUP = " just joined this group ";
+    public static final String PAYMENT_MESSAGE = " had made payment ";
+    public static final String PAYMENT_APPROVED_MESSAGE = " 's payment had been approved by ";
+    public static final String PAYMENT_REJECTED_MESSAGE = " 's payment had been rejected by ";
     private static final String PATH = "../assets/";
 
     @Autowired
@@ -51,7 +63,9 @@ public class EmailServiceImpl implements EmailService {
          return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
         }
 
-    public void periodicMailSender( String email, Integer range) throws MessagingException {
+
+
+        public void periodicMailSender( String email, Integer range) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
@@ -82,6 +96,9 @@ public class EmailServiceImpl implements EmailService {
         }
         this.emailSender.send(message);
     }
+
+
+
     @Override
     public ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
@@ -91,6 +108,7 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject("Blibli Future Medan Batch - 3.0");
         helper.setText("Hello, This is from attachment email sender!");
         FileSystemResource file = new FileSystemResource(new File(PATH+emailRequest.getFile()));
+
         helper.addAttachment("Pdf file", file);
 
         emailSender.send(message);

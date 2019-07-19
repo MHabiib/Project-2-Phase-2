@@ -292,7 +292,7 @@
     },//methods end here
     created() {
       this.getOverviewData();
-      this.streamGroupNotification();
+     // this.streamGroupNotification();
     },
     destroyed(){
       this.es.close()

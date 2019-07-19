@@ -134,12 +134,18 @@ public class UserServiceImpl implements UserService {
         System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
         Group groupExist = groupRepository.findByName(user.getGroupName());
+        User adminExist = userRepository.findByGroupNameAndRole(user.getGroupName(),user.getRole());
         if(userExist!=null){
             return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
         }
         if (groupExist == null){
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         }
+        if (user.getRole().equals("ADMIN")){
+            if(adminExist!=null)
+                return new ResponseEntity<>("Failed to save User!\nGroup admin already exists!", HttpStatus.BAD_REQUEST);
+        }
+
         if(checkImageFile(file)){
             try{
                 String fileName=user.getEmail()+"_"+file.getOriginalFilename();
@@ -158,16 +164,17 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<?> deleteUser(String email) {
+        User userExist = userRepository.findByEmail(email);
+        if (userExist == null)
+            return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
+
+        userExist.setActive(false);
+        userRepository.save(userExist);
+        return new ResponseEntity<>("User deleted!", HttpStatus.OK);
+    }
 
 
 }
 
-/*    @Override
-    public ResponseEntity<?> deleteUser(String id) {
-        User userExist = userRepository.findByIdUser(id);
-        if (userExist == null)
-            return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
-        userExist.setActive(false);
-        userRepository.save(userExist);
-        return new ResponseEntity<>("User deleted!", HttpStatus.OK);
-    }*/

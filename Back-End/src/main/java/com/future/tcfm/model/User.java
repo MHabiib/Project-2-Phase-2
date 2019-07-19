@@ -37,6 +37,7 @@ public class User {
 //    private List<PaymentDetail> periodPayed;
     private String imagePath;
     private String imageURL;
+    private List <String> expenseId;
 //    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
 //        this.periodPayed = periodPayed;
 //    }

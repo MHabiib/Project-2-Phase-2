@@ -23,10 +23,10 @@ public class MailConfig {
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.auth","false");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
-
+        //Mail properties that are needed to specify e.g. the SMTP server may be defined using the JavaMailSenderImpl. For example, for Gmail this can be configured as shown
         return mailSender;
     }
 

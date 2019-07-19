@@ -46,7 +46,7 @@
       }
     },
     created(){
-      this.streamPersonalNotification()
+      //this.streamPersonalNotification()
     },
     destroyed(){
       this.ess.close()
