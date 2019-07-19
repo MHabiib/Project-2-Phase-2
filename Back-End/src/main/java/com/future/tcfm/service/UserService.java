@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface UserService {
     List<User> loadAll();
+    ResponseEntity getUserById(String id);
     User getUser(String email);
     ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException;
 

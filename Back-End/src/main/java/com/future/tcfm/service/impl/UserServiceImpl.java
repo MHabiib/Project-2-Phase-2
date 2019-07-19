@@ -55,6 +55,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity getUserById(String id) {
+        User userExist = userRepository.findByIdUser(id);
+        if(userExist==null) return new ResponseEntity<>("User not found!",HttpStatus.NOT_FOUND);
+        return new ResponseEntity(userExist,HttpStatus.OK);
+    }
+
+    @Override
     public User getUser(String email) {
         return userRepository.findByEmail(email);
     }

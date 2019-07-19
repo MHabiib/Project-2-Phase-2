@@ -29,12 +29,32 @@ public class UserController {
         return userService.getUser(email);
     }
 
+    @GetMapping("/{id}") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
+    public ResponseEntity getUserById(@PathVariable("id") String id) {
+        return userService.getUserById(id);
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(
             @Nullable @RequestPart("file") MultipartFile file,
             @RequestPart("user") String userJSONString
     ) throws IOException {
         return userService.createUserV2(userJSONString, file);
+    }
+
+    /**
+     * api dibawah untuk SUPER_ADMIN yang mengupdate data user scr eksplisit
+     * @param id
+     * @param user
+     * @return
+     * @throws IOException
+     */
+    @PutMapping(value = "/managementUser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(
+            @PathVariable("id") String id,
+            @RequestBody User user
+    ) throws IOException {
+        return userService.manageUser(id,user);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
