@@ -46,7 +46,7 @@ public class UserController {
         return userService.updateUserV2(id, userJSONString, file);
     }
 
-    @PostMapping
+    @DeleteMapping
     public ResponseEntity deleteUser(String email) {
         return userService.deleteUser(email);
     }

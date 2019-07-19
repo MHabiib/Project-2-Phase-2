@@ -45,10 +45,9 @@ public class CheckPeriodPayedUserServiceImpl implements CheckPeriodPayedUserServ
             int range = yearNow-year1;
             period+=range*12-month1+monthNow;
         }
-                else{
+        else{
             period+=monthNow-month1;
         }
-
         return user.getTotalPeriodPayed()-period;
     }
 }

@@ -32,7 +32,7 @@ public class User {
 //    private String namaBank;
     private String rekening;
     private Double balance;
-    private Integer periodeTertinggal;
+    private Integer periodeTertinggal; //periode tertingal, jika (-) bearti user bayar surplus melebihi periode grup skrg
     private Integer totalPeriodPayed; //save total period payed by user in number
 //    private List<PaymentDetail> periodPayed;
     private String imagePath;

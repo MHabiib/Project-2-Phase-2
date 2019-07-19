@@ -120,18 +120,21 @@ public class PaymentServiceImpl implements PaymentService {
             return new ResponseEntity("Payment not found!",HttpStatus.NOT_FOUND);
         }
         if(thisPayment.getStatus()){
-            paymentExist.setIsPaid(true);
-            User user = userRepository.findByEmail(paymentExist.getEmail());
-            Group group = groupRepository.findByName(paymentExist.getGroupName());
+            if(!paymentExist.getIsPaid()){
+                paymentExist.setIsPaid(true);
+                User user = userRepository.findByEmail(paymentExist.getEmail());
+                Group group = groupRepository.findByName(paymentExist.getGroupName());
 
-            user.setTotalPeriodPayed(user.getTotalPeriodPayed()+paymentExist.getPeriode());
-            user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());// jika minus bearti user surplus
-            userRepository.save(user);
+                user.setTotalPeriodPayed(user.getTotalPeriodPayed()+paymentExist.getPeriode());
+                user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());// jika minus bearti user surplus
+                userRepository.save(user);
 
-            group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
-            groupRepository.save(group);
+                group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
+                groupRepository.save(group);
 
-            notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
+                notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
+            }
+
         }
         else if(!thisPayment.getStatus()){
             paymentExist.setIsPaid(false);

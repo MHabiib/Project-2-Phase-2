@@ -72,14 +72,15 @@
           console.log('P_Notification : '+this.notificationList.length)
           console.log('=================================')
         })
-
-        this.ess.addEventListener(localStorage.getItem('userEmail'), event =>{
+        let myEvent = localStorage.getItem('userEmail')+'personal'
+        this.ess.addEventListener(myEvent, event =>{
           this.notificationList = JSON.parse(event.data)
           console.log('P_Notification Updates: '+this.notificationList.length)
         })
 
         this.ess.onerror = function(){
           // this.ess.close()
+         
           console.log("P_Notification stream errored")
         }
       }

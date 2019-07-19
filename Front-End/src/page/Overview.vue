@@ -270,7 +270,7 @@
         this.showExpenseDetailWindow = false;
       },
       streamGroupNotification(){
-        this.es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('groupName'))
+        this.es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('userEmail'))
         
         this.es.addEventListener('start', event => {
           this.groupNotificationList = JSON.parse(event.data)
@@ -278,8 +278,8 @@
           console.log('G_Notification : '+this.groupNotificationList.length)
           console.log('=================================')
         })
-
-        this.es.addEventListener(localStorage.getItem('groupName'),(event) =>{
+        let myEvent = localStorage.getItem('userEmail')+'group'
+        this.es.addEventListener(myEvent,(event) =>{
           this.groupNotificationList = JSON.parse(event.data)
           console.log('G_Notification Updates: '+this.groupNotificationList.length)
         })

@@ -2,8 +2,10 @@ package com.future.tcfm.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.tcfm.model.Group;
+import com.future.tcfm.model.JwtUserDetails;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
+import com.future.tcfm.repository.JwtUserDetailsRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.UserService;
@@ -42,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    JwtUserDetailsRepository jwtUserDetailsRepository;
 
     private String notifMessage;
     @Override
@@ -83,6 +88,48 @@ public class UserServiceImpl implements UserService {
                 .body(Files.readAllBytes(img.toPath()));
     }
 
+    /**
+     * function yg d call ktk merubah data user yg dilakukan super_admin
+     * @param id
+     * @param user
+     * @return
+     */
+    @Override
+    public ResponseEntity manageUser(String id, User user){
+        User userExist = userRepository.findByIdUser(id);
+        if(userExist==null){
+            return new ResponseEntity("Username not found!", HttpStatus.NOT_FOUND);
+        }
+        if(userExist.getGroupName()!=user.getGroupName()) {
+            //notification untuk group lamanya
+            notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
+            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
+            //notification untuk group barunya
+            notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
+            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
+            userExist.setJoinDate(new Date().getTime());
+            userExist.setGroupName(user.getGroupName());
+        }
+        userExist.setEmail(user.getEmail());
+        userExist.setName(user.getName());
+        userExist.setPhone(user.getPhone());
+        userExist.setPassword(user.getPassword());
+        userExist.setRole(user.getRole());
+        userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(userExist.getEmail());
+        jwtUserDetailsRepository.delete(jwtUserDetails);
+        userRepository.save(userExist);
+        return new ResponseEntity(userExist,HttpStatus.OK);
+    }
+
+    /**
+     * function untuk user utk mengupdate profilenya
+     * @param id
+     * @param userJSONString
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @Override
     public ResponseEntity updateUserV2(String id, String userJSONString, MultipartFile file) throws IOException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);
@@ -104,26 +151,11 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
-        if(userExist.getGroupName()!=user.getGroupName()) {
-            //notification untuk group lamanya
-            notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
-            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
-            //notification untuk group barunya
-            notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
-            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
-            userExist.setJoinDate(new Date().getTime());
-            userExist.setGroupName(user.getGroupName());
-        }
-        userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
-        userExist.setRole(user.getRole());
-//        userExist.setBalance(user.getBalance());
-//        userExist.setPeriodeTertinggal(userExist.g);
         userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         userRepository.save(userExist);
-
         return new ResponseEntity(userExist,HttpStatus.OK);
     }
 

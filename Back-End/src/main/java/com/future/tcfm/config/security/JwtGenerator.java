@@ -30,8 +30,7 @@ public class JwtGenerator {
 
     @Value("${app.jwtExpirationInMs}")
     private static Long refreshTokenExpirationInMs = 10800000L;
-    @Autowired
-    private JwtAuthenticationProvider authenticationProvider;
+
 
     @Autowired
     UserRepository userRepository;
