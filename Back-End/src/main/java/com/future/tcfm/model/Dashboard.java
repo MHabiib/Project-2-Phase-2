@@ -16,10 +16,17 @@ public class Dashboard {
     private int totalMembers;
     private double pendingPayment;
     private double yourContribution;
-    private double totalExpenseByValue;
     private String adminAccountNumber;
     private String adminName;
     private Long lastPayment;
+    private int yourPayment;
+    private double expenseByValue;
+    private int expenseByQuantity;
+    private double expenseByValueBefore;
+    private int expenseByQuantityBefore;
+    private float expenseByQuantitiyPercent;
+    private float expenseByValuePercent;
+
 
     //yourPayment
     //totalExpenseByQuantity

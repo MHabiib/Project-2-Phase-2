@@ -5,6 +5,7 @@ import com.future.tcfm.model.Group;
 import com.future.tcfm.model.JwtUserDetails;
 import com.future.tcfm.model.User;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
+import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
@@ -135,15 +136,21 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
         double balanceUsed = expenseExist.getPrice()/listUser.size();
-        List<String> newExpenseContributed;
+        //List<String> newExpenseContributed;
+        List<ExpenseIdContributed>expenseIdContributeds;
         for (User user : listUser) {//add the expense to all user that contributed to this expense
-            newExpenseContributed = user.getExpenseIdContributed();
-            if(newExpenseContributed==null) {
-                newExpenseContributed = new ArrayList<>();
-            }
+            expenseIdContributeds = user.getExpenseIdContributed();
+
+            ExpenseIdContributed e = new ExpenseIdContributed();
+            e.setIdExpense(expenseExist.getIdExpense());
+            e.setUsedBalance(user.getBalance()-balanceUsed);
+            expenseIdContributeds.add(e);
+
+            /*if(expenseIdContributeds==null) {
+                expenseIdContributeds = new ArrayList<>();
+            }*/
             user.setBalance(user.getBalance()-balanceUsed); //mengurangi balance user dengan pembagian pengeluaran
-            newExpenseContributed.add(expenseExist.getIdExpense());
-            user.setExpenseIdContributed(newExpenseContributed);
+            //user.setExpenseIdContributed(newExpenseContributed);
             userRepository.save(user);
         }
     }

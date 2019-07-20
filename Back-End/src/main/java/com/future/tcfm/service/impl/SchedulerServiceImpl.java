@@ -1,4 +1,3 @@
-/*
 package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.User;
@@ -55,7 +54,8 @@ public class SchedulerServiceImpl implements SchedulerService {
             if(monthBefore<1){{ monthBefore+=12; } }
             String monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
 
-            if(period<user.getTotalPeriodPayed()){
+            emailService.userResign(user.getEmail());
+            /*if(period<user.getTotalPeriodPayed()){
                emailService.periodicMailSender(user.getEmail(),range);
                if(range>1)
                     notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_GROUP);
@@ -65,10 +65,9 @@ public class SchedulerServiceImpl implements SchedulerService {
             else{
                 emailService.periodicMailSender(user.getEmail(),range);
                 notificationService.createNotification("Anda Telah Membayar Iuran Bulan "+monthNowStr , user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-            }
+            }*/
                 //emailService.sendMailWithUsername(user.getEmail(),user.getName());
         }
 
     }
 }
-*/

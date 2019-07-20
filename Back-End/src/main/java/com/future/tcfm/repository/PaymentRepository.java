@@ -14,4 +14,5 @@ public interface PaymentRepository extends MongoRepository<Payment,String> {
     List<Payment> findAll();
     Page<Payment> findAllByGroupNameOrderByLastModifiedAt(String groupName,Pageable pageable);
     Page<Payment> findAllByEmailOrderByLastModifiedAt(String email, Pageable pageable);
+    List<Payment>findByEmailAndIsPaid(String email, Boolean isPaid);
 }

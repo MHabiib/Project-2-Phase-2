@@ -1,5 +1,6 @@
 package com.future.tcfm.model;
 
+import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.model.list.PaymentDetail;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class User {
 //    private List<PaymentDetail> periodPayed;
     private String imagePath;
     private String imageURL;
-    private List <String> expenseIdContributed;
+    private List <ExpenseIdContributed> expenseIdContributed;
 //    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
 //        this.periodPayed = periodPayed;
 //    }

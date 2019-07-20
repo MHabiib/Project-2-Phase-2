@@ -1,9 +1,12 @@
 package com.future.tcfm.service.impl;
 
+import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Notification;
 import com.future.tcfm.model.NotificationEvent;
 import com.future.tcfm.model.ReqResModel.EmailRequest;
 import com.future.tcfm.model.User;
+import com.future.tcfm.model.list.ExpenseIdContributed;
+import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,14 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    public static final String GROUP_PROFILE_UPDATE = "GROUP";
-    public static final String PAYMENT_DUE_DATE = " please make your payment now ";
+
     public static final String EXPENSE_MESSAGE = " requested new expense ";
     public static final String EXPENSE_APPROVED_MESSAGE = " 's requested expense had been approved ";
     public static final String EXPENSE_REJECTED_MESSAGE = " 's requested expense had been rejected ";
@@ -43,6 +47,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ExpenseRepository expenseRepository;
 
     @Autowired
     public JavaMailSender emailSender;
@@ -97,7 +104,51 @@ public class EmailServiceImpl implements EmailService {
         this.emailSender.send(message);
     }
 
+    @Override
+    public void requestExpense(String email, String idExpense) throws MessagingException {
+        User user  = userRepository.findByEmail(email);
+        String name = user.getName();
+        String groupName = user.getGroupName();
+        Expense expense = expenseRepository.findByIdExpense(idExpense);
+        User requester = userRepository.findByEmail(expense.getRequester());
 
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo(email);
+        helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
+
+        helper.setText("<html><body>" +
+                "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fwww.blibli.com%2Fwcsstore%2FIndraprastha%2Fimages%2Fgdn%2Fimages%2Fhead-blibli.jpg&amp;t=1563260709&amp;ymreqid=f2fe503c-78f1-5207-1c71-ea000701a700&amp;sig=Yqh0WVnLasWdIARYJH9xBg--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+requester.getName()+" Baru Saja Merequest Expense "+expense.getTitle()+"!<br>Detail : "+expense.getDetail()+"<br>Price : "+expense.getPrice()+"<br>Quantitiy : "+expense.getQuantity()+"<br><br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+
+        this.emailSender.send(message);
+    }
+
+    @Override
+    public void userResign(String email) throws MessagingException {
+        User user  = userRepository.findByEmail(email);
+        String name = user.getName();
+        String groupName = user.getGroupName();
+
+        List<Expense> listExpense = new ArrayList<>();
+
+        List<ExpenseIdContributed> expenseIdContributed = user.getExpenseIdContributed();
+        for(ExpenseIdContributed expense: expenseIdContributed){
+            Expense e = expenseRepository.findByIdExpense(expense.getIdExpense()) ;
+            listExpense.add(e);
+        }
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo("mhabibofficial2@yahoo.com");
+        helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
+
+        helper.setText("<html><body>" +
+                "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fwww.blibli.com%2Fwcsstore%2FIndraprastha%2Fimages%2Fgdn%2Fimages%2Fhead-blibli.jpg&amp;t=1563260709&amp;ymreqid=f2fe503c-78f1-5207-1c71-ea000701a700&amp;sig=Yqh0WVnLasWdIARYJH9xBg--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+listExpense+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+
+        this.emailSender.send(message);
+    }
 
     @Override
     public ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException {

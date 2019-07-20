@@ -21,6 +21,7 @@ public class Expense {
     private String title;
     private String detail;
     private Double price;
+    private Integer quantity;
     private String requester;
     private List<User> userContributed;
     private Long createdDate;

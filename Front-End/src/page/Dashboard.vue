@@ -2,29 +2,30 @@
   <div class='dashboardContainer'>
     <SidebarComponent />
 
-    <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
+    <div class='rightPanel'>
       <HeaderSection headerTitle='Dashboard' />
 
       <div class='dashboardFirstRow'>
         <div class='cardStyleOne'>
           <div class  ='cardStyleOneHeader'>
-
+            Rp {{dashboardData.expenseByValue | thousandSeparators}}
           </div>
 
           <div class='cardStyleOneBody'>
+
             <div class='cardStyleOneTitle'>Total Expenses by Value</div>
-            <div class='cardStyleOneDescription'>Increased 25% compared to last month</div>
+            <div class='cardStyleOneDescription'>Expense by Value last month Rp {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
           </div>
         </div>
 
         <div class='cardStyleOne'>
           <div class='cardStyleOneHeader'>
-
+            Rp {{dashboardData.expenseByQuantity | thousandSeparators}}
           </div>
 
           <div class='cardStyleOneBody'>
             <div class='cardStyleOneTitle'>Total Expenses by Quantity</div>
-            <div class='cardStyleOneDescription'>Increased 30% compared to last month</div>
+            <div class='cardStyleOneDescription'>Expense by Quantity last month Rp {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
           </div>
         </div>
 
