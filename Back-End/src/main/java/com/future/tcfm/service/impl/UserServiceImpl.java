@@ -104,24 +104,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity manageUser(String id, User user){
         User userExist = userRepository.findByIdUser(id);
+        Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true);
         if(userExist==null){
             return new ResponseEntity("Username not found!", HttpStatus.NOT_FOUND);
         }
-        if(userExist.getGroupName()!=user.getGroupName()) {
+        if(!userExist.getGroupName().equals(user.getGroupName())) {
             //notification untuk group lamanya
+            if(groupExist==null){
+                return new ResponseEntity("Group not found!", HttpStatus.NOT_FOUND);
+            }
+            userExist.setJoinDate(new Date().getTime());
+            userExist.setGroupName(user.getGroupName());
+
             notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
             notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
             //notification untuk group barunya
             notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
             notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
-            userExist.setJoinDate(new Date().getTime());
-            userExist.setGroupName(user.getGroupName());
         }
+        if(!userExist.getRole().equals(user.getRole())){
+            if(user.getRole().equals("GROUP_ADMIN")){
+                User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());
+                oldAdmin.setRole(oldAdmin.getRole().replace("GROUP_ADMIN","MEMBER"));
+                groupExist.setGroupAdmin(user.getEmail());
+            }
+        }
+        userExist.setRole(userExist.getRole());
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
-        userExist.setRole(user.getRole());
         userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(userExist.getEmail());
         jwtUserDetailsRepository.delete(jwtUserDetails);
@@ -173,7 +185,6 @@ public class UserServiceImpl implements UserService {
         System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
         Group groupExist = groupRepository.findByName(user.getGroupName());
-        User adminExist = userRepository.findByGroupNameAndRole(user.getGroupName(),user.getRole());
         if(userExist!=null){
             return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
         }
@@ -181,8 +192,11 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         }
         if (user.getRole().equals("GROUP_ADMIN")){
-            if(adminExist!=null)
+            if(groupExist.getGroupAdmin()!=null)
                 return new ResponseEntity<>("Failed to save User!\nGroup admin already exists!", HttpStatus.BAD_REQUEST);
+            else{
+                groupRepository.save(groupExist);// save perubahan admin pada group
+            }
         }
 
         if(checkImageFile(file)){

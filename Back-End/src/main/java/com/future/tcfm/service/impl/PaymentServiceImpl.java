@@ -185,14 +185,20 @@ public class PaymentServiceImpl implements PaymentService {
      * ambil total berapa persen sudah payment yang diterima dalam bulan X
      * @return
      */
-    public ResponseEntity getCurrentMonthPaymentByGroup(int month,String groupName){
+    public ResponseEntity getCurrentPaymentAndTotalCashUsedGroupOverView(int month,String groupName){
+        List<User> userList = userRepository.findByGroupNameAndActive(getCurrentUser().getGroupName(),true);
+        Group groupExist = groupRepository.findByNameAndActive(getCurrentUser().getGroupName(),true);
+        double totalCashUsed = getTotalCashUsed(groupExist);
+        //ini belum siap; anthony terakhir sampai disini 20/07
+
 
         return null;
     }
 
-    public float getCurrentPaymentPercentageByMonth(int month){
-        List<User> userList = userRepository.findByGroupNameAndActive(getCurrentUser().getGroupName(),true);
-        return null;
+
+
+    public double getTotalCashUsed(Group groupExist){
+        return groupExist.getCurrentPeriod()*groupExist.getRegularPayment()-groupExist.getGroupBalance();
     }
 
 }

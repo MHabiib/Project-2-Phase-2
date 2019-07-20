@@ -24,6 +24,7 @@ public class Group {
     @Id
     private String idGroup;
     private String name;
+    private String groupAdmin;
     private Double regularPayment;
     private Long createdDate;
     private Long closedDate;
