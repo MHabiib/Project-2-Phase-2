@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
         if (groupExist == null){
             return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         }
-        if (user.getRole().equals("ADMIN")){
+        if (user.getRole().equals("GROUP_ADMIN")){
             if(adminExist!=null)
                 return new ResponseEntity<>("Failed to save User!\nGroup admin already exists!", HttpStatus.BAD_REQUEST);
         }

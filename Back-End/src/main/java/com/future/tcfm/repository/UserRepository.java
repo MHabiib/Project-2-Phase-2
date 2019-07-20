@@ -13,6 +13,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByIdUser(String id);
     //List<User> findAllByActive(Boolean bool);
     User findByEmail(String email);
+    List<User> findByGroupNameAndActive(String gName,Boolean bool);
     User findByEmailAndActive(String email,Boolean bool);
     Integer countByGroupName(String groupName);
     Page<User> findByGroupName(String groupName, Pageable pageable);

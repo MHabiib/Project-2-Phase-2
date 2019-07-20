@@ -60,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
     }
     @Override
     public ResponseEntity<?> createGroup(Group group) {
-        Group groupExist = groupRepository.findByName(group.getName());
+        Group groupExist = groupRepository.findByNameAndActive(group.getName(),true);
         if (groupExist != null &&groupExist.getActive().equals(false))
             return new ResponseEntity<>("Failed to save Group!\nName already exists!", HttpStatus.BAD_REQUEST);
         groupRepository.save(group);
@@ -79,5 +79,28 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.save(groupExist);
         notificationService.createNotification(GROUP_PROFILE_UPDATE,null,groupExist.getName(),TYPE_GROUP);
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity disbandGroup(String id) {
+        Group groupExist = groupRepository.findByIdGroup(id);
+//        boolean hasEveryOnePayed = true;
+        if (groupExist == null) {
+            return new ResponseEntity<>("Failed to disband group!\nGroupId not found!", HttpStatus.NOT_FOUND);
+        }
+        List<User> userList = userRepository.findByGroupNameAndActive(groupExist.getName(), true);
+        for (User user : userList) {
+            if (user.getPeriodeTertinggal() > 0) {
+//                hasEveryOnePayed = false;
+                return new ResponseEntity<>("Failed to disband group!\nGroupId not found!", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        groupExist.setActive(false);
+        /**
+         * tambahkan fungsi utk send email berisi data payment tiap-tiap member dan balance mereka disini.
+         */
+        return new ResponseEntity<>("Group is disbanded!",HttpStatus.OK);
+
     }
 }

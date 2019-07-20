@@ -29,7 +29,7 @@ public class DashboardServiceImpl implements DashboardService {
         Group dGroup = groupRepository.findByName(dUser.getGroupName());
         Integer totalMembers = userRepository.countByGroupName(dGroup.getName());
 
-        User groupAdmin = userRepository.findByGroupNameAndRole(dUser.getGroupName(), "ADMIN");
+        User groupAdmin = userRepository.findByGroupNameAndRole(dUser.getGroupName(), "GROUP_ADMIN");
         String adminName = groupAdmin.getName();
         String accountNumber = groupAdmin.getRekening();
 

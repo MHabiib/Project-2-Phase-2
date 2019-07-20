@@ -36,11 +36,15 @@ public class GroupController {
     public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) {
         return groupService.updateGroup(id,group);
     }
-
     @GetMapping("/membersByEmail")
     public Page<User> findMyGroupMembers(@RequestParam("email") String email,
                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                          @RequestParam(value = "size", defaultValue = "10") int size) {
         return groupService.findMembersGroupByEmail(email,page,size);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Group> disbandGroup(@PathVariable("id") String id) {
+        return groupService.disbandGroup(id);
+    }
+
 }

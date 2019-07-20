@@ -16,4 +16,6 @@ public interface GroupService {
     ResponseEntity updateGroup(String id,Group group);
     List<User> membersGroup(String groupName);
     List<User> membersGroupByEmail(String email);
+
+    ResponseEntity disbandGroup(String id);
 }

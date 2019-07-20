@@ -21,7 +21,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (groupExist == null)
             return new ResponseEntity<>("404 :\nGroup not Found!", HttpStatus.NOT_FOUND);
         if(groupExist.getGroupBalance()<expense.getPrice()){
-            return new ResponseEntity<>("{\"message\":\"Group balance is not enough\"}",HttpStatus.BAD_REQUEST);//terakhir sampaidisini;anthony
+            return new ResponseEntity<>("{\"message\":\"Group balance is not enough\"}",HttpStatus.BAD_REQUEST);
         }
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
@@ -129,28 +131,40 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
 
-
     //ini api di pakai untuk admin utk reject / approve request expense dari user group
+    @Transactional
+    public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
+        double balanceUsed = expenseExist.getPrice()/listUser.size();
+        List<Expense> newExpenseContributed;
+        for (User user : listUser) {//add the expense to all user that contributed to this expense
+            newExpenseContributed = user.getExpenseContributed();
+            if(newExpenseContributed==null) {
+                newExpenseContributed = new ArrayList<>();
+            }
+            user.setBalance(user.getBalance()-balanceUsed); //mengurangi balance user dengan pembagian pengeluaran
+            newExpenseContributed.add(expenseExist);
+            user.setExpenseContributed(newExpenseContributed);
+            userRepository.save(user);
+        }
+    }
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
-
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
         if(expenseRequest.getStatus()) {
+            if(expenseExist.getStatus()!=null){
+                return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
+            }
             expenseExist.setStatus(true);
             //notif...
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
             List<User> listUser = userRepository.findByGroupNameLike(group.getName());
 
-            for (User user : listUser) {
-                List<String>addExpenseId = user.getExpenseId();
-                addExpenseId.add(expenseRequest.getId());
-            }
+            updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
 
-
-            groupRepository.save(group);//terakhir sampai disini... 17/07/19
+            groupRepository.save(group);
             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         else if(!expenseRequest.getStatus()) {
@@ -161,7 +175,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
-
 
         expenseRepository.save(expenseExist);
 

@@ -125,6 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
                 User user = userRepository.findByEmail(paymentExist.getEmail());
                 Group group = groupRepository.findByName(paymentExist.getGroupName());
 
+                user.setBalance(user.getBalance()+paymentExist.getPrice());
                 user.setTotalPeriodPayed(user.getTotalPeriodPayed()+paymentExist.getPeriode());
                 user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());// jika minus bearti user surplus
                 userRepository.save(user);
@@ -176,7 +177,22 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ResponseEntity findByGroupName(String groupName, int page, int size) {
         Page<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName,createPageRequest(page,size));
-        if(paymentList==null) return new ResponseEntity("Error: 404 Not Found",HttpStatus.NOT_FOUND);
+        if(paymentList==null) return new ResponseEntity<>("Error: 404 Not Found",HttpStatus.NOT_FOUND);
         return new ResponseEntity(paymentList,HttpStatus.OK);
     }
+
+    /**
+     * ambil total berapa persen sudah payment yang diterima dalam bulan X
+     * @return
+     */
+    public ResponseEntity getCurrentMonthPaymentByGroup(int month,String groupName){
+
+        return null;
+    }
+
+    public float getCurrentPaymentPercentageByMonth(int month){
+        List<User> userList = userRepository.findByGroupNameAndActive(getCurrentUser().getGroupName(),true);
+        return null;
+    }
+
 }

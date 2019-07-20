@@ -115,93 +115,6 @@
                 </div>
               </div>
 
-              <!-- <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Nancy has joined the group. Welcome Nancy!
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  3 mins ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  XXX has left the group
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  10 mins ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Tzuyu has made a payment
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  yesterday
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  New expense has been approved: Beli Meja Baru
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  3 days ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Expenses has been rejected: Beli Meja Makan
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  1 week ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Expenses has been rejected: Beli Meja DJ
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  1 month ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Expenses has been rejected: Beli Meja Anak-Anak
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  3 months ago
-                </div>
-              </div>
-
-              <div class="overviewRightLowerBodyContent">
-                <div class="overviewRightLowerBodyContentText">
-                  Expenses has been rejected: Beli Meja Ping-Pong
-                </div>
-
-                <div class="overviewRightLowerBodyContentTime">
-                  <div />
-                  last year
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -292,7 +205,7 @@
     },//methods end here
     created() {
       this.getOverviewData();
-     // this.streamGroupNotification();
+      this.streamGroupNotification();
     },
     destroyed(){
       this.es.close()

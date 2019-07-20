@@ -11,4 +11,6 @@ import java.util.List;
 public interface GroupRepository extends MongoRepository<Group, String> {
     Group findByName(String name);
     Group findByIdGroup(String id);
+    Group findByNameAndActive(String id,boolean bool);
+
 }
