@@ -20,5 +20,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByGroupNameLike(String groupName);
     List<User> findByGroupNameLikeOrderByJoinDateDesc(String groupName);
     User findByGroupNameAndRole(String groupName, String role);
+    Integer countAllByGroupNameAndActive(String gName, Boolean bool);
+    Integer countByGroupNameAndPeriodeTertinggalAndActive(String gName, Integer pt, Boolean bool);
 }
 

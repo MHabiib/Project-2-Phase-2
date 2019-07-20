@@ -69,7 +69,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
-
+        expense.setCreatedDate(System.currentTimeMillis());
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
         expense.setUserContributed(userContributed);
 //        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
@@ -135,18 +135,19 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
         double balanceUsed = expenseExist.getPrice()/listUser.size();
-        List<Expense> newExpenseContributed;
+        List<String> newExpenseContributed;
         for (User user : listUser) {//add the expense to all user that contributed to this expense
-            newExpenseContributed = user.getExpenseContributed();
+            newExpenseContributed = user.getExpenseIdContributed();
             if(newExpenseContributed==null) {
                 newExpenseContributed = new ArrayList<>();
             }
             user.setBalance(user.getBalance()-balanceUsed); //mengurangi balance user dengan pembagian pengeluaran
-            newExpenseContributed.add(expenseExist);
-            user.setExpenseContributed(newExpenseContributed);
+            newExpenseContributed.add(expenseExist.getIdExpense());
+            user.setExpenseIdContributed(newExpenseContributed);
             userRepository.save(user);
         }
     }
+
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
@@ -161,7 +162,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
             List<User> listUser = userRepository.findByGroupNameLike(group.getName());
-
+            group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
 
             groupRepository.save(group);

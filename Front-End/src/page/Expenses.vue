@@ -25,7 +25,7 @@
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Description</th>
+                <th>Title</th>
                 <th>Status</th>
                 <th>Price</th>
                 <th>Contributors</th>

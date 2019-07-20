@@ -17,5 +17,6 @@ public interface ExpenseRepository extends MongoRepository<Expense, String> {
     List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);
     Page<Expense> findByGroupNameOrderByCreatedDateDesc(String groupName, Pageable pageable);
     Expense findByIdExpense(String id);
-    List<Expense> findTop10ByGroupNameLikeOrderByCreatedDateDesc(String groupName);
+    Expense findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(String gName,Boolean bool);
+    List<Expense> findTop10ByGroupNameOrderByCreatedDateDesc(String groupName);
 }

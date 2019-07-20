@@ -1,5 +1,6 @@
-package com.future.tcfm.model;
+package com.future.tcfm.model.ReqResModel;
 
+import com.future.tcfm.model.Expense;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +12,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "overview")
 public class Overview {
     private List<Expense> latestExpense;
     private Double groupBalance;
     private Integer totalMembers;
+    private Integer paymentPaidThisMonth;
+    private double percentageTotalCashUsed;
     private Long latestJoinDate;
     private Long latestExpenseDate;
 }

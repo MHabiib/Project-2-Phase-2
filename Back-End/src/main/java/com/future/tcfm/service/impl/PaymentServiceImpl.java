@@ -17,12 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.OutputKeys;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
@@ -185,20 +188,5 @@ public class PaymentServiceImpl implements PaymentService {
      * ambil total berapa persen sudah payment yang diterima dalam bulan X
      * @return
      */
-    public ResponseEntity getCurrentPaymentAndTotalCashUsedGroupOverView(int month,String groupName){
-        List<User> userList = userRepository.findByGroupNameAndActive(getCurrentUser().getGroupName(),true);
-        Group groupExist = groupRepository.findByNameAndActive(getCurrentUser().getGroupName(),true);
-        double totalCashUsed = getTotalCashUsed(groupExist);
-        //ini belum siap; anthony terakhir sampai disini 20/07
-
-
-        return null;
-    }
-
-
-
-    public double getTotalCashUsed(Group groupExist){
-        return groupExist.getCurrentPeriod()*groupExist.getRegularPayment()-groupExist.getGroupBalance();
-    }
 
 }

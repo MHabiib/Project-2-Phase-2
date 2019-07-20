@@ -119,7 +119,7 @@
         isMembers: window.location.href === 'http://localhost:3000/members',
         isManageGroup: window.location.href === 'http://localhost:3000/manage-group',
         isManageUser: window.location.href === 'http://localhost:3000/manage-user',
-        isAdmin: localStorage.getItem('role') === 'ADMIN'
+        isAdmin: localStorage.getItem('role') === 'SUPER_ADMIN'
       }
     },
     methods: {

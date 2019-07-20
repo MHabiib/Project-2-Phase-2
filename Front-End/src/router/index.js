@@ -133,8 +133,8 @@ router.beforeEach((to, from, next) => {
       })
     } else {
       if(to.matched.some(record => record.meta.adminOnly)) {
-        if(localStorage.getItem('role') !== 'ADMIN') {
-          alert('Menu ini hanya boleh diakses oleh admin.');
+        if(localStorage.getItem('role') !== 'SUPER_ADMIN') {
+          alert('Menu ini hanya boleh diakses oleh super admin.');
           next({
             path: '/dashboard'
           })

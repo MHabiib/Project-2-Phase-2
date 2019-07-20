@@ -191,7 +191,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SseEmitter streamNotification(String ref,String type) {
-        SseEmitter emitter = new SseEmitter(60*1000L);
+        SseEmitter emitter = new SseEmitter(30*1000L);
         List<Notification> notificationList;
         User userExist = userRepository.findByEmailAndActive(ref,true);
         if(userExist==null){
@@ -224,7 +224,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final Map<String,SseEmitter> emitters = new ConcurrentHashMap<>();
 
 
-    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+//    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
     @Async
     @EventListener
@@ -241,14 +241,14 @@ public class NotificationServiceImpl implements NotificationService {
             System.out.println("Event Personal triggered!");
             eventName = "personal";
         }
-        sseMvcExecutor.execute(() -> {
-            SseEmitter.SseEventBuilder event = SseEmitter.event();
+//        sseMvcExecutor.execute(() -> {
             this.emitters.forEach((email,emitter) -> { //key = email
                 try {
+                    SseEmitter.SseEventBuilder event = SseEmitter.event();
                     event.name(email+eventName);
                     event.id(UUID.randomUUID().toString());
                     event.data(notificationList);
-//                    event.reconnectTime(15*1000L);
+                    event.reconnectTime(10*1000L);
                     emitter.send(event);
                     System.out.println( notificationEvent.getType()+" notification sent to " + email +", eventName : "+email+eventName);
                 } catch (Exception e) {
@@ -259,6 +259,6 @@ public class NotificationServiceImpl implements NotificationService {
             });
             System.out.println("Client listener Total : "+this.emitters.size());
             this.emitters.remove(deadEmitters);
-            });
+//            });
     }
 }

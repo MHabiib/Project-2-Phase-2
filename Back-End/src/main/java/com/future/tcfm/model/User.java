@@ -29,7 +29,7 @@ public class User {
     private Long leaveDate;
     private Boolean active;
     private String groupName;
-//    private String namaBank;
+    private String namaBank;
     private String rekening;
     private Double balance; //saldo user pada group yang akan dikembalikan jika user resign/pindah grup / totalregularpayment - kontribusi dalam setiap pengeluaran grup dalam bentuk uang
     private Integer periodeTertinggal; //periode tertingal, jika (-) bearti user bayar surplus melebihi periode grup skrg
@@ -37,7 +37,7 @@ public class User {
 //    private List<PaymentDetail> periodPayed;
     private String imagePath;
     private String imageURL;
-    private List <Expense> expenseContributed;
+    private List <String> expenseIdContributed;
 //    public void setPeriodPayed(List<PaymentDetail> periodPayed) {
 //        this.periodPayed = periodPayed;
 //    }

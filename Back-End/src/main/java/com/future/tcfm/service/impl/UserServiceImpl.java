@@ -195,6 +195,7 @@ public class UserServiceImpl implements UserService {
             if(groupExist.getGroupAdmin()!=null)
                 return new ResponseEntity<>("Failed to save User!\nGroup admin already exists!", HttpStatus.BAD_REQUEST);
             else{
+                groupExist.setGroupAdmin(user.getEmail());
                 groupRepository.save(groupExist);// save perubahan admin pada group
             }
         }
@@ -212,8 +213,12 @@ public class UserServiceImpl implements UserService {
         user.setJoinDate(new Date().getTime());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setActive(true);
+        user.setBalance((double)0);
 
         userRepository.save(user);
+        notifMessage= user.getName()+USER_JOINED_GROUP;
+        notificationService.createNotification(notifMessage,user.getEmail(),user.getGroupName(),TYPE_GROUP);
+
         return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }
 

@@ -1,17 +1,24 @@
 package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.Expense;
-import com.future.tcfm.model.Overview;
+import com.future.tcfm.model.Group;
+import com.future.tcfm.model.ReqResModel.Overview;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.OverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 
 @Service
 public class OverviewServiceImpl implements OverviewService {
@@ -33,19 +40,28 @@ public class OverviewServiceImpl implements OverviewService {
 
     @Override
     public Overview getData(String email) {
-        String userGroup = userRepository.findByEmail(email).getGroupName();
-        List<Expense> listExpense = expenseRepository.findTop10ByGroupNameLikeOrderByCreatedDateDesc(userGroup);
-        Double groupBalance = groupRepository.findByName(userRepository.findByEmail(email).getGroupName()).getGroupBalance();
-        Integer totalUser = userRepository.findByGroupNameLike(userGroup).size();
-        Long latestJoinDate = userRepository.findByGroupNameLikeOrderByJoinDateDesc(userGroup).get(0).getJoinDate();
-        Long latestExpense = expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(userGroup).get(0).getCreatedDate();
-
+        User dUser = userRepository.findByEmail(email);
+        Group userGroup = groupRepository.findByNameAndActive(dUser.getGroupName(),true);
+        List<Expense> listExpense = expenseRepository.findTop10ByGroupNameOrderByCreatedDateDesc(userGroup.getName());
+        int totalUser = userRepository.countAllByGroupNameAndActive(userGroup.getName(),true);
+        Long latestExpense = expenseRepository.findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(userGroup.getName(),true).getLastModifiedAt();
+        int paymentPaidThisMonth = userRepository.countByGroupNameAndPeriodeTertinggalAndActive(userGroup.getName(),0,true);
         Overview overviewData = new Overview();
         overviewData.setLatestExpense(listExpense);
-        overviewData.setGroupBalance(groupBalance);
+        overviewData.setGroupBalance(userGroup.getGroupBalance());
         overviewData.setTotalMembers(totalUser);
-        overviewData.setLatestJoinDate(latestJoinDate);
+        overviewData.setPercentageTotalCashUsed(getPercentageTotalCashUsed(userGroup,totalUser));
+        overviewData.setPaymentPaidThisMonth(paymentPaidThisMonth);
+        overviewData.setLatestJoinDate(System.currentTimeMillis());
         overviewData.setLatestExpenseDate(latestExpense);
         return overviewData;
+    }
+
+    public double getPercentageTotalCashUsed(Group groupExist,int totalMembers){
+        long selisihBulanDalamMs = System.currentTimeMillis()-groupExist.getCreatedDate();
+        int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
+        double saldoSekarangSeharusnya = selisihBulan*groupExist.getRegularPayment()*totalMembers;
+        double result = groupExist.getBalanceUsed()/saldoSekarangSeharusnya;
+        return Double.parseDouble(new DecimalFormat("##.##").format(result))*100;
     }
 }

@@ -22,17 +22,18 @@
           
           <div class="createNewExpenseFlexLine">
             <select name="selectGroup" id="selectGroup" class='selectGroup' @change="changeGroup($event)">
-              <option value="none" style="display: none">Select Group</option>
+              <option value="" >Select Group</option>
               <option v-for="(group, index) in groupList" :key="index" :value="group.name">{{group.name}}</option>
             </select>
 
             <select name="selectRole" id="selectRole" class='selectRole' @change="changeRole($event)">
-              <option value="none" style="display: none">Select Role</option>
-              <option value="USER">User</option>
-              <option value="ADMIN">Admin</option>
+              <option value="">Select Role</option>
+              <option value="MEMBER">Member</option>
+              <option value="GROUP_ADMIN">Group Admin</option>
+              <option class="red" value="SUPER_ADMIN">Super Admin</option>
             </select>
-
-            <input type="file" @change="changeFile($event)" class="selectFile"/>
+            <label style='width: 30%;color: var(--primary-1)'>Picture</label>
+            <input type="file" @change="changeFile($event)" class="selectFile" placeholder="Profile Picture"/>
           </div>
         </div>
       </div>
@@ -160,7 +161,9 @@
   .fixedPosition {
     position: absolute;
   }
-
+  .red {
+    color: RED;
+  }
   .createNewExpenseWindow {
     display: flex;
     width: 100vw;
@@ -246,8 +249,8 @@
     border: none;
     padding: 10px !important;
     color: var(--primary-4);
-    width: 100px;
-    height: 30px;
+    width: 120px;
+    height: 40px;
     background-color: var(--lightColor);
     margin-top: 12px;
     margin-right: 12px;
@@ -256,7 +259,8 @@
   .selectFile {
     color: var(--primary-0);
     margin-top: 12px;
-    width: 80%;
+    margin-left: -15px;
+    width: 70%;
   }
 
   .createNewExpenseFlexLine {

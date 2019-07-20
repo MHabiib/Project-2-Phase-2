@@ -76,17 +76,17 @@
           <div class="overviewRightUpper">
             <div class="overviewRightCard">
               <div class="overviewRightCardHeader">
-                98%
+                {{overviewData.paymentPaidThisMonth}}/{{overviewData.totalMembers}}
               </div>
 
               <div class="overviewRightCardBody">
-                From total payment is paid.
+                Members has paid this month.
               </div>
             </div>
 
             <div class="overviewRightCard">
               <div class="overviewRightCardHeader">
-                30%
+               {{overviewData.percentageTotalCashUsed}}%
               </div>
 
               <div class="overviewRightCardBody">
@@ -183,6 +183,8 @@
         this.showExpenseDetailWindow = false;
       },
       streamGroupNotification(){
+        let myEvent = localStorage.getItem('userEmail')+'group'
+
         this.es = new EventSource('http://localhost:8088/notification/group?ref='+localStorage.getItem('userEmail'))
         
         this.es.addEventListener('start', event => {
@@ -191,7 +193,6 @@
           console.log('G_Notification : '+this.groupNotificationList.length)
           console.log('=================================')
         })
-        let myEvent = localStorage.getItem('userEmail')+'group'
         this.es.addEventListener(myEvent,(event) =>{
           this.groupNotificationList = JSON.parse(event.data)
           console.log('G_Notification Updates: '+this.groupNotificationList.length)
@@ -377,7 +378,7 @@
   }
 
   .overviewRightCardHeader {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 600;
     color: var(--lightColor);
     background-color: var(--primary-0);

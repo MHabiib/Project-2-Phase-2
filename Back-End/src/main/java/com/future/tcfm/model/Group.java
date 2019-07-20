@@ -29,11 +29,12 @@ public class Group {
     private Long createdDate;
     private Long closedDate;
     private Double groupBalance;
+    private Double balanceUsed;
     private Double totalExpense;
     private Boolean active;
 
     @JsonIgnore
     public Integer getCurrentPeriod(){
-        return  new Date(System.currentTimeMillis()-createdDate).getMonth();
+        return  new Date(System.currentTimeMillis()).toLocalDate().getMonthValue()- new Date(createdDate).toLocalDate().getMonthValue();
     }
 }

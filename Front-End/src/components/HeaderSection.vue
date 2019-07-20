@@ -54,7 +54,7 @@
     watch:{
       notificationList: function(oldVal,newVal){
         if(this.notificationList.length>0) {this.isNotifNull=false}
-        console.log('Watcher triggered!')
+        console.log('Personal Watcher triggered!')
       }
     },
     computed:{
@@ -64,6 +64,8 @@
     },
     methods: {
       streamPersonalNotification(){
+        let myEvent = localStorage.getItem('userEmail')+'personal'
+
         this.ess = new EventSource('http://localhost:8088/notification/personal?ref='+localStorage.getItem('userEmail'))
         
         this.ess.addEventListener('start', event => {
@@ -72,7 +74,6 @@
           console.log('P_Notification : '+this.notificationList.length)
           console.log('=================================')
         })
-        let myEvent = localStorage.getItem('userEmail')+'personal'
         this.ess.addEventListener(myEvent, event =>{
           this.notificationList = JSON.parse(event.data)
           console.log('P_Notification Updates: '+this.notificationList.length)
