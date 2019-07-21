@@ -132,7 +132,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
 
-    //ini api di pakai untuk admin utk reject / approve request expense dari user group
     @Transactional
     public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
         double balanceUsed = expenseExist.getPrice()/listUser.size();
@@ -153,7 +152,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             userRepository.save(user);
         }
     }
-
+    //ini api di pakai untuk admin utk reject / approve request expense dari user group
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());

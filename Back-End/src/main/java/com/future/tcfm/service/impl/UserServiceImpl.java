@@ -212,8 +212,10 @@ public class UserServiceImpl implements UserService {
         }
         user.setJoinDate(new Date().getTime());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        user.setTotalPeriodPayed(0);
         user.setActive(true);
         user.setBalance((double)0);
+        user.setBalanceUsed((double)0);
 
         userRepository.save(user);
         notifMessage= user.getName()+USER_JOINED_GROUP;

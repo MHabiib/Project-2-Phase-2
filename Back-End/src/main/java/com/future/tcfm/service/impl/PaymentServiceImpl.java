@@ -123,7 +123,7 @@ public class PaymentServiceImpl implements PaymentService {
             return new ResponseEntity("Payment not found!",HttpStatus.NOT_FOUND);
         }
         if(thisPayment.getStatus()){
-            if(!paymentExist.getIsPaid()){
+            if(paymentExist.getIsPaid()==null){
                 paymentExist.setIsPaid(true);
                 User user = userRepository.findByEmail(paymentExist.getEmail());
                 Group group = groupRepository.findByName(paymentExist.getGroupName());

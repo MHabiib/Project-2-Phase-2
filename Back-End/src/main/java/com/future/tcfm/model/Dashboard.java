@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "group")
 public class Dashboard {
     private double groupBalance;
+    private double regularPayment;
     private int totalMembers;
     private double pendingPayment;
     private double yourContribution;
