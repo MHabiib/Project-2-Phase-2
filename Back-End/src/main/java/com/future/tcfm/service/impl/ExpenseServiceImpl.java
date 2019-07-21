@@ -136,21 +136,20 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
         double balanceUsed = expenseExist.getPrice()/listUser.size();
-        //List<String> newExpenseContributed;
-        List<ExpenseIdContributed>expenseIdContributeds;
+        List<ExpenseIdContributed> expenseIdContributeds;
         for (User user : listUser) {//add the expense to all user that contributed to this expense
             expenseIdContributeds = user.getExpenseIdContributed();
-
+            if(expenseIdContributeds==null) {
+                expenseIdContributeds = new ArrayList<>();
+            }
             ExpenseIdContributed e = new ExpenseIdContributed();
             e.setIdExpense(expenseExist.getIdExpense());
-            e.setUsedBalance(user.getBalance()-balanceUsed);
+            e.setUsedBalance(balanceUsed);
             expenseIdContributeds.add(e);
 
-            /*if(expenseIdContributeds==null) {
-                expenseIdContributeds = new ArrayList<>();
-            }*/
+            user.setBalanceUsed(user.getBalance()+balanceUsed);
             user.setBalance(user.getBalance()-balanceUsed); //mengurangi balance user dengan pembagian pengeluaran
-            //user.setExpenseIdContributed(newExpenseContributed);
+            user.setExpenseIdContributed(expenseIdContributeds);
             userRepository.save(user);
         }
     }

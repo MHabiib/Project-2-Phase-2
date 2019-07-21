@@ -57,19 +57,19 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         //totalExpenseByValue
-        for(Expense expense:dExpense){
-            Date expenseDate = new Date(expense.getCreatedDate());
-            int monthExpense=expenseDate.getMonth();
-
-            if(monthExpense==monthNow){
-                expenseByValue+=expense.getPrice();
-                expenseByQuantity+=expense.getQuantity();
-            }
-            else if (monthExpense==monthNow-1){
-                expenseByValueBefore+=expense.getPrice();
-                expenseByQuantityBefore+=expense.getQuantity();
-            }
-        }
+//        for(Expense expense:dExpense){
+//            Date expenseDate = new Date(expense.getCreatedDate());
+//            int monthExpense=expenseDate.getMonth();
+//
+//            if(monthExpense==monthNow){
+//                expenseByValue+=expense.getPrice();
+//                expenseByQuantity+=expense.getQuantity();
+//            }
+//            else if (monthExpense==monthNow-1){
+//                expenseByValueBefore+=expense.getPrice();
+//                expenseByQuantityBefore+=expense.getQuantity();
+//            }
+//        }
        /* if(expenseByValue||ex)
         if (expenseByValue>expenseByValueBefore)
             expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);

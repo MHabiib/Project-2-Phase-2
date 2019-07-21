@@ -33,6 +33,7 @@ public class User {
     private String namaBank;
     private String rekening;
     private Double balance; //saldo user pada group yang akan dikembalikan jika user resign/pindah grup / totalregularpayment - kontribusi dalam setiap pengeluaran grup dalam bentuk uang
+    private Double balanceUsed;
     private Integer periodeTertinggal; //periode tertingal, jika (-) bearti user bayar surplus melebihi periode grup skrg
     private Integer totalPeriodPayed; //save total period payed by user in number
 //    private List<PaymentDetail> periodPayed;
