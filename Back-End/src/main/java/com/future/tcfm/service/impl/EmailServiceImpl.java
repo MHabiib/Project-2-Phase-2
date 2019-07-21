@@ -119,7 +119,7 @@ public class EmailServiceImpl implements EmailService {
 
         helper.setText("<html><body>" +
                 "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fwww.blibli.com%2Fwcsstore%2FIndraprastha%2Fimages%2Fgdn%2Fimages%2Fhead-blibli.jpg&amp;t=1563260709&amp;ymreqid=f2fe503c-78f1-5207-1c71-ea000701a700&amp;sig=Yqh0WVnLasWdIARYJH9xBg--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+requester.getName()+" Baru Saja Merequest Expense "+expense.getTitle()+"!<br>Detail : "+expense.getDetail()+"<br>Price : "+expense.getPrice()+"<br>Quantitiy : "+expense.getQuantity()+"<br><br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+requester.getName()+" Baru Saja Merequest Expense "+expense.getTitle()+"!<br>Detail : "+expense.getDetail()+"<br>Price : "+expense.getPrice()+"<br><br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
 
         this.emailSender.send(message);
     }
