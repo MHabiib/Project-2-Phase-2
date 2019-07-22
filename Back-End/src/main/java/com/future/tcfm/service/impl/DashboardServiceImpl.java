@@ -89,7 +89,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         //PendingPayment
-        pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),true);
+        pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),null);
         for(Payment payment:pendingPayment){
             sumPendingPayment+=payment.getPrice();
         }
@@ -113,7 +113,6 @@ public class DashboardServiceImpl implements DashboardService {
         d.setYourContribution(Double.parseDouble(new DecimalFormat("##").format(dUser.getBalanceUsed())));
         d.setYourPayment(yourPayment);
         d.setPendingPayment(sumPendingPayment);
-
         return d;
     }
 }

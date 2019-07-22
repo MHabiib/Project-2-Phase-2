@@ -261,4 +261,10 @@ public class NotificationServiceImpl implements NotificationService {
             this.emitters.remove(deadEmitters);
 //            });
     }
+    @Override
+    public ResponseEntity deleteNotificationByEmail(String email){
+        Boolean deleted = notificationRepository.deleteAllByEmail(email);
+        return new ResponseEntity<>(deleted,HttpStatus.OK);
+    }
+
 }

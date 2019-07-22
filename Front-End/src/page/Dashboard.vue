@@ -142,18 +142,16 @@
         </div>
 
         <div class="thirdRowBody">
-          <div class="thirdRowContent paidMonth">Jan</div>
-          <div class="thirdRowContent paidMonth">Feb</div>
-          <div class="thirdRowContent paidMonth">Mar</div>
-          <div class="thirdRowContent paidMonth">Apr</div>
-          <div class="thirdRowContent paidMonth">May</div>
-          <div class="thirdRowContent">Jun</div>
-          <div class="thirdRowContent">Jul</div>
-          <div class="thirdRowContent">Aug</div>
-          <div class="thirdRowContent">Sep</div>
-          <div class="thirdRowContent">Oct</div>
-          <div class="thirdRowContent">Nov</div>
-          <div class="thirdRowContent">Dec</div>
+          <div 
+              class="thirdRowContent paidMonth"
+              v-for='(monthPaid,index) in monthList' :key='index'>{{monthPaid}}
+          </div>
+        
+          <div 
+              class="thirdRowContent"
+              v-for='(monthNotYetPaid,index) in monthNotYetPaid' :key='index'>{{monthNotYetPaid}}
+          </div>
+        
         </div>
       </div>
     </div>
@@ -180,6 +178,8 @@
   export default {
     data: function() {
       return {
+        monthList:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Des"],
+        monthNotYetPaid:[],
         dashboardData: {},
         showCreateNewExpenseWindow: false,
         showPayNowWindow: false,
@@ -206,9 +206,14 @@
             res => {
               console.log(res);
               this.dashboardData = res;
+              //bagi 2 monthList, menjadi 1. array yang berisi bulan yg telah dibayar, 2. aray berisi bulan belum bayar
+              this.monthNotYetPaid = this.monthList.splice(res.yourPayment),
+              
+              console.log(this.monthNotYetPaid)
               this.dataPayNow = {
                 nomorRekening: res.adminAccountNumber,
-                namaAdmin: res.adminName
+                namaAdmin: res.adminName,
+                regularPayment: res.regularPayment
               }
             }
           )

@@ -128,6 +128,8 @@
       ]),
       backToLogin() {
         this.$router.push('/login')
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
       },
       changeView(view) {
         this.$router.push(view)

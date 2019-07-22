@@ -28,6 +28,13 @@
           </div>
         </div>
       </div>
+      <div class="notificationItems" v-show="!isNotifNull">
+          <div class="notificationText">
+          </div>
+          <div class="notificationTime clearAll" @click="clearAllNotifications">
+            Clear All
+          </div>
+        </div>
     </div>
   </div>
 </template>
@@ -54,6 +61,7 @@
     watch:{
       notificationList: function(oldVal,newVal){
         if(this.notificationList.length>0) {this.isNotifNull=false}
+        else this.isNotifNull=true
         console.log('Personal Watcher triggered!')
       }
     },
@@ -84,6 +92,18 @@
          
           console.log("P_Notification stream errored")
         }
+      },
+      clearAllNotifications(){
+        this.notificationList=[]
+        fetch('http://localhost:8088/notification?ref='+localStorage.getItem('userEmail'),{
+          method: 'DELETE'
+        }).then(response => {
+          if(response.ok){
+            console.log('notification cleared!')
+          }else{
+            console.log('failed to clear notification.')
+          }
+        })
       }
     },
   }
@@ -142,5 +162,16 @@
   .notificationTime {
     font-size: 11px;
     color: var(--primary-2);
+  }
+  .clearAll{  
+    font-size:12px;
+    color: var(--primary-2);
+
+  }
+   .clearAll:hover {
+    /* background-color: var(--primary-2); */
+    cursor: pointer;
+    font-size:14px;
+    font-weight: 600;
   }
 </style>
