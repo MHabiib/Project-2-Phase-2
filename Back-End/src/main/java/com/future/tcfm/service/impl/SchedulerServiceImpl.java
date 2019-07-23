@@ -48,26 +48,35 @@ public class SchedulerServiceImpl implements SchedulerService {
             int monthNow= LocalDate.now().getMonthValue();
             int period = 0;
 
-            int range=user.getPeriodeTertinggal();
+          */
+/*  int range=user.getPeriodeTertinggal();
 
             String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
             int monthBefore= monthNow-range;
             if(monthBefore<1){{ monthBefore+=12; } }
-            String monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
+            String monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);*//*
+
 
             emailService.userResign(user.getEmail());
-            */
-/*if(period<user.getTotalPeriodPayed()){
-               emailService.periodicMailSender(user.getEmail(),range);
-               if(range>1)
+           */
+/* if(period<user.getTotalPeriodPayed()){
+               //emailService.periodicMailSender(user.getEmail(),range);
+                 emailService.userResign(user.getEmail());
+               *//*
+*/
+/*if(range>1)
                     notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_GROUP);
                else
                     notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthBeforeStr+" - "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-            }
+            }*//*
+*/
+/*
             else{
-                emailService.periodicMailSender(user.getEmail(),range);
+                 emailService.userResign(user.getEmail());
+            //    emailService.periodicMailSender(user.getEmail(),range);
                 notificationService.createNotification("Anda Telah Membayar Iuran Bulan "+monthNowStr , user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
             }*//*
+
 
                 //emailService.sendMailWithUsername(user.getEmail(),user.getName());
         }
