@@ -99,7 +99,8 @@ import { backEndAddress } from '../../Helper';
         nomorRekeningPengirim: '',
         namaPengirim: '',
         tanggalTransfer: '',
-        buktiTransfer: null
+        buktiTransfer: null,
+        regularPayment:0,
       }
     },
     methods: {
@@ -149,7 +150,7 @@ import { backEndAddress } from '../../Helper';
         })
         .then(response => {
           if(response.ok) {
-            alert('Berhasil!');
+            alert('Berhasil!\nMenunggu konfirmasi pembayaran dari Group Admin');
             this.closePayNowWindow();
           } else {
             console.log(response);
@@ -164,7 +165,7 @@ import { backEndAddress } from '../../Helper';
     },
     computed: {
       totalTagihan: function() {
-        return (this.periode * 100000)
+        return (this.periode * this.dataPayNow.regularPayment)
       }
     },
     created() {

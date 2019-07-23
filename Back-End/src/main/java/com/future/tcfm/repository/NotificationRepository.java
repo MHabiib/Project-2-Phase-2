@@ -14,8 +14,10 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification,String> {
     List<Notification> findTop10ByEmailAndTypeOrderByTimestampDesc(String email,String type);
-    List<Notification> findTop10ByGroupNameAndTypeOrderByTimestampDesc(String groupName,String type);
+    List<Notification> findTop10ByEmailAndTypeAndIsReadOrderByTimestampDesc(String email,String type,Boolean isRead);
 
+    List<Notification> findTop10ByGroupNameAndTypeOrderByTimestampDesc(String groupName,String type);
+    Boolean deleteAllByEmail(String email);
     List<Notification> findByEmailOrderByTimestampDesc(String email);
     List<Notification> findByGroupNameOrderByTimestampDesc(String groupName);
 //    List<Notification> findByEmailOrderByTimestampDesc(String email, Pageable pageable);

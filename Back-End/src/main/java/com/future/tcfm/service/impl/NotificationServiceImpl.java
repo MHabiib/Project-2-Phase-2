@@ -191,7 +191,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SseEmitter streamNotification(String ref,String type) {
-        SseEmitter emitter = new SseEmitter(30*1000L);
+        SseEmitter emitter = new SseEmitter(15*1000L);
         List<Notification> notificationList;
         User userExist = userRepository.findByEmailAndActive(ref,true);
         if(userExist==null){
@@ -261,4 +261,10 @@ public class NotificationServiceImpl implements NotificationService {
             this.emitters.remove(deadEmitters);
 //            });
     }
+    @Override
+    public ResponseEntity deleteNotificationByEmail(String email){
+        Boolean deleted = notificationRepository.deleteAllByEmail(email);
+        return new ResponseEntity<>(deleted,HttpStatus.OK);
+    }
+
 }

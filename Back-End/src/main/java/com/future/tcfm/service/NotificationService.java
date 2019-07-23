@@ -24,4 +24,6 @@ public interface NotificationService {
 //    SseEmitter streamPersonalNotification(String email);
 
     SseEmitter streamNotification(String ref,String type);
+
+    ResponseEntity deleteNotificationByEmail(String email);
 }

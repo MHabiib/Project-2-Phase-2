@@ -35,6 +35,8 @@ public class Group {
 
     @JsonIgnore
     public Integer getCurrentPeriod(){
-        return  new Date(System.currentTimeMillis()).toLocalDate().getMonthValue()- new Date(createdDate).toLocalDate().getMonthValue();
+        long selisihBulanDalamMs = System.currentTimeMillis()-getCreatedDate();
+        int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
+        return  selisihBulan;
     }
 }

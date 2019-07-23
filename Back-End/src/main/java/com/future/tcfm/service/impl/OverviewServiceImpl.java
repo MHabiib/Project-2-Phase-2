@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +44,15 @@ public class OverviewServiceImpl implements OverviewService {
         User dUser = userRepository.findByEmail(email);
         Group userGroup = groupRepository.findByNameAndActive(dUser.getGroupName(),true);
         List<Expense> listExpense = expenseRepository.findTop10ByGroupNameOrderByCreatedDateDesc(userGroup.getName());
+        if (listExpense == null) {
+            listExpense = new ArrayList<>();
+        }
         int totalUser = userRepository.countAllByGroupNameAndActive(userGroup.getName(),true);
         Long latestExpense = expenseRepository.findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(userGroup.getName(),true).getLastModifiedAt();
-        int paymentPaidThisMonth = userRepository.countByGroupNameAndPeriodeTertinggalAndActive(userGroup.getName(),0,true);
+        if(latestExpense==null){
+            latestExpense = 0L;
+        }
+        int paymentPaidThisMonth = userRepository.countByGroupNameAndPeriodeTertinggalLessThanAndActive(userGroup.getName(),1,true);
         Overview overviewData = new Overview();
         overviewData.setLatestExpense(listExpense);
         overviewData.setGroupBalance(userGroup.getGroupBalance());
@@ -57,7 +64,7 @@ public class OverviewServiceImpl implements OverviewService {
         return overviewData;
     }
 
-    public double getPercentageTotalCashUsed(Group groupExist,int totalMembers){
+    private double getPercentageTotalCashUsed(Group groupExist,int totalMembers){
         long selisihBulanDalamMs = System.currentTimeMillis()-groupExist.getCreatedDate();
         int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
         double saldoSekarangSeharusnya = selisihBulan*groupExist.getRegularPayment()*totalMembers;

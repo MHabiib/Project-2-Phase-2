@@ -9,6 +9,7 @@ import com.future.tcfm.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +89,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         //PendingPayment
-        pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),true);
+        pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),null);
         for(Payment payment:pendingPayment){
             sumPendingPayment+=payment.getPrice();
         }
@@ -97,10 +98,10 @@ public class DashboardServiceImpl implements DashboardService {
         Date joinDates = new Date(dUser.getJoinDate());
         int joinDate=joinDates.getMonth();
 
-//        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
-
+        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
 
         Dashboard d = new Dashboard();
+        d.setRegularPayment(dGroup.getRegularPayment());
         d.setGroupBalance(dGroup.getGroupBalance());
         d.setTotalMembers(totalMembers);
         d.setAdminAccountNumber(accountNumber);
@@ -109,10 +110,9 @@ public class DashboardServiceImpl implements DashboardService {
         d.setExpenseByValue(expenseByValue);
         d.setExpenseByQuantityBefore(expenseByQuantityBefore);
         d.setExpenseByValueBefore(expenseByValueBefore);
-        d.setYourContribution(dUser.getBalance());
-      //  d.setYourPayment(yourPayment);
+        d.setYourContribution(Double.parseDouble(new DecimalFormat("##").format(dUser.getBalanceUsed())));
+        d.setYourPayment(yourPayment);
         d.setPendingPayment(sumPendingPayment);
-
         return d;
     }
 }

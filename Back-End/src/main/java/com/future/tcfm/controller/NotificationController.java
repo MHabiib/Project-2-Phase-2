@@ -60,4 +60,9 @@ public class NotificationController {
             @PathVariable("id") String id){
         return notificationService.updateNotificationIsRead(id);
     }
+
+    @DeleteMapping(value = "/notification",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity clearAllNotification(@RequestParam(value = "ref") String email){
+        return notificationService.deleteNotificationByEmail(email);
+    }
 }
