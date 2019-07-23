@@ -98,7 +98,7 @@ public class DashboardServiceImpl implements DashboardService {
         Date joinDates = new Date(dUser.getJoinDate());
         int joinDate=joinDates.getMonth();
 
-        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
+//        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
 
         Dashboard d = new Dashboard();
         d.setRegularPayment(dGroup.getRegularPayment());
@@ -111,7 +111,7 @@ public class DashboardServiceImpl implements DashboardService {
         d.setExpenseByQuantityBefore(expenseByQuantityBefore);
         d.setExpenseByValueBefore(expenseByValueBefore);
         d.setYourContribution(Double.parseDouble(new DecimalFormat("##").format(dUser.getBalanceUsed())));
-        d.setYourPayment(yourPayment);
+ //       d.setYourPayment(yourPayment);
         d.setPendingPayment(sumPendingPayment);
         return d;
     }
