@@ -5,7 +5,11 @@
     </div>
 
     <div class="headerMenu">
-      <img src="../assets/notifications.png" alt="Notifications" width='20px' height='70%' @click="showNotification = !showNotification">
+      <!-- <a href="#"> -->
+        <span  v-show='!isRead' class="badge">{{isNotReadTotal}}</span>
+        <img src="../assets/notifications.png" alt="Notifications" width='20px' height='70%' style="margin-right:20px" 
+            @click="showPersonalNotification">
+      <!-- </a> -->
       <img src="../assets/profile.png" alt="Notifications" width='23px' height='70%'>
     </div>
 
@@ -44,12 +48,16 @@
     props: ['headerTitle'],
     data: function() {
       return {
+        clicked:0,
+        isRead : true,
+        isNotReadTotal:0,
         showNotification: false,
         isNotifNull:true,
         email:'',
         groupName:'',
         notificationList:[],
         ess:null,
+        showNotifNumber:false
       }
     },
     created(){
@@ -60,15 +68,20 @@
     },
     watch:{
       notificationList: function(oldVal,newVal){
+        this.isNotReadTotal = 0
         if(this.notificationList.length>0) {this.isNotifNull=false}
         else this.isNotifNull=true
+        this.notificationList.forEach(notif => {
+          if(!notif.isRead){this.isNotReadTotal +=1 }
+        })
+        this.isRead = this.isNotReadTotal>0 ? false : true
         console.log('Personal Watcher triggered!')
-      }
-    },
-    computed:{
-      updateNotif(){
-        return this.notificationList.length
-      }
+      },
+      // isNotReadTotal: function(oldVal,newVal){
+      //   if(this.isNotReadTotal==0){
+      //     this.isRead=!this.isRead
+      //   }
+      // }
     },
     methods: {
       streamPersonalNotification(){
@@ -78,6 +91,7 @@
         
         this.ess.addEventListener('start', event => {
           this.notificationList = JSON.parse(event.data)
+          console.log(this.notificationList)
           console.log('PersonalNotification stream started')
           console.log('P_Notification : '+this.notificationList.length)
           console.log('=================================')
@@ -89,8 +103,23 @@
 
         this.ess.onerror = function(){
           // this.ess.close()
-         
           console.log("P_Notification stream errored")
+        }
+      },
+      showPersonalNotification(){
+        this.showNotification = !this.showNotification
+        if(this.isRead==false){
+          this.isRead = !this.isRead
+          fetch('http://localhost:8088/notification?ref='+localStorage.getItem('userEmail'),{
+            method: 'PUT'
+          }).then(response => {
+            if(response.ok){
+              console.log('notification isRead updated!')
+              this.isNotReadTotal=0;
+            }else{
+              console.log('failed to update notification.')
+            }
+          })
         }
       },
       clearAllNotifications(){
@@ -105,7 +134,7 @@
           }
         })
       }
-    },
+    }//methods end here
   }
 </script>
 
@@ -168,10 +197,20 @@
     color: var(--primary-2);
 
   }
-   .clearAll:hover {
+  .clearAll:hover {
     /* background-color: var(--primary-2); */
     cursor: pointer;
     font-size:14px;
     font-weight: 600;
+  }
+  .badge {
+  position: relative;
+  top: -12px;
+  right: -35px;
+  padding: 1px 5px;
+  border-radius: 50%;
+  text-decoration: none;
+  background: red;
+  color: white;
   }
 </style>

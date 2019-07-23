@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@CrossOrigin
+@CrossOrigin("**")
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
@@ -55,14 +55,20 @@ public class NotificationController {
             @RequestParam(value = "ref") String email){
         return notificationService.streamNotification(email,type);
     }
-    @PutMapping(value = "/notification/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateNotification(
             @PathVariable("id") String id){
         return notificationService.updateNotificationIsRead(id);
     }
 
-    @DeleteMapping(value = "/notification",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity setNotificationIsRead(
+            @RequestParam("ref") String email){
+        return notificationService.setNotificationIsReadByEmail(email);
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity clearAllNotification(@RequestParam(value = "ref") String email){
-        return notificationService.deleteNotificationByEmail(email);
+        return notificationService.deletePersonalNotificationByEmail(email);
     }
 }

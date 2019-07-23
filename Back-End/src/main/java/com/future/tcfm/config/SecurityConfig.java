@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -81,19 +82,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl();
     }
 }
-/* ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.authorizeRequests();
-        registry.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();*/
-/*    @Bean
-    public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration cors = new CorsConfiguration();
-        cors.setAllowCredentials(true);
-        cors.addAllowedOrigin("*");
-        cors.addAllowedHeader("*");
-        cors.addAllowedMethod("*");
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", cors);
-        return new CorsFilter(urlBasedCorsConfigurationSource);
-    }*/
+//ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.authorizeRequests();
+//        registry.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
+//
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+//        final CorsConfiguration cors = new CorsConfiguration();
+//        cors.setAllowCredentials(true);
+//        cors.addAllowedOrigin("*");
+//        cors.addAllowedHeader("*");
+//        cors.addAllowedMethod("*");
+//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", cors);
+//        return new CorsFilter(urlBasedCorsConfigurationSource);
+//    }
 
 
  /*@Override

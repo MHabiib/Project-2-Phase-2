@@ -8,6 +8,8 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 public interface NotificationService {
+    ResponseEntity setNotificationIsReadByEmail(String email);
+
     void createNotification(String message, String email, String groupName, String type);
 
     ResponseEntity findByEmail(String id);
@@ -25,5 +27,5 @@ public interface NotificationService {
 
     SseEmitter streamNotification(String ref,String type);
 
-    ResponseEntity deleteNotificationByEmail(String email);
+    ResponseEntity deletePersonalNotificationByEmail(String email);
 }

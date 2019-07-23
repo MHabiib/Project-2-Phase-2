@@ -96,6 +96,21 @@ public class NotificationServiceImpl implements NotificationService {
         return new ResponseEntity<>("err: Notification Not found 404",HttpStatus.NOT_FOUND);
     }
 
+
+
+    @Override
+    public ResponseEntity setNotificationIsReadByEmail(String email) {
+        List<Notification> notificationList = notificationRepository.findByEmailAndIsReadOrderByTimestampDesc(email,false);
+        if(notificationList == null) {
+            return new ResponseEntity<>("All notifications is read", HttpStatus.NOT_FOUND);
+        }
+        notificationList.forEach(notif -> {
+            notif.setIsRead(true);
+            notif.setIsReadAt(System.currentTimeMillis());
+        });
+        notificationRepository.saveAll(notificationList);
+        return new ResponseEntity<>("Notification Updated!",HttpStatus.OK);
+    }
     @Override
     public void createNotification(String message, String email, String groupName, String type) {
         Notification notification = Notification.builder()
@@ -248,7 +263,7 @@ public class NotificationServiceImpl implements NotificationService {
                     event.name(email+eventName);
                     event.id(UUID.randomUUID().toString());
                     event.data(notificationList);
-                    event.reconnectTime(10*1000L);
+                    event.reconnectTime(10000L);
                     emitter.send(event);
                     System.out.println( notificationEvent.getType()+" notification sent to " + email +", eventName : "+email+eventName);
                 } catch (Exception e) {
@@ -262,8 +277,8 @@ public class NotificationServiceImpl implements NotificationService {
 //            });
     }
     @Override
-    public ResponseEntity deleteNotificationByEmail(String email){
-        Boolean deleted = notificationRepository.deleteAllByEmail(email);
+    public ResponseEntity deletePersonalNotificationByEmail(String email){
+        Boolean deleted = notificationRepository.deleteAllByEmailAndType(email,TYPE_PERSONAL);
         return new ResponseEntity<>(deleted,HttpStatus.OK);
     }
 
