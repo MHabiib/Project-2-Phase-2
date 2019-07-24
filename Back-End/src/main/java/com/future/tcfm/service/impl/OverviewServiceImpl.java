@@ -48,9 +48,9 @@ public class OverviewServiceImpl implements OverviewService {
             listExpense = new ArrayList<>();
         }
         int totalUser = userRepository.countAllByGroupNameAndActive(userGroup.getName(),true);
-        Long latestExpense = expenseRepository.findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(userGroup.getName(),true).getLastModifiedAt();
+        Expense latestExpense = expenseRepository.findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(userGroup.getName(),true);
         if(latestExpense==null){
-            latestExpense = 0L;
+            latestExpense = new Expense();
         }
         int paymentPaidThisMonth = userRepository.countByGroupNameAndPeriodeTertinggalLessThanAndActive(userGroup.getName(),1,true);
         Overview overviewData = new Overview();
@@ -60,7 +60,7 @@ public class OverviewServiceImpl implements OverviewService {
         overviewData.setPercentageTotalCashUsed(getPercentageTotalCashUsed(userGroup,totalUser));
         overviewData.setPaymentPaidThisMonth(paymentPaidThisMonth);
         overviewData.setLatestJoinDate(System.currentTimeMillis());
-        overviewData.setLatestExpenseDate(latestExpense);
+        overviewData.setLatestExpenseDate(latestExpense.getLastModifiedAt());
         return overviewData;
     }
 
