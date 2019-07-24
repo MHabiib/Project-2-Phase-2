@@ -59,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
 
 
 
-        public void periodicMailSender( String email, Integer range) throws MessagingException {
+    public void periodicMailSender( String email, Integer range) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();

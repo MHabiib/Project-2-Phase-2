@@ -59,7 +59,6 @@ public class DashboardServiceImpl implements DashboardService {
         List<Payment> pendingPayment;
         int sumPendingPayment = 0;
 
-
         //totalExpenseByValue
         int monthExpense = 0;
         for(Expense expense:dExpense){
