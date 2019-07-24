@@ -77,11 +77,6 @@
         this.isRead = this.isNotReadTotal>0 ? false : true
         console.log('Personal Watcher triggered!')
       },
-      // isNotReadTotal: function(oldVal,newVal){
-      //   if(this.isNotReadTotal==0){
-      //     this.isRead=!this.isRead
-      //   }
-      // }
     },
     methods: {
       streamPersonalNotification(){

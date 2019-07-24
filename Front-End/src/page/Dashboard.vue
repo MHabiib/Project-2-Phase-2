@@ -149,7 +149,7 @@
         
           <div 
               class="thirdRowContent"
-              v-for='(monthNotYetPaid,index) in monthNotYetPaid' :key='index'>{{monthNotYetPaid}}
+              v-for='(monthNotYetPaid,idx) in monthNotYetPaid' :key='"Not"+idx'>{{monthNotYetPaid}}
           </div>
         
         </div>
@@ -209,7 +209,7 @@
               //bagi 2 monthList, menjadi 1. array yang berisi bulan yg telah dibayar, 2. aray berisi bulan belum bayar
               this.monthNotYetPaid = this.monthList.splice(res.yourPayment),
               
-              console.log(this.monthNotYetPaid)
+              console.log("Month Not Yet Paid:  "+this.monthNotYetPaid)
               this.dataPayNow = {
                 nomorRekening: res.adminAccountNumber,
                 namaAdmin: res.adminName,
