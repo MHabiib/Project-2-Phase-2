@@ -47,7 +47,7 @@ public class DashboardServiceImpl implements DashboardService {
         String adminName = groupAdmin.getName();
         String accountNumber = groupAdmin.getRekening();
 
-        int monthNow= LocalDate.now().getMonthValue();
+        int monthNow= LocalDate.now().getMonthValue()-1;
         double expenseByValue = 0;
         int expenseByQuantity = 0;
         double expenseByValueBefore = 0;
@@ -55,22 +55,21 @@ public class DashboardServiceImpl implements DashboardService {
         int yourPayment=0;
         List<Payment> pendingPayment;
         int sumPendingPayment = 0;
-
+        int monthExpense=0;
 
         //totalExpenseByValue
-//        for(Expense expense:dExpense){
-//            Date expenseDate = new Date(expense.getCreatedDate());
-//            int monthExpense=expenseDate.getMonth();
-//
-//            if(monthExpense==monthNow){
-//                expenseByValue+=expense.getPrice();
-//                expenseByQuantity+=expense.getQuantity();
-//            }
-//            else if (monthExpense==monthNow-1){
-//                expenseByValueBefore+=expense.getPrice();
-//                expenseByQuantityBefore+=expense.getQuantity();
-//            }
-//        }
+        for(Expense expense:dExpense){
+            Date expenseDate = new Date(expense.getCreatedDate());
+            monthExpense=expenseDate.getMonth();
+            if(monthExpense==monthNow){
+                expenseByValue+=expense.getPrice();
+             //   expenseByQuantity+=expense.getQuantity();
+            }
+            else if (monthExpense==monthNow-1){
+                expenseByValueBefore+=expense.getPrice();
+               // expenseByQuantityBefore+=expense.getQuantity();
+            }
+        }
        /* if(expenseByValue||ex)
         if (expenseByValue>expenseByValueBefore)
             expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);
@@ -98,7 +97,7 @@ public class DashboardServiceImpl implements DashboardService {
         Date joinDates = new Date(dUser.getJoinDate());
         int joinDate=joinDates.getMonth();
 
-//        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
+        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
 
         Dashboard d = new Dashboard();
         d.setRegularPayment(dGroup.getRegularPayment());
@@ -111,7 +110,7 @@ public class DashboardServiceImpl implements DashboardService {
         d.setExpenseByQuantityBefore(expenseByQuantityBefore);
         d.setExpenseByValueBefore(expenseByValueBefore);
         d.setYourContribution(Double.parseDouble(new DecimalFormat("##").format(dUser.getBalanceUsed())));
- //       d.setYourPayment(yourPayment);
+        d.setYourPayment(yourPayment);
         d.setPendingPayment(sumPendingPayment);
         return d;
     }

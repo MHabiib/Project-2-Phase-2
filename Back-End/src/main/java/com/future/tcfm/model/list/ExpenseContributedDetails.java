@@ -13,4 +13,9 @@ public class ExpenseContributedDetails {
     private String title;
     private String detail;
     private Double price;
+
+    @Override
+    public String toString(){
+        return String.format("Title : |%-20s|,Detail : |%-20s|,Price : |%-20s|<br>",title,detail,price.toString());
+    }
 }

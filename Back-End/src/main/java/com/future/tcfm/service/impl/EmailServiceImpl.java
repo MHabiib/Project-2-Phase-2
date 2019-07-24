@@ -112,21 +112,27 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void userResign(String email) throws MessagingException {
+    public ResponseEntity userResign(String email) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
-
+        String expenseListStr="";
         List<ExpenseContributedDetails> listExpense = new ArrayList<>();
 
         List<ExpenseIdContributed> expenseIdContributed = user.getExpenseIdContributed();
-        for(ExpenseIdContributed expense: expenseIdContributed){
-            Expense e = expenseRepository.findByIdExpense(expense.getIdExpense()) ;
-            ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
-            expenseContributedDetails.setTitle(e.getTitle());
-            expenseContributedDetails.setDetail(e.getDetail());
-            expenseContributedDetails.setPrice(expenseIdContributed.get(0).getUsedBalance());//RECHECK!!!!!!!!!!!
-            listExpense.add(expenseContributedDetails);
+        if(expenseIdContributed!=null){
+            for(ExpenseIdContributed expense: expenseIdContributed){
+                Expense e = expenseRepository.findByIdExpense(expense.getIdExpense()) ;
+                ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
+                expenseContributedDetails.setTitle(e.getTitle());
+                expenseContributedDetails.setDetail(e.getDetail());
+                expenseContributedDetails.setPrice(expenseIdContributed.get(0).getUsedBalance());//RECHECK!!!!!!!!!!!
+                listExpense.add(expenseContributedDetails);
+                expenseListStr+=(expenseContributedDetails.toString());
+            }
+        }
+        else{
+            expenseListStr="\"Ooopss!!! anda belum ada kontribusi dalam group ini :C\"";
         }
 
         //HOW TO SHOW ARRY ON HTML???????????????????????
@@ -134,13 +140,14 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo("mhabibofficial2@gmail.com");
-        helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
+        helper.setSubject("Team Cash Flow Management: Resignation");
 
         helper.setText("<html><body>" +
                 "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+listExpense+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+expenseListStr+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
 
         this.emailSender.send(message);
+        return null;
     }
 
     @Override

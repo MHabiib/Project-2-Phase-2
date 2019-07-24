@@ -9,17 +9,11 @@ import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.OverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 
 @Service
 public class OverviewServiceImpl implements OverviewService {
@@ -64,11 +58,17 @@ public class OverviewServiceImpl implements OverviewService {
         return overviewData;
     }
 
-    private double getPercentageTotalCashUsed(Group groupExist,int totalMembers){
+    private String getPercentageTotalCashUsed(Group groupExist, int totalMembers){
         long selisihBulanDalamMs = System.currentTimeMillis()-groupExist.getCreatedDate();
         int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
         double saldoSekarangSeharusnya = selisihBulan*groupExist.getRegularPayment()*totalMembers;
+
+
+
         double result = groupExist.getBalanceUsed()/saldoSekarangSeharusnya;
-        return Double.parseDouble(new DecimalFormat("##.##").format(result))*100;
+
+        DecimalFormat df=new DecimalFormat("##");
+        return df.format(result*100);
+        //return Double.parseDouble(new DecimalFormat("##.##").format(result))*100;
     }
 }

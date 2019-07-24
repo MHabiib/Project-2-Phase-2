@@ -18,7 +18,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
-@RequestMapping("/api/email")
+@RequestMapping("/email")
 @Controller
 public class EmailController {
 
@@ -33,4 +33,9 @@ public class EmailController {
     public ResponseEntity attachmentEmail(@RequestBody EmailRequest emailRequest) throws MessagingException {
         return emailService.attachmentEmail(emailRequest);
     }
+    @PostMapping("/userResign")
+    public ResponseEntity userResign(@RequestBody String email) throws MessagingException {
+        return emailService.userResign(email);
+    }
+
 }

@@ -17,7 +17,7 @@ public class Overview {
     private Double groupBalance;
     private Integer totalMembers;
     private Integer paymentPaidThisMonth;
-    private double percentageTotalCashUsed;
+    private String percentageTotalCashUsed;
     private Long latestJoinDate;
     private Long latestExpenseDate;
 }
