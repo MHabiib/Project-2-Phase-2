@@ -58,35 +58,34 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         //totalExpenseByValue
-//        for(Expense expense:dExpense){
-//            Date expenseDate = new Date(expense.getCreatedDate());
-//            int monthExpense=expenseDate.getMonth();
-//
-//            if(monthExpense==monthNow){
-//                expenseByValue+=expense.getPrice();
+        for(Expense expense:dExpense){
+            int expenseDate = new LocalDate(expense.getCreatedDate()).getMonthValue();
+            int monthExpense=expenseDate.getMonth();
+            if(monthExpense==monthNow-1){
+                expenseByValue+=expense.getPrice();
 //                expenseByQuantity+=expense.getQuantity();
-//            }
-//            else if (monthExpense==monthNow-1){
-//                expenseByValueBefore+=expense.getPrice();
+            }
+            else if (monthExpense==monthNow-2){
+                expenseByValueBefore+=expense.getPrice();
 //                expenseByQuantityBefore+=expense.getQuantity();
-//            }
-//        }
-       /* if(expenseByValue||ex)
-        if (expenseByValue>expenseByValueBefore)
-            expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);
-        else if (expenseByValue<expenseByValueBefore)
-            expenseByValuePercent= (float) (((expenseByValueBefore/expenseByValue)-1)*(100)*-1);
-        else
-            expenseByValuePercent=0;
-
-
-        if (expenseByQuantity>expenseByQuantityBefore)
-            expenseByQuantityPercent=(((expenseByQuantity/expenseByQuantityBefore)-1)*100);
-        else if (expenseByQuantity<expenseByQuantityBefore)
-            expenseByQuantityPercent=(((expenseByQuantityBefore/expenseByQuantity)-1)*(100)*-1);
-        else
-            expenseByQuantityPercent=0;*/
-
+            }
+        }
+//       if(expenseByValue||ex)
+//        if (expenseByValue>expenseByValueBefore)
+//            expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);
+//        else if (expenseByValue<expenseByValueBefore)
+//            expenseByValuePercent= (float) (((expenseByValueBefore/expenseByValue)-1)*(100)*-1);
+//        else
+//            expenseByValuePercent=0;
+//
+//
+//        if (expenseByQuantity>expenseByQuantityBefore)
+//            expenseByQuantityPercent=(((expenseByQuantity/expenseByQuantityBefore)-1)*100);
+//        else if (expenseByQuantity<expenseByQuantityBefore)
+//            expenseByQuantityPercent=(((expenseByQuantityBefore/expenseByQuantity)-1)*(100)*-1);
+//        else
+//            expenseByQuantityPercent=0;
+//
 
         //PendingPayment
         pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),null);
