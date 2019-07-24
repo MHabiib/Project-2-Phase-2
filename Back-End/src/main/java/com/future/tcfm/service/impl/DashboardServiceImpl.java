@@ -6,11 +6,14 @@ import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.PaymentRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.DashboardService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -58,14 +61,16 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         //totalExpenseByValue
+        int monthExpense = 0;
         for(Expense expense:dExpense){
-            int expenseDate = new LocalDate(expense.getCreatedDate()).getMonthValue();
-            int monthExpense=expenseDate.getMonth();
-            if(monthExpense==monthNow-1){
+            LocalDate expenseDate = Instant.ofEpochMilli(expense.getLastModifiedAt()).atZone(ZoneId.systemDefault()).toLocalDate();
+//            int monthExpense=expenseDate.getMonth();
+            monthExpense = expenseDate.getMonthValue();
+            if(monthExpense==monthNow){
                 expenseByValue+=expense.getPrice();
 //                expenseByQuantity+=expense.getQuantity();
             }
-            else if (monthExpense==monthNow-2){
+            else if (monthExpense==monthNow-1){
                 expenseByValueBefore+=expense.getPrice();
 //                expenseByQuantityBefore+=expense.getQuantity();
             }
