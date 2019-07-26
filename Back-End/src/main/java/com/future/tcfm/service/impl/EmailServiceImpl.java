@@ -64,6 +64,7 @@ public class EmailServiceImpl implements EmailService {
         String name = user.getName();
         String groupName = user.getGroupName();
         int monthBefore= LocalDate.now().getMonthValue()-range;
+
         if(monthBefore<1){{ monthBefore+=12; } }
         String monthBeforeStr= Month.of(monthBefore).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
@@ -139,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setTo("mhabibofficial2@gmail.com");
+        helper.setTo("mhabibhimself@gmail.com");
         helper.setSubject("Team Cash Flow Management: Resignation");
 
         helper.setText("<html><body>" +
