@@ -140,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setTo("mhabibhimself@gmail.com");
+        helper.setTo("mhabibofficial2@gmail.com");
         helper.setSubject("Team Cash Flow Management: Resignation");
 
         helper.setText("<html><body>" +

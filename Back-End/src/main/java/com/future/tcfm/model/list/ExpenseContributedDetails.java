@@ -16,6 +16,6 @@ public class ExpenseContributedDetails {
 
     @Override
     public String toString(){
-        return String.format("Title    : %-20s<br>Detail  : %-20s<br>Price   : %-20s<br>",title,detail,price.toString());
+        return String.format("Title : %-20s<br>Detail : %-20s<br>Price : %-20s<br><br>",title,detail,price.toString());
     }
 }
