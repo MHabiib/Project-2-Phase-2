@@ -108,14 +108,17 @@ public class ExpenseServiceImpl implements ExpenseService {
      * @return
      */
     @Override
-    public Page<Expense> expensePageGroupByEmail(String userEmail, int page, int size) {
+    public Page<Expense> expensePageGroupByEmail(String userEmail,String filter, int page, int size) {
         User userSelected = userRepository.findByEmail(userEmail);
         String userGroup = userSelected.getGroupName();
-        return expenseRepository.findByGroupNameOrderByCreatedDateDesc(userGroup,createPageRequest(page,size));
+        return expenseRepository.findByGroupNameOrderByCreatedDateDesc(userGroup,createPageRequest(filter,"desc",page,size));
 }
 
-    static Pageable createPageRequest(int page, int size) {
-        return PageRequest.of(page,size,new Sort(Sort.Direction.DESC,"createdDate"));
+    static Pageable createPageRequest(String filter,String direction,int page, int size) {
+        if(direction.equals("asc")){
+            return PageRequest.of(page,size,Sort.by(filter).ascending());
+        }
+        return PageRequest.of(page,size,Sort.by(filter).descending());
     }
 
     //ini hanya untuk di akses oleh user utk edit request expense mereka

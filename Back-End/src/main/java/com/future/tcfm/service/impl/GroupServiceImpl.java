@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +49,15 @@ public class GroupServiceImpl implements GroupService {
         String userGroup = userRepository.findByEmail(email).getGroupName();
         return userRepository.findByGroupNameLike(userGroup);
     }
+
+    @Override
+    public int getGroupCreatedMonth(String groupName) {
+        Group groupExist = groupRepository.findByNameAndActive(groupName, true);
+        if (groupExist == null)
+            throw new RuntimeException("GROUP NOT FOUND!");
+        return Instant.ofEpochMilli(groupExist.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+    }
+
 //  --- Get Members List by Email ---
 
     /**
@@ -54,9 +66,9 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
-    public Page<User> findMembersGroupByEmail(String email, int page, int size) {
+    public Page<User> findMembersGroupByEmail(String email,String filter,int year, int page, int size) {
         String userGroup = userRepository.findByEmail(email).getGroupName();
-        return userRepository.findByGroupName(userGroup,createPageRequest(page,size));
+        return userRepository.findByGroupName(userGroup,createPageRequest(filter,"",page,size));
     }
     @Override
     public ResponseEntity<?> createGroup(Group group) {

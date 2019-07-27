@@ -14,7 +14,7 @@ public interface ExpenseService {
     ResponseEntity singleExpense(String id);
 
     //paging, terakhir sampai disini
-    Page<Expense> expensePageGroupByEmail(String userEmail, int page, int size);
+    Page<Expense> expensePageGroupByEmail(String userEmail,String filter, int page, int size);
 
     ResponseEntity updateExpense(String id, Expense expense);
     ResponseEntity managementExpense(ExpenseRequest expenseRequest);

@@ -75,7 +75,7 @@ public class PaymentServiceImpl implements PaymentService {
                 return new ResponseEntity<>("Some error occurred. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
-
+        payment.setIsChecked(false);
         payment.setPaymentDate(System.currentTimeMillis());
         payment.setGroupName(userExist.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());
@@ -107,6 +107,7 @@ public class PaymentServiceImpl implements PaymentService {
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
+        paymentExist.setIsRejected(null);
         paymentExist.setPrice(payment.getPrice());
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentExist.setPeriode(payment.getPeriode());
@@ -123,8 +124,8 @@ public class PaymentServiceImpl implements PaymentService {
             return new ResponseEntity("Payment not found!",HttpStatus.NOT_FOUND);
         }
         if(thisPayment.getStatus()){
-            if(paymentExist.getIsPaid()==null){
-                paymentExist.setIsPaid(true);
+            if(!paymentExist.getIsChecked()){
+                paymentExist.setIsRejected(false);
                 User user = userRepository.findByEmail(paymentExist.getEmail());
                 Group group = groupRepository.findByName(paymentExist.getGroupName());
 
@@ -136,16 +137,17 @@ public class PaymentServiceImpl implements PaymentService {
                 group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
                 groupRepository.save(group);
 
-                notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
+                notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + paymentExist.getEmail(); //getCurrentUser() = get current logged in user
             }
         }
-        else if(!thisPayment.getStatus()){
-            paymentExist.setIsPaid(false);
-            notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
+        else {
+            paymentExist.setIsRejected(true);
+            notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + paymentExist.getEmail(); //getCurrentUser() = get current logged in user
         }
-        notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),paymentExist.getEmail(),TYPE_PERSONAL);
+        paymentExist.setIsChecked(true);
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
+        notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),paymentExist.getEmail(),TYPE_PERSONAL);
 
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }
@@ -167,8 +169,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity findByEmail(String email,int page, int size) {
-        Page<Payment> paymentExist = paymentRepository.findAllByEmailOrderByLastModifiedAt(email,createPageRequest(page,size));
+    public ResponseEntity findByEmail(String email,String filter,int page, int size) {
+        Page<Payment> paymentExist = paymentRepository.findAllByEmailOrderByLastModifiedAt(email,createPageRequest(filter,"desc",page,size));
         if(paymentExist==null){
             return new ResponseEntity("\"\\\"{\\\"error\\\":\\\"404 not found\\\"\"",HttpStatus.NOT_FOUND);
         }
@@ -177,11 +179,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity findByGroupName(String groupName, int page, int size) {
-        Page<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByLastModifiedAt(groupName,createPageRequest(page,size));
+    public ResponseEntity findByGroupNameAndIsPaid(String groupName,String filter, int page, int size) {
+        Page<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByPaymentDateDesc(groupName,createPageRequest(filter,"desc",page,size));
         if(paymentList==null) return new ResponseEntity<>("Error: 404 Not Found",HttpStatus.NOT_FOUND);
         return new ResponseEntity(paymentList,HttpStatus.OK);
     }
+
+
 
     /**
      * ambil total berapa persen sudah payment yang diterima dalam bulan X

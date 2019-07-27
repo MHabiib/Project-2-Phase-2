@@ -1,10 +1,13 @@
 package com.future.tcfm.config.security;
 
+import com.future.tcfm.model.Group;
 import com.future.tcfm.model.JwtUserDetails;
 import com.future.tcfm.model.ReqResModel.LoginRequest;
 import com.future.tcfm.model.User;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.JwtUserDetailsRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.GroupService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.validation.GroupSequence;
 import java.util.*;
 
 @Service
@@ -31,9 +35,14 @@ public class JwtGenerator {
     @Value("${app.jwtExpirationInMs}")
     private static Long refreshTokenExpirationInMs = 10800000L;
 
+    @Autowired
+    GroupRepository groupRepository;
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    GroupService groupService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -47,7 +56,7 @@ public class JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+2000))//development phase token last 2s, lagi ngetes fungsi getNewToken di FE dengan memanfaatkan refreshToken
+                .setExpiration(new Date(System.currentTimeMillis()+2000L))//development phase token last 2s, lagi ngetes fungsi getNewToken di FE dengan memanfaatkan refreshToken
 //                .setExpiration(new Date(System.currentTimeMillis()+jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
@@ -66,25 +75,27 @@ public class JwtGenerator {
         User userExist = userRepository.findByEmail(loginRequest.getEmail());
         if (userExist!=null) {
             if (passwordEncoder.matches(loginRequest.getPassword(), userExist.getPassword())){
-                Map<String,String> tokenMap = new HashMap<>();
+                Map responseMap = new HashMap<>();
                 String refreshToken = generateRefreshToken(userExist.getIdUser());
                 String accessToken = generateToken(userExist.getEmail());
-                tokenMap.put("accessToken",accessToken);
-                tokenMap.put("refreshToken",refreshToken);
-                tokenMap.put("role",userExist.getRole());
-                tokenMap.put("groupName",userExist.getGroupName());
+                Group groupExist= groupRepository.findByNameAndActive(userExist.getGroupName(),true);
+                responseMap.put("accessToken",accessToken);
+                responseMap.put("refreshToken",refreshToken);
+                responseMap.put("role",userExist.getRole());
+                responseMap.put("groupName",userExist.getGroupName());
+                responseMap.put("groupCreatedDate",groupExist.getCreatedDate());
                 List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userExist.getRole());
                 JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(loginRequest.getEmail());
                 if(jwtUserDetails== null)
                     jwtUserDetails = new JwtUserDetails();
                 jwtUserDetails.setEmail(userExist.getEmail());
-                jwtUserDetails.setAccessToken(tokenMap.get("accessToken"));
-                jwtUserDetails.setRefreshToken(tokenMap.get("refreshToken"));
+                jwtUserDetails.setAccessToken(accessToken);
+                jwtUserDetails.setRefreshToken(refreshToken);
                 jwtUserDetails.setRefreshTokenExpiredAt(new Date().getTime()+refreshTokenExpirationInMs);
                 jwtUserDetails.setAuthorities(grantedAuthorities);
                 jwtUserDetails.setGroupName(userExist.getGroupName());
                 jwtUserDetailsRepository.save(jwtUserDetails);
-                return new ResponseEntity(tokenMap, HttpStatus.OK);
+                return new ResponseEntity(responseMap, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("User Not Found",HttpStatus.NOT_FOUND);

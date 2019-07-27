@@ -79,6 +79,7 @@
 
 <script>
   document.title = 'Payment | Team Cash Flow Management'
+  import Helper from '../../Helper';
 
   export default {
     computed: {

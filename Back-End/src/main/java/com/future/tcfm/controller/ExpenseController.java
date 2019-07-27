@@ -45,9 +45,10 @@ public class ExpenseController {
     @GetMapping("/group")
     public Page<Expense> expenseGroup (
             @RequestParam("email") String userEmail,
+            @RequestParam(value = "filter",defaultValue = "createdDate") String filter,
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size){
-        return expenseService.expensePageGroupByEmail(userEmail,page,size);
+        return expenseService.expensePageGroupByEmail(userEmail,filter,page,size);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Expense> singleExpense(@PathVariable("id") String id) {

@@ -56,6 +56,7 @@
   import HeaderSection from '../components/HeaderSection';
   import {backEndAddress} from '../../Helper';
   import AddNewUserWindow from '../components/addNewUser';
+  import Helper from '../../Helper';
 
   export default {
     computed: {
@@ -79,7 +80,10 @@
           }
         })
         .then(response => {
-          if(response.ok) {
+          if(response.status==401){
+            Helper.getNewToken(this.getAllUsers)
+          } else if(response.ok) {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
                 this.dataUser = res;

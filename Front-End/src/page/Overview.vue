@@ -90,7 +90,7 @@
               </div>
 
               <div class="overviewRightCardBody">
-                From total cash is used.
+                From this month total cash is used.
               </div>
             </div>
           </div>
@@ -167,12 +167,19 @@
           }
         })
         .then(response => {
-          response.json().then(
-            res => {
-              this.overviewData = res;
-              console.log(res);
-            }
-          )
+          if(response.status==401){
+            Helper.getNewToken(this.getOverviewData)
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                this.overviewData = res;
+                console.log(res);
+              }
+            )
+          }
+          
         })
       },
       openExpenseDetailWindow(id) {
