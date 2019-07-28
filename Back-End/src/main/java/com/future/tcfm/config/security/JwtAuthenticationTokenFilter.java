@@ -4,16 +4,11 @@ import com.future.tcfm.model.JwtUserDetails;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -76,8 +71,4 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         super.unsuccessfulAuthentication(request, response, failed);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"401 UNAUTHORIZED ACCESS");
     }
-
-
-
-
 }

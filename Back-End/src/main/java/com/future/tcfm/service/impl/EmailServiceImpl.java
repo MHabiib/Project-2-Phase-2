@@ -40,56 +40,35 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     public JavaMailSender emailSender;
+
     private int yearNow= LocalDate.now().getYear();
-    private int monthNow= LocalDate.now().getMonthValue();
 
-    String monthNowStr= Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-
-    @Override
-    public ResponseEntity simpleEmail(EmailRequest emailRequest) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(emailRequest.getEmail());
-            message.setSubject("Blibli Future Medan Batch - 3.0");
-            message.setText("simple email sender!");
-
-            this.emailSender.send(message);
-
-         return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
-        }
-
-
-
-    public void periodicMailSender( String email, Integer range) throws MessagingException {
+    public void periodicMailSender( String email, String monthNowStr, String monthBeforeStr) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
-        int monthBefore= LocalDate.now().getMonthValue()-range;
-
-        if(monthBefore<1){{ monthBefore+=12; } }
-        String monthBeforeStr= Month.of(monthBefore).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo(email);
         helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
 
-        if (range==0) {
+        if (monthNowStr.equals(monthBeforeStr)) {
             helper.setText("<html><body>" +
                     "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
                     "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu telah membayar iuran untuk bulan "+monthNowStr+" "+yearNow+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
         }
-        else if(range==1){
-            helper.setText("<html><body>" +
-                    "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu belum membayar iuran untuk bulan "+monthBeforeStr+" "+yearNow+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
-        }
-
         else {
             helper.setText("<html><body>" +
                     "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu belum membayar iuran untuk bulan "+monthBeforeStr+" "+yearNow+" - "+monthNowStr+" - "+yearNow+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu belum membayar iuran untuk bulan "+monthBeforeStr+" "+yearNow+" - "+monthNowStr+" - "+yearNow+"<br>Segera lakukan pembayaran anda.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
         }
         this.emailSender.send(message);
+    }
+
+    @Override
+    public ResponseEntity simpleEmail(EmailRequest emailRequest) {
+        return null;
     }
 
     @Override
@@ -168,3 +147,15 @@ public class EmailServiceImpl implements EmailService {
         return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
     }
 }
+
+/*    @Override
+    public ResponseEntity simpleEmail(EmailRequest emailRequest) {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(emailRequest.getEmail());
+            message.setSubject("Blibli Future Medan Batch - 3.0");
+            message.setText("simple email sender!");
+
+            this.emailSender.send(message);
+
+         return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
+        }*/

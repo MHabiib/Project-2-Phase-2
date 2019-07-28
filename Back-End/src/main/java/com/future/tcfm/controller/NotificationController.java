@@ -22,33 +22,6 @@ public class NotificationController {
     @Autowired
     NotificationService notificationService;
 
-
-//    @GetMapping(value = "/personal",produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity getPersonalNotification(
-//            @RequestParam(value = "ref") String email,
-//            @RequestParam(value = "isRead",required = false) Boolean isRead) {
-//        return notificationService.getPersonalNotification(email, isRead);
-//    }
-//    @GetMapping(value = "/personal",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public Flux<Notification> getPersonalNotification(@RequestParam(value = "ref") String email){
-//        return notificationService.getPersonalNotificationReactive(email);
-//    }
-
-    /**
-     * ini bakalan return notifikasi secara live non stop
-     * @param email
-     * @return
-     */
-//    @GetMapping(value = "/personal2",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public Flux<List<Notification>> getPersonalNotificationV2(@RequestParam(value = "ref") String email){
-//        return notificationService.getPersonalNotificationReactiveV2(email);
-//    }
-
-    /**
-     * ini yang dipakai oleh client di simbol notifikasi
-     * @param email
-     * @return
-     */
     @GetMapping(value = "/{type}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamPersonalNotification(
             @PathVariable("type")String type,
@@ -72,3 +45,30 @@ public class NotificationController {
         return notificationService.deletePersonalNotificationByEmail(email);
     }
 }
+
+//    @GetMapping(value = "/personal",produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity getPersonalNotification(
+//            @RequestParam(value = "ref") String email,
+//            @RequestParam(value = "isRead",required = false) Boolean isRead) {
+//        return notificationService.getPersonalNotification(email, isRead);
+//    }
+//    @GetMapping(value = "/personal",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public Flux<Notification> getPersonalNotification(@RequestParam(value = "ref") String email){
+//        return notificationService.getPersonalNotificationReactive(email);
+//    }
+
+/**
+ * ini bakalan return notifikasi secara live non stop
+ * @param email
+ * @return
+ */
+//    @GetMapping(value = "/personal2",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public Flux<List<Notification>> getPersonalNotificationV2(@RequestParam(value = "ref") String email){
+//        return notificationService.getPersonalNotificationReactiveV2(email);
+//    }
+
+/**
+ * ini yang dipakai oleh client di simbol notifikasi
+ * @param email
+ * @return
+ */

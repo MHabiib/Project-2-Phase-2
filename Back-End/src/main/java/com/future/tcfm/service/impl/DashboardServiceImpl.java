@@ -6,7 +6,6 @@ import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.PaymentRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.DashboardService;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,31 +64,15 @@ public class DashboardServiceImpl implements DashboardService {
             LocalDate expenseDate = Instant.ofEpochMilli(expense.getLastModifiedAt()).atZone(ZoneId.systemDefault()).toLocalDate();
 //            int monthExpense=expenseDate.getMonth();
             monthExpense = expenseDate.getMonthValue();
-            if(monthExpense==monthNow){
+            if(monthExpense==monthNow&&expense.getStatus().equals(true)){
                 expenseByValue+=expense.getPrice();
-//                expenseByQuantity+=expense.getQuantity();
+               expenseByQuantity+=1;
             }
-            else if (monthExpense==monthNow-1){
+            else if (monthExpense==monthNow-1&&expense.getStatus().equals(true)){
                 expenseByValueBefore+=expense.getPrice();
-//                expenseByQuantityBefore+=expense.getQuantity();
+                expenseByQuantityBefore+=1;
             }
         }
-//       if(expenseByValue||ex)
-//        if (expenseByValue>expenseByValueBefore)
-//            expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);
-//        else if (expenseByValue<expenseByValueBefore)
-//            expenseByValuePercent= (float) (((expenseByValueBefore/expenseByValue)-1)*(100)*-1);
-//        else
-//            expenseByValuePercent=0;
-//
-//
-//        if (expenseByQuantity>expenseByQuantityBefore)
-//            expenseByQuantityPercent=(((expenseByQuantity/expenseByQuantityBefore)-1)*100);
-//        else if (expenseByQuantity<expenseByQuantityBefore)
-//            expenseByQuantityPercent=(((expenseByQuantityBefore/expenseByQuantity)-1)*(100)*-1);
-//        else
-//            expenseByQuantityPercent=0;
-//
 
         //PendingPayment
         pendingPayment=paymentRepository.findByEmailAndIsChecked(dUser.getEmail(),false);
@@ -125,3 +108,20 @@ public class DashboardServiceImpl implements DashboardService {
 //                Aggregation.match(where("name").is(dUser.getGroupName())),
 //                Aggregation.project().and("member").project("size").as("count"));
 //        d.setTotalMembers(dGroup.getMember().size());
+
+//       if(expenseByValue||ex)
+//        if (expenseByValue>expenseByValueBefore)
+//            expenseByValuePercent= (float) (((expenseByValue/expenseByValueBefore)-1)*100);
+//        else if (expenseByValue<expenseByValueBefore)
+//            expenseByValuePercent= (float) (((expenseByValueBefore/expenseByValue)-1)*(100)*-1);
+//        else
+//            expenseByValuePercent=0;
+//
+//
+//        if (expenseByQuantity>expenseByQuantityBefore)
+//            expenseByQuantityPercent=(((expenseByQuantity/expenseByQuantityBefore)-1)*100);
+//        else if (expenseByQuantity<expenseByQuantityBefore)
+//            expenseByQuantityPercent=(((expenseByQuantityBefore/expenseByQuantity)-1)*(100)*-1);
+//        else
+//            expenseByQuantityPercent=0;
+//
