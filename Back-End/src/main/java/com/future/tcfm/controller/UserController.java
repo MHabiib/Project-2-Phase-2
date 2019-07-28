@@ -3,6 +3,7 @@ package com.future.tcfm.controller;
 import com.future.tcfm.model.User;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 
 @CrossOrigin
 @RestController
@@ -21,6 +24,15 @@ public class UserController {
     @GetMapping
     public ResponseEntity loadAll() {
         return ResponseEntity.ok(userService.loadAll());
+    }
+
+    @GetMapping("/search")
+    public Page<User> searchUser(
+            @RequestParam("name") String name,
+            @RequestParam(value = "groupName",required = false) String groupName,
+            @RequestParam(value = "page",required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
+        return userService.searchByNameAndGroupName(name,getCurrentUser().getGroupName(),page,size);
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value

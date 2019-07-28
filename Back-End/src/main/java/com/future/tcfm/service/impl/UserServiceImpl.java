@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> searchByNameAndGroupName(String name, String groupName,String filter,int page,int size) {
+    public Page<User> searchByNameAndGroupName(String name, String groupName,int page,int size) {
 
         return userRepository.findAllByNameContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(name,groupName,true,createPageRequest("totalPeriodPayed","desc",page,size));
     }

@@ -43,7 +43,7 @@ public class DashboardServiceImpl implements DashboardService {
         User dUser = userRepository.findByEmail(email);
         Group dGroup = groupRepository.findByName(dUser.getGroupName());
         Integer totalMembers = userRepository.countByGroupName(dGroup.getName());
-        List<Expense> dExpense = expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(dUser.getGroupName());
+        List<Expense> dExpense = expenseRepository.findByGroupNameLikeAndStatusOrderByCreatedDateDesc(dUser.getGroupName(),true);
 
         User groupAdmin = userRepository.findByGroupNameAndRole(dUser.getGroupName(), "GROUP_ADMIN");
         String adminName = groupAdmin.getName();

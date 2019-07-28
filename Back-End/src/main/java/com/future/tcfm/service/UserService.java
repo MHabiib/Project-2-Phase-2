@@ -22,7 +22,7 @@ public interface UserService {
     ResponseEntity getImage(String imageName) throws IOException;
 
 //    ResponseEntity<?> updateUser(String id, User user);
-    Page<User> searchByNameAndGroupName(String name, String groupName,String filter, int page, int size);
+    Page<User> searchByNameAndGroupName(String name, String groupName, int page, int size);
 
     ResponseEntity deleteUser(String email);
 }
