@@ -99,9 +99,9 @@ public class DashboardServiceImpl implements DashboardService {
 
         //youtPayment
         Date joinDates = new Date(dUser.getJoinDate());
-        int joinDate=joinDates.getMonth();
+//        int joinDate=joinDates.getMonth();
 
-        yourPayment+=joinDate+dUser.getTotalPeriodPayed()%12;
+        yourPayment+=dUser.getTotalPeriodPayed();
 
         Dashboard d = new Dashboard();
         d.setRegularPayment(dGroup.getRegularPayment());
