@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     public static JwtUserDetails getCurrentUser(){
         return (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

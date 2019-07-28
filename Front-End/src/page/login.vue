@@ -44,6 +44,8 @@
             localStorage.setItem('userEmail', this.emailInput);
             localStorage.setItem('groupName', res.data.groupName);
             localStorage.setItem('role', res.data.role);
+            localStorage.setItem('groupCreatedDate', parseInt(res.data.groupCreatedDate));
+
           })
           .then(()=> {
             alert('Login Berhasil');

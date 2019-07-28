@@ -137,17 +137,17 @@ public class PaymentServiceImpl implements PaymentService {
                 group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
                 groupRepository.save(group);
 
-                notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + paymentExist.getEmail(); //getCurrentUser() = get current logged in user
+                notificationMessage = paymentExist.getEmail()+ PAYMENT_APPROVED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
             }
         }
         else {
             paymentExist.setIsRejected(true);
-            notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + paymentExist.getEmail(); //getCurrentUser() = get current logged in user
+            notificationMessage = paymentExist.getEmail()+ PAYMENT_REJECTED_MESSAGE + getCurrentUser().getEmail(); //getCurrentUser() = get current logged in user
         }
         paymentExist.setIsChecked(true);
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
-        notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),paymentExist.getEmail(),TYPE_PERSONAL);
+        notificationService.createNotification(notificationMessage,paymentExist.getEmail(),null,TYPE_PERSONAL);
 
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }

@@ -10,6 +10,9 @@ import ManageUserPage from '../page/ManageUser';
 import ManageGroupPage from '../page/ManageGroup';
 import SidebarComponent from '../components/Sidebar';
 import HeaderSection from '../components/HeaderSection';
+import PaymentHistoryPage from '../page/PaymentHistory';
+import ManagePaymentPage from '../page/ManagePayment';
+
 import tugasWeb from '../page/tugasWeb';
 import '../index.css';
 
@@ -88,8 +91,13 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/payment',
-      component: PaymentPage,
+      path: '/paymenthistory',
+      component: PaymentHistoryPage,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/managepayment',
+      component: ManagePaymentPage,
       meta: { requiresAuth: true }
     },
     {

@@ -56,12 +56,39 @@
           </div>
         </div>
 
+
+
+
         <div class="menuParent" :class='{ activeMenu: isPayment }'>
           <div v-show="isPayment" class='littleBlue'></div>
-          <div class="menuWrapper" @click="changeView('/payment')">
+          <div class="menuWrapper" @click="paymentExpand = !paymentExpand">
             <img src="../assets/invoice-icon.png" alt="Dashboard" class='menuIcon'>
             Payment
           </div>
+          <div class="spacer" v-show="paymentExpand"></div>
+          <div
+            class="menuChild"
+            v-show="paymentExpand"
+            :class='{ activeSmallMenu: isPaymentHistory }'
+            @click='changeView("/paymenthistory")'
+          >
+            <div :class='{litteSmallBlue: isManageUser}'></div>
+            <div class="menuChildText">History</div>
+            <div />
+          </div>
+          <div
+            class="menuChild"
+            v-show="paymentExpand"
+            :class='{ activeSmallMenu: isManagePayment }'
+            @click='changeView("/managepayment")'
+          >
+            <div :class='{litteSmallBlue: isManageUser}'></div>
+            <div class="menuChildText">Manage</div>
+            <div />
+          </div>
+
+
+
         </div>
 
         <div class="menuParent" v-if='isAdmin'>
@@ -112,6 +139,9 @@
       return {
         groupDetailExpand: true,
         managementExpand: true,
+        paymentExpand : true,
+        isPaymentHistory:window.location.href === 'http://localhost:3000/paymenthistory',
+        isManagePayment:window.location.href === 'http://localhost:3000/managepayment',
         isDashboard: window.location.href === 'http://localhost:3000/dashboard',
         isPayment: window.location.href === 'http://localhost:3000/payment',
         isOverview: window.location.href === 'http://localhost:3000/overview',
@@ -130,6 +160,10 @@
         this.$router.push('/login')
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
+        localStorage.removeItem('groupName')
+        localStorage.removeItem('userEmail')
+        localStorage.removeItem('role')
+        localStorage.removeItem('groupCreatedDate')
       },
       changeView(view) {
         this.$router.push(view)
@@ -183,7 +217,7 @@
     width: 100%;
     text-align: center;
     margin: auto;
-    height: 40px;
+    height: 31px;
     display: flex;
     justify-content: space-between;
     align-items: center;
