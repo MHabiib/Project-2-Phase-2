@@ -10,6 +10,7 @@ import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
 
 @Service
@@ -93,6 +95,12 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(mimetype))
                 .body(Files.readAllBytes(img.toPath()));
+    }
+
+    @Override
+    public Page<User> searchByNameAndGroupName(String name, String groupName,String filter,int page,int size) {
+
+        return userRepository.findAllByNameContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(name,groupName,true,createPageRequest("totalPeriodPayed","desc",page,size));
     }
 
     /**

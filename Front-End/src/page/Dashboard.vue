@@ -138,7 +138,7 @@
 
       <div class="dashboardThirdRow">
         <div class="thirdRowHeader">
-          Your Payment - <span class="nextPrev" @click="year-=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)
+          Your Payment - <span class="nextPrev" @click="year>groupCreated.year?year-=1:year;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)
 ">prev</span>   {{checkYear}}   <span class="nextPrev" @click="year+=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)">next</span>
         </div>
 
@@ -194,9 +194,10 @@
         return (document.documentElement.clientWidth - 280);
       },
       checkYear: function(){
-        if(this.year < this.groupCreated.year){
+        if(this.year <= this.groupCreated.year){
           this.year=this.groupCreated.year
         }
+        // console.log(this.year)
         return this.year
       },
     },
@@ -211,14 +212,13 @@
         let monthList=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Des"]
         this.monthPaid=[]
         let yearDiff = year - this.groupCreated.year
-        console.log(yearDiff)
         totalPeriodPayed= totalPeriodPayed - (yearDiff*12)
         let result = totalPeriodPayed + this.groupCreated.month
         result = result > 12 ? 12 : result
         result = result > 0 ? result : 0
         this.monthPaid=monthList
-        this.monthNotYetPaid=(this.monthPaid.splice(result))
         console.log(this.year)
+        this.monthNotYetPaid=(this.monthPaid.splice(result))
       },
       getDashboardData() {
         fetch(`${Helper.backEndAddress}/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
@@ -239,7 +239,7 @@
               //bagi 2 monthList, menjadi 1. array yang berisi bulan yg telah dibayar, 2. aray berisi bulan belum bayar
               this.getThisYearTotalPeriodPayed(res.yourPayment,this.year)
               this.dataPayNow = {
-                lastPayment: this.monthList.length-1,
+                lastPayment: (res.yourPayment+this.groupCreated.month)%12-1,
                 nomorRekening: res.adminAccountNumber,
                 namaAdmin: res.adminName,
                 regularPayment: res.regularPayment

@@ -1,6 +1,7 @@
 package com.future.tcfm.service;
 
 import com.future.tcfm.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public interface UserService {
     ResponseEntity getImage(String imageName) throws IOException;
 
 //    ResponseEntity<?> updateUser(String id, User user);
+    Page<User> searchByNameAndGroupName(String name, String groupName,String filter, int page, int size);
 
-   ResponseEntity deleteUser(String email);
+    ResponseEntity deleteUser(String email);
 }

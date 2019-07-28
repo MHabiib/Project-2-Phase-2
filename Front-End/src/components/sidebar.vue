@@ -133,6 +133,7 @@
 <script>
   document.title = 'Dashboard | Team Cash Flow Management'
   import { mapActions } from 'vuex';
+  import Helper from '../../Helper'
 
   export default {
     data() {
@@ -157,13 +158,31 @@
         'logout'
       ]),
       backToLogin() {
-        this.$router.push('/login')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        localStorage.removeItem('groupName')
-        localStorage.removeItem('userEmail')
-        localStorage.removeItem('role')
-        localStorage.removeItem('groupCreatedDate')
+
+        let jsonBody = JSON.stringify({
+            accessToken:localStorage.getItem('accessToken').substring(6),
+            refreshToken:localStorage.getItem('refreshToken')
+        })
+        fetch(`${Helper.backEndAddress}/auth/signout`,{
+          method:'PUT',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body:jsonBody
+        }).then(response=>{
+          if(response.ok){
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+            localStorage.removeItem('groupName')
+            localStorage.removeItem('userEmail')
+            localStorage.removeItem('role')
+            localStorage.removeItem('groupCreatedDate')
+            this.$router.push('/login')
+          }
+          else{
+            alert('Failed to log out!Something terrible happened.')
+          }
+        })
       },
       changeView(view) {
         this.$router.push(view)

@@ -12,9 +12,9 @@ import SidebarComponent from '../components/Sidebar';
 import HeaderSection from '../components/HeaderSection';
 import PaymentHistoryPage from '../page/PaymentHistory';
 import ManagePaymentPage from '../page/ManagePayment';
-
 import tugasWeb from '../page/tugasWeb';
 import '../index.css';
+
 
 Vue.use(Router);
 Vue.component('SidebarComponent', SidebarComponent);
