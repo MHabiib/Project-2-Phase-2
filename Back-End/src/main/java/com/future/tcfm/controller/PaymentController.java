@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/payment")
@@ -19,16 +21,19 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @GetMapping
-    public ResponseEntity loadAll() {
-        return paymentService.findAll();
-    }
+//    @GetMapping
+//    public ResponseEntity loadAll() {
+//        return paymentService.findAll();
+//    }
 
-    @GetMapping("/{groupName}")
-    public ResponseEntity getPaymentByGroupName(@PathVariable("groupName") String groupName,
-                                                @RequestParam(value = "page", defaultValue = "0")int page,
-                                                @RequestParam(value = "size", defaultValue = "10")int size) {
-        return paymentService.findByGroupName(groupName,page,size);
+//    @GetMapping("/{groupName}")
+    @GetMapping
+    public ResponseEntity getPaymentByGroupName(
+//            @PathVariable("groupName") String groupName,
+                                                @RequestParam(value = "filter",required = false, defaultValue = "isPaid")String filter,
+                                                @RequestParam(value = "page",required = false, defaultValue = "0")int page,
+                                                @RequestParam(value = "size",required = false, defaultValue = "10")int size) {
+        return paymentService.findByGroupNameAndIsPaid(getCurrentUser().getGroupName(),filter,page,size);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,5 +54,9 @@ public class PaymentController {
     @PutMapping("/managementPayment")
     public ResponseEntity managementPayment(@RequestBody ExpenseRequest thisPayment) {
         return paymentService.managementPayment(thisPayment);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity managementPayment(@PathVariable("id") String id) {
+        return paymentService.findById(id);
     }
 }

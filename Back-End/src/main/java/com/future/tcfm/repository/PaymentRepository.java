@@ -12,7 +12,7 @@ import java.util.List;
 public interface PaymentRepository extends MongoRepository<Payment,String> {
     Payment findByIdPayment(String id);
     List<Payment> findAll();
-    Page<Payment> findAllByGroupNameOrderByLastModifiedAt(String groupName,Pageable pageable);
+    Page<Payment> findAllByGroupNameOrderByPaymentDateDesc(String groupName,Pageable pageable);
     Page<Payment> findAllByEmailOrderByLastModifiedAt(String email, Pageable pageable);
-    List<Payment>findByEmailAndIsPaid(String email, Boolean isPaid);
+    List<Payment>findByEmailAndIsChecked(String email, Boolean isPaid);
 }

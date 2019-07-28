@@ -27,7 +27,8 @@ public class Payment {
     private Long paymentDate;
     private Long lastModifiedAt;
     private Double price;
-    private Boolean isPaid;
+    private Boolean isChecked;
+    private Boolean isRejected;
     private String imagePath;
     private String imageURL;
 //    private Integer lastPeriod;

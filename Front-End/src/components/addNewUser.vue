@@ -75,7 +75,11 @@
           }
         })
         .then(response => {
-          if(response.ok) {
+          if(response.status==401){
+            Helper.getNewToken(this.getAllGroup)
+          }
+          else if(response.ok) {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
                 this.groupList = res;
@@ -135,7 +139,10 @@
             body: formData
           })
           .then(response => {
-            if(response.ok) {
+            if(response.status==401){
+              Helper.getNewToken(this.createNewUser)
+            } else if(response.ok) {
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
               alert('User baru berhasil ditambahkan.');
               this.closeAddNewUserWindow();
               this.$emit('refreshData');

@@ -10,7 +10,7 @@ import java.util.List;
 public interface GroupService {
     List<Group> loadAll();
 
-    Page<User> findMembersGroupByEmail(String email, int page, int size);
+    Page<User> findMembersGroupByEmail(String email,String filter,int year, int page, int size);
 
     ResponseEntity createGroup(Group group);
     ResponseEntity updateGroup(String id,Group group);
@@ -18,4 +18,6 @@ public interface GroupService {
     List<User> membersGroupByEmail(String email);
 
     ResponseEntity disbandGroup(String id);
+
+    int getGroupCreatedMonth(String groupName);
 }

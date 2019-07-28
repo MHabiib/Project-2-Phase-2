@@ -92,7 +92,7 @@ public class DashboardServiceImpl implements DashboardService {
 //
 
         //PendingPayment
-        pendingPayment=paymentRepository.findByEmailAndIsPaid(dUser.getEmail(),null);
+        pendingPayment=paymentRepository.findByEmailAndIsChecked(dUser.getEmail(),false);
         for(Payment payment:pendingPayment){
             sumPendingPayment+=payment.getPrice();
         }

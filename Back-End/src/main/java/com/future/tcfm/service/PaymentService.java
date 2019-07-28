@@ -13,7 +13,7 @@ public interface PaymentService {
     ResponseEntity managementPayment(ExpenseRequest thisPayment); // pakai ExpenseRequest karena hanya butuh id dan status
     ResponseEntity findAll();
     ResponseEntity findById(String id);
-    ResponseEntity findByEmail(String email, int page, int size);
-    ResponseEntity findByGroupName(String groupName, int page, int size);
+    ResponseEntity findByEmail(String email, String filter,int page, int size);
+    ResponseEntity findByGroupNameAndIsPaid(String groupName,String filter, int page, int size);
 
 }

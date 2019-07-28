@@ -89,7 +89,11 @@
           })
         })
         .then(response => {
-          if(response.ok) {
+          if(response.status==401){
+            Helper.getNewToken(this.createNewExpense)
+          }
+          else if(response.ok) {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             alert('Expense berhasil diajukan!\nMenunggu persetujuan dari group admin')
             this.$emit('refreshData');
             this.$emit('closeCreateNewExpenseWindow');

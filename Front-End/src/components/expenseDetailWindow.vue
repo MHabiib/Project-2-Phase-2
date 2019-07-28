@@ -67,12 +67,22 @@
 <script>
   import Helper from '../../Helper';
 
+  const trueOrFalse =[false,true]
+
   export default {
     props: ['expenseId'],
+    data: function() {
+      return {
+        expenseDetail: {},
+        disableButton: false,
+        dStatus:null,
+      }
+    },
     methods: {
       closeExpenseDetailWindow() {this.$emit('closeExpenseDetailWindow')},
       updateExpenseStatus(id, status) {
         if(this.disableButton !== true) {
+          this.dStatus = status;
           this.disableButton = true;
           fetch(`${Helper.backEndAddress}/api/expense/managementExpense`, {
             method: 'PUT',
@@ -87,7 +97,11 @@
             })
           })
           .then(response => {
-            if(response.ok) {
+            if(response.status==401){
+              Helper.getNewToken(this.updateExpenseStatus.bind(null,this.expenseDetail.idExpense,this.dStatus))
+            }
+            else if(response.ok) {
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
               this.getExpenseData(this.expenseId);
               this.$emit('refreshData')
             }
@@ -100,22 +114,24 @@
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
-          response.json().then(
-            res => {
-              this.expenseDetail = res;
-              this.checkStatus(res.status);
-            }
-          )
+          if(response.status==401){
+            console.log('expenseId : '+this.expenseId)
+            Helper.getNewToken(this.getExpenseData.bind(null,this.expenseId))
+          }  else {
+          
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                this.expenseDetail = res;
+                this.checkStatus(res.status);
+              }
+            )
+          }
         })
       }
     },
     created() {this.getExpenseData(this.expenseId);},
-    data: function() {
-      return {
-        expenseDetail: {},
-        disableButton: false
-      }
-    },
+    
     filters: {
       statusChecker(status) {
         switch(status) {

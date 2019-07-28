@@ -146,6 +146,7 @@
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
+  import Helper from '../../Helper';
 
   export default {
     computed: {

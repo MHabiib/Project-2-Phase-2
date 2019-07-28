@@ -210,6 +210,10 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>("Some error occured. Failed to add image", HttpStatus.BAD_REQUEST);
             }
         }
+        if(user.getTotalPeriodPayed()==null){
+            user.setTotalPeriodPayed(0);
+        }
+        user.setTotalPeriodPayed(groupExist.getCurrentPeriod()+user.getTotalPeriodPayed());
         user.setJoinDate(new Date().getTime());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setTotalPeriodPayed(0);

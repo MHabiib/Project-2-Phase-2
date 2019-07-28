@@ -5,7 +5,7 @@
         <div class="payNowHeader">
           <div>
             <div class='textPayNow'>Pay Now</div>
-            <div class='pembayaranTerakhir'>Pembayaran terakhir Anda: {{dataPayNow.pembayaranTerakhir}}</div>
+            <div class='pembayaranTerakhir'>Pembayaran terakhir Anda: <b>{{lastPayment}}</b></div>
           </div>
 
           <div class='buttonGroup'>
@@ -88,6 +88,9 @@
 
 <script>
 import { backEndAddress } from '../../Helper';
+import Helper from '../../Helper';
+
+const monthList =["January","February","March","April","May","June","July","August","September","Oktober","November","Desember"]
   export default {
     props: ['dataPayNow'],
     data: function() {
@@ -149,7 +152,11 @@ import { backEndAddress } from '../../Helper';
           body: formData
         })
         .then(response => {
-          if(response.ok) {
+          if(response.status==401){
+            Helper.getNewToken(this.submitPembayaran)
+          }
+          else if(response.ok) {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             alert('Berhasil!\nMenunggu konfirmasi pembayaran dari Group Admin');
             this.closePayNowWindow();
           } else {
@@ -166,6 +173,9 @@ import { backEndAddress } from '../../Helper';
     computed: {
       totalTagihan: function() {
         return (this.periode * this.dataPayNow.regularPayment)
+      },
+      lastPayment: function(){
+        return (monthList[this.dataPayNow.lastPayment])
       }
     },
     created() {
@@ -254,7 +264,7 @@ import { backEndAddress } from '../../Helper';
   }
 
   .pembayaranTerakhir {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: lighter;
   }
 

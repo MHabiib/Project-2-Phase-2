@@ -107,12 +107,18 @@
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
-          response.json().then(
-            res => {
-              this.dataExpense = res.content;
-              this.filterData(this.searchQuery);
-            }
-          )
+          if(response.status==401){
+            Helper.getNewToken(this.getExpenseData)
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                this.dataExpense = res.content;
+                this.filterData(this.searchQuery);
+              }
+            )
+          }         
         })
       },
       showUserContributed(selectedExpense, userList) {
@@ -261,7 +267,7 @@
   .expensesTableBody table {width: 100%;}
 
   .expensesTableBody tbody {
-    height: 63vh;
+    height: 55vh;
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;

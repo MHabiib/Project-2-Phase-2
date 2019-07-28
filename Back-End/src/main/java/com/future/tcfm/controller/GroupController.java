@@ -38,9 +38,11 @@ public class GroupController {
     }
     @GetMapping("/membersByEmail")
     public Page<User> findMyGroupMembers(@RequestParam("email") String email,
-                                         @RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "10") int size) {
-        return groupService.findMembersGroupByEmail(email,page,size);
+                                         @RequestParam(value = "filter",required = false, defaultValue = "name") String filter,
+                                         @RequestParam(value = "year",required = false, defaultValue = "0") int year,
+                                         @RequestParam(value = "page",required = false, defaultValue = "0") int page,
+                                         @RequestParam(value = "size",required = false, defaultValue = "10") int size) {
+        return groupService.findMembersGroupByEmail(email,filter,year,page,size);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Group> disbandGroup(@PathVariable("id") String id) {

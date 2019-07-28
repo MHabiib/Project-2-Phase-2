@@ -202,7 +202,12 @@
           }
         })
         .then(response => {
-          response.json().then(
+          if(response.status==401){
+            Helper.getNewToken(this.getDashboardData)
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
             res => {
               console.log(res);
               this.dashboardData = res;
@@ -211,12 +216,15 @@
               
               console.log("Month Not Yet Paid:  "+this.monthNotYetPaid)
               this.dataPayNow = {
+                lastPayment: this.monthList.length-1,
                 nomorRekening: res.adminAccountNumber,
                 namaAdmin: res.adminName,
                 regularPayment: res.regularPayment
               }
             }
-          )
+           )
+          }
+          
         })
       },
       openCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = true;},
