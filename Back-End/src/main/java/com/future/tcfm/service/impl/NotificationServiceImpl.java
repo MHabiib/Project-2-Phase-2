@@ -251,12 +251,6 @@ public class NotificationServiceImpl implements NotificationService {
             notificationList = notificationRepository.findTop10ByGroupNameAndTypeOrderByTimestampDesc(notificationEvent.getGroupName(),TYPE_GROUP);
             System.out.println("Event Group triggered!");
             eventName = "group";
-        } else {
-            notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(notificationEvent.getEmail(),TYPE_PERSONAL);
-            System.out.println("Event Personal triggered!");
-            eventName = "personal";
-        }
-//        sseMvcExecutor.execute(() -> {
             this.emitters.forEach((email,emitter) -> { //key = email
                 try {
                     SseEmitter.SseEventBuilder event = SseEmitter.event();
@@ -272,6 +266,24 @@ public class NotificationServiceImpl implements NotificationService {
                     System.out.println("Exception! : removed emitter "+email);
                 }
             });
+        } else {
+            notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(notificationEvent.getEmail(),TYPE_PERSONAL);
+            System.out.println("Event Personal triggered!");
+            eventName = "personal";
+            try {
+                SseEmitter.SseEventBuilder event = SseEmitter.event();
+                event.name(notificationEvent.getEmail() + eventName);
+                event.id(UUID.randomUUID().toString());
+                event.data(notificationList);
+                event.reconnectTime(10000L);
+                this.emitters.get(notificationEvent.getEmail()).send(event);
+            }catch (Exception e){
+                this.emitters.remove(notificationEvent.getEmail());
+                System.out.println("Exception! : removed emitter "+notificationEvent.getEmail());
+            }
+        }
+//        sseMvcExecutor.execute(() -> {
+
             System.out.println("Client listener Total : "+this.emitters.size());
             this.emitters.remove(deadEmitters);
 //            });
@@ -279,6 +291,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public ResponseEntity deletePersonalNotificationByEmail(String email){
         Boolean deleted = notificationRepository.deleteAllByEmailAndType(email,TYPE_PERSONAL);
+        System.out.println(deleted);
         return new ResponseEntity<>(deleted,HttpStatus.OK);
     }
 
