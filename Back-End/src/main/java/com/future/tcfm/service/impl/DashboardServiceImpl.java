@@ -65,13 +65,13 @@ public class DashboardServiceImpl implements DashboardService {
             LocalDate expenseDate = Instant.ofEpochMilli(expense.getLastModifiedAt()).atZone(ZoneId.systemDefault()).toLocalDate();
 //            int monthExpense=expenseDate.getMonth();
             monthExpense = expenseDate.getMonthValue();
-            if(monthExpense==monthNow){
+            if(monthExpense==monthNow&&expense.getStatus().equals(true)){
                 expenseByValue+=expense.getPrice();
-//                expenseByQuantity+=expense.getQuantity();
+               expenseByQuantity+=1;
             }
-            else if (monthExpense==monthNow-1){
+            else if (monthExpense==monthNow-1&&expense.getStatus().equals(true)){
                 expenseByValueBefore+=expense.getPrice();
-//                expenseByQuantityBefore+=expense.getQuantity();
+                expenseByQuantityBefore+=1;
             }
         }
 //       if(expenseByValue||ex)
