@@ -19,6 +19,5 @@ public interface ExpenseRepository extends MongoRepository<Expense, String> {
     Expense findByIdExpense(String id);
     Expense findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(String gName,Boolean bool);
     List<Expense> findTop10ByGroupNameOrderByCreatedDateDesc(String groupName);
-    Integer countAllByGroupNameAndAndStatus(String groupName,Boolean bool);
 
 }

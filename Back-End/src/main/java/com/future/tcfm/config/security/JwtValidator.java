@@ -1,17 +1,12 @@
 package com.future.tcfm.config.security;
 
 import com.future.tcfm.model.JwtUserDetails;
-import com.future.tcfm.model.User;
 import com.future.tcfm.repository.JwtUserDetailsRepository;
-import com.future.tcfm.repository.UserRepository;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -67,7 +62,6 @@ public class JwtValidator {
         jwtUserDetailsRepository.save(currentUser);
 //        System.out.println("Refresh token expired at : "+ new Date(currentUser.getRefreshTokenExpiredAt()));
         return newToken;
-//        return null;
     }
     public ResponseEntity getRefreshToken(String accesToken, String refreshToken){
         System.out.println(accesToken+"\n"+refreshToken);

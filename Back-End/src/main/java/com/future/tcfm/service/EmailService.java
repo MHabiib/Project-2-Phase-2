@@ -13,5 +13,5 @@ public interface EmailService {
     ResponseEntity userResign(String email) throws MessagingException;
 
     ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException;
-    void periodicMailSender (String email, Integer range) throws MessagingException;
+    void periodicMailSender (String email, String monthNowStr, String monthBeforeStr) throws MessagingException;
 }

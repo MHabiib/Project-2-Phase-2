@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findByIdUser(String id);
-    //List<User> findAllByActive(Boolean bool);
     User findByEmail(String email);
     List<User> findByGroupNameAndActive(String gName,Boolean bool);
     User findByEmailAndActive(String email,Boolean bool);

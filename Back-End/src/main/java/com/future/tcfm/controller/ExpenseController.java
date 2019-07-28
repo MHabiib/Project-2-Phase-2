@@ -25,18 +25,6 @@ public class ExpenseController {
     public List<Expense> loadAll (){
         return expenseService.loadAll();
     }
-
-//    @GetMapping("/group") //body fill with group name without ""
-//    public List<Expense> expenseGroup (@RequestBody String groupName){
-//        System.out.println(groupName);
-//        return expenseService.expenseGroup(groupName);
-//    }
-
-//    @GetMapping("/group")
-//    public List<Expense> expenseGroup (@RequestParam("email") String userEmail){
-//        return expenseService.expenseGroupByEmail(userEmail);
-//    }
-
     /**
      * paging
      * @param userEmail

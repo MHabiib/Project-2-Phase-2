@@ -3,7 +3,6 @@ package com.future.tcfm.controller;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -21,12 +20,6 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-//    @GetMapping
-//    public ResponseEntity loadAll() {
-//        return paymentService.findAll();
-//    }
-
-//    @GetMapping("/{groupName}")
     @GetMapping
     public ResponseEntity getPaymentByGroupName(
 //            @PathVariable("groupName") String groupName,
