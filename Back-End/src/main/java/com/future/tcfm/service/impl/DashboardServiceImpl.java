@@ -80,9 +80,7 @@ public class DashboardServiceImpl implements DashboardService {
             sumPendingPayment+=payment.getPrice();
         }
 
-        //youtPayment
-        Date joinDates = new Date(dUser.getJoinDate());
-//        int joinDate=joinDates.getMonth();
+
 
         yourPayment+=dUser.getTotalPeriodPayed();
 

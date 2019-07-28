@@ -138,18 +138,19 @@
 
       <div class="dashboardThirdRow">
         <div class="thirdRowHeader">
-          Your Payment - 2019
+          Your Payment - <span class="nextPrev" @click="year-=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)
+">prev</span>   {{checkYear}}   <span class="nextPrev" @click="year+=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)">next</span>
         </div>
 
         <div class="thirdRowBody">
           <div 
               class="thirdRowContent paidMonth"
-              v-for='(monthPaid,index) in monthList' :key='index'>{{monthPaid}}
+              v-for='(monthPaid,index) in ((monthPaid))' :key='index'>{{monthPaid}}
           </div>
         
           <div 
               class="thirdRowContent"
-              v-for='(monthNotYetPaid,idx) in monthNotYetPaid' :key='"Not"+idx'>{{monthNotYetPaid}}
+              v-for='(monthNotYetPaid,idx) in ((monthNotYetPaid))' :key='"Not"+idx'>{{monthNotYetPaid}}
           </div>
         
         </div>
@@ -178,23 +179,47 @@
   export default {
     data: function() {
       return {
-        monthList:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Des"],
+        monthPaid:[],
         monthNotYetPaid:[],
         dashboardData: {},
         showCreateNewExpenseWindow: false,
         showPayNowWindow: false,
-        dataPayNow: {}
+        dataPayNow: {},
+        year:0,
+        groupCreated:{},
       }
     },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
-      }
+      },
+      checkYear: function(){
+        if(this.year < this.groupCreated.year){
+          this.year=this.groupCreated.year
+        }
+        return this.year
+      },
     },
     created() {
       this.getDashboardData();
+      this.groupCreated.month=new Date(parseInt(localStorage.groupCreatedDate)).getMonth()
+      this.groupCreated.year=new Date(parseInt(localStorage.groupCreatedDate)).getFullYear()
+      this.year=new Date().getFullYear()
     },
     methods: {
+      getThisYearTotalPeriodPayed: function(totalPeriodPayed,year){
+        let monthList=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Des"]
+        this.monthPaid=[]
+        let yearDiff = year - this.groupCreated.year
+        console.log(yearDiff)
+        totalPeriodPayed= totalPeriodPayed - (yearDiff*12)
+        let result = totalPeriodPayed + this.groupCreated.month
+        result = result > 12 ? 12 : result
+        result = result > 0 ? result : 0
+        this.monthPaid=monthList
+        this.monthNotYetPaid=(this.monthPaid.splice(result))
+        console.log(this.year)
+      },
       getDashboardData() {
         fetch(`${Helper.backEndAddress}/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
           headers: {
@@ -212,9 +237,7 @@
               console.log(res);
               this.dashboardData = res;
               //bagi 2 monthList, menjadi 1. array yang berisi bulan yg telah dibayar, 2. aray berisi bulan belum bayar
-              this.monthNotYetPaid = this.monthList.splice(res.yourPayment),
-              
-              console.log("Month Not Yet Paid:  "+this.monthNotYetPaid)
+              this.getThisYearTotalPeriodPayed(res.yourPayment,this.year)
               this.dataPayNow = {
                 lastPayment: this.monthList.length-1,
                 nomorRekening: res.adminAccountNumber,
@@ -448,5 +471,19 @@
 
   .paidMonth {
     text-decoration: line-through;
+    font-weight: 700;
+    font-style: italic;
+  }
+    .nextPrev:hover{
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: var(--lightColor);
+    color: var(--primary-0);
+  }
+  .nextPrev:active{
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: var(--primary);
+    color: var(--lightColor);
   }
 </style>
