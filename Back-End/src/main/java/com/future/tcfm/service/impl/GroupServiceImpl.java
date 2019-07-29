@@ -9,15 +9,11 @@ import com.future.tcfm.service.GroupService;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +36,13 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> loadAll() {
         return groupRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity getGroupById(String id) {
+        Group groupExist= groupRepository.findByIdGroup(id);
+        if(groupExist==null) return new ResponseEntity<>("Group not found!",HttpStatus.NOT_FOUND);
+        return new ResponseEntity(groupExist,HttpStatus.OK);
     }
 
     @Override

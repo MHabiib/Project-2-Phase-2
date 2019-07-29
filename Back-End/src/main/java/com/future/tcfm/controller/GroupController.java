@@ -27,6 +27,11 @@ public class GroupController {
         return groupService.membersGroup(groupName);
     }
 
+    @GetMapping("/{id}") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
+    public ResponseEntity getMemberById(@PathVariable("id") String id) {
+        return groupService.getGroupById(id);
+    }
+
     @PostMapping
     public ResponseEntity createGroup(@RequestBody Group group) {
         return groupService.createGroup(group);

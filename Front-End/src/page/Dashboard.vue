@@ -8,7 +8,7 @@
       <div class='dashboardFirstRow'>
         <div class='cardStyleOne'>
           <div class  ='cardStyleOneHeader'>
-            Rp {{dashboardData.expenseByValue | thousandSeparators}}
+            <p> Rp {{dashboardData.expenseByValue | thousandSeparators}}</p>
           </div>
 
           <div class='cardStyleOneBody'>
@@ -20,12 +20,12 @@
 
         <div class='cardStyleOne'>
           <div class='cardStyleOneHeader'>
-            Rp {{dashboardData.expenseByQuantity | thousandSeparators}}
+            <p>{{dashboardData.expenseByQuantity | thousandSeparators}}</p>
           </div>
 
           <div class='cardStyleOneBody'>
             <div class='cardStyleOneTitle'>Total Expenses by Quantity</div>
-            <div class='cardStyleOneDescription'>Expense by Quantity last month Rp {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
+            <div class='cardStyleOneDescription'>Expense by Quantity last month {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
           </div>
         </div>
 
@@ -270,6 +270,7 @@
   .rightPanel {
     padding: 20px 20px 20px 30px;
     box-sizing: border-box;
+    width: 80%;
   }
 
   .dashboardFirstRow {
@@ -283,12 +284,21 @@
     width: 300px;
   }
 
+  .cardStyleOneHeader > p {
+    margin: 0 auto;
+    font-size: 24pt;
+    font-weight: bold;
+  }
   .cardStyleOneHeader {
     background-color: var(--primary-0);
+    text-align: center;
+    align-items: center;
+    color: white;
     width: 93%;
     height: 70%;
     border-radius: 10px;
     margin: auto;
+    display: flex;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
   }
 

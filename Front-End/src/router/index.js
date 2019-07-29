@@ -9,7 +9,7 @@ import MembersPage from '../page/Members';
 import ManageUserPage from '../page/ManageUser';
 import ManageGroupPage from '../page/ManageGroup';
 import SidebarComponent from '../components/Sidebar';
-import HeaderSection from '../components/HeaderSection';
+ import HeaderSection from '../components/HeaderSection';
 import PaymentHistoryPage from '../page/PaymentHistory';
 import ManagePaymentPage from '../page/ManagePayment';
 import tugasWeb from '../page/tugasWeb';
@@ -79,11 +79,6 @@ const router = new Router({
           return '/login'
         }
       }
-    },
-    {
-      path: '/tugasweb',
-      component: tugasWeb,
-      meta: { requiresAuth: true }
     },
     {
       path: '/dashboard',
