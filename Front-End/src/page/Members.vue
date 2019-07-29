@@ -11,13 +11,18 @@
             All Members
           </div>
 
-         <div style='display: flex;'>
-            <input class='membersTableSearch' type="text" placeholder="Search by Names..." v-model='searchQuery'/>
+         <div class="myParent" style='display: flex;'>
+           
+            <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
+           <div  style="margin-left:10px" class="dropdownMenu" >
+                <multiselect v-model="filter" :allow-empty="false" :options="options" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Pick a value"></multiselect>
+            </div>
             <div class="refreshBtn" @click='searchData(0)'>
-              Refresh
+              <!-- Refresh -->
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
             </div>
          </div>
         </div>
@@ -60,7 +65,11 @@
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
   import Helper from '../../Helper';
+  import Multiselect from 'vue-multiselect'
   export default {
+    components:{
+      Multiselect
+    },
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
@@ -74,6 +83,8 @@
         showInviteMemberWindow: false,
         loading:false,
         groupName:'',
+        filter:'name',
+        options:['name','email','role']
       }
     },
     created() {
@@ -91,7 +102,8 @@
     methods: {
       searchData(page){
         this.loading=true
-        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
+        console.log(this.filter)
+        fetch(`${Helper.backEndAddress}/api/user/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -118,7 +130,7 @@
       getMembersData(page) {
         // fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=${page}`, {
         this.loading=true
-        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
+        fetch(`${Helper.backEndAddress}/api/user/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -179,7 +191,7 @@
 
   }
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
   .membersComponent {
     display: flex;
@@ -260,14 +272,21 @@
     box-sizing: border-box;
   }
   .membersTableSearch::placeholder {color: var(--primary-1)}
+  #app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{
+    /* background-color: var(--lightColor); */
+    font-size: 14px;
+    color: var(--primary-0) ;
+    border-radius: 5px;
+  }
   .refreshBtn {
-    background-color: var(--lightColor);
+    background-color: #fff;
     color: var(--primary-0);
     padding: 10px;
     font-weight: 500;
     border-radius: 5px;
     font-size: 14px;
     margin-left: 10px;
+   
   }
   .refreshBtn:hover {
     background-color: var(--primary-3);

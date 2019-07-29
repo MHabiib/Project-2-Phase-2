@@ -17,7 +17,8 @@ public interface UserRepository extends MongoRepository<User, String> {
     Integer countByGroupName(String groupName);
     Page<User> findByGroupName(String groupName, Pageable pageable);
     List<User> findByGroupNameLike(String groupName);
-    Page<User> findAllByNameContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(String name,String groupName,Boolean active,Pageable pageable);
+//    Page<User> findAllByNameContainingAndEmailContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,Boolean active,Pageable pageable);
+    Page<User> findAllByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndGroupNameContainingIgnoreCaseAndRoleContainingIgnoreCaseAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,String role,Boolean active,Pageable pageable);
 
     User findByGroupNameAndRole(String groupName, String role);
     Integer countAllByGroupNameAndActive(String gName, Boolean bool);
