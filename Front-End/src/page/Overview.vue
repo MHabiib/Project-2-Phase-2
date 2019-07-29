@@ -54,6 +54,7 @@
               <table>
                 <thead>
                   <tr>
+                    <th>&nbsp;&nbsp;</th>
                     <th>Date</th>
                     <th>Detail</th>
                     <th>Price</th>
@@ -62,6 +63,7 @@
 
                 <tbody>
                   <tr v-for="(expense, index) in overviewData.latestExpense" :key="index" @click="openExpenseDetailWindow(expense.idExpense)">
+                    <td>{{index+1}}.</td>
                     <td>{{expense.createdDate | dateFormatter}}</td>
                     <td>{{expense.title}}</td>
                     <td>Rp {{expense.price | thousandSeparators}}</td>
@@ -369,9 +371,11 @@
   }
 
   .overviewLeftLowerBody tbody, .overviewLeftLowerBody thead tr { display: block; }
-  .overviewLeftLowerBody tbody td:nth-child(1), .overviewLeftLowerBody thead tr th:nth-child(1) { width: 10vw; padding-left: 10px;}
-  .overviewLeftLowerBody tbody td:nth-child(2), .overviewLeftLowerBody thead tr th:nth-child(2) { width: 18vw; }
-  .overviewLeftLowerBody tbody td:nth-child(3), .overviewLeftLowerBody thead tr th:nth-child(3) { width: 8vw; }
+  .overviewLeftLowerBody tbody td:nth-child(1), .overviewLeftLowerBody thead tr th:nth-child(1) { width: 1.5vw; padding-left: 10px;}
+
+  .overviewLeftLowerBody tbody td:nth-child(2), .overviewLeftLowerBody thead tr th:nth-child(2) { width: 10vw;}
+  .overviewLeftLowerBody tbody td:nth-child(3), .overviewLeftLowerBody thead tr th:nth-child(3) { width: 18vw; }
+  .overviewLeftLowerBody tbody td:nth-child(4), .overviewLeftLowerBody thead tr th:nth-child(4) { width: 8vw; }
 
   .overviewRightUpper {
     display: flex;

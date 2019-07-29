@@ -18,6 +18,7 @@
           <table>
             <thead>
               <tr>
+                <th>&nbsp;&nbsp;</th>
                 <th>Join Date</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -25,17 +26,18 @@
                 <th>Role</th>
               </tr>
             </thead>
-            <div class="loading fade-enter-active fade-leave-active" v-show="loading">
-              <span class="fa fa-spinner fa-spin"></span> Loading
-            </div>
             <tbody id='infiniteScroll'>
               <tr v-for="(member, index) in memberList" :key="index">
+                <td>{{index+1}}</td>
                 <td>{{member.joinDate | dateFormatter}}</td>
                 <td>{{member.name}}</td>
                 <td>{{member.email}}</td>
                 <td>{{member.phone}}</td>
                 <td>{{member.role}}</td>
               </tr>
+              <div style="text-align:center">
+                <div v-show="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+              </div>
             </tbody>
           </table>
         </div>
@@ -68,12 +70,34 @@
       }
     },
     created() {
-      this.getMembersData(0);
+      this.initMembersData();
     },
     mounted(){
       this.scroll();
     },
     methods: {
+      initMembersData() {
+        fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=0`, {
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          }
+        })
+        .then(response => {
+          if(response.status==401){
+            Helper.getNewToken(this.initMembersData)
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+ response.headers.get('Authorization'))
+            response.json().then(
+              res => {
+                this.memberList=res.content
+                this.dataMember=res
+                this.loading=false
+                  // console.log(this.dataUser)        
+              }
+            )}
+        })
+      },
       getMembersData(page) {
         fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=${page}`, {
           headers: {
@@ -82,8 +106,8 @@
         })
         .then(response => {
           if(response.status==401){
-            this.memberList=[]
-            Helper.getNewToken(this.getMembersData.bind(null,0))
+            // this.memberList.length=0
+            Helper.getNewToken(this.getMembersData.bind(null,this.dataMember.pageable.pageNumber+1))
           }
           else{
             localStorage.setItem('accessToken','Token '+ response.headers.get('Authorization'))
@@ -91,7 +115,7 @@
               res => {
                 this.memberList=this.memberList.concat(res.content)
                 this.dataMember=res
-                this.loading=false
+                // this.loading=false
                   // console.log(this.dataUser)        
               }
             )}
@@ -105,38 +129,15 @@
             console.log('infinite scroll triggered!')
             if(this.dataMember.last!=true){             
               this.loading=true;
+              setTimeout(e=>{this.loading=false},800)
+              clearTimeout()
               this.getMembersData(this.dataMember.pageable.pageNumber+1)
               console.log('get more data!')
-              // setTimeout(e=>{this.loading=false},300)
             }
           }
         })
       },
-      // filterData(newQuery) {
-      //   let dataFiltered = [];
-      //   const queryBaru = newQuery.toString().toLowerCase();
-      //   this.membersData.forEach(element => {
-      //     const joinDateElement = this.dateFormatter(element.joinDate).toString().toLowerCase();
-      //     const nameElement = element.name.toString().toLowerCase();
-      //     const emailElement = element.email.toString().toLowerCase();
-      //     const phoneElement = element.phone.toString();
-      //     const roleElement = element.role.toString().toLowerCase();
-      //     if(
-      //       joinDateElement.includes(queryBaru) ||
-      //       nameElement.includes(queryBaru) ||
-      //       emailElement.includes(queryBaru) ||
-      //       phoneElement.includes(queryBaru) ||
-      //       roleElement.includes(queryBaru)
-      //     ) {
-      //       dataFiltered.push(element)
-      //     }
-      //   })
-      //   this.dataMembersShown = dataFiltered;
-      //   const e = document.getElementById('infiniteScroll');
-      //   if (e.scrollHeight <= e.clientHeight) {
-      //     console.log('Infinite Triggered')
-      //   }
-      // },
+
       dateFormatter(dateToFormat) {
         const monthToString = (month)=> {
           switch(month) {
@@ -218,10 +219,11 @@
     padding-top: 20px;
   }
   .membersTableBody thead tr, .membersTableBody tbody { display: block; box-sizing: border-box; }
-  .membersTableBody tbody td:nth-child(1), .membersTableBody thead tr th:nth-child(1) {width: 13vw;}
-  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) {width: 14vw;}
-  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) {width: 22vw;}
-  .membersTableBody tbody td:nth-child(4), .membersTableBody thead tr th:nth-child(4) {width: 10vw;}
+  .membersTableBody tbody td:nth-child(1), .membersTableBody thead tr th:nth-child(1) {width: 1.5vw;}
+  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) {width: 11vw;}
+  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) {width: 14vw;}
+  .membersTableBody tbody td:nth-child(4), .membersTableBody thead tr th:nth-child(4) {width: 18vw;}
+  .membersTableBody tbody td:nth-child(5), .membersTableBody thead tr th:nth-child(5) {width: 12vw;}
   .membersTableHeader {
     background-color: var(--primary-0);
     color: var(--lightColor);
@@ -265,23 +267,41 @@
     cursor: pointer;
   }
   .membersTableAddNew:active {background-color: var(--primary-4);}
-  .loading {
-    text-align: center;
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: flex;
     position: absolute;
-    color: #fff;
-    z-index: 9;
-    background: var(--primary-0);
-    opacity: 0.8;
-    padding: 8px 18px;
-    border-radius: 5px;
-    left: calc(50% - 45px);
-    top: calc(50% - 18px);
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0
-  }
+
 </style>

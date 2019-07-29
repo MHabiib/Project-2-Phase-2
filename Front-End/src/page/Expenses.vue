@@ -24,6 +24,7 @@
           <table>
             <thead>
               <tr>
+                <th>&nbsp;&nbsp;</th>
                 <th>Date</th>
                 <th>Title</th>
                 <th>Status</th>
@@ -35,9 +36,10 @@
             <tbody id='infiniteScroll'>
               <tr
                 class='expenseRow'
-                v-for='(expense, index) in dataExpenseShown' :key='index'
+                v-for='(expense, index) in dataExpenseShown' :key='"expense-"+index'
                 @click="openExpenseDetailWindow(expense.idExpense)"
               >
+                <td>{{index+1}}.</td>
                 <td>{{expense.createdDate | dateFormatter}}</td>
                 <td>{{expense.title}}</td>
                 <td>{{expense.status | statusChecker}}</td>
@@ -275,23 +277,27 @@
   }
 
   .expensesTableBody tbody tr td {padding-top: 12px; padding-bottom: 12px;}
-  .expensesTableBody thead tr, .expensesTableBody tbody {display: block; box-sizing: border-box;}
-
+  .expensesTableBody thead tr, .expensesTableBody tbody {text-align:left;display: block; box-sizing: border-box;}
   .expensesTableBody tbody td:nth-child(1), .expensesTableBody thead tr th:nth-child(1) {
+    width: 1.5vw;
+    text-align: left;
+    padding-left: 10px;
+  }
+  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {
     width: 13vw;
     text-align: left;
     padding-left: 10px;
   }
 
-  .expensesTableBody tbody td:nth-child(2), .expensesTableBody thead tr th:nth-child(2) {
+  .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {
     width: 300px;
     text-align: left;
     padding-left: 10px;
   }
 
-  .expensesTableBody tbody td:nth-child(3), .expensesTableBody thead tr th:nth-child(3) {width: 10vw;}
-  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 11vw;}
-  .expensesTableBody tbody td:nth-child(5), .expensesTableBody thead tr th:nth-child(5) {width: 10vw;}
+  .expensesTableBody tbody td:nth-child(4), .expensesTableBody thead tr th:nth-child(4) {width: 10vw;}
+  .expensesTableBody tbody td:nth-child(5), .expensesTableBody thead tr th:nth-child(5) {width: 11vw;}
+  .expensesTableBody tbody td:nth-child(6), .expensesTableBody thead tr th:nth-child(6) {width: 10vw;}
 
   .showMembersButton {cursor: pointer;}
 
