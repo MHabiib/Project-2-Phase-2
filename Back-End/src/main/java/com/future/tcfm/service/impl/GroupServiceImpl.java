@@ -114,7 +114,7 @@ public class GroupServiceImpl implements GroupService {
 //                hasEveryOnePayed = false;
                 return new ResponseEntity<>("Failed to disband group!\nGroupId not found!", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }
+        }//x
 
         groupExist.setActive(false);
         /**
