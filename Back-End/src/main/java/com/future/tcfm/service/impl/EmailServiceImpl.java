@@ -72,21 +72,18 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void requestExpense(String email, String idExpense) throws MessagingException {
+    public void emailNotification(String messages, String email) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
-        String groupName = user.getGroupName();
-        Expense expense = expenseRepository.findByIdExpense(idExpense);
-        User requester = userRepository.findByEmail(expense.getRequester());
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo(email);
-        helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
+        helper.setSubject("Team Cash Flow Management: Notification");
 
         helper.setText("<html><body>" +
                 "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+requester.getName()+" Baru Saja Merequest Expense "+expense.getTitle()+"!<br>Detail : "+expense.getDetail()+"<br>Price : "+expense.getPrice()+"<br><br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+messages+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team - Blibli.com</p></td></tr></body></html>",true);
 
         this.emailSender.send(message);
     }
@@ -158,4 +155,4 @@ public class EmailServiceImpl implements EmailService {
             this.emailSender.send(message);
 
          return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
-        }*/
+}*/

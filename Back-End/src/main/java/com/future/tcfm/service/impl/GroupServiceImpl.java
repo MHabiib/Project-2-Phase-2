@@ -4,6 +4,7 @@ import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.GroupService;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class GroupServiceImpl implements GroupService {
     UserRepository userRepository;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    EmailService emailService;
+
     @Override
     public List<Group> loadAll() {
         return groupRepository.findAll();
