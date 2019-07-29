@@ -9,6 +9,7 @@ import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.ExpenseService;
 import com.future.tcfm.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     UserRepository userRepository;
 
     @Autowired
+    EmailService emailService;
+
+    @Autowired
     NotificationService notificationService;
     @Override
     public List<Expense> loadAll() {
@@ -57,7 +62,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ResponseEntity createExpense(Expense expense) {
+    public ResponseEntity createExpense(Expense expense) throws MessagingException {
         /*Expense expenseExist = expenseRepository.findByTitle(expense.getTitle());
         if (expenseExist != null)
             return new ResponseEntity<>("Failed to request Expense!\nTitle already exists!", HttpStatus.BAD_REQUEST);*/
@@ -82,7 +87,9 @@ public class ExpenseServiceImpl implements ExpenseService {
          */
         String message = expense.getRequester() + EXPENSE_MESSAGE +"(" +expense.getTitle()+")";
         notificationService.createNotification(message,expense.getRequester(),expense.getGroupName(),TYPE_GROUP);
-
+        for(User user : userContributed){
+            emailService.emailNotification(message,user.getEmail());//pengiriman email untuk user yang berkontribusi pada expense
+        }
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
 
@@ -157,7 +164,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
     //ini api di pakai untuk admin utk reject / approve request expense dari user group
     @Override
-    public ResponseEntity managementExpense(ExpenseRequest expenseRequest){
+    public ResponseEntity managementExpense(ExpenseRequest expenseRequest) throws MessagingException {
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
@@ -182,6 +189,10 @@ public class ExpenseServiceImpl implements ExpenseService {
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
+        List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
+        for(User user : groupMembers){
+            emailService.emailNotification(notificationMessage,user.getEmail());//pengiriman email untuk user yang berkontribusi
+        }
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
 

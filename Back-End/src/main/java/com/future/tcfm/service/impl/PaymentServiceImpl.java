@@ -8,6 +8,7 @@ import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.PaymentRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.xml.transform.OutputKeys;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,9 +48,12 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EmailService emailService;
+
     String notificationMessage;
     @Override
-    public ResponseEntity createPayment(String paymentJSONString, MultipartFile file) throws IOException {
+    public ResponseEntity createPayment(String paymentJSONString, MultipartFile file) throws IOException, MessagingException {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
         System.out.print("Isi payment:");
         System.out.print(payment);
@@ -82,6 +87,8 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.save(payment);
         notificationMessage = payment.getEmail()+ PAYMENT_MESSAGE; //getCurrentUser() = get current logged in user
         notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName(),TYPE_PERSONAL);
+        emailService.emailNotification(notificationMessage,getCurrentUser().getEmail());//pengiriman email untuk user yang berkontribusi
+
         return new ResponseEntity<>("Succeed to create payment!",HttpStatus.OK);
 
     }
@@ -118,7 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity managementPayment(ExpenseRequest thisPayment) {
+    public ResponseEntity managementPayment(ExpenseRequest thisPayment) throws MessagingException {
         Payment paymentExist = paymentRepository.findByIdPayment(thisPayment.getId());
         if(paymentExist==null){
             return new ResponseEntity("Payment not found!",HttpStatus.NOT_FOUND);
@@ -148,6 +155,8 @@ public class PaymentServiceImpl implements PaymentService {
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
         notificationService.createNotification(notificationMessage,paymentExist.getEmail(),null,TYPE_PERSONAL);
+        emailService.emailNotification(notificationMessage,paymentExist.getEmail());//pengiriman email untuk user yang berkontribusi
+
 
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }

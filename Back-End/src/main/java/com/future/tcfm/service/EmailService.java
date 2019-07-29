@@ -8,7 +8,7 @@ import javax.mail.MessagingException;
 public interface EmailService {
     ResponseEntity simpleEmail(EmailRequest emailRequest);
 
-    void requestExpense(String email, String idExpense) throws MessagingException;
+    void emailNotification(String message, String email)  throws MessagingException;
 
     ResponseEntity userResign(String email) throws MessagingException;
 
