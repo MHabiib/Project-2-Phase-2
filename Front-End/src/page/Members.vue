@@ -11,7 +11,15 @@
             All Members
           </div>
 
-          <input class='membersTableSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
+         <div style='display: flex;'>
+            <input class='membersTableSearch' type="text" placeholder="Search by Names..." v-model='searchQuery'/>
+            <!-- <div class="refreshBtn"  @click='searchData(0)'>
+              <img src="../assets/magnifier.png" width="18px" alt="Search">
+            </div> -->
+            <div class="refreshBtn" @click='searchData(0)'>
+              Refresh
+            </div>
+         </div>
         </div>
 
         <div class="membersTableBody">
@@ -19,21 +27,21 @@
             <thead>
               <tr>
                 <th>&nbsp;&nbsp;</th>
-                <th>Join Date</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role</th>
+                <th>Join Date</th>
               </tr>
             </thead>
             <tbody id='infiniteScroll'>
               <tr v-for="(member, index) in memberList" :key="index">
-                <td>{{index+1}}</td>
-                <td>{{member.joinDate | dateFormatter}}</td>
+                <td>{{index+1}}.</td>
                 <td>{{member.name}}</td>
                 <td>{{member.email}}</td>
                 <td>{{member.phone}}</td>
                 <td>{{member.role}}</td>
+                <td>{{member.joinDate | dateFormatter}}</td>
               </tr>
               <div style="text-align:center">
                 <div v-show="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -60,46 +68,57 @@
     },
     data: function() {
       return {
-        // membersData: [],
-        // dataMembersShown: [],
         memberList:[],
         dataMember:{},
         searchQuery: '',
         showInviteMemberWindow: false,
         loading:false,
+        groupName:'',
       }
     },
     created() {
-      this.initMembersData();
+      this.searchData(0)
+      this.groupName=localStorage.getItem('groupName')
     },
     mounted(){
       this.scroll();
     },
+    watch:{
+      searchQuery: function(oldVal,newVal){
+        this.searchData(0)
+      }
+    },
     methods: {
-      initMembersData() {
-        fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=0`, {
+      searchData(page){
+        this.loading=true
+        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
         })
         .then(response => {
           if(response.status==401){
-            Helper.getNewToken(this.initMembersData)
+            this.userList=[]
+            Helper.getNewToken(this.searchData.bind(null,0))
           }
-          else{
-            localStorage.setItem('accessToken','Token '+ response.headers.get('Authorization'))
+          else if(response.ok){
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
-                this.memberList=res.content
+                this.memberList=res.content 
                 this.dataMember=res
-                this.loading=false
-                  // console.log(this.dataUser)        
+                setTimeout(e=>{this.loading=false},500)
+
+                // this.loading=false
               }
-            )}
+            )
+          }
         })
       },
       getMembersData(page) {
-        fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=${page}`, {
+        // fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=${page}`, {
+        this.loading=true
+        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -114,9 +133,8 @@
             response.json().then(
               res => {
                 this.memberList=this.memberList.concat(res.content)
-                this.dataMember=res
-                // this.loading=false
-                  // console.log(this.dataUser)        
+                this.dataMember=res      
+                setTimeout(e=>{this.loading=false},500)
               }
             )}
         })
@@ -127,10 +145,8 @@
           // console.log(paymentTable.scrollTop + paymentTable.clientHeight+" : "+paymentTable.scrollHeight)
           if((paymentTable.scrollTop + paymentTable.clientHeight)+1>= paymentTable.scrollHeight) {
             console.log('infinite scroll triggered!')
-            if(this.dataUser.last!=true & this.loading==false){   
+            if(this.dataMember.last!=true & this.loading==false){   
               this.loading=true;
-              setTimeout(e=>{this.loading=false},800)
-              clearTimeout()
               this.getMembersData(this.dataMember.pageable.pageNumber+1)
               console.log('get more data!')
             }
@@ -160,15 +176,7 @@
       },
     },
 
-    // watch: {
-    //   searchQuery: function (newQuery, oldQuery) {
-    //     if(newQuery === '') {
-    //       this.dataMembersShown = this.membersData;
-    //     } else {
-    //       this.filterData(newQuery);
-    //     }
-    //   }
-    // },
+
   }
 </script>
 
@@ -220,9 +228,9 @@
   }
   .membersTableBody thead tr, .membersTableBody tbody { display: block; box-sizing: border-box; }
   .membersTableBody tbody td:nth-child(1), .membersTableBody thead tr th:nth-child(1) {width: 1.5vw;}
-  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) {width: 11vw;}
-  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) {width: 14vw;}
-  .membersTableBody tbody td:nth-child(4), .membersTableBody thead tr th:nth-child(4) {width: 18vw;}
+  .membersTableBody tbody td:nth-child(2), .membersTableBody thead tr th:nth-child(2) {width: 14vw;}
+  .membersTableBody tbody td:nth-child(3), .membersTableBody thead tr th:nth-child(3) {width: 18vw;}
+  .membersTableBody tbody td:nth-child(4), .membersTableBody thead tr th:nth-child(4) {width: 12vw;}
   .membersTableBody tbody td:nth-child(5), .membersTableBody thead tr th:nth-child(5) {width: 12vw;}
   .membersTableHeader {
     background-color: var(--primary-0);
@@ -252,7 +260,7 @@
     box-sizing: border-box;
   }
   .membersTableSearch::placeholder {color: var(--primary-1)}
-  .membersTableAddNew {
+  .refreshBtn {
     background-color: var(--lightColor);
     color: var(--primary-0);
     padding: 10px;
@@ -261,12 +269,12 @@
     font-size: 14px;
     margin-left: 10px;
   }
-  .membersTableAddNew:hover {
+  .refreshBtn:hover {
     background-color: var(--primary-3);
     color: var(--lightColor);
     cursor: pointer;
   }
-  .membersTableAddNew:active {background-color: var(--primary-4);}
+  .refreshBtn:active {background-color: var(--primary-4);}
   .lds-ring {
     display: inline-block;
     position: relative;
