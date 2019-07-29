@@ -29,10 +29,10 @@ public class UserController {
     @GetMapping("/search")
     public Page<User> searchUser(
             @RequestParam("name") String name,
-            @RequestParam(value = "groupName",required = false) String groupName,
+            @RequestParam(value = "groupName",required = false,defaultValue="") String groupName,
             @RequestParam(value = "page",required = false, defaultValue = "0") int page,
             @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
-        return userService.searchByNameAndGroupName(name,getCurrentUser().getGroupName(),page,size);
+        return userService.searchByNameAndGroupName(name,groupName,page,size);
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value

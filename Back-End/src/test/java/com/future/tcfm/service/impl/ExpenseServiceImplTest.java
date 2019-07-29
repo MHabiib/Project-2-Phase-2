@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class ExpenseServiceImplTest {
     }
 
     @Test
-    public void createExpense() {
+    public void createExpense() throws MessagingException {
         doReturn(expense).when(expenseRepository).save(expense);
 
         ResponseEntity<?> result = expenseService.createExpense(expense);

@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -44,7 +45,7 @@ public class ExpenseController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createExpense(@RequestBody Expense expense) {
+    public ResponseEntity createExpense(@RequestBody Expense expense) throws MessagingException {
         return expenseService.createExpense(expense);
     }
 
@@ -54,7 +55,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/managementExpense")
-    public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) {
+    public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) throws MessagingException {
         return expenseService.managementExpense(expenseRequest);
     }
 }

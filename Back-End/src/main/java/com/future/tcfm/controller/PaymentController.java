@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
@@ -33,7 +34,7 @@ public class PaymentController {
     public ResponseEntity create(
             @Nullable @RequestPart("file") MultipartFile file,
             @RequestPart("payment") String paymentJSONString
-    ) throws IOException {
+    ) throws IOException, MessagingException {
         return paymentService.createPayment(paymentJSONString, file);
     }
 
@@ -45,7 +46,7 @@ public class PaymentController {
     }
 
     @PutMapping("/managementPayment")
-    public ResponseEntity managementPayment(@RequestBody ExpenseRequest thisPayment) {
+    public ResponseEntity managementPayment(@RequestBody ExpenseRequest thisPayment) throws MessagingException {
         return paymentService.managementPayment(thisPayment);
     }
     @GetMapping("/{id}")
