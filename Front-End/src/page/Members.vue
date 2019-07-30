@@ -12,8 +12,7 @@
           </div>
 
          <div class="myParent" style='display: flex;'>
-           
-            <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
+          <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
@@ -286,7 +285,6 @@
     border-radius: 5px;
     font-size: 14px;
     margin-left: 10px;
-   
   }
   .refreshBtn:hover {
     background-color: var(--primary-3);

@@ -1,9 +1,6 @@
 package com.future.tcfm.service.impl;
 
-import com.future.tcfm.model.Expense;
-import com.future.tcfm.model.Group;
-import com.future.tcfm.model.JwtUserDetails;
-import com.future.tcfm.model.User;
+import com.future.tcfm.model.*;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.repository.ExpenseRepository;
@@ -12,11 +9,15 @@ import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.ExpenseService;
 import com.future.tcfm.service.NotificationService;
+;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,8 @@ import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
@@ -168,6 +171,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
+        if(!expenseExist.getGroupName().equals(getCurrentUser().getGroupName())){
+            return new ResponseEntity<>("403 You are not the group admin of this group",HttpStatus.UNAUTHORIZED);
+        }
         if(expenseRequest.getStatus()) {
             if(expenseExist.getStatus()!=null){
                 return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
@@ -200,6 +206,22 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return new ResponseEntity<>("Expense Updated", HttpStatus.OK);
     }
+
+    @Override
+    public Page<Expense> searchBy(String filter, String value,  int page, int size){
+        if(filter.equalsIgnoreCase("title")){
+            //findByTitle
+        } else if(filter.equalsIgnoreCase("status")){
+            //findByStatus
+        } else if(filter.equalsIgnoreCase("price" )){
+            //findByPrice
+        } else if(filter.equalsIgnoreCase("createdDate")){
+            //findByCreatedDateLessThan
+        }
+
+        return null;
+    }
+
 /*
     @Override
     public ResponseEntity management(ExpenseRequest request) {

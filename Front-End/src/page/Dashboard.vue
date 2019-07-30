@@ -138,8 +138,8 @@
 
       <div class="dashboardThirdRow">
         <div class="thirdRowHeader">
-          Your Payment - <span class="nextPrev" @click="year>groupCreated.year?year-=1:year;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)
-">prev</span>   {{checkYear}}   <span class="nextPrev" @click="year+=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)">next</span>
+          Your Payment in <span class="nextPrev" @click="year>groupCreated.year?year-=1:year;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)
+">&#8249;</span>{{checkYear}}<span class="nextPrev" @click="year+=1;getThisYearTotalPeriodPayed(dashboardData.yourPayment,year)">&#8250;</span>
         </div>
 
         <div class="thirdRowBody">
@@ -484,16 +484,24 @@
     font-weight: 700;
     font-style: italic;
   }
-    .nextPrev:hover{
+  .nextPrev{
+    font-size: 22px;
+    text-decoration: none;
+    padding:0 6px; 
+    border-radius: 28%;
+    display: inline-block;
+  }
+
+  .nextPrev:hover{
     cursor: pointer;
-    border-radius: 5px;
-    background-color: var(--lightColor);
+    background-color: var(--lightColor); 
     color: var(--primary-0);
   }
   .nextPrev:active{
     cursor: pointer;
-    border-radius: 5px;
+
     background-color: var(--primary);
     color: var(--lightColor);
   }
+
 </style>

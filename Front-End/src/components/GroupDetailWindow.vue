@@ -65,19 +65,15 @@
               >
                 Disband Group
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
     </div>
   </div></template>
-
 <script>
   import Helper from '../../Helper';
   import Members from "../page/Members";
-
   export default {
     props: ['groupId'],
     data: function() {
@@ -90,7 +86,6 @@
     },
     methods: {
       closeGroupDetailWindow() {this.$emit('closeGroupDetailWindow')},
-
       getGroupData(id) {
         fetch(`${Helper.backEndAddress}/api/group/${id}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
@@ -113,7 +108,6 @@
           })
       },
       getMember(id) {
-
         fetch(`${Helper.backEndAddress}/api/group/members/${localStorage.getItem('groupName')}`, {//search query >??
           headers: {
             Authorization: localStorage.getItem('accessToken')

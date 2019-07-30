@@ -64,9 +64,6 @@ public class GroupServiceImpl implements GroupService {
             throw new RuntimeException("GROUP NOT FOUND!");
         return Instant.ofEpochMilli(groupExist.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
     }
-
-//  --- Get Members List by Email ---
-
     /**
      * paging
      * @param email,page,size

@@ -165,7 +165,7 @@ import { clearTimeout } from 'timers';
           // console.log(paymentTable.scrollTop + paymentTable.clientHeight+" : "+paymentTable.scrollHeight)
           if((paymentTable.scrollTop + paymentTable.clientHeight)+1>= paymentTable.scrollHeight) {
             console.log('infinite scroll triggered!')
-            if(this.dataUser.last!=true & this.loading==false){   
+            if(this.dataPayment.last!=true & this.loading==false){   
               this.loading=true;
               setTimeout(e=>{this.loading=false},800)
               clearTimeout()

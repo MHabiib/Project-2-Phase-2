@@ -26,6 +26,16 @@ public class ExpenseController {
     public List<Expense> loadAll (){
         return expenseService.loadAll();
     }
+
+    @GetMapping("/search")
+    public Page<Expense> searchExpense(
+            @RequestParam(value = "filter",required = false,defaultValue="") String filter,
+            @RequestParam(value = "value",required = false,defaultValue="")String value,
+            @RequestParam(value = "page",required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
+        return expenseService.searchBy(filter,value,page,size);
+    }
+
     /**
      * paging
      * @param userEmail

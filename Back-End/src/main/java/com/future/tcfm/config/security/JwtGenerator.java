@@ -54,7 +54,7 @@ public class JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+200000000000L))//development phase token last 2s, lagi ngetes fungsi getNewToken di FE dengan memanfaatkan refreshToken
+                .setExpiration(new Date(System.currentTimeMillis()+2000L))//development phase token last 2s, lagi ngetes fungsi getNewToken di FE dengan memanfaatkan refreshToken
 //                .setExpiration(new Date(System.currentTimeMillis()+jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
