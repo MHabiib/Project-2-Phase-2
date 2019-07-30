@@ -85,7 +85,7 @@
         groupDetail: {},
         disableButton: false,
         dStatus:null,
-        memberList: ["andri","habib","harvine"]
+        memberList: ["Tzuyu","Sana","Jihyo"]
       }
     },
     methods: {
