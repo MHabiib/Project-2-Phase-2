@@ -201,24 +201,31 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
-
         expenseRepository.save(expenseExist);
-
         return new ResponseEntity<>("Expense Updated", HttpStatus.OK);
     }
 
     @Override
-    public Page<Expense> searchBy(String filter, String value,  int page, int size){
-        if(filter.equalsIgnoreCase("title")){
-            //findByTitle
-        } else if(filter.equalsIgnoreCase("status")){
-            //findByStatus
-        } else if(filter.equalsIgnoreCase("price" )){
-            //findByPrice
-        } else if(filter.equalsIgnoreCase("createdDate")){
-            //findByCreatedDateLessThan
+    public Page<Expense> searchBy(String query, int page, int size){
+        String key = "";
+        String value = "";
+        System.out.println("Query Param : "+query);
+        Pattern pattern = Pattern.compile("(.*)(:|<|>)(.*)"); //terakhir smpai sini
+        Matcher matcher = pattern.matcher(query);
+        if(matcher.find()){
+            key=matcher.group(1);
+            value=matcher.group(3);
         }
-
+        System.out.println("Key : "+key+"; Value : "+value);
+        if(key.equalsIgnoreCase("title")){
+            return expenseRepository.findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(value,createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("status")){
+            return expenseRepository.findByStatusOrderByCreatedDateDesc(Boolean.parseBoolean(value),createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("price" )){
+            return expenseRepository.findByPriceLessThanEqualOrderByCreatedDate(Double.parseDouble(value),createPageRequest("lastModifiedAt","desc",page,size));
+        } else if(key.equalsIgnoreCase("createdDate")){
+            return expenseRepository.findByCreatedDateLessThanEqualOrderByStatus(Long.parseLong(value),createPageRequest("createdDate","desc",page,size));
+        }
         return null;
     }
 

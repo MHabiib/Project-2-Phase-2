@@ -18,6 +18,11 @@ public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);
     Page<Expense> findByGroupNameOrderByCreatedDateDesc(String groupName, Pageable pageable);
     Page<Expense> findAllByTitleContainsIgnoreCaseAndStatusContainsIgnoreCase(String title,Boolean status,Pageable pageable);
+    Page<Expense> findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(String title,Pageable pageable);
+    Page<Expense> findByStatusOrderByCreatedDateDesc(Boolean status,Pageable pageable);
+    Page<Expense> findByPriceLessThanEqualOrderByCreatedDate(double price,Pageable pageable);
+    Page<Expense> findByCreatedDateLessThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
+
 
     @Query("{'?0' : { $regex: '?1', $options: 'i' } }")
     Page<Expense> findAll(

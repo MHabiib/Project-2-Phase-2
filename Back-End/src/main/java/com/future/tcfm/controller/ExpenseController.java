@@ -29,11 +29,11 @@ public class ExpenseController {
 
     @GetMapping("/search")
     public Page<Expense> searchExpense(
-            @RequestParam(value = "filter",required = false,defaultValue="") String filter,
-            @RequestParam(value = "value",required = false,defaultValue="")String value,
+            @RequestParam(value = "query",required = false,defaultValue="") String query,
+//            @RequestParam(value = "value",required = false,defaultValue="")String value,
             @RequestParam(value = "page",required = false, defaultValue = "0") int page,
             @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
-        return expenseService.searchBy(filter,value,page,size);
+        return expenseService.searchBy(query,page,size);
     }
 
     /**

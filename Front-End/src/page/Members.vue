@@ -277,6 +277,9 @@
     color: var(--primary-0) ;
     border-radius: 5px;
   }
+  .dropdownMenu:hover{
+    cursor:pointer;
+  }
   .refreshBtn {
     background-color: #fff;
     color: var(--primary-0);
