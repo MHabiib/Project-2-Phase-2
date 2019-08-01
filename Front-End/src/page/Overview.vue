@@ -82,7 +82,7 @@
               </div>
 
               <div class="overviewRightCardBody">
-                Members has paid this month.
+                Members completed regular payments.
               </div>
             </div>
 

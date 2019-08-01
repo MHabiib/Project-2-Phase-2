@@ -81,6 +81,7 @@ public class JwtGenerator {
                 responseMap.put("refreshToken",refreshToken);
                 responseMap.put("role",userExist.getRole());
                 responseMap.put("groupName",userExist.getGroupName());
+//                responseMap.put("groupCurrentPeriod",groupExist.getCurrentPeriod());
                 responseMap.put("groupCreatedDate",groupExist.getCreatedDate());
                 List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userExist.getRole());
                 JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(loginRequest.getEmail());

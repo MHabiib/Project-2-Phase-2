@@ -80,8 +80,6 @@ public class DashboardServiceImpl implements DashboardService {
             sumPendingPayment+=payment.getPrice();
         }
 
-
-
         yourPayment+=dUser.getTotalPeriodPayed();
 
         Dashboard d = new Dashboard();
