@@ -3,7 +3,7 @@
     <div class='createNewExpenseWindow'>
       <div class='createNewExpenseWindowSize'>
         <div class="createNewExpenseHeader">
-          <div>Add New User</div>
+          <div>{{this.editMode ? 'Edit' : 'Create New'}} User</div>
           <div class='buttonGroup'>
             <div class="closeButton" @click="closeAddNewUserWindow">Close</div>
             <div class="okButton" @click="createNewUser">OK</div>
@@ -45,6 +45,7 @@
   import Helper from '../../Helper';
 
   export default {
+    props: ['editMode', 'editEmail'],
     data: function() {
       return {
         namaInput: '',
@@ -126,7 +127,7 @@
             role: this.roleInput,
             password: this.passwordInput,
             rekening: this.nomorRekeningInput,
-            // namaBank: this.namaBankInput
+            namaBank: this.namaBankInput
           }))
 
           formData.append('file', this.fileInput);
@@ -157,9 +158,13 @@
           })
         }
       },
+      fetchUserData() {
+        console.log(`Fetching user data is not complete`);
+      }
     },
     created() {
       this.getAllGroup();
+      this.editMode ? this.fetchUserData() : null;
     },
   }
 </script>
