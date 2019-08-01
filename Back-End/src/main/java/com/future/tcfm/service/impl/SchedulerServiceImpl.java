@@ -55,7 +55,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         String monthNowStr="";
 
         groupMap.forEach((groupName,groupVal)->{
-            groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1);
+            groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
             groupRepository.save(groupVal);
         });
 
