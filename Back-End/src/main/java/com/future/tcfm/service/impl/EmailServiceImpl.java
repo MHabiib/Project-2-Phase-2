@@ -50,6 +50,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo("anthonylegend44@gmail.com");
         helper.setTo(email);
         helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
 

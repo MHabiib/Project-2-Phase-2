@@ -68,11 +68,11 @@ public class SchedulerServiceImpl implements SchedulerService {
 //                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
 
             notificationService.createNotification("You have missed "+ user.getPeriodeTertinggal()+"'s month payment", user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-//                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
+                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
             }
             else {
                 notificationService.createNotification("Thank you for completing "+monthNowStr+"'s payment", user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-//                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
+                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
             }
         }
         userRepository.saveAll(listUser);
