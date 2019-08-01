@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -32,11 +33,17 @@ public class Group {
     private Double balanceUsed;
     private Double totalExpense;
     private Boolean active;
+    private Integer currentPeriod;
+//    @JsonIgnore // hitung selisih bulan dari tangal bulan di buat dgn tgl skrg
+//    public Integer getCurrentPeriod(){
+//        long selisihBulanDalamMs = System.currentTimeMillis()-getCreatedDate();
+//        int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
+//        return  selisihBulan;
+//    }
+//    @JsonIgnore
+//    public Integer getCurrentPeriod(){
+//        int monthCreated = Instant.ofEpochMilli(getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+//        return LocalDate.now().getMonthValue()-monthCreated;
+//    }
 
-    @JsonIgnore
-    public Integer getCurrentPeriod(){
-        long selisihBulanDalamMs = System.currentTimeMillis()-getCreatedDate();
-        int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
-        return  selisihBulan;
-    }
 }

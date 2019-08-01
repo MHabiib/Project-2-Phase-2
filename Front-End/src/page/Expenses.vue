@@ -113,7 +113,7 @@
         showExpenseDetailWindow: false,
         showCreateNewExpenseWindow: false,
         searchQuery: '',
-        options:['title','status','price'],
+        options:['title','status','date','price lt','price gt'],
         filter:'title',
         groupName:'',
         disable:false,
@@ -136,7 +136,7 @@
         this.loading=true
         console.log(this.filter)
         // fetch(`${Helper.backEndAddress}/api/expense/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
-        fetch(`${Helper.backEndAddress}/api/expense/search?${this.filter}=${this.searchQuery}&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/expense/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -165,7 +165,7 @@
         this.loading=true
         this.disable=true
         // fetch(`${Helper.backEndAddress}/api/expense/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
-        fetch(`${Helper.backEndAddress}/api/expense/search?${this.filter}=${this.searchQuery}&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/expense/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -258,7 +258,7 @@
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-<style>
+<style> 
   .expensesComponent {display: flex;}
 
   .rightPanel {

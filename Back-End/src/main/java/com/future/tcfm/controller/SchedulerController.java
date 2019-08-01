@@ -17,10 +17,10 @@ public class SchedulerController {
     @Autowired
     SchedulerService schedulerService;
 
-    @Scheduled(cron = "0 28 10 05 * ?") // setiap tanggal 28  disetiap bulan jam 10 : 05
-//       @Scheduled(fixedRate = 10000)
+//    @Scheduled(cron = "0 28 10 05 * ?") // setiap tanggal 28  disetiap bulan jam 10 : 05
+//   @Scheduled(fixedRate = 10000)
     @GetMapping("/test")
-        public void scheduler() throws MessagingException {
+    public void scheduler() throws MessagingException {
         schedulerService.scheduler();
     }
 }

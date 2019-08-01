@@ -21,6 +21,8 @@ public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     Page<Expense> findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(String title,Pageable pageable);
     Page<Expense> findByStatusOrderByCreatedDateDesc(Boolean status,Pageable pageable);
     Page<Expense> findByPriceLessThanEqualOrderByCreatedDate(double price,Pageable pageable);
+    Page<Expense> findByPriceGreaterThanEqualOrderByCreatedDate(double price,Pageable pageable);
+
     Page<Expense> findByCreatedDateLessThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
 
 

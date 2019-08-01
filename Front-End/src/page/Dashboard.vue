@@ -13,7 +13,7 @@
 
           <div class='cardStyleOneBody'>
 
-            <div class='cardStyleOneTitle'>Total Expenses by Value</div>
+            <div class='cardStyleOneTitle'>Total Expenses by Value this month</div>
             <div class='cardStyleOneDescription'>Expense by Value last month Rp {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           </div>
 
           <div class='cardStyleOneBody'>
-            <div class='cardStyleOneTitle'>Total Expenses by Quantity</div>
+            <div class='cardStyleOneTitle'>Total Expenses by Quantity this month</div>
             <div class='cardStyleOneDescription'>Expense by Quantity last month {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
           </div>
         </div>

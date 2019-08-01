@@ -220,12 +220,12 @@ public class UserServiceImpl implements UserService {
         if(user.getTotalPeriodPayed()==null){
             user.setTotalPeriodPayed(0);
         }
-        user.setTotalPeriodPayed(groupExist.getCurrentPeriod()+user.getTotalPeriodPayed());
+        user.setTotalPeriodPayed(groupExist.getCurrentPeriod()+user.getTotalPeriodPayed()-1);//-1 karena bulan sekarang
+        user.setPeriodeTertinggal(groupExist.getCurrentPeriod()-user.getTotalPeriodPayed());
         user.setJoinDate(new Date().getTime());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-        user.setTotalPeriodPayed(0);
         user.setActive(true);
-        user.setBalance((double)0);
+        user.setBalance((user.getTotalPeriodPayed()-groupExist.getCurrentPeriod()+1)*groupExist.getRegularPayment());
         user.setBalanceUsed((double)0);
 
         userRepository.save(user);

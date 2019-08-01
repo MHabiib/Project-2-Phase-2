@@ -207,23 +207,29 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public Page<Expense> searchBy(String query, int page, int size){
-        String key = "";
-        String value = "";
         System.out.println("Query Param : "+query);
-        Pattern pattern = Pattern.compile("(.*)(:|<|>)(.*)"); //terakhir smpai sini
+        Pattern pattern = Pattern.compile("(.*)(:|<|>)(.*)");
         Matcher matcher = pattern.matcher(query);
-        if(matcher.find()){
-            key=matcher.group(1);
-            value=matcher.group(3);
-        }
+        if(!matcher.find()){return null;}
+        String key=matcher.group(1);
+        String value=matcher.group(3);
         System.out.println("Key : "+key+"; Value : "+value);
         if(key.equalsIgnoreCase("title")){
             return expenseRepository.findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(value,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("status")){
-            return expenseRepository.findByStatusOrderByCreatedDateDesc(Boolean.parseBoolean(value),createPageRequest("createdDate","desc",page,size));
-        } else if(key.equalsIgnoreCase("price" )){
+            Boolean status = null;
+            if(value.equalsIgnoreCase("rejected")){
+                status=false;
+            }
+            else if(value.equalsIgnoreCase("accepted")){
+                status=true;
+            }
+            return expenseRepository.findByStatusOrderByCreatedDateDesc(status,createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("price lt" )){
             return expenseRepository.findByPriceLessThanEqualOrderByCreatedDate(Double.parseDouble(value),createPageRequest("lastModifiedAt","desc",page,size));
-        } else if(key.equalsIgnoreCase("createdDate")){
+        } else if(key.equalsIgnoreCase("price gt" )) {
+            return expenseRepository.findByPriceGreaterThanEqualOrderByCreatedDate(Double.parseDouble(value), createPageRequest("lastModifiedAt", "desc", page, size));
+        }else if(key.equalsIgnoreCase("createdDate")){
             return expenseRepository.findByCreatedDateLessThanEqualOrderByStatus(Long.parseLong(value),createPageRequest("createdDate","desc",page,size));
         }
         return null;
