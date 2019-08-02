@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,7 +33,7 @@ public class ExpenseController {
             @RequestParam(value = "query",required = false,defaultValue="") String query,
 //            @RequestParam(value = "value",required = false,defaultValue="")String value,
             @RequestParam(value = "page",required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
+            @RequestParam(value = "size",required = false, defaultValue = "10") int size) throws ParseException {
         return expenseService.searchBy(query,page,size);
     }
 

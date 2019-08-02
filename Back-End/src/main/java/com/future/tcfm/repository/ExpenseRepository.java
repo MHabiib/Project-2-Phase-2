@@ -24,6 +24,7 @@ public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     Page<Expense> findByPriceGreaterThanEqualOrderByCreatedDate(double price,Pageable pageable);
 
     Page<Expense> findByCreatedDateLessThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
+    Page<Expense> findByCreatedDateGreaterThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
 
 
     @Query("{'?0' : { $regex: '?1', $options: 'i' } }")

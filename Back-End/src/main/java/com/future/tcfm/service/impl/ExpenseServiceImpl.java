@@ -27,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -206,7 +208,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public Page<Expense> searchBy(String query, int page, int size){
+    public Page<Expense> searchBy(String query, int page, int size) throws ParseException {
         System.out.println("Query Param : "+query);
         Pattern pattern = Pattern.compile("(.*)(:|<|>)(.*)");
         Matcher matcher = pattern.matcher(query);
@@ -218,20 +220,30 @@ public class ExpenseServiceImpl implements ExpenseService {
             return expenseRepository.findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(value,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("status")){
             Boolean status = null;
-            if(value.equalsIgnoreCase("rejected")){
-                status=false;
-            }
-            else if(value.equalsIgnoreCase("accepted")){
-                status=true;
-            }
+            status = value.equalsIgnoreCase("accepted");
             return expenseRepository.findByStatusOrderByCreatedDateDesc(status,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("price lt" )){
-            return expenseRepository.findByPriceLessThanEqualOrderByCreatedDate(Double.parseDouble(value),createPageRequest("lastModifiedAt","desc",page,size));
+            Double dValue = value.equalsIgnoreCase("")? Double.MAX_VALUE : Double.parseDouble(value);
+            return expenseRepository.findByPriceLessThanEqualOrderByCreatedDate(dValue,createPageRequest("lastModifiedAt","desc",page,size));
         } else if(key.equalsIgnoreCase("price gt" )) {
-            return expenseRepository.findByPriceGreaterThanEqualOrderByCreatedDate(Double.parseDouble(value), createPageRequest("lastModifiedAt", "desc", page, size));
-        }else if(key.equalsIgnoreCase("createdDate")){
-            return expenseRepository.findByCreatedDateLessThanEqualOrderByStatus(Long.parseLong(value),createPageRequest("createdDate","desc",page,size));
+            Double dValue = value.equalsIgnoreCase("")? 0 :Double.parseDouble(value);
+            return expenseRepository.findByPriceGreaterThanEqualOrderByCreatedDate(dValue, createPageRequest("lastModifiedAt", "desc", page, size));
+        } else if(key.equalsIgnoreCase("date before")){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+            long timeStamp= System.currentTimeMillis();
+            try {
+                timeStamp = formatter.parse(value).getTime();
+            }catch (Exception e){e.printStackTrace();}
+            return expenseRepository.findByCreatedDateLessThanEqualOrderByStatus(timeStamp,createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("date after")){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+            long timeStamp= 0;
+            try {
+                timeStamp = formatter.parse(value).getTime();
+            }catch (Exception e){e.printStackTrace();}
+            return expenseRepository.findByCreatedDateGreaterThanEqualOrderByStatus(timeStamp,createPageRequest("createdDate","desc",page,size));
         }
+
         return null;
     }
 

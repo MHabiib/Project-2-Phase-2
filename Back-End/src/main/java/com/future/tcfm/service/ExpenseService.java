@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
+import java.text.ParseException;
 import java.util.List;
 
 public interface ExpenseService {
@@ -17,5 +18,5 @@ public interface ExpenseService {
     ResponseEntity updateExpense(String id, Expense expense);
     ResponseEntity managementExpense(ExpenseRequest expenseRequest) throws MessagingException;
     List<Expense> expenseGroupByEmail(String userEmail);
-    Page<Expense> searchBy(String query, int page, int size);
+    Page<Expense> searchBy(String query, int page, int size) throws ParseException;
 }

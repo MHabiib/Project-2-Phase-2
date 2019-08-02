@@ -12,12 +12,20 @@
           </div>
 
           <div class="myParent" style='display: flex;'>
-          <input class='expensesTableSearch'  type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
+          <input class='expensesTableSearch'  type="text" :placeholder="'Query by '+this.searchPlaceHolder " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
            <div  style="margin-left:10px" class="dropdownMenu" >
-                <multiselect v-model="filter" :allow-empty="false" :options="options" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Pick a value"></multiselect>
+                <multiselect 
+                  v-model="filter" 
+                  :allow-empty="false" 
+                  :options="options" 
+                  :searchable="false" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  :placeholder="filter">
+                </multiselect>
             </div>
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
@@ -84,7 +92,6 @@
   </div>
 </template>
 
-
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
@@ -93,9 +100,17 @@
   import createNewExpenseWindow from '../components/createNewExpense';
   import Helper from '../../Helper';
   import Multiselect from 'vue-multiselect'
+import { setTimeout } from 'timers';
 
   export default {
-    computed: {rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);}},
+    computed: {
+      rightPanelWidth: function() {
+        return (document.documentElement.clientWidth - 280);
+      },
+      searchPlaceHolder:function(){
+        return this.filter == "date" ? "(dd-MMMM-yyyy)" : this.filter
+      }
+    },
     components: {
       'multiselect': Multiselect,
       'UserContributedWindow': UserContributedWindow,
@@ -113,7 +128,7 @@
         showExpenseDetailWindow: false,
         showCreateNewExpenseWindow: false,
         searchQuery: '',
-        options:['title','status','date','price lt','price gt'],
+        options:['title','status','date before','date after','price lt','price gt'],
         filter:'title',
         groupName:'',
         disable:false,
@@ -134,7 +149,7 @@
         console.log(this.disable)
         // if(this.disable==true) return
         this.loading=true
-        console.log(this.filter)
+        console.log(this.filter +" : "+this.searchQuery)
         // fetch(`${Helper.backEndAddress}/api/expense/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
         fetch(`${Helper.backEndAddress}/api/expense/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {
