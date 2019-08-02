@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +52,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Autowired
     UserRepository userRepository;
 
+
     @Autowired
     EmailService emailService;
 
@@ -59,8 +63,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRepository.findAll();
     }
 
-    String notificationMessage;
-
+    private String notificationMessage;
+    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
     @Override
     public List<Expense> expenseGroup(String groupName) {
         return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(groupName);
@@ -92,9 +96,15 @@ public class ExpenseServiceImpl implements ExpenseService {
          */
         String message = expense.getRequester() + EXPENSE_MESSAGE +"(" +expense.getTitle()+")";
         notificationService.createNotification(message,expense.getRequester(),expense.getGroupName(),TYPE_GROUP);
-        for(User user : userContributed){
-            emailService.emailNotification(message,user.getEmail());//pengiriman email untuk user yang berkontribusi pada expense
-        }
+        sseMvcExecutor.execute(() -> {
+            try {
+                for (User user : userContributed) {
+                    emailService.emailNotification(message, user.getEmail());//pengiriman email untuk user yang berkontribusi pada expense
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         return new ResponseEntity<>(expense, HttpStatus.OK);
     }
 
@@ -198,9 +208,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
         List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
-        for(User user : groupMembers){
-            emailService.emailNotification(notificationMessage,user.getEmail());//pengiriman email untuk user yang berkontribusi
-        }
+        sseMvcExecutor.execute(() -> {
+            try {
+                for (User user : groupMembers) {
+                    emailService.emailNotification(notificationMessage, user.getEmail());//pengiriman email untuk user yang berkontribusi
+                }
+            }catch (Exception e){e.printStackTrace();;}
+        });
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
         expenseRepository.save(expenseExist);
@@ -219,8 +233,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         if(key.equalsIgnoreCase("title")){
             return expenseRepository.findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(value,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("status")){
-            Boolean status = null;
-            status = value.equalsIgnoreCase("accepted");
+            Boolean status = value.equalsIgnoreCase("accepted");
+            status = value.equalsIgnoreCase("") || value.equalsIgnoreCase("waiting") ? null : status;
             return expenseRepository.findByStatusOrderByCreatedDateDesc(status,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("price lt" )){
             Double dValue = value.equalsIgnoreCase("")? Double.MAX_VALUE : Double.parseDouble(value);

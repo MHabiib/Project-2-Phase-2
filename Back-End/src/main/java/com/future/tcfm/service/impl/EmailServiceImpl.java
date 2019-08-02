@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -43,6 +44,7 @@ public class EmailServiceImpl implements EmailService {
 
     private int yearNow= LocalDate.now().getYear();
 
+    @Async
     public void periodicMailSender( String email, String monthNowStr, String monthBeforeStr) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
@@ -72,6 +74,7 @@ public class EmailServiceImpl implements EmailService {
         return null;
     }
 
+    @Async
     @Override
     public void emailNotification(String messages, String email) throws MessagingException {
         User user  = userRepository.findByEmail(email);
@@ -89,6 +92,7 @@ public class EmailServiceImpl implements EmailService {
         this.emailSender.send(message);
     }
 
+    @Async
     @Override
     public ResponseEntity userResign(String email) throws MessagingException {
         User user  = userRepository.findByEmail(email);

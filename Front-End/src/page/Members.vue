@@ -12,13 +12,22 @@
           </div>
 
          <div class="myParent" style='display: flex;'>
-          <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
-           <div  style="margin-left:10px" class="dropdownMenu" >
-                <multiselect v-model="filter" :allow-empty="false" :options="options" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Pick a value"></multiselect>
+           <div   class="dropdownMenu" >
+                <multiselect 
+                  v-model="filter" 
+                  :allow-empty="false" 
+                  :options="options" 
+                  :searchable="false" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  placeholder="Pick a value">
+                </multiselect>
             </div>
+            <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
+
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
               <!-- <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh"> -->
@@ -94,6 +103,9 @@
       this.scroll();
     },
     watch:{
+      filter : function (newQuery, oldQuery) {
+        this.searchData(0)  
+      },
       searchQuery: function(oldVal,newVal){
         this.searchData(0)
       }
@@ -267,7 +279,7 @@
     border: none;
     color: var(--primary-0);
     border-radius: 4px;
-    height: 37px;
+    height: 40px;
     box-sizing: border-box;
   }
   .membersTableSearch::placeholder {color: var(--primary-1)}
@@ -276,6 +288,11 @@
     font-size: 14px;
     color: var(--primary-0) ;
     border-radius: 5px;
+  }
+  .dropdownMenu{
+    margin-right: 10px;
+    position: relative;
+    width: 10vw;
   }
   .dropdownMenu:hover{
     cursor:pointer;

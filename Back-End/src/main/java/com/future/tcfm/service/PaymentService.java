@@ -17,4 +17,5 @@ public interface PaymentService {
     ResponseEntity findByEmail(String email, String filter,int page, int size);
     ResponseEntity findByGroupNameAndIsPaid(String groupName,String filter, int page, int size);
 
+    ResponseEntity searchQuery(String key, String value, int page, int size);
 }

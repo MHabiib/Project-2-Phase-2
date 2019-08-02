@@ -16,7 +16,7 @@
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
-           <div  style="margin-left:10px" class="dropdownMenu" >
+           <div class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 
                   :allow-empty="false" 
@@ -24,7 +24,7 @@
                   :searchable="false" 
                   :close-on-select="true" 
                   :show-labels="false" 
-                  :placeholder="filter">
+                  placeholder="Pick a value">
                 </multiselect>
             </div>
             <div class="refreshBtn" @click='searchData(0)'>
@@ -65,6 +65,9 @@
                   {{expense.userContributed.length}} Members
                 </td>
               </tr>
+              <div class="loading">
+                <div v-show="loading"  class="lds-ring"><div></div><div></div><div></div><div></div></div>
+              </div>
             </tbody>
           </table>
         </div>
@@ -100,7 +103,7 @@
   import createNewExpenseWindow from '../components/createNewExpense';
   import Helper from '../../Helper';
   import Multiselect from 'vue-multiselect'
-import { setTimeout } from 'timers';
+  import { setTimeout } from 'timers';
 
   export default {
     computed: {
@@ -108,7 +111,7 @@ import { setTimeout } from 'timers';
         return (document.documentElement.clientWidth - 280);
       },
       searchPlaceHolder:function(){
-        return this.filter == "date" ? "(dd-MMMM-yyyy)" : this.filter
+        return this.filter == "date before"  || this.filter == "date after"  ? "(dd-MMMM-yyyy)" : this.filter
       }
     },
     components: {
@@ -128,10 +131,11 @@ import { setTimeout } from 'timers';
         showExpenseDetailWindow: false,
         showCreateNewExpenseWindow: false,
         searchQuery: '',
-        options:['title','status','date before','date after','price lt','price gt'],
         filter:'title',
+        options:['title','status','date before','date after','price lt','price gt'],
         groupName:'',
         disable:false,
+        loading:false,
       }
     },
     created() {
@@ -140,6 +144,9 @@ import { setTimeout } from 'timers';
     },
     mounted() {this.scroll()},
     watch: {
+      filter : function (newQuery, oldQuery) {
+        this.searchData(0)  
+      },
       searchQuery: function (newQuery, oldQuery) {
         this.searchData(0)  
       }
@@ -209,9 +216,9 @@ import { setTimeout } from 'timers';
           // console.log(paymentTable.scrollTop + paymentTable.clientHeight+" : "+paymentTable.scrollHeight)
           if((paymentTable.scrollTop + paymentTable.clientHeight)+1>= paymentTable.scrollHeight) {
             console.log('infinite scroll triggered!')
-            if(this.dataMember.last!=true & this.loading==false){   
+            if(this.dataExpense.last!=true & this.loading==false){   
               this.loading=true;
-              this.getMembersData(this.dataExpense.pageable.pageNumber+1)
+              this.getExpenseData(this.dataExpense.pageable.pageNumber+1)
               console.log('get more data!')
             }
           }
@@ -291,6 +298,8 @@ import { setTimeout } from 'timers';
     padding: 15px 25px;
     border-radius: 5px;
     align-items: center;
+    font-weight: 600;
+
     width: 90%;
     margin: auto;
     position: relative;
@@ -360,7 +369,7 @@ import { setTimeout } from 'timers';
     border: none;
     color: var(--primary-0);
     border-radius: 4px;
-    height: 37px;
+    height: 40px;
     box-sizing: border-box;
   }
 
@@ -370,6 +379,12 @@ import { setTimeout } from 'timers';
     font-size: 14px;
     color: var(--primary-0) ;
     border-radius: 5px;
+  }
+
+  .dropdownMenu{
+    margin-left: 10px;
+    position: relative;
+    width: 10vw;
   }
   .dropdownMenu:hover{
     cursor:pointer;
@@ -409,4 +424,45 @@ import { setTimeout } from 'timers';
   .expenseRow {cursor: pointer;}
   .expenseRow:hover {background-color: white;}
   .expenseRow:active {background-color: rgba(255, 255, 255, .5);}
+  .loading{
+    text-align: center;
+    position: relative;
+  }
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
 </style>

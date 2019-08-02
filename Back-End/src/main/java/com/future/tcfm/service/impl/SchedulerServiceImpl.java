@@ -22,6 +22,8 @@ import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.text.DateFormatSymbols;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_LATE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
@@ -41,41 +43,53 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Autowired
     NotificationService notificationService;
 
+    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+
     @Async
     @Transactional
     public void scheduler() throws MessagingException {
         List<User> listUser = userRepository.findAll();
         Map<String,Group> groupMap = new HashMap<>();
-        Group group;
 
         listUser.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
 
         int monthNow= LocalDate.now().getMonthValue();
-        String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
-        String monthNowStr="";
+
 
         groupMap.forEach((groupName,groupVal)->{
             groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
             groupRepository.save(groupVal);
         });
 
-        for (User user : listUser) {
-            group = groupMap.get(user.getGroupName());
+        sseMvcExecutor.execute(() -> {
+            Group group;
+            String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
+            String monthNowStr="";
+            for (User user : listUser) {
+                group = groupMap.get(user.getGroupName());
 //            monthBeforeStr=Month.of((monthNow-user.getPeriodeTertinggal())%12).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
-            monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
-            user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());
-            if(user.getPeriodeTertinggal()>0){
+                monthNowStr = Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+                user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
+                if (user.getPeriodeTertinggal() > 0) {
 //                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
 
-            notificationService.createNotification("You have missed "+ user.getPeriodeTertinggal()+"'s month payment", user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
+                    notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
+                    try {
+                        emailService.periodicMailSender(user.getEmail(), monthNowStr, monthBeforeStr);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
+                    try {
+                        emailService.periodicMailSender(user.getEmail(), monthNowStr, monthBeforeStr);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            else {
-                notificationService.createNotification("Thank you for completing "+monthNowStr+"'s payment", user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-                emailService.periodicMailSender(user.getEmail(),monthNowStr,monthBeforeStr);
-            }
-        }
-        userRepository.saveAll(listUser);
+            userRepository.saveAll(listUser);
+        });
     }
 
     @Async

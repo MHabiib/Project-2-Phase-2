@@ -290,9 +290,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
     @Override
     public ResponseEntity deletePersonalNotificationByEmail(String email){
-        Boolean deleted = notificationRepository.deleteAllByEmailAndType(email,TYPE_PERSONAL);
-        System.out.println(deleted);
-        return new ResponseEntity<>(deleted,HttpStatus.OK);
+        notificationRepository.deleteAllByEmailAndType(email,TYPE_PERSONAL);
+        return new ResponseEntity<>("",HttpStatus.OK);
     }
 
 }

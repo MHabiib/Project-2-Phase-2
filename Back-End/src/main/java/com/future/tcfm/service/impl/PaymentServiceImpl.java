@@ -11,8 +11,12 @@ import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.PaymentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,6 +54,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     String notificationMessage;
     @Override
@@ -194,7 +201,14 @@ public class PaymentServiceImpl implements PaymentService {
         return new ResponseEntity(paymentList,HttpStatus.OK);
     }
 
-
+    @Override
+    public ResponseEntity searchQuery(String key,String value,int page, int size) {
+        Query query = new Query();
+        Criteria criteria = Criteria.where(key).is(value);
+        query.addCriteria(criteria);
+        List<Payment> paymentPage =  mongoTemplate.find(query, Payment.class, "payment");
+        return ResponseEntity.ok(paymentPage);
+    }
 
     /**
      * ambil total berapa persen sudah payment yang diterima dalam bulan X
