@@ -13,9 +13,9 @@
 
           <div class="myParent" style='display: flex;'>
           <input class='expensesTableSearch'  type="text" :placeholder="'Query by '+this.searchPlaceHolder " v-model='searchQuery'/>
-            <!-- <div class="refreshBtn"  @click='searchData(0)'>
+            <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
-            </div> -->
+            </div>
            <div class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 

@@ -12,9 +12,10 @@
           </div>
 
          <div class="myParent" style='display: flex;'>
+            <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
-            </div> -->
+            </div> -->          
            <div   class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 
@@ -25,12 +26,10 @@
                   :show-labels="false" 
                   placeholder="Pick a value">
                 </multiselect>
-            </div>
-            <input class='membersTableSearch' type="text" :placeholder="'Query by '+filter " v-model='searchQuery'/>
-
+            </div>            
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
-              <!-- <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh"> -->
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
             </div>
          </div>
         </div>
@@ -290,7 +289,7 @@
     border-radius: 5px;
   }
   .dropdownMenu{
-    margin-right: 10px;
+    margin-left: 10px;
     position: relative;
     width: 10vw;
   }
