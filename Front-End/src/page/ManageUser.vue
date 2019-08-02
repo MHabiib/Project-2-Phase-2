@@ -13,7 +13,7 @@
 
           <div style='display: flex;'>
             <input class='managementTableHeadSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
-            <div class="managementTableHeadAddNew" @click='openAddNewUserWindow'>Add New User</div>
+            <div class="managementTableHeadAddNew" @click='createUser'>Add New User</div>
           </div>
         </div>
 
@@ -30,7 +30,7 @@
             </thead>
 
             <tbody id='infiniteScroll'>
-              <tr v-for='(user, index) in dataUserShown' :key='index'>
+              <tr v-for='(user, index) in dataUserShown' :key='index' class="userRow" @click="editUser(user.email)">
                 <td>{{user.groupName}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.email}}</td>
@@ -47,6 +47,8 @@
       v-if='showAddNewUserWindow'
       @closeAddNewUserWindow='closeAddNewUserWindow'
       @refreshData="getAllUsers"
+      :editMode="editMode"
+      :editEmail="editEmail"
     />
   </div>
 </template>
@@ -69,7 +71,9 @@
         dataUser: [],
         dataUserShown: [],
         showAddNewUserWindow: false,
-        searchQuery: ''
+        searchQuery: '',
+        editMode: false,
+        editEmail: ''
       }
     },
     methods: {
@@ -106,9 +110,6 @@
       closeAddNewUserWindow() {
         this.showAddNewUserWindow = false;
       },
-      openAddNewUserWindow() {
-        this.showAddNewUserWindow = true;
-      },
       filterData(newQuery) {
         let dataFiltered = [];
         const queryBaru = newQuery.toString().toLowerCase();
@@ -136,6 +137,15 @@
         if (e.scrollHeight <= e.clientHeight) {
           console.log('Infinite Triggered')
         }
+      },
+      editUser(userEmail) {
+        this.editMode = true;
+        this.editEmail = userEmail;
+        this.showAddNewUserWindow = true;
+      },
+      createUser() {
+        this.editMode = false;
+        this.showAddNewUserWindow = true;
       },
     },
     components: {
@@ -258,8 +268,13 @@
 
   .manageUserComponent .managementTableBody thead tr, .manageUserComponent .managementTableBody tbody { display: block; box-sizing: border-box; }
   .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 10vw; padding-left: 12px}
-  .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 15vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 22vw; }
-  .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 12vw; }
-  /* .manageUserComponent .managementTableBody tbody td:nth-child(5), .manageUserComponent .managementTableBody thead tr th:nth-child(5) { width: 2vw; text-align: 'center' } */
+  .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 15vw; padding-left: 12px}
+  .manageUserComponent .managementTableBody tbody td:nth-child(3), .manageUserComponent .managementTableBody thead tr th:nth-child(3) { width: 22vw; padding-left: 12px}
+  .manageUserComponent .managementTableBody tbody td:nth-child(4), .manageUserComponent .managementTableBody thead tr th:nth-child(4) { width: 12vw; padding-left: 12px}
+  .manageUserComponent .managementTableBody tbody td:nth-child(5), .manageUserComponent .managementTableBody thead tr th:nth-child(5) { width: 5vw; text-align: 'center'; padding-left: 12px }
+
+  .userRow:hover {
+    background-color: white;
+    cursor: pointer;
+  }
 </style>

@@ -29,7 +29,7 @@
             </div>
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
-              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
+              <!-- <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh"> -->
             </div>
          </div>
         </div>
