@@ -125,7 +125,7 @@ public class EmailServiceImpl implements EmailService {
         String expenseListStr="";
         List<ExpenseContributedDetails> listExpense = new ArrayList<>();
         Group group= groupRepository.findByName(user.getGroupName());
-        List<Expense> expenseIdContributed = expenseRepository.findByGroupNameLikeAndGroupCurrentPeriodAtAndStatus(groupName,group.getCurrentPeriod(),true);
+        List<Expense> expenseIdContributed = expenseRepository.findByGroupNameLikeAndGroupCurrentPeriodAndStatus(groupName,group.getCurrentPeriod(),true);
         if(expenseIdContributed!=null){
             for(Expense expense: expenseIdContributed){
                 ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
