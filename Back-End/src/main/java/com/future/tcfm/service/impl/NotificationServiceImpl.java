@@ -239,7 +239,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final Map<String,SseEmitter> emitters = new ConcurrentHashMap<>();
 
 
-//    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+    ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Async
     @EventListener
@@ -252,41 +252,42 @@ public class NotificationServiceImpl implements NotificationService {
             System.out.println("Event Group triggered!");
             eventName = "group";
             this.emitters.forEach((email,emitter) -> { //key = email
-                try {
-                    SseEmitter.SseEventBuilder event = SseEmitter.event();
-                    event.name(email+eventName);
-                    event.id(UUID.randomUUID().toString());
-                    event.data(notificationList);
-                    event.reconnectTime(10000L);
-                    emitter.send(event);
-                    System.out.println( notificationEvent.getType()+" notification sent to " + email +", eventName : "+email+eventName);
-                } catch (Exception e) {
+                executor.execute(() -> {
+                    try {
+                        SseEmitter.SseEventBuilder event = SseEmitter.event();
+                        event.name(email + eventName);
+                        event.id(UUID.randomUUID().toString());
+                        event.data(notificationList);
+                        event.reconnectTime(10000L);
+                        emitter.send(event);
+                        System.out.println(notificationEvent.getType() + " notification sent to " + email + ", eventName : " + email + eventName);
+                    } catch (Exception e) {
 //                    deadEmitters.add(k);
-                    this.emitters.remove(email);
-                    System.out.println("Exception! : removed emitter "+email);
-                }
+                        this.emitters.remove(email);
+                        System.out.println("Exception! : removed emitter " + email);
+                    }
+                });
             });
         } else {
             notificationList = notificationRepository.findTop10ByEmailAndTypeOrderByTimestampDesc(notificationEvent.getEmail(),TYPE_PERSONAL);
             System.out.println("Event Personal triggered!");
             eventName = "personal";
-            try {
-                SseEmitter.SseEventBuilder event = SseEmitter.event();
-                event.name(notificationEvent.getEmail() + eventName);
-                event.id(UUID.randomUUID().toString());
-                event.data(notificationList);
-                event.reconnectTime(10000L);
-                this.emitters.get(notificationEvent.getEmail()).send(event);
-            }catch (Exception e){
-                this.emitters.remove(notificationEvent.getEmail());
-                System.out.println("Exception! : removed emitter "+notificationEvent.getEmail());
-            }
+            executor.execute(() -> {
+                try {
+                    SseEmitter.SseEventBuilder event = SseEmitter.event();
+                    event.name(notificationEvent.getEmail() + eventName);
+                    event.id(UUID.randomUUID().toString());
+                    event.data(notificationList);
+                    event.reconnectTime(10000L);
+                    this.emitters.get(notificationEvent.getEmail()).send(event);
+                } catch (Exception e) {
+                    this.emitters.remove(notificationEvent.getEmail());
+                    System.out.println("Exception! : removed emitter " + notificationEvent.getEmail());
+                }
+            });
         }
-//        sseMvcExecutor.execute(() -> {
-
             System.out.println("Client listener Total : "+this.emitters.size());
             this.emitters.remove(deadEmitters);
-//            });
     }
     @Override
     public ResponseEntity deletePersonalNotificationByEmail(String email){

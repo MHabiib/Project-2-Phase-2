@@ -13,9 +13,9 @@
 
           <div class="myParent" style='display: flex;'>
           <input class='expensesTableSearch'  type="text" :placeholder="'Query by '+this.searchPlaceHolder " v-model='searchQuery'/>
-            <div class="refreshBtn"  @click='searchData(0)'>
+            <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
-            </div>
+            </div> -->
            <div class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 
@@ -29,7 +29,7 @@
             </div>
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
-              <!-- <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh"> -->
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
             </div>
          </div>
         </div>
@@ -102,7 +102,7 @@
   import expenseDetailWindow from '../components/expenseDetailWindow';
   import createNewExpenseWindow from '../components/createNewExpense';
   import Helper from '../../Helper';
-  import Multiselect from 'vue-multiselect'
+  import Multiselect from 'vue-multiselect';
   import { setTimeout } from 'timers';
 
   export default {
@@ -132,7 +132,7 @@
         showCreateNewExpenseWindow: false,
         searchQuery: '',
         filter:'title',
-        options:['title','status','date before','date after','price lt','price gt'],
+        options:['title','status','date before','date after','price <','price >'],
         groupName:'',
         disable:false,
         loading:false,

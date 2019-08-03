@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +66,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
 
     String notificationMessage;
     @Override
@@ -101,8 +106,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.save(payment);
         notificationMessage = payment.getEmail()+ PAYMENT_MESSAGE; //getCurrentUser() = get current logged in user
         notificationService.createNotification(notificationMessage,getCurrentUser().getEmail(),getCurrentUser().getGroupName(),TYPE_PERSONAL);
-        emailService.emailNotification(notificationMessage,getCurrentUser().getEmail());//pengiriman email untuk user yang berkontribusi
-
+        executor.execute(() -> {
+            try {
+                emailService.emailNotification(notificationMessage, getCurrentUser().getEmail());//pengiriman email untuk user yang berkontribusi
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        });
         return new ResponseEntity<>("Succeed to create payment!",HttpStatus.OK);
 
     }
@@ -176,7 +186,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
         notificationService.createNotification(notificationMessage,paymentExist.getEmail(),null,TYPE_PERSONAL);
-        emailService.emailNotification(notificationMessage,paymentExist.getEmail());//pengiriman email untuk user yang berkontribusi
+        executor.execute(() -> {
+            try {
+                emailService.emailNotification(notificationMessage, paymentExist.getEmail());//pengiriman email untuk user yang berkontribusi
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        });
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }
 

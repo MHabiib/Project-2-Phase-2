@@ -97,7 +97,7 @@
             })
           })
           .then(response => {
-            if(response.status==401){
+            if(response.status==401 || response.status==403){
               Helper.getNewToken(this.updateExpenseStatus.bind(null,this.expenseDetail.idExpense,this.dStatus))
             }
             else if(response.ok) {
@@ -114,11 +114,10 @@
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
-          if(response.status==401){
+          if(response.status==401 || response.status==403){
             console.log('expenseId : '+this.expenseId)
             Helper.getNewToken(this.getExpenseData.bind(null,this.expenseId))
           }  else {
-          
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {

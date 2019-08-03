@@ -64,11 +64,14 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     private String notificationMessage;
-    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
     @Override
     public List<Expense> expenseGroup(String groupName) {
         return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(groupName);
     }
+
 
     @Override
     public ResponseEntity createExpense(Expense expense) throws MessagingException {
@@ -96,7 +99,7 @@ public class ExpenseServiceImpl implements ExpenseService {
          */
         String message = expense.getRequester() + EXPENSE_MESSAGE +"(" +expense.getTitle()+")";
         notificationService.createNotification(message,expense.getRequester(),expense.getGroupName(),TYPE_GROUP);
-        sseMvcExecutor.execute(() -> {
+        executor.execute(() -> {
             try {
                 for (User user : userContributed) {
                     emailService.emailNotification(message, user.getEmail());//pengiriman email untuk user yang berkontribusi pada expense
@@ -208,7 +211,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
         List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
-        sseMvcExecutor.execute(() -> {
+        executor.execute(() -> {
             try {
                 for (User user : groupMembers) {
                     emailService.emailNotification(notificationMessage, user.getEmail());//pengiriman email untuk user yang berkontribusi

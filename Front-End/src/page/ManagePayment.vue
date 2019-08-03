@@ -11,11 +11,22 @@
             Manage Payments
           </div>
 
-          <div style='display: flex;'>
-            <input class='paymentTableSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
-
-            <div class="paymentTableAddNew" @click='searchPayment'>
-              Search
+          <div class="myParent" style='display: flex;'>
+            <input class='paymentTableSearch' type="text" :placeholder="'Search by '+this.searchPlaceHolder" v-model='searchQuery'/>
+            <div class="dropdownMenu" >
+                <multiselect 
+                  v-model="filter" 
+                  :allow-empty="false" 
+                  :options="options" 
+                  :searchable="false" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  placeholder="Pick a value">
+                </multiselect>
+            </div>
+            <div class="refreshBtn" @click='searchData(0)'>
+              <!-- Refresh -->
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
             </div>
           </div>
         </div>
@@ -68,10 +79,22 @@
   import HeaderSection from '../components/HeaderSection';
   import PaymentDetailWindow from '../components/PaymentDetailWindow';
   import Helper from '../../Helper';
-import { clearTimeout } from 'timers';
+  import Multiselect from 'vue-multiselect'
+  import { clearTimeout } from 'timers';
 
   export default {
-    computed: {rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);}},
+    components: {
+      'PaymentDetailWindow': PaymentDetailWindow,
+      'multiselect': Multiselect,
+    },
+    computed: {
+      rightPanelWidth: function() {
+        return (document.documentElement.clientWidth - 280);     
+       },
+      searchPlaceHolder:function(){
+        return this.filter == "date before"  || this.filter == "date after"  ? "(dd-MMMM-yyyy)" : this.filter
+      }
+    },
     data: function() {
       return {
         dataPayment:{},
@@ -79,18 +102,31 @@ import { clearTimeout } from 'timers';
         detailPaymentSelected: '',
         showPaymentDetailWindow: false,
         searchQuery: '',
+        filter:'email',
+        options:['email','status','date before','date after','periode <','periode >'],
         loading:false,
       }
     },
-    created() {this.getPaymentData();},
+    mounted() {this.scroll()},
+    watch: {
+      filter : function (newQuery, oldQuery) {
+        this.searchData(0)  
+      },
+      searchQuery: function (newQuery, oldQuery) {
+        this.searchData(0)  
+      }
+    },
+    created() {this.searchData(0);},
     methods: {
-        getPaymentData() {
-        fetch(`${Helper.backEndAddress}/api/payment?isPaid=false&page=0`, {
+      searchData(page) {
+        this.loading=true;
+        console.log(this.filter+" : " +this.searchQuery)
+        fetch(`${Helper.backEndAddress}/api/payment/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
           if(response.status==401){
-            Helper.getNewToken(this.getPaymentData)
+            Helper.getNewToken(this.searchData.bind(null,0))
           }
           else{
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
@@ -98,6 +134,8 @@ import { clearTimeout } from 'timers';
               res => {
                 this.paymentList=res.content
                 this.dataPayment = res;
+                setTimeout(e=>{this.loading=false},500)
+
                 // this.loading=false
               }
             )
@@ -105,7 +143,11 @@ import { clearTimeout } from 'timers';
         })
       },
       getPendingPayment(page) {
-        fetch(`${Helper.backEndAddress}/api/payment?isPaid=false&page=${page}`, {
+        this.loading=true;
+        console.log(this.filter+" : " +this.searchQuery)
+
+        // fetch(`${Helper.backEndAddress}/api/payment?isPaid=false&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/payment/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
         .then(response => {
@@ -118,6 +160,7 @@ import { clearTimeout } from 'timers';
               res => {
                 this.paymentList=this.paymentList.concat(res.content)
                 this.dataPayment = res;
+                setTimeout(e=>{this.loading=false},500)
                 // this.loading=false;
               }
             )
@@ -167,8 +210,6 @@ import { clearTimeout } from 'timers';
             console.log('infinite scroll triggered!')
             if(this.dataPayment.last!=true & this.loading==false){   
               this.loading=true;
-              setTimeout(e=>{this.loading=false},800)
-              clearTimeout()
               this.getPendingPayment(this.dataPayment.pageable.pageNumber+1)
               console.log('get more data!')
             }
@@ -179,9 +220,7 @@ import { clearTimeout } from 'timers';
 
       }
     },
-    components: {
-      'PaymentDetailWindow': PaymentDetailWindow,
-    },
+
     filters: {
       statusChecker(status) {
         switch(status) {
@@ -190,11 +229,10 @@ import { clearTimeout } from 'timers';
           case null: return 'Pending'
         }
       }
-    },
-    mounted() {this.scroll()},
-    
+    },    
   }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
   .paymentsComponent {display: flex;}
@@ -214,11 +252,14 @@ import { clearTimeout } from 'timers';
     padding: 15px 25px;
     border-radius: 5px;
     align-items: center;
+    font-weight: 600;
+
     width: 90%;
     margin: auto;
     position: relative;
     z-index: 1;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+
   }
 
   .paymentsTableHeaderTitle {
@@ -279,10 +320,42 @@ import { clearTimeout } from 'timers';
     border: none;
     color: var(--primary-0);
     border-radius: 4px;
+    height: 40px;
+    box-sizing: border-box;
   }
 
   .paymentTableSearch::placeholder {color: var(--primary-1)}
+.expensesTableSearch::placeholder {color: var(--primary-1)}
+  #app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{
+    /* background-color: var(--lightColor); */
+    font-size: 14px;
+    color: var(--primary-0) ;
+    border-radius: 5px;
+  }
 
+  .dropdownMenu{
+    margin-left: 10px;
+    position: relative;
+    width: 10vw;
+  }
+  .dropdownMenu:hover{
+    cursor:pointer;
+  }
+  .refreshBtn {
+    background-color: #fff;
+    color: var(--primary-0);
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  .refreshBtn:hover {
+    background-color: var(--primary-3);
+    color: var(--lightColor);
+    cursor: pointer;
+  }
+  .refreshBtn:active {background-color: var(--primary-4);}
   .paymentTableAddNew {
     background-color: var(--lightColor);
     color: var(--primary-0);
