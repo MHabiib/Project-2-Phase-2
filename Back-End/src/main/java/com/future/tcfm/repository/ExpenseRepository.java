@@ -17,14 +17,12 @@ public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     List<Expense> findByGroupNameLikeAndStatusOrderByCreatedDateDesc(String groupName,Boolean bool);
     List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);
     Page<Expense> findByGroupNameOrderByCreatedDateDesc(String groupName, Pageable pageable);
-    Page<Expense> findAllByTitleContainsIgnoreCaseAndStatusContainsIgnoreCase(String title,Boolean status,Pageable pageable);
-    Page<Expense> findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(String title,Pageable pageable);
-    Page<Expense> findByStatusOrderByCreatedDateDesc(Boolean status,Pageable pageable);
-    Page<Expense> findByPriceLessThanEqualOrderByCreatedDate(double price,Pageable pageable);
-    Page<Expense> findByPriceGreaterThanEqualOrderByCreatedDate(double price,Pageable pageable);
-
-    Page<Expense> findByCreatedDateLessThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
-    Page<Expense> findByCreatedDateGreaterThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(String groupName,String title,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndStatusOrderByCreatedDateDesc(String groupName,Boolean status,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndPriceLessThanOrderByPriceDesc(String groupName,double price,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndPriceGreaterThanOrderByPriceDesc(String groupName,double price,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndCreatedDateLessThanEqualOrderByStatus(String groupName, long dateInMillis,Pageable pageable);
+    Page<Expense> findByGroupNameContainsAndCreatedDateGreaterThanEqualOrderByStatus(String groupName,long dateInMillis,Pageable pageable);
 
 
     @Query("{'?0' : { $regex: '?1', $options: 'i' } }")

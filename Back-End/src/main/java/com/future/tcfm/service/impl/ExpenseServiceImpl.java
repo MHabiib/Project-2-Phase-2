@@ -223,39 +223,40 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public Page<Expense> searchBy(String query, int page, int size) throws ParseException {
+        String groupName = getCurrentUser().getGroupName();
         System.out.println("Query Param : "+query);
-        Pattern pattern = Pattern.compile("(.*)(:|<|>)(.*)");
+        Pattern pattern = Pattern.compile("(.*)(:)(.*)");
         Matcher matcher = pattern.matcher(query);
         if(!matcher.find()){return null;}
         String key=matcher.group(1);
         String value=matcher.group(3);
         System.out.println("Key : "+key+"; Value : "+value);
         if(key.equalsIgnoreCase("title")){
-            return expenseRepository.findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(value,createPageRequest("createdDate","desc",page,size));
+            return expenseRepository.findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(groupName,value,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("status")){
             Boolean status = value.equalsIgnoreCase("accepted");
             status = value.equalsIgnoreCase("") || value.equalsIgnoreCase("waiting") ? null : status;
-            return expenseRepository.findByStatusOrderByCreatedDateDesc(status,createPageRequest("createdDate","desc",page,size));
-        } else if(key.equalsIgnoreCase("price lt" )){
+            return expenseRepository.findByGroupNameContainsAndStatusOrderByCreatedDateDesc(groupName,status,createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("price <" )){
             Double dValue = value.equalsIgnoreCase("")? Double.MAX_VALUE : Double.parseDouble(value);
-            return expenseRepository.findByPriceLessThanEqualOrderByCreatedDate(dValue,createPageRequest("lastModifiedAt","desc",page,size));
-        } else if(key.equalsIgnoreCase("price gt" )) {
+            return expenseRepository.findByGroupNameContainsAndPriceLessThanOrderByPriceDesc(groupName,dValue,createPageRequest("createdDate","desc",page,size));
+        } else if(key.equalsIgnoreCase("price >" )) {
             Double dValue = value.equalsIgnoreCase("")? 0 :Double.parseDouble(value);
-            return expenseRepository.findByPriceGreaterThanEqualOrderByCreatedDate(dValue, createPageRequest("lastModifiedAt", "desc", page, size));
+            return expenseRepository.findByGroupNameContainsAndPriceGreaterThanOrderByPriceDesc(groupName,dValue, createPageRequest("createdDate", "desc", page, size));
         } else if(key.equalsIgnoreCase("date before")){
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
             long timeStamp= System.currentTimeMillis();
             try {
                 timeStamp = formatter.parse(value).getTime();
             }catch (Exception e){e.printStackTrace();}
-            return expenseRepository.findByCreatedDateLessThanEqualOrderByStatus(timeStamp,createPageRequest("createdDate","desc",page,size));
+            return expenseRepository.findByGroupNameContainsAndCreatedDateLessThanEqualOrderByStatus(groupName,timeStamp,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("date after")){
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
             long timeStamp= 0;
             try {
                 timeStamp = formatter.parse(value).getTime();
             }catch (Exception e){e.printStackTrace();}
-            return expenseRepository.findByCreatedDateGreaterThanEqualOrderByStatus(timeStamp,createPageRequest("createdDate","desc",page,size));
+            return expenseRepository.findByGroupNameContainsAndCreatedDateGreaterThanEqualOrderByStatus(groupName,timeStamp,createPageRequest("createdDate","desc",page,size));
         }
 
         return null;

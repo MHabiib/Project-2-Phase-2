@@ -12,11 +12,14 @@ import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.PaymentService;
 
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,9 +32,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
@@ -163,8 +169,6 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.save(paymentExist);
         notificationService.createNotification(notificationMessage,paymentExist.getEmail(),null,TYPE_PERSONAL);
         emailService.emailNotification(notificationMessage,paymentExist.getEmail());//pengiriman email untuk user yang berkontribusi
-
-
         return new ResponseEntity(paymentExist,HttpStatus.OK);
     }
 
@@ -202,17 +206,52 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity searchQuery(String key,String value,int page, int size) {
-        Query query = new Query();
-        Criteria criteria = Criteria.where(key).is(value);
-        query.addCriteria(criteria);
-        List<Payment> paymentPage =  mongoTemplate.find(query, Payment.class, "payment");
-        return ResponseEntity.ok(paymentPage);
+    public Page<Payment> searchBy(String query, int page, int size) {
+        System.out.println("Query Param : "+query);
+        Pattern pattern = Pattern.compile("(.*)(:)(.*)");
+        Matcher matcher = pattern.matcher(query);
+        if(!matcher.find()){return null;}
+        String key=matcher.group(1);
+        String value=matcher.group(3);
+        System.out.println("Key : "+key+"; Value : "+value);
+        Pageable pageable = createPageRequest("paymentDate","desc",page,size);
+        Query myQuery = new Query().with(pageable);
+        Criteria criteria = new Criteria();
+        if(key.equalsIgnoreCase("date before")){
+            key = "paymentDate";
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+            long timeStamp= System.currentTimeMillis();
+            try {
+                timeStamp = formatter.parse(value).getTime();
+            }catch (Exception e){e.printStackTrace();}
+            criteria = Criteria.where(key).lte(timeStamp).and("groupName").is(getCurrentUser().getGroupName());
+        }else if(key.equalsIgnoreCase("date after")){
+            key = "paymentDate";
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+            long timeStamp= 0;
+            try {
+                timeStamp = formatter.parse(value).getTime();
+            }catch (Exception e){e.printStackTrace();}
+            criteria = Criteria.where(key).gte(timeStamp).and("groupName").is(getCurrentUser().getGroupName());
+        } else if(key.equalsIgnoreCase("status")){
+            key = "isRejected";
+            Boolean isRejected = !value.equalsIgnoreCase("accepted");
+            isRejected = value.equalsIgnoreCase("") || value.equalsIgnoreCase("pending") ? null : isRejected;
+            criteria = Criteria.where(key).is(isRejected).and("groupName").is(getCurrentUser().getGroupName());
+        } else if(key.equalsIgnoreCase("periode <")){
+            key=key.substring(0,7);
+            int dValue = value.equalsIgnoreCase("")? Integer.MAX_VALUE :Integer.parseInt(value);
+            criteria = Criteria.where(key).lt(dValue).and("groupName").is(getCurrentUser().getGroupName());
+        } else if(key.equalsIgnoreCase("periode >")){
+            key=key.substring(0,7);
+            int dValue = value.equalsIgnoreCase("")? 0 :Integer.parseInt(value);
+            criteria = Criteria.where(key).gt(dValue).and("groupName").is(getCurrentUser().getGroupName());
+        }
+        myQuery.addCriteria(criteria);
+        List<Payment> paymentList =  mongoTemplate.find(myQuery,Payment.class,"payment");
+        return PageableExecutionUtils.getPage(
+                paymentList,
+                pageable,
+                () -> mongoTemplate.count(myQuery, Payment.class));
     }
-
-    /**
-     * ambil total berapa persen sudah payment yang diterima dalam bulan X
-     * @return
-     */
-
 }

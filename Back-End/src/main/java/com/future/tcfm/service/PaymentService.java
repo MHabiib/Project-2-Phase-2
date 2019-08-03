@@ -2,6 +2,7 @@ package com.future.tcfm.service;
 
 import com.future.tcfm.model.Payment;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,5 +18,5 @@ public interface PaymentService {
     ResponseEntity findByEmail(String email, String filter,int page, int size);
     ResponseEntity findByGroupNameAndIsPaid(String groupName,String filter, int page, int size);
 
-    ResponseEntity searchQuery(String key, String value, int page, int size);
+    Page<Payment> searchBy(String query, int page, int size);
 }

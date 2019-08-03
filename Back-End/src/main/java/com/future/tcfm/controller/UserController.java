@@ -34,7 +34,7 @@ public class UserController {
             @RequestParam(value = "role",required = false,defaultValue="") String role,
             @RequestParam(value = "page",required = false, defaultValue = "0") int page,
             @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
-        return userService.searchBy(name,email,groupName,role,page,size);
+        return userService.searchBy(name,email,getCurrentUser().getGroupName(),role,page,size);
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value

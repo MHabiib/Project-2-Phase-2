@@ -1,8 +1,10 @@
 package com.future.tcfm.controller;
 
+import com.future.tcfm.model.Payment;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -21,13 +23,22 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @GetMapping
-    public ResponseEntity getPaymentByGroupName(
-//            @PathVariable("groupName") String groupName,
-                                                @RequestParam(value = "filter",required = false, defaultValue = "isPaid")String filter,
-                                                @RequestParam(value = "page",required = false, defaultValue = "0")int page,
-                                                @RequestParam(value = "size",required = false, defaultValue = "10")int size) {
-        return paymentService.findByGroupNameAndIsPaid(getCurrentUser().getGroupName(),filter,page,size);
+//    @GetMapping
+//    public ResponseEntity getPaymentByGroupName(
+////            @PathVariable("groupName") String groupName,
+//                                                @RequestParam(value = "filter",required = false, defaultValue = "isPaid")String filter,
+//                                                @RequestParam(value = "page",required = false, defaultValue = "0")int page,
+//                                                @RequestParam(value = "size",required = false, defaultValue = "10")int size) {
+//        return paymentService.findByGroupNameAndIsPaid(getCurrentUser().getGroupName(),filter,page,size);
+//    }
+
+    @GetMapping("/search")
+    public Page<Payment> searchPayment(
+    //            @PathVariable("groupName") String groupName,
+            @RequestParam(value = "query",required = false, defaultValue = "")String query,
+            @RequestParam(value = "page",required = false, defaultValue = "0")int page,
+            @RequestParam(value = "size",required = false, defaultValue = "10")int size) {
+        return paymentService.searchBy(query,page,size);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
