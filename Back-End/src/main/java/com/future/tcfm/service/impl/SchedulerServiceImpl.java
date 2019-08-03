@@ -61,13 +61,13 @@ public class SchedulerServiceImpl implements SchedulerService {
             groupRepository.save(groupVal);
         });
 
-        sseMvcExecutor.execute(() -> {
+        sseMvcExecutor.execute(() -> {//pisahThread
             Group group;
             String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
             String monthNowStr="";
             for (User user : listUser) {
                 group = groupMap.get(user.getGroupName());
-//            monthBeforeStr=Month.of((monthNow-user.getPeriodeTertinggal())%12).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
+//                monthBeforeStr=Month.of((monthNow-user.getPeriodeTertinggal())%12).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
                 monthNowStr = Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
                 user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
                 if (user.getPeriodeTertinggal() > 0) {

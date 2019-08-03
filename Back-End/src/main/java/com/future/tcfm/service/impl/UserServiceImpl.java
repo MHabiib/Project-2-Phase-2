@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
                     Path deletePath = Paths.get(UPLOADED_FOLDER + userExist.getImagePath());
                     Files.delete(deletePath);
                 }
-                String fileName=userExist.getEmail()+"_"+file.getOriginalFilename();
+                String fileName="user/"+userExist.getEmail()+"_"+file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 userExist.setImagePath(fileName);
                 userExist.setImageURL(UPLOADED_URL+fileName);
@@ -209,7 +209,7 @@ public class UserServiceImpl implements UserService {
 
         if(checkImageFile(file)){
             try{
-                String fileName=user.getEmail()+"_"+file.getOriginalFilename();
+                String fileName="user/"+user.getEmail()+"_"+file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 user.setImagePath(fileName);
                 user.setImageURL(UPLOADED_URL+fileName);
