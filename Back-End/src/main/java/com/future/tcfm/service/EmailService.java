@@ -18,5 +18,11 @@ public interface EmailService {
     ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException;
 
     @Async
-    void periodicMailSender (String email, String monthNowStr, String monthBeforeStr) throws MessagingException;
+    void periodicMailSender (String email, String monthBeforeStr,int yearBefore) throws MessagingException;
+
+    @Async
+    void periodicMailReminderSender (String email) throws MessagingException;
+
+    @Async
+    void monthlyCashStatement(String email) throws MessagingException;
 }

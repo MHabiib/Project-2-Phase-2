@@ -3,6 +3,7 @@ package com.future.tcfm.service.impl;
 import com.future.tcfm.model.*;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.model.list.ExpenseIdContributed;
+import com.future.tcfm.model.list.UserContributedList;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
@@ -89,7 +90,18 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
         expense.setCreatedDate(System.currentTimeMillis());
         List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
-        expense.setUserContributed(userContributed);
+        List<UserContributedList> userContributedLists;
+        for(User user:userContributed){
+            userContributedLists=expense.getUserContributed();
+            if(userContributedLists==null) {
+                userContributedLists = new ArrayList<>();
+            }
+            UserContributedList u = new UserContributedList();
+            u.setEmail(user.getEmail());
+            u.setImageURL(user.getImageURL());
+            userContributedLists.add(u);
+        }
+
 //        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
 
         expense.setRequester(expense.getRequester());
