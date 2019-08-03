@@ -17,22 +17,12 @@ public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     List<Expense> findByGroupNameLikeAndStatusOrderByCreatedDateDesc(String groupName,Boolean bool);
     List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);
     Page<Expense> findByGroupNameOrderByCreatedDateDesc(String groupName, Pageable pageable);
-    Page<Expense> findAllByTitleContainsIgnoreCaseAndStatusContainsIgnoreCase(String title,Boolean status,Pageable pageable);
     Page<Expense> findByTitleContainsIgnoreCaseOrderByCreatedDateDesc(String title,Pageable pageable);
     Page<Expense> findByStatusOrderByCreatedDateDesc(Boolean status,Pageable pageable);
     Page<Expense> findByPriceLessThanEqualOrderByCreatedDate(double price,Pageable pageable);
     Page<Expense> findByPriceGreaterThanEqualOrderByCreatedDate(double price,Pageable pageable);
-
     Page<Expense> findByCreatedDateLessThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
     Page<Expense> findByCreatedDateGreaterThanEqualOrderByStatus(long dateInMillis,Pageable pageable);
-
-
-    @Query("{'?0' : { $regex: '?1', $options: 'i' } }")
-    Page<Expense> findAll(
-            String field,
-            String value,
-            Pageable pageable);
-
     Expense findByIdExpense(String id);
     Expense findTopByGroupNameAndStatusOrderByLastModifiedAtDesc(String gName,Boolean bool);
     List<Expense> findTop10ByGroupNameOrderByCreatedDateDesc(String groupName);

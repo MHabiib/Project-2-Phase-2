@@ -40,6 +40,7 @@ import static com.future.tcfm.service.impl.UserServiceImpl.*;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
+    public static final String UPLOADED_FOLDER="../assets/user/";
     @Autowired
     PaymentRepository paymentRepository;
 
@@ -79,7 +80,7 @@ public class PaymentServiceImpl implements PaymentService {
         if(checkImageFile(file)){
             try {
 //              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
-                String fileName = System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
+                String fileName = "payment/"+System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
                 payment.setImageURL(UPLOADED_URL+fileName);
@@ -113,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
                     Path deletePath = Paths.get(UPLOADED_FOLDER + paymentExist.getImagePath());
                     Files.delete(deletePath);
                 }
-                String fileName=String.valueOf(System.currentTimeMillis())+"_"+payment.getEmail()+"_"+file.getOriginalFilename();
+                String fileName="payment/"+String.valueOf(System.currentTimeMillis())+"_"+payment.getEmail()+"_"+file.getOriginalFilename();
                 saveUploadedFile(file, fileName);
                 paymentExist.setImagePath(fileName);
                 paymentExist.setImageURL(UPLOADED_URL + fileName);
@@ -134,13 +135,20 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ResponseEntity managementPayment(ExpenseRequest thisPayment) throws MessagingException {
         Payment paymentExist = paymentRepository.findByIdPayment(thisPayment.getId());
+
         if(paymentExist==null){
             return new ResponseEntity("Payment not found!",HttpStatus.NOT_FOUND);
         }
+        String payFor=paymentExist.getEmailMemberLain().equals("")?paymentExist.getEmail():paymentExist.getEmailMemberLain();
+        User payForExist=userRepository.findByEmail(payFor);
+        if(payForExist==null){
+            return new ResponseEntity("User not found!",HttpStatus.NOT_FOUND);
+        }
+
         if(thisPayment.getStatus()){
             if(!paymentExist.getIsChecked()){
                 paymentExist.setIsRejected(false);
-                User user = userRepository.findByEmail(paymentExist.getEmail());
+                User user = userRepository.findByEmail(payFor);
                 Group group = groupRepository.findByName(paymentExist.getGroupName());
 
                 user.setBalance(user.getBalance()+paymentExist.getPrice());
