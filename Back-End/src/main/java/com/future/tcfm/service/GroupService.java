@@ -5,6 +5,7 @@ import com.future.tcfm.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface GroupService {
@@ -21,4 +22,6 @@ public interface GroupService {
     int getGroupCreatedMonth(String groupName);
 
     ResponseEntity getGroupById(String id);
+
+    Page<Group> searchBy(String query, int page, int size) throws ParseException;
 }

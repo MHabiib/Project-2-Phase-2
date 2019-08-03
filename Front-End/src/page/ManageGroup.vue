@@ -12,11 +12,24 @@
             All Groups
           </div>
 
-          <div style='display: flex;'>
-            <input class='groupTableSearch' type="text" placeholder="Search by anything" v-model='searchQuery'/>
-
-            <div class="groupTableAddNew" @click='openCreateNewGroupWindow'>
-              Request Group
+          <div class="myParent" style='display: flex;'>
+            <input class='groupsTabeSearch' type="text" :placeholder="'Search by '+this.searchPlaceHolder" v-model='searchQuery'/>
+            <div class="dropdownMenu" >
+                <multiselect 
+                  v-model="filter" 
+                  :allow-empty="false" 
+                  :options="options" 
+                  :searchable="false" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  placeholder="Pick a value">
+                </multiselect>
+            </div>
+            <div class="refreshBtn" @click='searchData(0)'>
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
+            </div>
+            <div class="groupsTabeAddNew" @click='openCreateNewGroupWindow'>
+              Add New Group
             </div>
           </div>
         </div>
@@ -28,49 +41,41 @@
               <th>&nbsp;&nbsp;</th>
               <th>Name</th>
               <th>Admin</th>
+              <th>Balance</th>
               <th>Regular Payment</th>
-              <th>Group Balance</th>
-              <th>Status</th>
+              <th>Created Date</th>
+              <!-- <th>Status</th> -->
             </tr>
             </thead>
 
             <tbody id='infiniteScroll'>
-            <tr
-              class='groupRow'
-              v-for='(group, index) in dataGroupShown' :key='"group-"+index'
-              @click="openGroupDetailWindow(group.idGroup)"
-            >
-              <td>{{index+1}}.</td>
-              <td>{{group.name}}</td>
-              <td>{{group.groupAdmin}}</td>
-              <td>Rp {{group.regularPayment | thousandSeparators}}</td>
-              <td>Rp {{group.groupBalance | thousandSeparators}}</td>
-              <td>{{group.active?"Active" : "Non-Active"}}</td>
-            </tr>
+              <tr
+                class='groupRow'
+                v-for='(group, index) in groupList' :key='"group-"+index'
+                @click="openGroupDetailWindow(group.idGroup)"
+              >
+                <td>{{index+1}}.</td>
+                <td>{{group.name}}</td>
+                <td>{{group.groupAdmin}}</td>
+                <td>Rp {{group.groupBalance | thousandSeparators}}</td>
+                <td>Rp {{group.regularPayment | thousandSeparators}}</td>
+                <td>{{group.createdDate | dateFormatter}}</td>
+
+                <!-- <td>{{group.active ? "Active" : "Non-Active"}}</td> -->
+              </tr>
+              <div style="text-align:center">
+                <div v-show="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+              </div>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-
-    <UserContributedWindow
-      v-if='showUserContributedWindow'
-      @closeContributedWindow="closeUserContributedWindow"
-      :groupName="this.selectedGroup"
-      :userList="this.selectedUserList"
-    />
-
-    <groupDetailWindow
+    <createNewGroupWindow
       v-if='showGroupDetailWindow'
       @closeGroupDetailWindow="closeGroupDetailWindow"
       @refreshData="getGroupData"
       :groupId="this.detailGroupSelected"
-    />
-
-    <createNewGroupWindow
-      v-if='showCreateNewGroupWindow'
-      @closeCreateNewGroupWindow='closeCreateNewGroupWindow'
-      @refreshData="getGroupData"
     />
   </div>
 </template>
@@ -78,53 +83,95 @@
 <script>
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
-  import UserContributedWindow from '../components/userContributedWindow';
-  import groupDetailWindow from '../components/GroupDetailWindow';
-  import createNewGroupWindow from '../components/createNewExpense';
+  import createNewGroupWindow from '../components/CreateNewGroupWindow';
+  import Multiselect from 'vue-multiselect'
   import Helper from '../../Helper';
 
   export default {
-    computed: {rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);}},
+    components: {
+      'multiselect': Multiselect,
+      createNewGroupWindow,
+
+    },
+    computed: {
+      rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);
+      },
+      searchPlaceHolder:function(){
+        return this.filter == "date before"  || this.filter == "date after"  ? "(dd-MMMM-yyyy)" : this.filter
+      }
+      
+    },
     data: function() {
       return {
-        dataGroup: [],
-        dataGroupShown: [],
-        selectedUserList: [],
+        dataGroup: {},
+        groupList:[],
         detailGroupSelected: '',
-        selectedGroup: '',
-        showUserContributedWindow: false,
         showGroupDetailWindow: false,
-        showCreateNewGroupWindow: false,
-        searchQuery: ''
+        searchQuery: '',
+        filter:'name',
+        options:['name','groupAdmin','date before','date after','balance <','balance >'],
+        loading:false,
       }
     },
-    created() {this.getGroupData();},
+    mounted() {this.scroll()},
+    watch: {
+      filter : function (newQuery, oldQuery) {
+        this.searchData(0)  
+      },
+      searchQuery: function (newQuery, oldQuery) {
+        this.searchData(0)  
+      }
+    },
+    created() {this.searchData(0);},
     methods: {
-      getGroupData() {
-        fetch(`${Helper.backEndAddress}/api/group`, {
+      searchData(page) {
+        this.loading=true;
+        console.log(this.filter+" : " +this.searchQuery)
+        fetch(`${Helper.backEndAddress}/api/group/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
           headers: {Authorization: localStorage.getItem('accessToken')}
         })
-          .then(response => {
-            if(response.status==401){
-              Helper.getNewToken(this.getGroupData)
-            }
-            else{
-              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-              response.json().then(
-                res => {
-                  // console.log(res)
-                  // this.dataGroup = res
-                  this.dataGroupShown = res
-                  // this.filterData(this.searchQuery);
-                }
-              )
-            }
-          })
+        .then(response => {
+          if(response.status==401){
+            Helper.getNewToken(this.searchData.bind(null,0))
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                this.groupList=res.content
+                this.dataPayment = res;
+                setTimeout(e=>{this.loading=false},500)
+
+                // this.loading=false
+              }
+            )
+          }         
+        })
       },
-      showUserContributed(selectedGroup, userList) {
-        this.selectedGroup = selectedGroup;
-        this.selectedUserList = userList;
-        this.showUserContributedWindow = true;
+      getGroupData(page) {
+        this.loading=true;
+        console.log(this.filter+" : " +this.searchQuery)
+
+        // fetch(`${Helper.backEndAddress}/api/payment?isPaid=false&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/group/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {
+          headers: {Authorization: localStorage.getItem('accessToken')}
+        })
+        .then(response => {
+          if(response.status==401){
+            Helper.getNewToken(this.getPendingPayment.bind(null,this.dataPayment.pageable.pageNumber+1))
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                this.groupList=this.groupList.concat(res.content)
+                this.dataPayment = res;
+                setTimeout(e=>{this.loading=false},500)
+                // this.loading=false;
+              }
+            )
+          }         
+        })
       },
       closeUserContributedWindow() {this.showUserContributedWindow = false;},
       openGroupDetailWindow(groupId) {
@@ -169,38 +216,6 @@
           case null: return 'Waiting'
         }
       },
-      filterData(newQuery) {
-        let dataFiltered = [];
-        const queryBaru = newQuery.toString().toLowerCase();
-
-        this.dataGroup.forEach(element => {
-          const dateElement = this.dateFormatter(element.createdDate).toString().toLowerCase();
-          const titleElement = element.title.toString().toLowerCase();
-          const statusElement = this.statusChecker(element.status).toString().toLowerCase();
-          const priceElement = element.price.toString();
-
-          if(
-            dateElement.includes(queryBaru) ||
-            titleElement.includes(queryBaru) ||
-            statusElement.includes(queryBaru) ||
-            priceElement.includes(queryBaru)
-          ) {
-            dataFiltered.push(element)
-          }
-        })
-
-        this.dataGroupShown = dataFiltered;
-        const e = document.getElementById('infiniteScroll');
-        if (e.scrollHeight <= e.clientHeight) {
-          console.log('Infinite Triggered')
-        }
-      }
-    },
-    components: {
-      'UserContributedWindow': UserContributedWindow,
-      'createNewGroupWindow': createNewGroupWindow,
-      groupDetailWindow,
-
     },
     filters: {
       statusChecker(status) {
@@ -211,19 +226,9 @@
         }
       }
     },
-    mounted() {this.scroll()},
-    watch: {
-      searchQuery: function (newQuery, oldQuery) {
-        if(newQuery === '') {
-          this.dataGroupShown = this.dataGroup;
-        } else {
-          this.filterData(newQuery);
-        }
-      }
-    },
   }
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
   .groupsComponent {display: flex;}
 
@@ -242,6 +247,8 @@
     padding: 15px 25px;
     border-radius: 5px;
     align-items: center;
+    font-weight: 600;
+
     width: 90%;
     margin: auto;
     position: relative;
@@ -283,20 +290,20 @@
     padding-left: 10px;
   }
   .groupsTableBody tbody td:nth-child(2), .groupsTableBody thead tr th:nth-child(2) {
-    width: 13vw;
+    width: 12vw;
     text-align: left;
     padding-left: 10px;
   }
 
   .groupsTableBody tbody td:nth-child(3), .groupsTableBody thead tr th:nth-child(3) {
-    width: 300px;
+    width: 15vw;
     text-align: left;
     padding-left: 10px;
   }
 
-  .groupsTableBody tbody td:nth-child(4), .groupsTableBody thead tr th:nth-child(4) {width: 10vw;}
-  .groupsTableBody tbody td:nth-child(5), .groupsTableBody thead tr th:nth-child(5) {width: 11vw;}
-  .groupsTableBody tbody td:nth-child(6), .groupsTableBody thead tr th:nth-child(6) {width: 10vw;}
+  .groupsTableBody tbody td:nth-child(4), .groupsTableBody thead tr th:nth-child(4) {width: 14vw;}
+  .groupsTableBody tbody td:nth-child(5), .groupsTableBody thead tr th:nth-child(5) {width: 12vw;}
+  /* .groupsTableBody tbody td:nth-child(6), .groupsTableBody thead tr th:nth-child(6) {width: 10vw;} */
 
   .showMembersButton {cursor: pointer;}
 
@@ -305,7 +312,7 @@
     color: var(--primary-0);
   }
 
-  .groupTableSearch {
+  .groupsTabeSearch {
     outline: none;
     padding: 8px 10px;
     border: none;
@@ -313,9 +320,39 @@
     border-radius: 4px;
   }
 
-  .groupTableSearch::placeholder {color: var(--primary-1)}
+  .groupsTabeSearch::placeholder {color: var(--primary-1)}
 
-  .groupTableAddNew {
+#app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{
+    /* background-color: var(--lightColor); */
+    font-size: 14px;
+    color: var(--primary-0) ;
+    border-radius: 5px;
+  }
+
+  .dropdownMenu{
+    margin-left: 10px;
+    position: relative;
+    width: 10vw;
+  }
+  .dropdownMenu:hover{
+    cursor:pointer;
+  }
+  .refreshBtn {
+    background-color: #fff;
+    color: var(--primary-0);
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  .refreshBtn:hover {
+    background-color: var(--primary-3);
+    color: var(--lightColor);
+    cursor: pointer;
+  }
+  .refreshBtn:active {background-color: var(--primary-4);}
+  .groupsTabeAddNew {
     background-color: var(--lightColor);
     color: var(--primary-0);
     padding: 10px;
@@ -326,13 +363,48 @@
     cursor: pointer;
   }
 
-  .groupTableAddNew:hover {
+  .groupsTabeAddNew:hover {
     background-color: var(--primary-3);
     color: var(--lightColor);
   }
 
-  .groupTableAddNew:active {background-color: var(--primary-4);}
+  .groupsTabeAddNew:active {background-color: var(--primary-4);}
   .groupRow {cursor: pointer;}
   .groupRow:hover {background-color: white;}
   .groupRow:active {background-color: rgba(255, 255, 255, .5);}
+   .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 </style>

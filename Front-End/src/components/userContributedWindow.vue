@@ -10,7 +10,7 @@
         <div class="userContributedBody">
           <div v-for='(dataUser, index) in dataUserContributed' :key='index' class='userContributedBodyContent'>
             <div class='userContributedBodyContentLeft'>
-              <img :src="'http://localhost:8088/img/' + dataUser.imagePath" :alt="dataUser.name"/>
+              <img :src="''+dataUser.imageURL" :alt="dataUser.name"/>
             </div>
 
             <div class="userContributedBodyContentRight">

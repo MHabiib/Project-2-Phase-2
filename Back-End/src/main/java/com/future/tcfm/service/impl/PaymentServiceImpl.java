@@ -240,7 +240,7 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.println("Key : "+key+"; Value : "+value);
         Pageable pageable = createPageRequest("paymentDate","desc",page,size);
         Query myQuery = new Query().with(pageable);
-        Criteria criteria = new Criteria();
+        Criteria criteria = Criteria.where(key).regex(value,"i");
         if(key.equalsIgnoreCase("date before")){
             key = "paymentDate";
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
@@ -267,7 +267,7 @@ public class PaymentServiceImpl implements PaymentService {
             int dValue = value.equalsIgnoreCase("")? Integer.MAX_VALUE :Integer.parseInt(value);
             criteria = Criteria.where(key).lt(dValue).and("groupName").is(getCurrentUser().getGroupName());
         } else if(key.equalsIgnoreCase("periode >")){
-            key=key.substring(0,7);
+                key=key.substring(0,7);
             int dValue = value.equalsIgnoreCase("")? 0 :Integer.parseInt(value);
             criteria = Criteria.where(key).gt(dValue).and("groupName").is(getCurrentUser().getGroupName());
         }

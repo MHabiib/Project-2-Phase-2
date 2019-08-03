@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin
@@ -41,17 +42,25 @@ public class GroupController {
     public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) {
         return groupService.updateGroup(id,group);
     }
-    @GetMapping("/membersByEmail")
-    public Page<User> findMyGroupMembers(@RequestParam("email") String email,
-                                         @RequestParam(value = "filter",required = false, defaultValue = "name") String filter,
-                                         @RequestParam(value = "year",required = false, defaultValue = "0") int year,
-                                         @RequestParam(value = "page",required = false, defaultValue = "0") int page,
-                                         @RequestParam(value = "size",required = false, defaultValue = "10") int size) {
-        return groupService.findMembersGroupByEmail(email,filter,year,page,size);
+    @GetMapping("/search")
+    public Page<Group> searchAllGroup(
+            //            @PathVariable("groupName") String groupName,
+            @RequestParam(value = "query",required = false, defaultValue = "")String query,
+            @RequestParam(value = "page",required = false, defaultValue = "0")int page,
+            @RequestParam(value = "size",required = false, defaultValue = "10")int size) throws ParseException {
+        return groupService.searchBy(query,page,size);
     }
+
+//    @GetMapping("/membersByEmail")
+//    public Page<User> findMyGroupMembers(@RequestParam("email") String email,
+//                                         @RequestParam(value = "filter",required = false, defaultValue = "name") String filter,
+//                                         @RequestParam(value = "year",required = false, defaultValue = "0") int year,
+//                                         @RequestParam(value = "page",required = false, defaultValue = "0") int page,
+//                                         @RequestParam(value = "size",required = false, defaultValue = "10") int size) {
+//        return groupService.findMembersGroupByEmail(email,filter,year,page,size);
+//    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Group> disbandGroup(@PathVariable("id") String id) {
         return groupService.disbandGroup(id);
     }
-
 }

@@ -235,7 +235,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         String value=matcher.group(3);
         System.out.println("Key : "+key+"; Value : "+value);
         if(key.equalsIgnoreCase("title")){
-            return expenseRepository.findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(groupName,value,createPageRequest("createdDate","desc",page,size));
+            return expenseRepository.findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(groupName,value,createPageRequest("title","asc",page,size));
         } else if(key.equalsIgnoreCase("status")){
             Boolean status = value.equalsIgnoreCase("accepted");
             status = value.equalsIgnoreCase("") || value.equalsIgnoreCase("waiting") ? null : status;
