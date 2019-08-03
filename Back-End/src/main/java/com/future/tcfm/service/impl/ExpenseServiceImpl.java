@@ -206,13 +206,14 @@ public class ExpenseServiceImpl implements ExpenseService {
                 return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
             }
             expenseExist.setStatus(true);
-            //notif...
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
+
+            //notif...
             List<User> listUser = userRepository.findByGroupNameLike(group.getName());
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
-
+            expenseExist.setGroupCurrentPeriod(group.getCurrentPeriod());
             groupRepository.save(group);
             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }

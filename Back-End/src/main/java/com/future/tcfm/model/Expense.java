@@ -30,4 +30,5 @@ public class Expense {
     private Boolean status;
     private Long lastModifiedAt;
     private String approvedOrRejectedBy;
+    private Integer groupCurrentPeriod;
 }

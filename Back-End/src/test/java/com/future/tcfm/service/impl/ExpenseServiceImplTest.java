@@ -47,7 +47,6 @@ public class ExpenseServiceImplTest {
         expense.setTitle("Sound");
         expense.setDetail("Marshall");
         expense.setPrice((double) 15000000);
-        expense.setUserContributed(Arrays.asList(user,user,user));
         expense.setRequester(user.getEmail());
     }
 

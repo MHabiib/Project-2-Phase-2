@@ -38,7 +38,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Autowired
     NotificationService notificationService;
 
-    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
     @Async
 //    @Scheduled(fixedRate = 5000L)
@@ -139,12 +139,12 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Async
     @Transactional
     @Scheduled(cron = "0 31 10 05 * ?") // setiap tanggal 31 disetiap bulan jam 10 : 05
-    public void monthlyCashStatement() throws MessagingException {
+    public void monthlyCashStatemen() throws MessagingException {
         List<User> listUser = userRepository.findAll();
         sseMvcExecutor.execute(() -> {//pisahThread
             for(User user:listUser){
                 try {
-                    emailService.monthlyCashStatement(user.getEmail());
+                    emailService.periodicMailReminderSender(user.getEmail());
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }

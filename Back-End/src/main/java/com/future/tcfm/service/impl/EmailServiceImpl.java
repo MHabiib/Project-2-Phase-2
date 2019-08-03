@@ -1,11 +1,13 @@
 package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.Expense;
+import com.future.tcfm.model.Group;
 import com.future.tcfm.model.ReqResModel.EmailRequest;
 import com.future.tcfm.model.User;
 import com.future.tcfm.model.list.ExpenseContributedDetails;
 import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.repository.ExpenseRepository;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class EmailServiceImpl implements EmailService {
     ExpenseRepository expenseRepository;
 
     @Autowired
+    GroupRepository groupRepository;
+
+    @Autowired
     public JavaMailSender emailSender;
 
     @Async
@@ -52,8 +57,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setTo("anthonylegend44@gmail.com");
-        helper.setTo(email);
+        helper.setTo("mhabibofficial2@gmail.com");
         helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
 
         if (monthNowStr.equals(monthBeforeStr)) {
@@ -85,7 +89,6 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo("mhabibofficial2@gmail.com");
-        helper.setTo(email);
         helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
 
         helper.setText("<html><body>" +
@@ -121,14 +124,14 @@ public class EmailServiceImpl implements EmailService {
         String groupName = user.getGroupName();
         String expenseListStr="";
         List<ExpenseContributedDetails> listExpense = new ArrayList<>();
-
-        List<Expense> expenseIdContributed = expenseRepository.findByGroupNameLikeAndLastModifiedAtAndStatus(groupName,1,true);///???????????????????????????????????????????? FIND BY MONTH
+        Group group= groupRepository.findByName(user.getGroupName());
+        List<Expense> expenseIdContributed = expenseRepository.findByGroupNameLikeAndGroupCurrentPeriodAtAndStatus(groupName,group.getCurrentPeriod(),true);
         if(expenseIdContributed!=null){
             for(Expense expense: expenseIdContributed){
-                Expense e = expenseRepository.findByIdExpense(expense.getIdExpense()) ;
                 ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
-                expenseContributedDetails.setTitle(e.getTitle());
-                expenseContributedDetails.setDetail(e.getDetail());
+                expenseContributedDetails.setTitle(expense.getTitle());
+                expenseContributedDetails.setDetail(expense.getDetail());
+                expenseContributedDetails.setPrice(expense.getPrice());
                 listExpense.add(expenseContributedDetails);
                 expenseListStr+=(expenseContributedDetails.toString());
             }
