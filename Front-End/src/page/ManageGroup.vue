@@ -4,14 +4,11 @@
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
       <HeaderSection headerTitle='Groups'/>
-
-
       <div class="groupsBodySection">
         <div class="groupsTableHeader">
           <div class="groupsTableHeaderTitle">
             All Groups
           </div>
-
           <div class="myParent" style='display: flex;'>
             <input class='groupsTabeSearch' type="text" :placeholder="'Search by '+this.searchPlaceHolder" v-model='searchQuery'/>
             <div class="dropdownMenu" >
@@ -52,7 +49,7 @@
               <tr
                 class='groupRow'
                 v-for='(group, index) in groupList' :key='"group-"+index'
-                @click="openGroupDetailWindow(group.idGroup)"
+                @click="openGroupDetailWindow(group)"
               >
                 <td>{{index+1}}.</td>
                 <td>{{group.name}}</td>
@@ -73,9 +70,13 @@
     </div>
     <createNewGroupWindow
       v-if='showGroupDetailWindow'
+      @updateGroupDetailWindow="updateGroupDetailWindow"
       @closeGroupDetailWindow="closeGroupDetailWindow"
       @refreshData="getGroupData"
-      :groupId="this.detailGroupSelected"
+      :groupDetail="this.detailGroupSelected"
+      :headerTitle ="this.headerTitle"
+      :editMode ="this.editMode"
+      :addMode = this.addMode
     />
   </div>
 </template>
@@ -91,7 +92,6 @@
     components: {
       'multiselect': Multiselect,
       createNewGroupWindow,
-
     },
     computed: {
       rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);
@@ -111,6 +111,9 @@
         filter:'name',
         options:['name','groupAdmin','date before','date after','balance <','balance >'],
         loading:false,
+        editMode:false,
+        addMode:false,
+        headerTitle:'',
       }
     },
     mounted() {this.scroll()},
@@ -174,13 +177,27 @@
         })
       },
       closeUserContributedWindow() {this.showUserContributedWindow = false;},
-      openGroupDetailWindow(groupId) {
+      openGroupDetailWindow(groupDetail) {
+        this.detailGroupSelected = groupDetail;
+        this.headerTitle = `Group ${groupDetail.name}`;
+        this.editMode = false;
+        this.addMode = false;
         this.showGroupDetailWindow = true;
-        this.detailGroupSelected = groupId;
+
       },
       closeGroupDetailWindow() {this.showGroupDetailWindow = false;},
-      openCreateNewGroupWindow() {this.showCreateNewGroupWindow = true;},
-      closeCreateNewGroupWindow() {this.showCreateNewGroupWindow = false;},
+      updateGroupDetailWindow(){
+        this.showGroupDetailWindow = false
+        this.searchData(0)
+      },
+      openCreateNewGroupWindow() {
+        this.detailGroupSelected = {};
+        this.headerTitle = `Add New Group`
+        this.editMode = true;
+        this.addMode = true;
+        this.showGroupDetailWindow = true;},
+      closeCreateNewGroupWindow() {
+        this.showGroupDetailWindow = false;},
       scroll() {
         document.getElementById('infiniteScroll').onscroll = (e) => {
           if(e.target.clientHeight + e.target.scrollTop >= e.target.scrollHeight) {

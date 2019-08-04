@@ -47,7 +47,7 @@
               <tr
                 class='paymentRow'
                 v-for='(payment, index) in paymentList' :key='index'
-                @click="openPaymentDetailWindow(payment.idPayment)">
+                @click="openPaymentDetailWindow(payment)">
                     <td>{{index+1}}.</td>
                     <td>{{payment.paymentDate | dateFormatter}}</td>
                     <td>{{payment.email}}</td>
@@ -67,8 +67,8 @@
     <PaymentDetailWindow
       v-if='showPaymentDetailWindow'
       @closePaymentDetailWindow="closePaymentDetailWindow"
-      @refreshData="getPaymentData(0)"
-      :paymentId="this.detailPaymentSelected"
+      @refreshData="searchData(0)"
+      :payment="this.detailPaymentSelected"
     />
 
   </div>
@@ -167,9 +167,9 @@
           }         
         })
       },
-      openPaymentDetailWindow(paymentId) {
+      openPaymentDetailWindow(payment) {
         this.showPaymentDetailWindow = true;
-        this.detailPaymentSelected = paymentId;
+        this.detailPaymentSelected = payment;
       },
       closePaymentDetailWindow() {this.showPaymentDetailWindow = false;},
 

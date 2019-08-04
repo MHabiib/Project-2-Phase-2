@@ -112,8 +112,8 @@
           alert('Harap masukkan email user.')
         } else if(this.nomorHpInput === '') {
           alert('Harap masukkan nomor handphone user')
-        } else if(this.groupInput === '') {
-          alert('Harap pilih grup user.')
+        // } else if(this.groupInput === '') {
+        //   alert('Harap pilih grup user.')
         } else if(this.fileInput === null) {
           alert('Harap masukkan foto user.')
         } else {
@@ -124,7 +124,7 @@
             email: this.emailInput,
             phone: this.nomorHpInput,
             groupName: this.groupInput,
-            role: this.roleInput,
+            role: this.roleInput===""?"MEMBER":this.roleInput,
             password: this.passwordInput,
             rekening: this.nomorRekeningInput,
             namaBank: this.namaBankInput
@@ -243,13 +243,16 @@
 
   .singleLineInput {
     outline: none;
-    padding: 10px;
-    border: solid 1px var(--primary-1);
-    color: var(--primary-4);
+    padding: 5px;
     width: 100%;
-    margin-top: 10px;
+    border: solid 1px var(--primary-1);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    color: var(--primary-4);
+    margin-top: 20px;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 2px;
   }
 
   .singleLineInput::placeholder {

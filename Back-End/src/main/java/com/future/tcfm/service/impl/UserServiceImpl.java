@@ -122,8 +122,11 @@ public class UserServiceImpl implements UserService {
             }
             userExist.setJoinDate(new Date().getTime());
             userExist.setGroupName(user.getGroupName());
-
+            userExist.setPeriodeTertinggal(1);
+            userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod()-1);
             notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
+
+
             notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
             //notification untuk group barunya
             notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
@@ -132,8 +135,9 @@ public class UserServiceImpl implements UserService {
         if(!userExist.getRole().equals(user.getRole())){
             if(user.getRole().equals("GROUP_ADMIN")){
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());
-                oldAdmin.setRole(oldAdmin.getRole().replace("GROUP_ADMIN","MEMBER"));
+                oldAdmin.setRole("MEMBER");
                 groupExist.setGroupAdmin(user.getEmail());
+                userRepository.save(oldAdmin);
             }
         }
         userExist.setRole(userExist.getRole());
@@ -196,7 +200,10 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
         }
         if (groupExist == null){
-            user.setGroupName("GROUPLESS"); // terakhir sampai disini
+            groupExist = new Group();
+            groupExist.setCurrentPeriod(0);
+            groupExist.setRegularPayment((double)0);
+            user.setGroupName("GROUP_LESS");
 //            return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);
         }
         if (user.getRole().equals("GROUP_ADMIN")){
@@ -241,7 +248,9 @@ public class UserServiceImpl implements UserService {
         User userExist = userRepository.findByEmail(email);
         if (userExist == null)
             return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
-
+        if(userExist.getPeriodeTertinggal()>0){
+            return new ResponseEntity<>(userExist.getPeriodeTertinggal(),HttpStatus.OK);
+        }
         userExist.setActive(false);
         userRepository.save(userExist);
         return new ResponseEntity<>("User deleted!", HttpStatus.OK);
