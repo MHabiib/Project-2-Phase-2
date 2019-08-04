@@ -89,7 +89,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
         expense.setCreatedDate(System.currentTimeMillis());
-        List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
+        expense.setGroupCurrentPeriod(groupExist.getCurrentPeriod());
+        List<User> userContributed = userRepository.findByGroupNameAndActive(expense.getGroupName(),true);
         List<UserContributedList> userContributedLists;
         for(User user:userContributed){
             userContributedLists=expense.getUserContributed();
@@ -210,10 +211,9 @@ public class ExpenseServiceImpl implements ExpenseService {
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
 
             //notif...
-            List<User> listUser = userRepository.findByGroupNameLike(group.getName());
+            List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
-            expenseExist.setGroupCurrentPeriod(group.getCurrentPeriod());
             groupRepository.save(group);
             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
@@ -223,7 +223,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
-        List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
+        List<User> groupMembers = userRepository.findByGroupNameAndActive(expenseExist.getGroupName(),true);
         executor.execute(() -> {
             try {
                 for (User user : groupMembers) {

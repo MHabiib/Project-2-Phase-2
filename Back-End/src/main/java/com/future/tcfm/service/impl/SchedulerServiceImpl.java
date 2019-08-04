@@ -40,25 +40,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     private ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
-    @Async
-//    @Scheduled(fixedRate = 5000L)
-    @Transactional
-    public void checkUserPeriodPaid(){
-        System.out.println("This is the checkUserPeriodPaid method!");
-        List<User> userList = userRepository.findAllByActive(true);
-        Map<String,Group> groupMap = new HashMap<String,Group>();
-        userList.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
-        Group group;
-        String message=PAYMENT_LATE;
-        for (User user : userList) {
-            group = groupMap.get(user.getGroupName());
-            if(user.getTotalPeriodPayed()<group.getCurrentPeriod()){
-                user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());
-                notificationService.createNotification(message,user.getEmail(),null,TYPE_PERSONAL);
-            }
-        }
-        userRepository.saveAll(userList);
-    }
+//
     @Async
     @Transactional
     @Scheduled(cron = "0 10 10 05 * ?") // setiap tanggal 10  disetiap bulan jam 10 : 05
@@ -151,6 +133,25 @@ public class SchedulerServiceImpl implements SchedulerService {
             }
         });
     }
+//    @Async
+////    @Scheduled(fixedRate = 5000L)
+//    @Transactional
+//    public void checkUserPeriodPaid(){
+//        System.out.println("This is the checkUserPeriodPaid method!");
+//        List<User> userList = userRepository.findAllByActive(true);
+//        Map<String,Group> groupMap = new HashMap<String,Group>();
+//        userList.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
+//        Group group;
+//        String message=PAYMENT_LATE;
+//        for (User user : userList) {
+//            group = groupMap.get(user.getGroupName());
+//            if(user.getTotalPeriodPayed()<group.getCurrentPeriod()){
+//                user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());
+//                notificationService.createNotification(message,user.getEmail(),null,TYPE_PERSONAL);
+//            }
+//        }
+//        userRepository.saveAll(userList);
+//    }
 }
 
 /*
