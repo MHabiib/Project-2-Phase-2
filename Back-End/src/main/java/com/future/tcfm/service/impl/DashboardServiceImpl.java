@@ -41,13 +41,12 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public Dashboard getData(String email) {
         User dUser = userRepository.findByEmail(email);
-        Group dGroup = groupRepository.findByName(dUser.getGroupName());
+        Group dGroup = groupRepository.findByNameAndActive(dUser.getGroupName(),true);
         Integer totalMembers = userRepository.countByGroupName(dGroup.getName());
         List<Expense> dExpense = expenseRepository.findByGroupNameLikeAndStatusOrderByCreatedDateDesc(dUser.getGroupName(),true);
 
-        User groupAdmin = userRepository.findByGroupNameAndRole(dUser.getGroupName(), "GROUP_ADMIN");
-        String adminName = groupAdmin.getName();
-        String accountNumber = groupAdmin.getRekening();
+        String adminName = dGroup.getGroupAdmin();
+        String accountNumber = dGroup.getBankAccountNumber();
 
         int monthNow= LocalDate.now().getMonthValue();
         double expenseByValue = 0;

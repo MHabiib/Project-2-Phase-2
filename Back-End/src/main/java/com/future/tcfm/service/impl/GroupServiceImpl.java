@@ -112,21 +112,28 @@ public class GroupServiceImpl implements GroupService {
         Group groupExist = groupRepository.findByIdGroup(id);
         List<User> userList;
         List<Expense> expenseList;
-        List<JwtUserDetails> currentlyLoggedInUsers;
         if (groupExist == null)
             return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
         Boolean isNameAvailable = groupRepository.countAllByNameAndActive(group.getName(), true) == 0;
         groupExist.setRegularPayment(group.getRegularPayment());
-        groupExist.setGroupAdmin(group.getGroupAdmin());
+        if(!groupExist.getGroupAdmin().equalsIgnoreCase(group.getGroupAdmin())){
+            User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
+            User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
+            groupExist.setGroupAdmin(newAdmin.getEmail());
+            newAdmin.setRole("GROUP_ADMIN");
+            oldAdmin.setRole("MEMBER");
+            userRepository.save(newAdmin);
+            userRepository.save(oldAdmin);
+        }
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setBalanceUsed(group.getBalanceUsed());
+        groupExist.setBankAccountNumber(group.getBankAccountNumber());
         groupExist.setLastModifiedAt(System.currentTimeMillis());
         groupExist.setCurrentPeriod(group.getCurrentPeriod());
         if(isNameAvailable) {
             expenseList = expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(groupExist.getName());
             userList = userRepository.findByGroupNameAndActive(groupExist.getName(),true);
             jwtUserDetailsRepository.deleteAllByGroupName(groupExist.getName());
-
             groupExist.setName(group.getName());
             expenseList.forEach(expense -> expense.setGroupName(groupExist.getName()));
             userList.forEach(user -> user.setGroupName(groupExist.getName()));
