@@ -14,10 +14,10 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByIdUser(String id);
     User findByEmail(String email);
     List<User> findByGroupNameAndActive(String gName,Boolean bool);
+    List<User> findByGroupNameAndActiveOrderByNameAsc(String gName,Boolean bool);
     User findByEmailAndActive(String email,Boolean bool);
     Integer countByGroupName(String groupName);
     Page<User> findByGroupName(String groupName, Pageable pageable);
-    List<User> findByGroupNameLike(String groupName);
 //    Page<User> findAllByNameContainingAndEmailContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,Boolean active,Pageable pageable);
     Page<User> findAllByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndGroupNameContainingIgnoreCaseAndRoleContainingIgnoreCaseAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,String role,Boolean active,Pageable pageable);
 

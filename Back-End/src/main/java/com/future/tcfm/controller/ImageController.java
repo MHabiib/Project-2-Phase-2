@@ -13,9 +13,14 @@ import java.io.IOException;
 public class ImageController {
     @Autowired
     UserService userService;
-
     @GetMapping(value = "/{imageName:.+}")
-    public ResponseEntity getImage(@PathVariable("imageName") String imageName) throws IOException {
+    public ResponseEntity getOldImage(@PathVariable("imageName") String imageName) throws IOException {
         return userService.getImage(imageName);
     }
+    @GetMapping(value = "/{type}/{imageName:.+}")
+    public ResponseEntity getPaymentImage(@PathVariable("type") String type,@PathVariable("imageName") String imageName) throws IOException {
+        return userService.getImage(type+"/"+imageName);
+    }
+
+
 }

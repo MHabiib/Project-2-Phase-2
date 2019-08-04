@@ -45,7 +45,7 @@ public class GroupServiceImplTest {
         group = new Group();
         group.setName("Breakthrough");
         group.setIdGroup(GROUP_ID);
-        group.setTotalExpense((double) 1000000);
+//        group.setTotalExpense((double) 1000000);
         group.setClosedDate(null);
         group.setRegularPayment((double) 10000);
         group.setGroupBalance((double) 50000000);
@@ -75,14 +75,14 @@ public class GroupServiceImplTest {
     public void membersGroup() {
         // Data preparation
         List<User> users = Arrays.asList(user,user,user);
-        Mockito.when(userRepository.findByGroupNameLike(user.getGroupName())).thenReturn(users);
+        Mockito.when(userRepository.findByGroupNameAndActive(user.getGroupName(),true)).thenReturn(users);
 
         // Method call
         List<User> memberList= groupService.membersGroup(user.getGroupName());
 
         // Verification
         Assert.assertThat(memberList, Matchers.hasSize(3));
-        Mockito.verify(userRepository, Mockito.times(1)).findByGroupNameLike(user.getGroupName());
+        Mockito.verify(userRepository, Mockito.times(1)).findByGroupNameAndActive(user.getGroupName(),true);
         Mockito.verifyNoMoreInteractions(groupRepository);
     }
 

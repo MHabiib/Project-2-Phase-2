@@ -28,10 +28,11 @@ public class Group {
     private String groupAdmin;
     private Double regularPayment;
     private Long createdDate;
+    private Long lastModifiedAt;
     private Long closedDate;
     private Double groupBalance;
     private Double balanceUsed;
-    private Double totalExpense;
+//    private Double totalExpense;
     private Boolean active;
     private Integer currentPeriod;
 //    @JsonIgnore // hitung selisih bulan dari tangal bulan di buat dgn tgl skrg

@@ -41,18 +41,7 @@
             </div>
           </div>
           <div class="expenseDetailFourthRow expenseDetailRow">
-              
               <zoom-on-hover :img-normal="paymentDetail.imageURL" :scale="1.8"></zoom-on-hover>
-              <!-- <vue-responsive-image
-                :width-on-screen="50"
-                :width-on-screen-tablet="75"
-                :width-on-screen-smartphone="100"
-                :image-url="''+paymentDetail.imageURL"
-                :image-ratio="4/3"
-                :alt="''+paymentDetail.imagePath"
-                :mode="'all'"
-              ></vue-responsive-image> -->
-              <!-- <img :src="paymentDetail.imageURL" :alt="paymentDetail.imagePath"/> -->
           </div>
 
           <div class="expenseDetailFifthRow expenseDetailRow">
@@ -92,7 +81,7 @@
       'VueResponsiveImage':VueResponsiveImage,
       'ZoomOnHover':ZoomOnHover,
     },
-    props: ['paymentId'],
+    props: ['payment'],
     data: function() {
       return {
         paymentDetail: {},
@@ -139,29 +128,8 @@
         }
       },
       checkStatus(status) {if(status !== null) {this.disableButton = true}},
-      getPaymentData(id) {
-        fetch(`${Helper.backEndAddress}/api/payment/${id}`, {
-          headers: {Authorization: localStorage.getItem('accessToken')}
-        })
-        .then(response => {
-          if(response.status==401){
-            console.log('paymentId : '+this.paymentId)
-            Helper.getNewToken(this.getPaymentData.bind(null,this.paymentId))
-          }  else {
-          
-            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            response.json().then(
-              res => {
-                this.paymentDetail = res;
-                console.log(this.paymentDetail)
-                this.checkStatus(res.isRejected);
-              }
-            )
-          }
-        })
-      }
     },
-    created() {this.getPaymentData(this.paymentId);},
+    created() {this.paymentDetail=Object.assign({},this.payment)},
     
     filters: {
       statusChecker(status) {
@@ -209,7 +177,7 @@
   }
 
   .expenseWindowSize {
-    width: 30vw;
+    width: 35vw;
     height: 80vh;
     position: relative;
     top: -10vh;

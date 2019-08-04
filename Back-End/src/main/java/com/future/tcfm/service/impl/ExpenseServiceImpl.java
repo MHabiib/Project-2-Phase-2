@@ -88,7 +88,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
         expense.setCreatedDate(System.currentTimeMillis());
-        List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
+        List<User> userContributed = userRepository.findByGroupNameAndActive(expense.getGroupName(),true);
         expense.setUserContributed(userContributed);
 //        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
 
@@ -197,7 +197,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             //notif...
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
-            List<User> listUser = userRepository.findByGroupNameLike(group.getName());
+            List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
 
@@ -210,7 +210,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
-        List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
+        List<User> groupMembers = userRepository.findByGroupNameAndActive(expenseExist.getGroupName(),true);
         executor.execute(() -> {
             try {
                 for (User user : groupMembers) {

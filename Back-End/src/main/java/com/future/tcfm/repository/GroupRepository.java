@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface GroupRepository extends MongoRepository<Group, String> {
+    int countAllByNameAndActive(String name,Boolean bool);
+
     Group findByName(String name);
     Group findByIdGroup(String id);
     Group findByNameAndActive(String id,boolean bool);

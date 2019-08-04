@@ -1,9 +1,9 @@
 package com.future.tcfm.service.impl;
 
-import com.future.tcfm.model.Group;
-import com.future.tcfm.model.Payment;
-import com.future.tcfm.model.User;
+import com.future.tcfm.model.*;
+import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
+import com.future.tcfm.repository.JwtUserDetailsRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.GroupService;
@@ -18,11 +18,13 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -39,6 +41,10 @@ public class GroupServiceImpl implements GroupService {
     GroupRepository groupRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JwtUserDetailsRepository jwtUserDetailsRepository;
+    @Autowired
+    ExpenseRepository expenseRepository;
     @Autowired
     NotificationService notificationService;
     @Autowired
@@ -60,14 +66,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<User> membersGroup(String groupName) {
-        return userRepository.findByGroupNameLike(groupName);
+        return userRepository.findByGroupNameAndActiveOrderByNameAsc(groupName,true);
     }
 
 //  EMAIL -> GET GROUP NAME -> GET ALL MEMBER IN THE GROUP; Robin
     @Override
     public List<User> membersGroupByEmail(String email) {
         String userGroup = userRepository.findByEmail(email).getGroupName();
-        return userRepository.findByGroupNameLike(userGroup);
+        return userRepository.findByGroupNameAndActive(userGroup,true);
     }
 
     @Override
@@ -98,39 +104,60 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity updateGroup(String id, Group group) {
         Group groupExist = groupRepository.findByIdGroup(id);
+        List<User> userList;
+        List<Expense> expenseList;
+        List<JwtUserDetails> currentlyLoggedInUsers;
         if (groupExist == null)
             return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
+        Boolean isNameAvailable = groupRepository.countAllByNameAndActive(group.getName(), true) == 0;
         groupExist.setRegularPayment(group.getRegularPayment());
+        groupExist.setGroupAdmin(group.getGroupAdmin());
         groupExist.setGroupBalance(group.getGroupBalance());
-        groupExist.setActive(group.getActive());
-        groupExist.setCreatedDate(new Date().getTime());
+        groupExist.setBalanceUsed(group.getBalanceUsed());
+        groupExist.setLastModifiedAt(new Date().getTime());
+        groupExist.setCurrentPeriod(group.getCurrentPeriod());
+        if(isNameAvailable) {
+            expenseList = expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(groupExist.getName());
+            userList = userRepository.findByGroupNameAndActive(groupExist.getName(),true);
+            jwtUserDetailsRepository.deleteAllByGroupName(groupExist.getName());
+
+            groupExist.setName(group.getName());
+            expenseList.forEach(expense -> expense.setGroupName(groupExist.getName()));
+            userList.forEach(user -> user.setGroupName(groupExist.getName()));
+            expenseRepository.saveAll(expenseList);
+            userRepository.saveAll(userList);
+        }
         groupRepository.save(groupExist);
-        notificationService.createNotification(GROUP_PROFILE_UPDATE,null,groupExist.getName(),TYPE_GROUP);
+        notificationService.createNotification(GROUP_PROFILE_UPDATE+getCurrentUser().getEmail(),null,groupExist.getName(),TYPE_GROUP);
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity disbandGroup(String id) {
         Group groupExist = groupRepository.findByIdGroup(id);
-//        boolean hasEveryOnePayed = true;
+        List<User> memberHasNotPaid = new ArrayList<>();
         if (groupExist == null) {
             return new ResponseEntity<>("Failed to disband group!\nGroupId not found!", HttpStatus.NOT_FOUND);
         }
-        List<User> userList = userRepository.findByGroupNameAndActive(groupExist.getName(), true);
+        List<User> userList = userRepository.findByGroupNameAndActiveOrderByNameAsc(groupExist.getName(), true);
         for (User user : userList) {
             if (user.getPeriodeTertinggal() > 0) {
-//                hasEveryOnePayed = false;
-                return new ResponseEntity<>("Failed to disband group!\nGroupId not found!", HttpStatus.INTERNAL_SERVER_ERROR);
+                memberHasNotPaid.add(user);
             }
-        }//x
-
+        }
+        System.out.println("Member hasnt paid : "+memberHasNotPaid);
+        if(memberHasNotPaid.size()>0){
+            return new ResponseEntity<>(memberHasNotPaid, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         groupExist.setActive(false);
+        groupRepository.save(groupExist);
         /**
          * tambahkan fungsi utk send email berisi data payment tiap-tiap member dan balance mereka disini.
          */
-        return new ResponseEntity<>("Group is disbanded!",HttpStatus.OK);
+        return new ResponseEntity<>("Group just been disbanded!",HttpStatus.OK);
     }
 
     @Override
@@ -145,7 +172,7 @@ public class GroupServiceImpl implements GroupService {
         System.out.println("Key : "+key+"; Value : "+value);
         Pageable pageable = createPageRequest(key,"asc",page,size);
         Query myQuery = new Query().with(pageable);
-        Criteria criteria = Criteria.where(key).regex(value,"i");
+        Criteria criteria = Criteria.where(key).regex(value,"i").and("active").is(true);
         if(key.equalsIgnoreCase("date before")){
             key = "createdDate";
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");

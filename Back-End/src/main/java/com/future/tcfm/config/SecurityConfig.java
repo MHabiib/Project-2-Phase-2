@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
-//        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+        //        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
         http.cors().and().csrf().disable()//disable cors
 //        .and().csrf().disable()
                 .authorizeRequests()

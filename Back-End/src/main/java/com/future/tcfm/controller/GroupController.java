@@ -5,13 +5,14 @@ import com.future.tcfm.model.User;
 import com.future.tcfm.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin("**")
 @RestController
 @RequestMapping("/api/group")
 public class GroupController {
@@ -23,13 +24,14 @@ public class GroupController {
         return groupService.loadAll();
     }
 
-    @GetMapping("/members") //body fill with group name without ""
-    public List<User> membersGroup(@RequestBody String groupName){
-        return groupService.membersGroup(groupName);
+
+    @GetMapping("/{groupName}/members") //body fill with group name without ""
+    public ResponseEntity membersGroup(@PathVariable("groupName") String groupName){
+        return new ResponseEntity<>(groupService.membersGroup(groupName), HttpStatus.OK);
     }
 
     @GetMapping("/{id}") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
-    public ResponseEntity getMemberById(@PathVariable("id") String id) {
+    public ResponseEntity getGroupById(@PathVariable("id") String id) {
         return groupService.getGroupById(id);
     }
 
@@ -60,7 +62,7 @@ public class GroupController {
 //        return groupService.findMembersGroupByEmail(email,filter,year,page,size);
 //    }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Group> disbandGroup(@PathVariable("id") String id) {
+    public ResponseEntity disbandGroup(@PathVariable("id") String id) {
         return groupService.disbandGroup(id);
     }
 }

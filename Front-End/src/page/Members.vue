@@ -138,7 +138,6 @@
         })
       },
       getMembersData(page) {
-        // fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&filter=${'role'}&page=${page}`, {
         this.loading=true
         fetch(`${Helper.backEndAddress}/api/user/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
           headers: {

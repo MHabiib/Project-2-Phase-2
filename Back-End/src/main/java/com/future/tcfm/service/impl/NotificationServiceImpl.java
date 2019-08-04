@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 public class NotificationServiceImpl implements NotificationService {
     public static final String TYPE_PERSONAL = "PERSONAL";
     public static final String TYPE_GROUP = "GROUP";
-    public static final String GROUP_PROFILE_UPDATE = "GROUP";
+    public static final String GROUP_PROFILE_UPDATE = "Group profile had been updated by ";
     public static final String PAYMENT_LATE = " you are late for this month's payment";
     public static final String EXPENSE_MESSAGE = " requested new expense ";
     public static final String EXPENSE_APPROVED_MESSAGE = " 's requested expense had been approved ";

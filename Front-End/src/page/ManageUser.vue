@@ -95,6 +95,8 @@
               }
             )
           } else if(response.status === 403) {
+            Helper.getNewToken(this.getAllUsers)
+
             alert('Error 403, Anda tidak memiliki hak akses terhadap halaman ini.\nKembali ke dashboard');
             this.$router.push('/dashboard')
           } else {
