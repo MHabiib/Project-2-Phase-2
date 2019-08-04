@@ -3,6 +3,7 @@ package com.future.tcfm.service.impl;
 import com.future.tcfm.model.*;
 import com.future.tcfm.model.ReqResModel.ExpenseRequest;
 import com.future.tcfm.model.list.ExpenseIdContributed;
+import com.future.tcfm.model.list.UserContributedList;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
@@ -88,8 +89,19 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setCreatedDate(new Date().getTime());
         expense.setGroupName(userRepository.findByEmail(expense.getRequester()).getGroupName());
         expense.setCreatedDate(System.currentTimeMillis());
-        List<User> userContributed = userRepository.findByGroupNameAndActive(expense.getGroupName(),true);
-        expense.setUserContributed(userContributed);
+        List<User> userContributed = userRepository.findByGroupNameLike(expense.getGroupName());
+        List<UserContributedList> userContributedLists;
+        for(User user:userContributed){
+            userContributedLists=expense.getUserContributed();
+            if(userContributedLists==null) {
+                userContributedLists = new ArrayList<>();
+            }
+            UserContributedList u = new UserContributedList();
+            u.setEmail(user.getEmail());
+            u.setImageURL(user.getImageURL());
+            userContributedLists.add(u);
+        }
+
 //        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
 
         expense.setRequester(expense.getRequester());
@@ -194,13 +206,14 @@ public class ExpenseServiceImpl implements ExpenseService {
                 return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
             }
             expenseExist.setStatus(true);
-            //notif...
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
-            List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
+
+            //notif...
+            List<User> listUser = userRepository.findByGroupNameLike(group.getName());
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional
-
+            expenseExist.setGroupCurrentPeriod(group.getCurrentPeriod());
             groupRepository.save(group);
             notificationMessage = expenseExist.getRequester() + EXPENSE_APPROVED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
@@ -210,7 +223,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
-        List<User> groupMembers = userRepository.findByGroupNameAndActive(expenseExist.getGroupName(),true);
+        List<User> groupMembers = userRepository.findByGroupNameLike(expenseExist.getGroupName());
         executor.execute(() -> {
             try {
                 for (User user : groupMembers) {
@@ -235,7 +248,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         String value=matcher.group(3);
         System.out.println("Key : "+key+"; Value : "+value);
         if(key.equalsIgnoreCase("title")){
-            return expenseRepository.findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(groupName,value,createPageRequest("title","asc",page,size));
+            return expenseRepository.findByGroupNameContainsAndTitleContainsIgnoreCaseOrderByCreatedDateDesc(groupName,value,createPageRequest("createdDate","desc",page,size));
         } else if(key.equalsIgnoreCase("status")){
             Boolean status = value.equalsIgnoreCase("accepted");
             status = value.equalsIgnoreCase("") || value.equalsIgnoreCase("waiting") ? null : status;

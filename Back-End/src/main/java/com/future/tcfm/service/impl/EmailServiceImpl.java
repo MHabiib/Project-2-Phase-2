@@ -1,11 +1,13 @@
 package com.future.tcfm.service.impl;
 
 import com.future.tcfm.model.Expense;
+import com.future.tcfm.model.Group;
 import com.future.tcfm.model.ReqResModel.EmailRequest;
 import com.future.tcfm.model.User;
 import com.future.tcfm.model.list.ExpenseContributedDetails;
 import com.future.tcfm.model.list.ExpenseIdContributed;
 import com.future.tcfm.repository.ExpenseRepository;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,20 +42,22 @@ public class EmailServiceImpl implements EmailService {
     ExpenseRepository expenseRepository;
 
     @Autowired
+    GroupRepository groupRepository;
+
+    @Autowired
     public JavaMailSender emailSender;
 
-    private int yearNow= LocalDate.now().getYear();
-
     @Async
-    public void periodicMailSender( String email, String monthNowStr, String monthBeforeStr) throws MessagingException {
+    public void periodicMailSender( String email, String monthBeforeStr,int yearBefore) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
+        String monthNowStr=Month.of(LocalDate.now().getMonthValue()).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        int yearNow=LocalDate.now().getYear();
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setTo("anthonylegend44@gmail.com");
-        helper.setTo(email);
+        helper.setTo("mhabibofficial2@gmail.com");
         helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
 
         if (monthNowStr.equals(monthBeforeStr)) {
@@ -64,7 +68,7 @@ public class EmailServiceImpl implements EmailService {
         else {
             helper.setText("<html><body>" +
                     "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu belum membayar iuran untuk bulan "+monthBeforeStr+" "+yearNow+" - "+monthNowStr+" - "+yearNow+"<br>Segera lakukan pembayaran anda.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu belum membayar iuran untuk bulan "+monthBeforeStr+" "+yearBefore+" - "+monthNowStr+" - "+yearNow+"<br>Segera lakukan pembayaran anda.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
         }
         this.emailSender.send(message);
     }
@@ -72,6 +76,26 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public ResponseEntity simpleEmail(EmailRequest emailRequest) {
         return null;
+    }
+
+    @Async
+    public void periodicMailReminderSender( String email) throws MessagingException {
+        User user  = userRepository.findByEmail(email);
+        String name = user.getName();
+        String groupName = user.getGroupName();
+        String monthNowStr=Month.of(LocalDate.now().getMonthValue()).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        int yearNow=LocalDate.now().getYear();
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo("mhabibofficial2@gmail.com");
+        helper.setSubject("Team Cash Flow Management: Monthly Reminder Regular Payment");
+
+        helper.setText("<html><body>" +
+                "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Iuran bulanan group kamu akan dijalankan ke periode berikutnya, pada tanggal 10 "+monthNowStr+" "+yearNow+"<br>Pastikan anda telah membayar iuran bulanan anda.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+
+        this.emailSender.send(message);
     }
 
     @Async
@@ -88,6 +112,42 @@ public class EmailServiceImpl implements EmailService {
         helper.setText("<html><body>" +
                 "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
                 "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+messages+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team - Blibli.com</p></td></tr></body></html>",true);
+
+        this.emailSender.send(message);
+    }
+
+    @Async
+    @Override
+    public void monthlyCashStatement(String email) throws MessagingException {
+        User user  = userRepository.findByEmail(email);
+        String name = user.getName();
+        String groupName = user.getGroupName();
+        String expenseListStr="";
+        List<ExpenseContributedDetails> listExpense = new ArrayList<>();
+        Group group= groupRepository.findByName(user.getGroupName());
+        List<Expense> expenseIdContributed = expenseRepository.findByGroupNameLikeAndGroupCurrentPeriodAndStatus(groupName,group.getCurrentPeriod(),true);
+        if(expenseIdContributed!=null){
+            for(Expense expense: expenseIdContributed){
+                ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
+                expenseContributedDetails.setTitle(expense.getTitle());
+                expenseContributedDetails.setDetail(expense.getDetail());
+                expenseContributedDetails.setPrice(expense.getPrice());
+                listExpense.add(expenseContributedDetails);
+                expenseListStr+=(expenseContributedDetails.toString());
+            }
+        }
+        else{
+            expenseListStr="\"Ooopss!!! Group anda belum ada kontribusi :C\"";
+        }
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo("mhabibofficial2@gmail.com");
+        helper.setSubject("Team Cash Flow Management: Resignation");
+
+        helper.setText("<html><body>" +
+                "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
+                "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+expenseListStr+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group Untuk Prosedur Pengambilan Uang Kembali.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
 
         this.emailSender.send(message);
     }
@@ -116,8 +176,6 @@ public class EmailServiceImpl implements EmailService {
         else{
             expenseListStr="\"Ooopss!!! anda belum ada kontribusi dalam group ini :C\"";
         }
-
-        //HOW TO SHOW ARRY ON HTML???????????????????????
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

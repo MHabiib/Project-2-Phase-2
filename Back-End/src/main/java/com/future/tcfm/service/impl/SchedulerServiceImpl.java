@@ -14,19 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.TextStyle;
 import java.util.*;
-import java.text.DateFormatSymbols;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.future.tcfm.service.impl.NotificationServiceImpl.PAYMENT_LATE;
-import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_PERSONAL;
 
 @Service
@@ -43,57 +38,9 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Autowired
     NotificationService notificationService;
 
-    ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
     @Async
-    @Transactional
-    public void scheduler() throws MessagingException {
-        List<User> listUser = userRepository.findAll();
-        Map<String,Group> groupMap = new HashMap<>();
-
-        listUser.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
-
-        int monthNow= LocalDate.now().getMonthValue();
-
-
-        groupMap.forEach((groupName,groupVal)->{
-            groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
-            groupRepository.save(groupVal);
-        });
-
-        sseMvcExecutor.execute(() -> {//pisahThread
-            Group group;
-            String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
-            String monthNowStr="";
-            for (User user : listUser) {
-                group = groupMap.get(user.getGroupName());
-//                monthBeforeStr=Month.of((monthNow-user.getPeriodeTertinggal())%12).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
-                monthNowStr = Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-                user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
-                if (user.getPeriodeTertinggal() > 0) {
-//                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-
-                    notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
-                    try {
-                        emailService.periodicMailSender(user.getEmail(), monthNowStr, monthBeforeStr);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
-                    try {
-                        emailService.periodicMailSender(user.getEmail(), monthNowStr, monthBeforeStr);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            userRepository.saveAll(listUser);
-        });
-    }
-
-    @Async
-//    @Scheduled(cron = "0 28 10 05 * ?") // setiap tanggal 28  disetiap bulan jam 10 : 05
 //    @Scheduled(fixedRate = 5000L)
     @Transactional
     public void checkUserPeriodPaid(){
@@ -111,6 +58,98 @@ public class SchedulerServiceImpl implements SchedulerService {
             }
         }
         userRepository.saveAll(userList);
+    }
+    @Async
+    @Transactional
+    @Scheduled(cron = "0 10 10 05 * ?") // setiap tanggal 10  disetiap bulan jam 10 : 05
+    public void scheduler() throws MessagingException {
+        List<User> listUser = userRepository.findAll();
+        Map<String,Group> groupMap = new HashMap<>();
+
+        listUser.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
+        int monthNow = LocalDate.now().getMonthValue();
+        String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        groupMap.forEach((groupName,groupVal)->{
+            groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
+            groupRepository.save(groupVal);
+        });
+
+        sseMvcExecutor.execute(() -> {//pisahThread
+            int yearBefore = LocalDate.now().getYear();
+            int monthChecker = 0;
+            int yearChecker=0;
+            int monthBefore = LocalDate.now().getMonthValue();
+            Group group;
+            String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
+
+            for (User user : listUser) {
+                group = groupMap.get(user.getGroupName());
+                user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
+                if (user.getPeriodeTertinggal() > 0) {
+                    if(user.getPeriodeTertinggal()>11){
+                        monthChecker=user.getPeriodeTertinggal() % 12;
+                        yearChecker=(user.getPeriodeTertinggal()-monthChecker)/12;
+                        monthBefore-=monthChecker;
+                        yearBefore-=yearChecker;
+                    }
+                    else{
+                        monthBefore-=user.getPeriodeTertinggal();
+                    }
+                    if(monthBefore<=0){
+                        monthBefore+=12;
+                        yearBefore-=1;
+                    }
+                    monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
+//                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
+                    notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
+                    try {
+                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
+                    try {
+                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            userRepository.saveAll(listUser);
+        });
+    }
+
+    @Async
+    @Transactional
+    @Scheduled(cron = "0 7 10 05 * ?") // setiap tanggal 7 disetiap bulan jam 10 : 05
+    public void schedulerReminder() throws MessagingException {
+        List<User> listUser = userRepository.findAll();
+        sseMvcExecutor.execute(() -> {//pisahThread
+            for(User user:listUser){
+                try {
+                    emailService.periodicMailReminderSender(user.getEmail());
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Async
+    @Transactional
+    @Scheduled(cron = "0 31 10 05 * ?") // setiap tanggal 31 disetiap bulan jam 10 : 05
+    public void monthlyCashStatemen() throws MessagingException {
+        List<User> listUser = userRepository.findAll();
+        sseMvcExecutor.execute(() -> {//pisahThread
+            for(User user:listUser){
+                try {
+                    emailService.periodicMailReminderSender(user.getEmail());
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
 
