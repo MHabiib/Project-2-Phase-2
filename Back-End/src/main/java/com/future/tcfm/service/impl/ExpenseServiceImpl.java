@@ -194,16 +194,17 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
     }
 
-    /* Untuk membuat list adminGroup, requester dan seluruh super admin*/
-    List<User> sendTo = new ArrayList<>();
-    List<User> superAdmin = userRepository.findByRoleAndActive("SUPER_ADMIN",true);
-    User userTarget = new User();
-    User adminTarget = new User();
-    User requesterTarget = new User();
+
 
     //ini api di pakai untuk admin utk reject / approve request expense dari user group
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest) throws MessagingException {
+        /* Untuk membuat list adminGroup, requester dan seluruh super admin*/
+        List<User> sendTo = new ArrayList<>();
+        List<User> superAdmin = userRepository.findByRoleAndActive("SUPER_ADMIN",true);
+        User userTarget = new User();
+        User adminTarget = new User();
+        User requesterTarget = new User();
         Expense expenseExist = expenseRepository.findByIdExpense(expenseRequest.getId());
         if (expenseExist==null)
             return new ResponseEntity<>("Expense not found", HttpStatus.OK);
@@ -237,11 +238,10 @@ public class ExpenseServiceImpl implements ExpenseService {
             userTarget.setEmail(user.getEmail());
             sendTo.add(userTarget);
         }
+
         requesterTarget.setEmail(expenseExist.getRequester());
         sendTo.add(requesterTarget);
         sendTo.add(adminTarget);
-
-
 
         executor.execute(() -> {
             try {

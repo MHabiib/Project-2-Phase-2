@@ -57,14 +57,20 @@ public class SchedulerServiceImpl implements SchedulerService {
         });
 
         sseMvcExecutor.execute(() -> {//pisahThread
-            int yearBefore = LocalDate.now().getYear();
+            int yearBefore = 0;
             int monthChecker = 0;
             int yearChecker=0;
-            int monthBefore = LocalDate.now().getMonthValue();
+            int monthBefore =0;
+
             Group group;
             String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
 
             for (User user : listUser) {
+                yearBefore=LocalDate.now().getYear();
+                monthChecker=0;
+                yearChecker=0;
+                monthBefore= LocalDate.now().getMonthValue();
+
                 group = groupMap.get(user.getGroupName());
                 user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
                 if (user.getPeriodeTertinggal() > 0) {
@@ -89,7 +95,8 @@ public class SchedulerServiceImpl implements SchedulerService {
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }
-                } else {
+                }
+                else {
                     notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
                         emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore);
