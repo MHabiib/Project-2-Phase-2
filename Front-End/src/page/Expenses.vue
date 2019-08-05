@@ -51,7 +51,7 @@
               <tr
                 class='expenseRow'
                 v-for='(expense, index) in expenseList' :key='"expense-"+index'
-                @click="openExpenseDetailWindow(expense.idExpense)"
+                @click="openExpenseDetailWindow(expense)"
               >
                 <td>{{index+1}}.</td>
                 <td>{{expense.createdDate | dateFormatter}}</td>
@@ -83,14 +83,14 @@
     <expenseDetailWindow
       v-if='showExpenseDetailWindow'
       @closeExpenseDetailWindow="closeExpenseDetailWindow"
-      @refreshData="getExpenseData"
-      :expenseId="this.detailExpenseSelected"
+      @refreshData="searchData(0)"
+      :expenseDetail=  this.detailExpenseSelected
     />
 
     <createNewExpenseWindow
       v-if='showCreateNewExpenseWindow'
       @closeCreateNewExpenseWindow='closeCreateNewExpenseWindow'
-      @refreshData="getExpenseData"
+      @refreshData="searchData(0)"
     />
   </div>
 </template>
@@ -136,6 +136,7 @@
         groupName:'',
         disable:false,
         loading:false,
+        createExpenseMode:null,
       }
     },
     created() {
@@ -230,9 +231,10 @@
         this.showUserContributedWindow = true;
       },
       closeUserContributedWindow() {this.showUserContributedWindow = false;},
-      openExpenseDetailWindow(expenseId) {
+      openExpenseDetailWindow(expense) {
+        this.createExpenseMode = true;
         this.showExpenseDetailWindow = true;
-        this.detailExpenseSelected = expenseId;
+        this.detailExpenseSelected = expense;
       },
       closeExpenseDetailWindow() {this.showExpenseDetailWindow = false;},
       openCreateNewExpenseWindow() {this.showCreateNewExpenseWindow = true;},

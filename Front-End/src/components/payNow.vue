@@ -16,12 +16,12 @@
 
         <div class="payNowBody">
           <div class="payNowOneRow">
-            Rek Tujuan Transfer: {{dataPayNow.nomorRekening}} a.n. {{dataPayNow.namaAdmin}}
+            Transfer to account number: {{dataPayNow.nomorRekening}} a.n. {{dataPayNow.namaAdmin}}
           </div>
 
           <div class="payNowOneRow">
             <div>
-              <input type="number" name="periode" id="periode" placeholder="Jumlah Periode" v-model='periode'/>
+              <input type="number" name="periode" id="periode" placeholder="Number of periods" v-model='periode'/>
             </div>
 
             <div>
@@ -34,7 +34,7 @@
               type="text"
               name="rekeningPengirim"
               id="rekeningPengirim"
-              placeholder="No. Rekening Anda"
+              placeholder="Bank Account Number"
               @keypress='checkChar'
               v-model='nomorRekeningPengirim'
             />
@@ -44,7 +44,7 @@
               type="text"
               name="namaPengirim"
               id="namaPengirim"
-              placeholder="Rekening Atas Nama"
+              placeholder="Bank Account Name"
               v-model='namaPengirim'
             />
           </div>
@@ -68,14 +68,14 @@
 
           <div class="payNowOneRow">
             <input @click="setUntukMemberLain" type="checkbox" name="untukMemberLain" id="untukMemberLain"/>
-            <div style="margin-right: 10px;">Bayar untuk member lain?</div>
+            <div style="margin-right: 10px;">Pay for other member?</div>
 
             <input
               style="flex: 1"
               type="text"
               name="emailMemberLain"
               id="emailMemberLain"
-              placeholder="Email Member Lain"
+              placeholder="Other member's email account"
               v-if="untukMemberLain"
               v-model="emailMemberLain"
             />
@@ -123,7 +123,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
       },
       selectFile(e) {
         if(e.target.files[0].size > 5000000) {
-          alert('Ukuran file maksimum adalah 5 MB. Harap upload foto dengan resolusi yang lebih kecil.');
+          alert('Max Image size is 5 MB. Please upload a lower resolution image.');
           this.buktiTransfer = null;
           e.target.value = null;
         } else {

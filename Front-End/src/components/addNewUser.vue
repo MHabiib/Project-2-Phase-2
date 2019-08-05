@@ -14,10 +14,6 @@
           <input class='singleLineInput' type="text" placeholder='Nama' v-model='namaInput'/>
           <input class='singleLineInput' type="text" placeholder='Email' v-model='emailInput'/>
           <input class='singleLineInput' type="text" placeholder='Nomor Handphone' v-model='nomorHpInput' @keypress="checkChar"/>
-          <div style="display: flex; justify-content: space-between">
-            <input style='width: 48%' class='singleLineInput' type="text" placeholder='Nama Bank' v-model='namaBankInput'/>
-            <input style='width: 48%' class='singleLineInput' type="text" placeholder='Nomor Rekening' v-model='nomorRekeningInput' @keypress="checkChar"/>
-          </div>
           <input class='singleLineInput' type="password" placeholder='Buat password baru' v-model='passwordInput'/>
           
           <div class="createNewExpenseFlexLine">
@@ -33,7 +29,7 @@
               <option class="red" value="SUPER_ADMIN">Super Admin</option>
             </select>
             <label style='width: 30%;color: var(--primary-1)'>Picture</label>
-            <input type="file" @change="changeFile($event)" class="selectFile" placeholder="Profile Picture"/>
+            <input type="file" accept="image/*" @change="changeFile($event)" class="selectFile" placeholder="Profile Picture"/>
           </div>
         </div>
       </div>
@@ -55,9 +51,8 @@
         roleInput: '',
         fileInput: null,
         passwordInput: '',
-        nomorRekeningInput: '',
-        namaBankInput: '',
-        groupList: []
+        groupList: [],
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
       }
     },
     methods: {
@@ -103,19 +98,26 @@
         this.roleInput = e.target.value;
       },
       changeFile(e) {
+         if(e.target.files[0].size > 5000000) {
+          alert('Max Image size is 5 MB. Please upload a lower resolution image.');
+          this.fileInput = null;
+          e.target.value = null;
+        } else {
         this.fileInput = e.target.files[0];
+        }
       },
       createNewUser() {
+        let isEmailValid = this.reg.test(this.emailInput)
         if(this.namaInput === '') {
-          alert('Harap masukkan nama user.')
-        } else if(this.emailInput === '') {
-          alert('Harap masukkan email user.')
+          alert('Name can\'t be null.')
+        } else if(this.emailInput === '' || isEmailValid==false) {
+          alert('Please input valid email.')
         } else if(this.nomorHpInput === '') {
-          alert('Harap masukkan nomor handphone user')
+          alert('Please input phone number.')
         // } else if(this.groupInput === '') {
         //   alert('Harap pilih grup user.')
         } else if(this.fileInput === null) {
-          alert('Harap masukkan foto user.')
+          alert('Please insert profile picture.')
         } else {
           let formData = new FormData();
 

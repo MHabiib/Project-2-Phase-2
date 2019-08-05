@@ -11,49 +11,49 @@
           <div class="expenseDetailFirstRow expenseDetailRow">
             <div class="expenseDetailContainer">
               <div class='expenseDetailLabel'>Requested By</div>
-              <div class="expenseDetailValue">: {{expenseDetail.requester}}</div>
+              <div class="expenseDetailValue">: {{newExpenseDetail.requester}}</div>
             </div>
 
             <div class="expenseDetailDate">
-              {{expenseDetail.createdDate | dateFormatter}}
+              {{newExpenseDetail.createdDate | dateFormatter}}
             </div>
           </div>
 
           <div class="expenseDetailSecondRow expenseDetailRow">
             <div class="expenseDetailContainer">
               <div class='expenseDetailLabel'>Cost</div>
-              <div class="expenseDetailValue">: Rp {{expenseDetail.price | thousandSeparators}}</div>
+              <div class="expenseDetailValue">: Rp {{newExpenseDetail.price | thousandSeparators}}</div>
             </div>
           </div>
 
           <div class="expenseDetailThirdRow expenseDetailRow">
             <div class="expenseDetailContainer">
               <div class='expenseDetailLabel'>Title</div>
-              <div class="expenseDetailValue">: {{expenseDetail.title}}</div>
+              <div class="expenseDetailValue">: {{newExpenseDetail.title}}</div>
             </div>
           </div>
 
           <div class="expenseDetailFourthRow expenseDetailRow">
-            {{expenseDetail.detail}}
+            {{newExpenseDetail.detail}}
           </div>
 
           <div class="expenseDetailFifthRow expenseDetailRow">
             <div class="expenseDetailContainer">
               <div class='expenseDetailLabel'>Status</div>
-              <div class="expenseDetailValue">: {{expenseDetail.status | statusChecker}}</div>
+              <div class="expenseDetailValue">: {{newExpenseDetail.status | statusChecker}}</div>
             </div>
 
             <div class="expenseDetailButton">
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
-                @click="updateExpenseStatus(expenseDetail.idExpense ,false)"
+                @click="updateExpenseStatus(newExpenseDetail.idExpense ,false)"
               >
                 Reject
               </div>
 
               <div
                 :class="{disableButton: disableButton ,acceptButton: !disableButton}"
-                @click="updateExpenseStatus(expenseDetail.idExpense ,true)"
+                @click="updateExpenseStatus(newExpenseDetail.idExpense ,true)"
               >
                 Accept
               </div>
@@ -70,12 +70,12 @@
   const trueOrFalse =[false,true]
 
   export default {
-    props: ['expenseId'],
+    props: ['expenseDetail'],
     data: function() {
       return {
-        expenseDetail: {},
         disableButton: false,
         dStatus:null,
+        newExpenseDetail:{}
       }
     },
     methods: {
@@ -98,11 +98,12 @@
           })
           .then(response => {
             if(response.status==401 || response.status==403){
+              alert('Oops!Something wrong happened, please redo your action.')
               Helper.getNewToken(this.updateExpenseStatus.bind(null,this.expenseDetail.idExpense,this.dStatus))
             }
             else if(response.ok) {
               localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-              this.getExpenseData(this.expenseId);
+              this.getExpenseData(this.newExpenseDetail.idExpense);
               this.$emit('refreshData')
             }
           })
@@ -115,13 +116,13 @@
         })
         .then(response => {
           if(response.status==401 || response.status==403){
-            console.log('expenseId : '+this.expenseId)
-            Helper.getNewToken(this.getExpenseData.bind(null,this.expenseId))
+            console.log('IdExpense : '+this.newExpenseDetail.idExpense)
+            Helper.getNewToken(this.getExpenseData.bind(null,this.newExpenseDetail.idExpense))
           }  else {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
-                this.expenseDetail = res;
+                this.newExpenseDetail = res;
                 this.checkStatus(res.status);
               }
             )
@@ -129,7 +130,9 @@
         })
       }
     },
-    created() {this.getExpenseData(this.expenseId);},
+    created() {
+      this.newExpenseDetail=Object.assign({},this.expenseDetail)
+    },
     
     filters: {
       statusChecker(status) {
