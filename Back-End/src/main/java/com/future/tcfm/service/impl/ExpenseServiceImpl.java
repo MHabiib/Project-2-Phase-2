@@ -193,6 +193,14 @@ public class ExpenseServiceImpl implements ExpenseService {
             userRepository.save(user);
         }
     }
+
+    /* Untuk membuat list adminGroup, requester dan seluruh super admin*/
+    List<User> sendTo = new ArrayList<>();
+    List<User> superAdmin = userRepository.findByRoleAndActive("SUPER_ADMIN",true);
+    User userTarget = new User();
+    User adminTarget = new User();
+    User requesterTarget = new User();
+
     //ini api di pakai untuk admin utk reject / approve request expense dari user group
     @Override
     public ResponseEntity managementExpense(ExpenseRequest expenseRequest) throws MessagingException {
@@ -209,7 +217,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             expenseExist.setStatus(true);
             Group group = groupRepository.findByName(expenseExist.getGroupName());
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
-
+            adminTarget.setEmail(group.getGroupAdmin());
             //notif...
             List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
@@ -223,10 +231,21 @@ public class ExpenseServiceImpl implements ExpenseService {
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
         notificationService.createNotification(notificationMessage,expenseExist.getRequester(),expenseExist.getGroupName(),TYPE_GROUP);
-        List<User> groupMembers = userRepository.findByGroupNameAndActive(expenseExist.getGroupName(),true);
+
+        /* Untuk membuat list adminGroup, requester dan seluruh super admin*/
+        for (User user:superAdmin){
+            userTarget.setEmail(user.getEmail());
+            sendTo.add(userTarget);
+        }
+        requesterTarget.setEmail(expenseExist.getRequester());
+        sendTo.add(requesterTarget);
+        sendTo.add(adminTarget);
+
+
+
         executor.execute(() -> {
             try {
-                for (User user : groupMembers) {
+                for (User user : sendTo) {
                     emailService.emailNotification(notificationMessage, user.getEmail());//pengiriman email untuk user yang berkontribusi
                 }
             }catch (Exception e){e.printStackTrace();;}

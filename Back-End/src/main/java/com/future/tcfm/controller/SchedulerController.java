@@ -16,9 +16,17 @@ public class SchedulerController {
 
     @Autowired
     SchedulerService schedulerService;
-    @GetMapping("/test")
+    @GetMapping("/testScheduler")
     public void scheduler() throws MessagingException {
         schedulerService.scheduler();
+    }
+    @GetMapping("/testSchedulerReminder/")
+    public void schedulerReminder() throws MessagingException {
+        schedulerService.schedulerReminder();
+    }
+    @GetMapping("/testMonthlyCashStatement")
+    public void monthlyCashStatement() throws MessagingException {
+        schedulerService.monthlyCashStatement();
     }
 }
 

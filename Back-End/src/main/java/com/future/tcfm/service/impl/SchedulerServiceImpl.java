@@ -121,12 +121,12 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Async
     @Transactional
     @Scheduled(cron = "0 31 10 05 * ?") // setiap tanggal 31 disetiap bulan jam 10 : 05
-    public void monthlyCashStatemen() throws MessagingException {
+    public void monthlyCashStatement() throws MessagingException {
         List<User> listUser = userRepository.findAll();
         sseMvcExecutor.execute(() -> {//pisahThread
             for(User user:listUser){
                 try {
-                    emailService.periodicMailReminderSender(user.getEmail());
+                    emailService.monthlyCashStatement(user.getEmail());
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
