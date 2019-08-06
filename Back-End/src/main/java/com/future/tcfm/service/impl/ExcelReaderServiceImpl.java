@@ -1,31 +1,81 @@
 package com.future.tcfm.service.impl;
+import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
+import com.future.tcfm.model.list.UserContributedList;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import com.future.tcfm.service.ExcelReaderService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.omg.SendingContext.RunTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ExcelReaderServiceImpl implements ExcelReaderService {
     @Autowired
     UserRepository userRepository;
-
-    private static String[] columns = {"Name", "Email", "Date Of Birth", "Salary"};
+    @Autowired
+    GroupRepository groupRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
-    public void store(MultipartFile file) {
+    @Transactional
+    public Boolean saveFile(MultipartFile file) {
         try {
-            List<User> userList = parseExcelFile(file.getInputStream());
-            userRepository.saveAll(userList);
-            System.out.println("Bulk Insert success!");
+            List<Group> groupList = groupRepository.findAllByActive(true);
+            List<User> userList = userRepository.findAllByActive(true);
+            List<User> newUserList = parseExcelFile(file.getInputStream());
+            Map<String,Group> newGroupMap = new HashMap<>();
+            int numbersOfGroupAdmin = 0;
+            for (User user : newUserList) {
+                Boolean isGroupExist = true;
+                for (User registeredUser : userList){
+                    if(user.getEmail().equalsIgnoreCase(registeredUser.getEmail())){
+                        throw new RuntimeException("Exception: email already exist!");
+                    }
+                }
+                for (Group group : groupList) {
+                    if (user.getGroupName().equalsIgnoreCase(group.getName())) {
+                        numbersOfGroupAdmin = user.getRole().equalsIgnoreCase("GROUP_ADMIN")? numbersOfGroupAdmin+1 : numbersOfGroupAdmin;
+                        user.setTotalPeriodPayed(group.getCurrentPeriod()-1);
+                        isGroupExist = true;
+                        break;
+                    } else {
+                        isGroupExist = false;
+                    }
+                }
+                if(numbersOfGroupAdmin>1){
+                    throw new RuntimeException("Exception: 1 Group is more than two admin");
+                }
+                if (!isGroupExist) {
+                    Group newGroup = Group.builder()
+                            .groupAdmin(user.getRole().equalsIgnoreCase("GROUP_ADMIN") ? user.getEmail()  :  "") //terakhir sampai disini dan belum di uji
+                            .name(user.getGroupName())
+                            .balanceUsed(0.0)
+                            .groupBalance(0.0)
+                            .bankAccountNumber("")
+                            .regularPayment(0.0)
+                            .currentPeriod(1)
+                            .active(true)
+                            .build();
+                    newGroupMap.put(newGroup.getName(),newGroup);
+                }
+            }
+            if(newGroupMap.size()>0){
+                newGroupMap.forEach((key,value) -> groupRepository.save(value));
+            }
+            userRepository.saveAll(newUserList);
+            System.out.println("Bulk Insert succed!");
+            return true;
         } catch (IOException e) {
             throw new RuntimeException("Fail -> Message "+e.getMessage());
         }
@@ -33,55 +83,53 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
     }
     @Override
     public ByteArrayInputStream loadFile() throws IOException {
+
+        String[] COLUMNs = {"Email", "Password", "Name", "Phone Number", "Group Name", "Role","NB: There are 2 Roles : 1.MEMBER 2.GROUP_ADMIN"};
         // Create a Workbook
         Workbook workbook = new XSSFWorkbook();     // new HSSFWorkbook() for generating `.xls` file
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        /* CreationHelper helps us create instances for various things like DataFormat,
-           Hyperlink, RichTextString etc in a format (HSSF, XSSF) independent way */
-        CreationHelper createHelper = workbook.getCreationHelper();
 
         // Create a Sheet
         Sheet sheet = workbook.createSheet("User");
 
-        // Create a Font for styling header cells
+
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
-        headerFont.setFontHeightInPoints((short) 14);
         headerFont.setColor(IndexedColors.RED.getIndex());
 
-        // Create a CellStyle with the font
         CellStyle headerCellStyle = workbook.createCellStyle();
         headerCellStyle.setFont(headerFont);
+        headerCellStyle.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerCellStyle.setWrapText(true);
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        // Create a Row
+        // Row for Header
         Row headerRow = sheet.createRow(0);
-
-        // Creating cells
-        for(int i = 0; i < columns.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(columns[i]);
+        // Header
+        for (int col = 0; col < COLUMNs.length; col++) {
+            Cell cell = headerRow.createCell(col);
+            cell.setCellValue(COLUMNs[col]);
             cell.setCellStyle(headerCellStyle);
+            if(col == 3 || col == 4 || col == COLUMNs.length-1)    sheet.autoSizeColumn(col);
+            else sheet.setColumnWidth(col,7500);
+
         }
-//        FileOutputStream fileOut = new FileOutputStream("poi-generated-file.xlsx");
-        ByteArrayOutputStream fileOut = new ByteArrayOutputStream();
-        workbook.write(fileOut);
-        fileOut.close();
-        workbook.close();
-        return new ByteArrayInputStream(fileOut.toByteArray());
+        workbook.write(out);
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        return in;
     }
 
-    private static List<User> parseExcelFile(InputStream is) {
+    private List<User> parseExcelFile(InputStream is) {
         try {
             Workbook workbook = new XSSFWorkbook(is);
-            Sheet sheet = workbook.getSheet("Customers");
+            Sheet sheet = workbook.getSheet("User");
             Iterator<Row> rows = sheet.iterator();
             List<User> userList = new ArrayList<>();
-            int rowNumber = 0;
             while (rows.hasNext()) {
                 Row currentRow = rows.next();
                 // skip row (0)
-                if(rowNumber == 0) {
-                    rowNumber++;
+                if(currentRow.getRowNum() == 0) {
                     continue;
                 }
                 Iterator<Cell> cellsInRow = currentRow.iterator();
@@ -89,6 +137,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 int cellIndex = 0;
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
+                    currentCell.setCellType(CellType.STRING);
                     if(cellIndex==0) { // email
                         user.setEmail(currentCell.getStringCellValue());
                     } else if(cellIndex==1) { // password
@@ -102,15 +151,16 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                     } else if(cellIndex==5) { // role
                         user.setRole(currentCell.getStringCellValue());
                     }
-                    user.setTotalPeriodPayed(0);
-                    user.setBalanceUsed(0.0);
-                    user.setPeriodeTertinggal(-1);
-                    user.setJoinDate(System.currentTimeMillis());
-                    user.setActive(true);
-                    user.setImagePath("");
-                    user.setImageURL("");
                     cellIndex++;
                 }
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setTotalPeriodPayed(0);
+                user.setBalanceUsed(0.0);
+                user.setPeriodeTertinggal(-1);
+                user.setJoinDate(System.currentTimeMillis());
+                user.setActive(true);
+                user.setImagePath("");
+                user.setImageURL("");
                 userList.add(user);
             }
             // Close WorkBook
@@ -120,6 +170,5 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             throw new RuntimeException("FAIL! -> message = " + e.getMessage());
         }
     }
-
 
 }

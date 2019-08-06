@@ -28,6 +28,9 @@
             <div class="groupsTabeAddNew" @click='openCreateNewGroupWindow'>
               Add New Group
             </div>
+            <div class="groupsTabeAddNew" @click='openBulkInsertWindow'>
+              Bulk Insert
+            </div>
           </div>
         </div>
 
@@ -78,6 +81,10 @@
       :editMode ="this.editMode"
       :addMode = this.addMode
     />
+    <bulkInsertWindow
+    v-if="showBulkInsertWindow"
+    @closeBulkInsertWindow="closeBulkInsertWindow"
+    />
   </div>
 </template>
 
@@ -85,12 +92,16 @@
   import SidebarComponent from '../components/Sidebar';
   import HeaderSection from '../components/HeaderSection';
   import createNewGroupWindow from '../components/CreateNewGroupWindow';
+  import bulkInsertWindow from '../components/BulkInsertWindow'; 
+
   import Multiselect from 'vue-multiselect'
   import Helper from '../../Helper';
+  
 
   export default {
     components: {
       'multiselect': Multiselect,
+      bulkInsertWindow,
       createNewGroupWindow,
     },
     computed: {
@@ -113,6 +124,7 @@
         loading:false,
         editMode:false,
         addMode:false,
+        showBulkInsertWindow: false,
         headerTitle:'',
       }
     },
@@ -198,6 +210,12 @@
         this.showGroupDetailWindow = true;},
       closeCreateNewGroupWindow() {
         this.showGroupDetailWindow = false;},
+      openBulkInsertWindow(){
+        this.showBulkInsertWindow = true;
+      },
+      closeBulkInsertWindow(){
+        this.showBulkInsertWindow = false;
+      },
       scroll() {
         document.getElementById('infiniteScroll').onscroll = (e) => {
           if(e.target.clientHeight + e.target.scrollTop >= e.target.scrollHeight) {

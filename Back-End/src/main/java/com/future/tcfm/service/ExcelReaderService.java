@@ -8,6 +8,6 @@ import java.io.IOException;
 
 public interface ExcelReaderService {
 
-    void store(MultipartFile multipartFile);
+    Boolean saveFile(MultipartFile multipartFile);
     ByteArrayInputStream loadFile() throws IOException;
 }
