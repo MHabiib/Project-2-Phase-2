@@ -9,7 +9,7 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
-    private static final String MY_EMAIL = "future.medan@gmail.com";
+    private static final String MY_EMAIL = "future.medan2@gmail.com";
     private static final String MY_PASSWORD = "futuregdn";
 
     @Bean
@@ -26,7 +26,7 @@ public class MailConfig {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth","false");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "false");
+        props.put("mail.debug", "true");
         //Mail properties that are needed to specify e.g. the SMTP server may be defined using the JavaMailSenderImpl. For example, for Gmail this can be configured as shown
         return mailSender;
     }

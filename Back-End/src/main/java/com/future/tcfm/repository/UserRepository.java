@@ -20,7 +20,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     Page<User> findByGroupName(String groupName, Pageable pageable);
 //    Page<User> findAllByNameContainingAndEmailContainingAndGroupNameContainingAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,Boolean active,Pageable pageable);
     Page<User> findAllByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndGroupNameContainingIgnoreCaseAndRoleContainingIgnoreCaseAndActiveOrderByTotalPeriodPayed(String name,String email,String groupName,String role,Boolean active,Pageable pageable);
-
+    List<User> findByRoleAndActive(String role, Boolean bool);
     User findByGroupNameAndRole(String groupName, String role);
     Integer countAllByGroupNameAndActive(String gName, Boolean bool);
     Integer countByGroupNameAndPeriodeTertinggalLessThanAndActive(String gName, Integer pt, Boolean bool);
