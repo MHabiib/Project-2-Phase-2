@@ -50,7 +50,7 @@
               <div class="expenseDetailValue">: {{paymentDetail.isRejected | statusChecker}}</div>
             </div>
 
-            <div class="expenseDetailButton">
+            <div class="expenseDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && paymentDetail.isRejected===null" >
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
                 @click="updatePaymentStatus(paymentDetail.idPayment ,false)"
@@ -87,6 +87,7 @@
         paymentDetail: {},
         disableButton: false,
         dStatus:null,
+        role:localStorage.getItem('role'),
       }
     },
     methods: {
@@ -129,7 +130,7 @@
       },
       checkStatus(status) {if(status !== null) {this.disableButton = true}},
     },
-    created() {this.paymentDetail=Object.assign({},this.payment)},
+    created() {this.paymentDetail=Object.assign({},this.payment), this.role = localStorage.getItem('role')},
     
     filters: {
       statusChecker(status) {
@@ -137,7 +138,6 @@
           case true: return 'Rejected, please made another payment.'
           case false: return 'Accepted.'
           case null: return 'Pending'
-
         }
       }
     }

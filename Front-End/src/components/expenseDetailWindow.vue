@@ -43,7 +43,7 @@
               <div class="expenseDetailValue">: {{newExpenseDetail.status | statusChecker}}</div>
             </div>
 
-            <div class="expenseDetailButton">
+            <div class="expenseDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && newExpenseDetail.status===null">
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
                 @click="updateExpenseStatus(newExpenseDetail.idExpense ,false)"
@@ -75,6 +75,7 @@
       return {
         disableButton: false,
         dStatus:null,
+        role:localStorage.getItem('role'),
         newExpenseDetail:{}
       }
     },
@@ -130,8 +131,10 @@
         })
       }
     },
+
     created() {
       this.newExpenseDetail=Object.assign({},this.expenseDetail)
+      this.role = localStorage.getItem('role')
     },
     
     filters: {
@@ -141,7 +144,14 @@
           case false: return 'Rejected'
           case null: return 'Waiting Response'
         }
-      }
+      }/*,
+      roleChecker(role){
+        switch (role) {
+          case localStorage.getItem('role')==='SUPER_ADMIN':return 'SUPER_ADMIN'
+          case localStorage.getItem('role')==='GROUP_ADMIN':return 'GROUP_ADMIN'
+          case localStorage.getItem('role')==='MEMBER':return 'MEMBER'
+        }
+      }*/
     }
   }
 </script>
