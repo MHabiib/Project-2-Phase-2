@@ -35,7 +35,6 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             List<User> userList = userRepository.findAllByActive(true);
             List<User> newUserList = parseExcelFile(file.getInputStream());
             Map<String,Group> newGroupMap = new HashMap<>();
-            int numbersOfGroupAdmin = 0;
             for (User user : newUserList) {
                 Boolean isGroupExist = false;
                 for (User registeredUser : userList){
@@ -45,16 +44,15 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 }
                 for (Group group : groupList) {
                     if (user.getGroupName().equalsIgnoreCase(group.getName())) {
-                        numbersOfGroupAdmin = user.getRole().equalsIgnoreCase("GROUP_ADMIN")? numbersOfGroupAdmin+1 : numbersOfGroupAdmin;
+                        if(user.getRole().equalsIgnoreCase("GROUP_ADMIN") && group.getGroupAdmin().equalsIgnoreCase("")){
+                            group.setGroupAdmin(user.getEmail());
+                        }
                         user.setTotalPeriodPayed(group.getCurrentPeriod()-1);
                         isGroupExist = true;
                         break;
                     } else {
                         isGroupExist = false;
                     }
-                }
-                if(numbersOfGroupAdmin>1){
-                    throw new RuntimeException("Exception: 1 Group is more than two admin");
                 }
                 if (!isGroupExist) {
                     Group newGroup = Group.builder()
@@ -74,15 +72,17 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             if(newGroupMap.size()>0){
                 newGroupMap.forEach((key,value) -> {
                     newUserList.forEach(user -> {
-                        if(user.getRole().equalsIgnoreCase("GROUP_ADMIN") && user.getGroupName().equalsIgnoreCase(value.getName())){
+                        if(value.getGroupAdmin().equalsIgnoreCase("") && user.getRole().equalsIgnoreCase("GROUP_ADMIN") && user.getGroupName().equalsIgnoreCase(value.getName())){
                             value.setGroupAdmin(user.getEmail());
                         }
                     });
-                    groupRepository.save(value);
-
+                    groupList.add(value);
+//                    groupRepository.save(value);
                 });
             }
-            userRepository.saveAll(newUserList);
+            userList.addAll(newUserList);
+            userRepository.saveAll(userList);
+            groupRepository.saveAll(groupList);
             System.out.println("Bulk Insert succed!");
             return true;
         } catch (IOException e) {
@@ -165,7 +165,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setTotalPeriodPayed(0);
                 user.setBalanceUsed(0.0);
-                user.setPeriodeTertinggal(-1);
+                user.setPeriodeTertinggal(1);
                 user.setJoinDate(System.currentTimeMillis());
                 user.setActive(true);
                 user.setImagePath("");

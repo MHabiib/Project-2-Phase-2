@@ -123,15 +123,16 @@ public class GroupServiceImpl implements GroupService {
         Boolean isNameAvailable = groupRepository.countAllByNameAndActive(group.getName(), true) == 0;
         groupExist.setRegularPayment(group.getRegularPayment());
         if(!groupExist.getGroupAdmin().equalsIgnoreCase(group.getGroupAdmin())){
-            User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
-            if(!groupExist.getGroupAdmin().equalsIgnoreCase("")) {
+//            if(!groupExist.getGroupAdmin().equalsIgnoreCase("")) {
+            if( !group.getGroupAdmin().equalsIgnoreCase("")){
+                User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
+                newAdmin.setRole("GROUP_ADMIN");
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
-                groupExist.setGroupAdmin(newAdmin.getEmail());
                 oldAdmin.setRole("MEMBER");
                 userRepository.save(oldAdmin);
+                userRepository.save(newAdmin);
             }
-            newAdmin.setRole("GROUP_ADMIN");
-            userRepository.save(newAdmin);
+            groupExist.setGroupAdmin(group.getGroupAdmin());
         }
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setBalanceUsed(group.getBalanceUsed());

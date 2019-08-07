@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Array;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -240,7 +241,10 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.println("Key : "+key+"; Value : "+value);
         Pageable pageable = createPageRequest("paymentDate","desc",page,size);
         Query myQuery = new Query().with(pageable);
-        Criteria criteria = Criteria.where(key).regex(value,"i");
+        System.out.println("Authorities : "+getCurrentUser().getAuthorities());
+        String myRole = getCurrentUser().getAuthorities().toString();
+        String groupName = myRole.contains("SUPER_ADMIN") ? "" : getCurrentUser().getGroupName();
+        Criteria criteria = Criteria.where(key).regex(value,"i").regex(groupName);
         if(key.equalsIgnoreCase("date before")){
             key = "paymentDate";
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
@@ -248,7 +252,7 @@ public class PaymentServiceImpl implements PaymentService {
             try {
                 timeStamp = formatter.parse(value).getTime();
             }catch (Exception e){e.printStackTrace();}
-            criteria = Criteria.where(key).lte(timeStamp).and("groupName").is(getCurrentUser().getGroupName());
+            criteria = Criteria.where(key).lte(timeStamp).and("groupName").regex(groupName);
         }else if(key.equalsIgnoreCase("date after")){
             key = "paymentDate";
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
@@ -256,20 +260,20 @@ public class PaymentServiceImpl implements PaymentService {
             try {
                 timeStamp = formatter.parse(value).getTime();
             }catch (Exception e){e.printStackTrace();}
-            criteria = Criteria.where(key).gte(timeStamp).and("groupName").is(getCurrentUser().getGroupName());
+            criteria = Criteria.where(key).gte(timeStamp).and("groupName").regex(groupName);
         } else if(key.equalsIgnoreCase("status")){
             key = "isRejected";
             Boolean isRejected = !value.equalsIgnoreCase("accepted");
             isRejected = value.equalsIgnoreCase("") || value.equalsIgnoreCase("pending") ? null : isRejected;
-            criteria = Criteria.where(key).is(isRejected).and("groupName").is(getCurrentUser().getGroupName());
+            criteria = Criteria.where(key).is(isRejected).and("groupName").regex(groupName);
         } else if(key.equalsIgnoreCase("periode <")){
             key=key.substring(0,7);
             int dValue = value.equalsIgnoreCase("")? Integer.MAX_VALUE :Integer.parseInt(value);
-            criteria = Criteria.where(key).lt(dValue).and("groupName").is(getCurrentUser().getGroupName());
+            criteria = Criteria.where(key).lt(dValue).and("groupName").regex(groupName);
         } else if(key.equalsIgnoreCase("periode >")){
                 key=key.substring(0,7);
             int dValue = value.equalsIgnoreCase("")? 0 :Integer.parseInt(value);
-            criteria = Criteria.where(key).gt(dValue).and("groupName").is(getCurrentUser().getGroupName());
+            criteria = Criteria.where(key).gt(dValue).and("groupName").regex(groupName);
         }
         myQuery.addCriteria(criteria);
         List<Payment> paymentList =  mongoTemplate.find(myQuery,Payment.class,"payment");
