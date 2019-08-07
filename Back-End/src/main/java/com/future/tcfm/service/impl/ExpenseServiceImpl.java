@@ -181,7 +181,9 @@ public class ExpenseServiceImpl implements ExpenseService {
             e.setIdExpense(expenseExist.getIdExpense());
             e.setUsedBalance(balanceUsed);
             expenseIdContributeds.add(e);
-
+            if(user.getBalance()==null){
+                user.setBalance((0.0));
+            }
             user.setBalanceUsed(user.getBalance()+balanceUsed);
             user.setBalance(user.getBalance()-balanceUsed); //mengurangi balance user dengan pembagian pengeluaran
             user.setExpenseIdContributed(expenseIdContributeds);

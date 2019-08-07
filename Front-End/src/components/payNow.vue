@@ -21,7 +21,7 @@
 
           <div class="payNowOneRow">
             <div>
-              <input type="number" name="periode" id="periode" placeholder="Number of periods" v-model='periode'/>
+              <input @keypress="checkChar" type="number" min="1" max="99" maxlength="2" name="periode" id="periode" placeholder="Number of periods" v-model='periode'/>
             </div>
 
             <div>
@@ -69,8 +69,19 @@
           <div class="payNowOneRow">
             <input @click="setUntukMemberLain" type="checkbox" name="untukMemberLain" id="untukMemberLain"/>
             <div style="margin-right: 10px;">Pay for other member?</div>
-
-            <input
+             <div class="dropdownMenu" style="flex: 1" >
+                <multiselect 
+                  v-if="untukMemberLain"
+                  v-model="emailMemberLain" 
+                  :allow-empty="false" 
+                  :options="groupMemberList" 
+                  :searchable="true" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  placeholder="Pick a member">
+                </multiselect>
+            </div>
+            <!-- <input
               style="flex: 1"
               type="text"
               name="emailMemberLain"
@@ -78,7 +89,7 @@
               placeholder="Other member's email account"
               v-if="untukMemberLain"
               v-model="emailMemberLain"
-            />
+            /> -->
           </div>
         </div>
       </div>
@@ -89,12 +100,18 @@
 <script>
 import { backEndAddress } from '../../Helper';
 import Helper from '../../Helper';
+import Multiselect from 'vue-multiselect'
 
 const monthList =["January","February","March","April","May","June","July","August","September","Oktober","November","Desember"]
   export default {
     props: ['dataPayNow'],
+    components:{
+      'multiselect': Multiselect,
+    },
     data: function() {
       return {
+        searchQuery: '',
+        groupMemberList:[],
         biaya: '',
         periode: '',
         untukMemberLain: false,
@@ -105,8 +122,19 @@ const monthList =["January","February","March","April","May","June","July","Augu
         buktiTransfer: null,
         regularPayment:0,
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
-
       }
+    },
+    computed: {
+      totalTagihan: function() {
+        return (this.periode * this.dataPayNow.regularPayment)
+      },
+      lastPayment: function(){
+        return (monthList[this.dataPayNow.lastPayment])
+      }
+    },
+    created() {
+      console.log(this.dataPayNow);
+      this.getMember();
     },
     methods: {
       closePayNowWindow() {
@@ -114,6 +142,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
       },
       checkChar(e) {
         if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode === 8) {} else {
+        // if(e.value <0 && e.value > 9){
           e.preventDefault();
         }
       },
@@ -132,22 +161,30 @@ const monthList =["January","February","March","April","May","June","July","Augu
           this.buktiTransfer = e.target.files[0];
         }
       },
-      validateInput(){
+      validateInput(emailInput){
+        let isEmailValid = this.reg.test(emailInput)
         if(this.periode ==="") {
           alert('Periode can\'t be null.')
           return false
-        } if(this.untukMemberLain){ // terakhir sampai disini
-            if(this.reg.test(this.emailMemberLain)) {
-                this.newGroupDetail.groupCurrentPeriod=1
+        } if(this.untukMemberLain==true){
+            if(this.emailMemberLain==='') {
+                alert('Please input a valid email.')
+                return false
             }
         } else if(this.nomorRekeningPengirim === '') {
           alert('Please input bank account\'s name')
+          return false        
+        } else if(this.namaPengirim === '') {
+          alert('Please input bank account\'s name')
           return false
-        } else if(this.buktiTransfer === null) {
+        }else if(this.buktiTransfer === null) {
           alert('Please input the proof of payment.')
           return false
-        } 
+        } else if(this.tanggalTransfer === null){
+          return false
+        }
         return true
+      
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
       },
       submitPembayaran() {
@@ -157,7 +194,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
           periode: this.periode,
           nomorRekeningPengirim: this.nomorRekeningPengirim,
           namaPengirim: this.namaPengirim,
-          emailMemberLain: this.emailMemberLain,
+          emailMemberLain: this.untukMemberLain ? this.emailMemberLain : "",
           email: localStorage.getItem('userEmail'),
           price: this.totalTagihan
         }))
@@ -188,22 +225,46 @@ const monthList =["January","February","March","April","May","June","July","Augu
           alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
           console.log(err);
         })
-      }
-    },
-
-    computed: {
-      totalTagihan: function() {
-        return (this.periode * this.dataPayNow.regularPayment)
       },
-      lastPayment: function(){
-        return (monthList[this.dataPayNow.lastPayment])
+      getMember() {
+
+      fetch(`${Helper.backEndAddress}/api/group/members`, {
+        headers: {
+          Authorization: localStorage.getItem('accessToken')
+        },
+        method: 'GET'
+      })
+        .then(response => {
+          if(response.status==401){
+            this.groupMemberList=[]
+            Helper.getNewToken(this.getMember)
+          }
+          else if(response.ok){
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then(
+              res => {
+                console.log(res)
+                this.groupMemberList.length=0
+                res.forEach( element =>{
+                  this.groupMemberList.push(element.email)
+                })
+                let index = this.groupMemberList.indexOf(localStorage.getItem('userEmail'));
+                if (index !== -1) this.groupMemberList.splice(index, 1);
+                setTimeout(e=>{this.loading=false},500)
+              }
+            )
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            alert('Oops! Something wrong happened when processing request.\nPlease try again.')
+          }
+        })
       }
     },
-    created() {
-      console.log(this.dataPayNow);
-    }
+    
   }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
   .fixedPosition {
@@ -308,5 +369,21 @@ const monthList =["January","February","March","April","May","June","July","Augu
 
   .payNowOneRow input::placeholder {
     color: var(--primary-1);
+  }
+  #app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{
+    /* background-color: var(--lightColor); */
+    font-size: 12px;
+    color: var(--primary-0) ;
+    border-radius: 5px;
+    padding:2px;
+  }
+
+  .dropdownMenu{
+    margin-left: 10px;
+    position: relative;
+    /* width: 100%; */
+  }
+  .dropdownMenu:hover{
+    cursor:pointer;
   }
 </style>

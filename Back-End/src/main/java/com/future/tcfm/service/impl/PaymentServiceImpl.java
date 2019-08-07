@@ -165,13 +165,15 @@ public class PaymentServiceImpl implements PaymentService {
         if(thisPayment.getStatus()){
             if(!paymentExist.getIsChecked()){
                 paymentExist.setIsRejected(false);
-                User user = userRepository.findByEmail(payFor);
+//                User user = userRepository.findByEmail(payFor);
                 Group group = groupRepository.findByName(paymentExist.getGroupName());
-
-                user.setBalance(user.getBalance()+paymentExist.getPrice());
-                user.setTotalPeriodPayed(user.getTotalPeriodPayed()+paymentExist.getPeriode());
-                user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());// jika minus bearti user surplus
-                userRepository.save(user);
+                if(payForExist.getBalance()==null){
+                    payForExist.setBalance(0.0);
+                }
+                payForExist.setBalance(payForExist.getBalance()+paymentExist.getPrice());
+                payForExist.setTotalPeriodPayed(payForExist.getTotalPeriodPayed()+paymentExist.getPeriode());
+                payForExist.setPeriodeTertinggal(group.getCurrentPeriod()-payForExist.getTotalPeriodPayed());// jika minus bearti user surplus
+                userRepository.save(payForExist);
 
                 group.setGroupBalance(group.getGroupBalance()+paymentExist.getPrice());
                 groupRepository.save(group);
@@ -244,7 +246,7 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.println("Authorities : "+getCurrentUser().getAuthorities());
         String myRole = getCurrentUser().getAuthorities().toString();
         String groupName = myRole.contains("SUPER_ADMIN") ? "" : getCurrentUser().getGroupName();
-        Criteria criteria = Criteria.where(key).regex(value,"i").regex(groupName);
+        Criteria criteria = Criteria.where(key).regex(value,"i").and("groupName").regex(groupName);
         if(key.equalsIgnoreCase("date before")){
             key = "paymentDate";
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");

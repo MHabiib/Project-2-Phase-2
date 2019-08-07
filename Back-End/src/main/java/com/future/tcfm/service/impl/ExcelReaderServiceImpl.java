@@ -164,6 +164,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 }
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setTotalPeriodPayed(0);
+                user.setBalance(0.0);
                 user.setBalanceUsed(0.0);
                 user.setPeriodeTertinggal(1);
                 user.setJoinDate(System.currentTimeMillis());

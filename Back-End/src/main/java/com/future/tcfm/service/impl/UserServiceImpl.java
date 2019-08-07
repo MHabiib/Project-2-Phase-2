@@ -11,6 +11,11 @@ import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +30,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.*;
 
@@ -50,6 +59,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     JwtUserDetailsRepository jwtUserDetailsRepository;
 
+    @Autowired
+    MongoTemplate mongoTemplate;
     private String notifMessage;
     @Override
     public List<User> loadAll() {
@@ -98,8 +109,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> searchBy(String name,String email, String groupName, String role,int page,int size) {
-        return userRepository.findAllByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndGroupNameContainingIgnoreCaseAndRoleContainingIgnoreCaseAndActiveOrderByTotalPeriodPayed(name,email,groupName,role,true,createPageRequest("totalPeriodPayed","desc",page,size));
+    public Page<User> searchBy(String query,Boolean membersOnly, int page,int size) {
+        System.out.println("Query Param : "+query);
+        Pattern pattern = Pattern.compile("(.*)(:)(.*)");
+        Matcher matcher = pattern.matcher(query);
+        if(!matcher.find()){return null;}
+        String key=matcher.group(1);
+        String value=matcher.group(3);
+        Criteria criteria;
+        if(key.equalsIgnoreCase("group")) key="groupName";
+        System.out.println("Key : "+key+"; Value : "+value);
+        String myRole = getCurrentUser().getAuthorities().toString();
+        String groupName = myRole.contains("SUPER_ADMIN") ? "" : getCurrentUser().getGroupName();
+        Pageable pageable = createPageRequest(key,"asc",page,size);
+        Query myQuery = new Query().with(pageable);
+        criteria = Criteria.where(key).regex(value,"i").and("groupName").is(groupName).and("active").is(true);
+        if(membersOnly){
+            criteria = Criteria.where("groupName").regex(getCurrentUser().getGroupName()).and("active").is(true);
+        }
+        else if(key.equalsIgnoreCase("period")){
+            pageable = createPageRequest(key,"desc",page,size);
+            criteria = Criteria.where("groupName").regex(groupName).and("active").is(true);
+        }else if(groupName.equalsIgnoreCase("")){
+            criteria = Criteria.where(key).regex(value,"i").and("active").is(true);
+        }
+        myQuery.addCriteria(criteria);
+        List<User> paymentList =  mongoTemplate.find(myQuery,User.class,"user");
+        return PageableExecutionUtils.getPage(
+                paymentList,
+                pageable,
+                () -> mongoTemplate.count(myQuery, User.class));
     }
 
     /**

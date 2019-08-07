@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.List;
 
+import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
+
 @CrossOrigin("**")
 @RestController
 @RequestMapping("/api/group")
@@ -28,6 +30,11 @@ public class GroupController {
     @GetMapping("/{groupName}/members") //body fill with group name without ""
     public ResponseEntity membersGroup(@PathVariable("groupName") String groupName){
         return new ResponseEntity<>(groupService.membersGroup(groupName), HttpStatus.OK);
+    }
+
+    @GetMapping("/members") //body fill with group name without ""
+    public ResponseEntity myGroupMembers(){
+        return new ResponseEntity<>(groupService.membersGroup(getCurrentUser().getGroupName()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value

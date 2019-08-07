@@ -36,6 +36,10 @@
               <div v-if="add==false" v-show="edit==false" class="value">: {{groupDetail.groupAdmin}}</div>
               <select ref="groupAdmin" v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupDetail.groupAdmin' @change="changeGroupAdmin($event)">
                 <option  
+                  class='selectAdminOption' value="">      
+                  Remove Group Admin            
+                </option>     
+                <option  
                   class='selectAdminOption'
                   v-for='(member,index) in groupMemberList' :key='index'
                   :value='member.email'>

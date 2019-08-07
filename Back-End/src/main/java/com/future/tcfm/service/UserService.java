@@ -19,7 +19,7 @@ public interface UserService {
     ResponseEntity updateUserV2(String id, String userJSONString, MultipartFile file) throws IOException;
     ResponseEntity getImage(String imageName) throws IOException;
 
-    Page<User> searchBy(String name,String email, String groupName,String role, int page, int size);
+    Page<User> searchBy(String query,Boolean membersOnly,int page, int size);
 
     ResponseEntity deleteUser(String email);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 
@@ -27,14 +28,12 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public Page<User> searchUser(
-            @RequestParam(value = "name",required = false,defaultValue="") String name,
-            @RequestParam(value = "groupName",required = false,defaultValue="") String groupName,
-            @RequestParam(value = "email",required = false,defaultValue="") String email,
-            @RequestParam(value = "role",required = false,defaultValue="") String role,
-            @RequestParam(value = "page",required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size",required = false, defaultValue = "10") int size)  {
-        return userService.searchBy(name,email,getCurrentUser().getGroupName(),role,page,size);
+    public Page<User> searchAllUser(
+            @RequestParam(value = "query",required = false, defaultValue = "")String query,
+            @RequestParam(value = "membersOnly",required = false, defaultValue = "false")Boolean membersOnly,
+            @RequestParam(value = "page",required = false, defaultValue = "0")int page,
+            @RequestParam(value = "size",required = false, defaultValue = "10")int size) throws ParseException {
+        return userService.searchBy(query,membersOnly,page,size);
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
