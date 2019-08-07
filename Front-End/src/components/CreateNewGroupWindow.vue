@@ -157,7 +157,7 @@
           alert('Harap masukkan nomor handphone user')
           return false
         } else if(this.fileInput === null) {
-          alert('Harap masukkan foto user.'),
+          alert('Harap masukkan foto user.')
           return false
         }
         return true
