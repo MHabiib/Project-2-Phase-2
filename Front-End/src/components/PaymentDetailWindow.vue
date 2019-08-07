@@ -135,8 +135,8 @@
     filters: {
       statusChecker(status) {
         switch(status) {
-          case true: return 'Rejected, please made another payment.'
-          case false: return 'Accepted.'
+          case true: return 'Rejected, please made another payment'
+          case false: return 'Accepted'
           case null: return 'Pending'
         }
       }

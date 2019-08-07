@@ -20,9 +20,7 @@
                 </div>
 
                 <div class="overviewLeftBodyLower">
-                  <img src="../assets/time.png" alt="Time" width='15px'>
-                  <div>Last updated {{overviewData.latestExpenseDate | fromNow}}.</div>
-                </div>
+                  </div>
               </div>
             </div>
 
@@ -38,9 +36,7 @@
                 </div>
 
                 <div class="overviewLeftBodyLower">
-                  <img src="../assets/time.png" alt="Time" width='15px'>
-                  <div>Last updated {{overviewData.latestJoinDate | fromNow}}.</div>
-                </div>
+                  </div>
               </div>
             </div>
           </div>
