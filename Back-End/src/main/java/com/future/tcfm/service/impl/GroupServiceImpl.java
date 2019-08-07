@@ -103,6 +103,7 @@ public class GroupServiceImpl implements GroupService {
         }if(group.getGroupAdmin()==null){
             group.setGroupAdmin("");
         }
+        group.setGroupAdmin(group.getGroupAdmin().equalsIgnoreCase("")?"":group.getGroupAdmin());
         group.setCreatedDate(System.currentTimeMillis());
         group.setLastModifiedAt(System.currentTimeMillis());
         group.setClosedDate(0L);
@@ -123,12 +124,14 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setRegularPayment(group.getRegularPayment());
         if(!groupExist.getGroupAdmin().equalsIgnoreCase(group.getGroupAdmin())){
             User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
-            User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
-            groupExist.setGroupAdmin(newAdmin.getEmail());
+            if(!groupExist.getGroupAdmin().equalsIgnoreCase("")) {
+                User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
+                groupExist.setGroupAdmin(newAdmin.getEmail());
+                oldAdmin.setRole("MEMBER");
+                userRepository.save(oldAdmin);
+            }
             newAdmin.setRole("GROUP_ADMIN");
-            oldAdmin.setRole("MEMBER");
             userRepository.save(newAdmin);
-            userRepository.save(oldAdmin);
         }
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setBalanceUsed(group.getBalanceUsed());

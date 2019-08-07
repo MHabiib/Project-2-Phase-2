@@ -104,6 +104,8 @@ const monthList =["January","February","March","April","May","June","July","Augu
         tanggalTransfer: '',
         buktiTransfer: null,
         regularPayment:0,
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+
       }
     },
     methods: {
@@ -130,9 +132,27 @@ const monthList =["January","February","March","April","May","June","July","Augu
           this.buktiTransfer = e.target.files[0];
         }
       },
+      validateInput(){
+        if(this.periode ==="") {
+          alert('Periode can\'t be null.')
+          return false
+        } if(this.untukMemberLain){ // terakhir sampai disini
+            if(this.reg.test(this.emailMemberLain)) {
+                this.newGroupDetail.groupCurrentPeriod=1
+            }
+        } else if(this.nomorRekeningPengirim === '') {
+          alert('Please input bank account\'s name')
+          return false
+        } else if(this.buktiTransfer === null) {
+          alert('Please input the proof of payment.')
+          return false
+        } 
+        return true
+        // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
+      },
       submitPembayaran() {
+        if(!this.validateInput()) return;
         let formData = new FormData();
-
         formData.append('payment', JSON.stringify({
           periode: this.periode,
           nomorRekeningPengirim: this.nomorRekeningPengirim,
@@ -170,6 +190,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
         })
       }
     },
+
     computed: {
       totalTagihan: function() {
         return (this.periode * this.dataPayNow.regularPayment)

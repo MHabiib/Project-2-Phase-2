@@ -176,13 +176,15 @@
               Helper.getNewToken(this.updateGroup.bind(null,jsonBody))
             } else {
                 localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-                response.json().then(
-                  res => {
-                    this.newGroupDetail = res;
-                    alert('group updated!')
-                    this.$emit('updateGroupDetailWindow');
-                  }
-                )
+                if(response.ok){
+                  response.json().then(
+                    res => {
+                      this.newGroupDetail = res;
+                      alert('group updated!')
+                      this.$emit('updateGroupDetailWindow');
+                    }
+                  )
+                }
             }
         })
       },

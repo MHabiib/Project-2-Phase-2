@@ -151,7 +151,7 @@
               this.$emit('refreshData');
             } else {
               console.log(response);
-              alert('Terjadi kesalahan. Harap periksa kembali input Anda atau refresh kembali halaman ini.');
+              alert('Oops! Something wrong happened. Please make sure the data is valid');
             }
           })
           .catch(err => {

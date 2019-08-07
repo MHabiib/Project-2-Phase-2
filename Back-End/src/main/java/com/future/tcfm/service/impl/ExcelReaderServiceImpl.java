@@ -37,7 +37,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             Map<String,Group> newGroupMap = new HashMap<>();
             int numbersOfGroupAdmin = 0;
             for (User user : newUserList) {
-                Boolean isGroupExist = true;
+                Boolean isGroupExist = false;
                 for (User registeredUser : userList){
                     if(user.getEmail().equalsIgnoreCase(registeredUser.getEmail())){
                         throw new RuntimeException("Exception: email already exist!");
@@ -58,7 +58,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 }
                 if (!isGroupExist) {
                     Group newGroup = Group.builder()
-                            .groupAdmin(user.getRole().equalsIgnoreCase("GROUP_ADMIN") ? user.getEmail()  :  "") //terakhir sampai disini dan belum di uji
+                            .groupAdmin("")
                             .name(user.getGroupName())
                             .balanceUsed(0.0)
                             .createdDate(System.currentTimeMillis())
@@ -72,7 +72,15 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                 }
             }
             if(newGroupMap.size()>0){
-                newGroupMap.forEach((key,value) -> groupRepository.save(value));
+                newGroupMap.forEach((key,value) -> {
+                    newUserList.forEach(user -> {
+                        if(user.getRole().equalsIgnoreCase("GROUP_ADMIN") && user.getGroupName().equalsIgnoreCase(value.getName())){
+                            value.setGroupAdmin(user.getEmail());
+                        }
+                    });
+                    groupRepository.save(value);
+
+                });
             }
             userRepository.saveAll(newUserList);
             System.out.println("Bulk Insert succed!");
