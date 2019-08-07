@@ -61,6 +61,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                             .groupAdmin(user.getRole().equalsIgnoreCase("GROUP_ADMIN") ? user.getEmail()  :  "") //terakhir sampai disini dan belum di uji
                             .name(user.getGroupName())
                             .balanceUsed(0.0)
+                            .createdDate(System.currentTimeMillis())
                             .groupBalance(0.0)
                             .bankAccountNumber("")
                             .regularPayment(0.0)
