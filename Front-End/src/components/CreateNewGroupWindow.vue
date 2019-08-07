@@ -78,7 +78,7 @@
             </div>
             <div class="valueInput">
               <div  v-show="edit==false"  class="value">: Rp {{groupDetail.groupBalance | thousandSeparators}}</div>
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Balance' v-model='newGroupDetail.groupBalance'  @keypress="checkChar"/>
+              <input v-if="edit" class='singleLineInput' type="text" placeholder='Balance' v-model='newGroupDetail.groupBalance'  @keypress="checkChar" required/>
             </div>
           </div>
           <div>
@@ -88,9 +88,9 @@
             <div class="valueInput" style="width:40%">
               <div  v-show="edit==false"  class="value">: Rp {{groupDetail.balanceUsed | thousandSeparators}}
               </div>            
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Used Balance' v-model='newGroupDetail.balanceUsed' @keypress="checkChar"/>
+              <input v-if="edit" class='singleLineInput' type="text" placeholder='Used Balance' v-model='newGroupDetail.balanceUsed' @keypress="checkChar" required/>
             </div>
-            <div :disabled='edit' class="buttonDisband"  @click="disbandGroup">Disband Group</div>          
+            <div v-if='!edit' class="buttonDisband"  @click="disbandGroup">Disband Group</div>
           </div>
         </div>
       </div>
@@ -159,7 +159,7 @@
         } else if(this.fileInput === null) {
           alert('Harap masukkan foto user.')
           return false
-        } 
+        }
         return true
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
       },
