@@ -91,20 +91,15 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setCreatedDate(System.currentTimeMillis());
         expense.setGroupCurrentPeriod(groupExist.getCurrentPeriod());
         List<User> userContributed = userRepository.findByGroupNameAndActive(expense.getGroupName(),true);
-        List<UserContributedList> userContributedLists;
+        List<UserContributedList> userContributedLists=new ArrayList<>();
         for(User user:userContributed){
-            userContributedLists=expense.getUserContributed();
-            if(userContributedLists==null) {
-                userContributedLists = new ArrayList<>();
-            }
             UserContributedList u = new UserContributedList();
             u.setEmail(user.getEmail());
             u.setImageURL(user.getImageURL());
             userContributedLists.add(u);
         }
-
 //        expense.setRequester(userRepository.findByEmail(expense.getRequester()).getName());
-
+        expense.setUserContributed(userContributedLists);
         expense.setRequester(expense.getRequester());
         expenseRepository.save(expense);
         /*
