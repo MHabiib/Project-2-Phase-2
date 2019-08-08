@@ -98,11 +98,9 @@ public class GroupServiceImpl implements GroupService {
         Group groupExist = groupRepository.findByNameAndActive(group.getName(),true);
         if (groupExist != null &&groupExist.getActive().equals(false))
             return new ResponseEntity<>("Failed to save Group!\nName already exists!", HttpStatus.BAD_REQUEST);
-        if(group.getCurrentPeriod()==0){
-            group.setCurrentPeriod(1);
-        }if(group.getGroupAdmin()==null){
-            group.setGroupAdmin("");
-        }
+        if(group.getCurrentPeriod()==0)   group.setCurrentPeriod(1);
+        if(group.getGroupAdmin()==null)   group.setGroupAdmin("");
+
         group.setGroupAdmin(group.getGroupAdmin().equalsIgnoreCase("")?"":group.getGroupAdmin());
         group.setCreatedDate(System.currentTimeMillis());
         group.setLastModifiedAt(System.currentTimeMillis());
@@ -127,10 +125,13 @@ public class GroupServiceImpl implements GroupService {
             if( !group.getGroupAdmin().equalsIgnoreCase("")){
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
-                User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
-                oldAdmin.setRole("MEMBER");
-                userRepository.save(oldAdmin);
                 userRepository.save(newAdmin);
+                if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
+                    User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
+                    oldAdmin.setRole("MEMBER");
+                    userRepository.save(oldAdmin);
+                }
+
             }
             groupExist.setGroupAdmin(group.getGroupAdmin());
         }

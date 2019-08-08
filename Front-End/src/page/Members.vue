@@ -113,7 +113,7 @@
       searchData(page){
         this.loading=true
         console.log(this.filter)
-        fetch(`${Helper.backEndAddress}/api/user/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&membersOnly=true&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -139,7 +139,7 @@
       },
       getMembersData(page) {
         this.loading=true
-        fetch(`${Helper.backEndAddress}/api/user/search?${this.filter}=${this.searchQuery}&groupName=${this.groupName}&page=${page}`, {                    
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&membersOnly=true&page=${page}`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }

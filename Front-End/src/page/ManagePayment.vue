@@ -303,7 +303,7 @@
     padding-left: 10px;
   }
 
-  .managePamentsTableBody tbody td:nth-child(3), .managePamentsTableBody thead tr th:nth-child(3) {width: 15vw;}
+  .managePamentsTableBody tbody td:nth-child(3), .managePamentsTableBody thead tr th:nth-child(3) {width: 20vw;}
   .managePamentsTableBody tbody td:nth-child(4), .managePamentsTableBody thead tr th:nth-child(4) {width: 11vw;}
   .managePamentsTableBody tbody td:nth-child(5), .managePamentsTableBody thead tr th:nth-child(5) {width: 10vw;}
 

@@ -72,7 +72,7 @@
             :class='{ activeSmallMenu: isPaymentHistory }'
             @click='changeView("/paymenthistory")'
           >
-            <div :class='{litteSmallBlue: isManageUser}'></div>
+            <div :class='{litteSmallBlue: isPaymentHistory}'></div>
             <div class="menuChildText">History</div>
             <div />
           </div>
@@ -82,7 +82,7 @@
             :class='{ activeSmallMenu: isManagePayment }'
             @click='changeView("/managepayment")'
           >
-            <div :class='{litteSmallBlue: isManageUser}'></div>
+            <div :class='{litteSmallBlue: isManagePayment}'></div>
             <div class="menuChildText">Manage</div>
             <div />
           </div>

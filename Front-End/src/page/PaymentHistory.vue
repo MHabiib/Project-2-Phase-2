@@ -18,7 +18,8 @@
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
             <div class="refreshBtn" @click='searchData(0)'>
-              Refresh
+              <!-- Refresh -->
+              <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
             </div>
           </div>
         </div>
@@ -90,6 +91,7 @@
         loading:false,
         searchQuery:'',
         groupCreated:{},
+        filter:'period'
       }
     },
 
@@ -112,7 +114,7 @@
     methods: {
       searchData(page){
         this.loading=true
-        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&page=${page}`, {
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {              
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -145,7 +147,7 @@
       getMembersData(page) {
         this.loading=true
         // fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&page=${page}&filter=${'totalPeriodPayed'}`, {
-        fetch(`${Helper.backEndAddress}/api/user/search?name=${this.searchQuery}&page=${page}`, {          
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {              
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -271,7 +273,7 @@
   .paymentTableSearch::placeholder {color: var(--primary-1)}
 
   .refreshBtn {
-    background-color: var(--lightColor);
+    background-color: #fff;
     color: var(--primary-0);
     padding: 10px;
     font-weight: 500;

@@ -107,6 +107,11 @@
               this.getExpenseData(this.newExpenseDetail.idExpense);
               this.$emit('refreshData')
             }
+            else{
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              alert('Oops! Something wrong happened.\n Please try again.')
+              this.$emit('refreshData')
+            }
           })
         }
       },
@@ -121,12 +126,14 @@
             Helper.getNewToken(this.getExpenseData.bind(null,this.newExpenseDetail.idExpense))
           }  else {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            response.json().then(
-              res => {
-                this.newExpenseDetail = res;
-                this.checkStatus(res.status);
-              }
-            )
+            if(response.ok){
+              response.json().then(
+                res => {
+                  this.newExpenseDetail = res;
+                  this.checkStatus(res.status);
+                }
+              )
+            }
           }
         })
       }

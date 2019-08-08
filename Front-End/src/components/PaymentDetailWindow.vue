@@ -122,8 +122,11 @@
                   this.paymentDetail=res;
                   this.$emit('refreshData')
                 }
-              )
-              
+              )              
+            } else{
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              console.log('error!')
+              alert('Oops! Something wrong happened when processing request.\nPlease try again.')
             }
           })
         }

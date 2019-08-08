@@ -98,6 +98,7 @@
             this.$emit('refreshData');
             this.$emit('closeCreateNewExpenseWindow');
           } else {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             alert('Gagal meminta expense baru. Silahkan cek kembali input Anda atau refresh halaman ini.');
           }
         })

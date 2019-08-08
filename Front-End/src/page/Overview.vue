@@ -58,7 +58,7 @@
                 </thead>
 
                 <tbody>
-                  <tr v-for="(expense, index) in overviewData.latestExpense" :key="index" @click="openExpenseDetailWindow(expense.idExpense)">
+                  <tr v-for="(expense, index) in overviewData.latestExpense" :key="index" @click="openExpenseDetailWindow(expense)">
                     <td>{{index+1}}.</td>
                     <td>{{expense.createdDate | dateFormatter}}</td>
                     <td>{{expense.title}}</td>
@@ -122,7 +122,7 @@
     <expenseDetailWindow
       v-if='showExpenseDetailWindow'
       @closeExpenseDetailWindow="closeExpenseDetailWindow"
-      :expenseId="this.detailExpenseSelected"
+      :expenseDetail="this.expenseDetail"
     />
   </div>
 </template>
@@ -139,7 +139,6 @@
       return {
         overviewData: {},
         showExpenseDetailWindow: false,
-        detailExpenseSelected: '',
         groupNotificationList:[],
         es:null
       }
@@ -180,9 +179,9 @@
           
         })
       },
-      openExpenseDetailWindow(id) {
+      openExpenseDetailWindow(expenseDetail) {
         this.showExpenseDetailWindow = true;
-        this.detailExpenseSelected = id;
+        this.expenseDetail = expenseDetail;
       },
       closeExpenseDetailWindow() {
         this.showExpenseDetailWindow = false;
