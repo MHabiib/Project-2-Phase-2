@@ -15,7 +15,7 @@ import java.text.ParseException;
 
 import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 
-@CrossOrigin
+@CrossOrigin("**")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

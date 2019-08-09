@@ -126,12 +126,11 @@ public class GroupServiceImpl implements GroupService {
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
                 userRepository.save(newAdmin);
-                if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
-                    User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
-                    oldAdmin.setRole("MEMBER");
-                    userRepository.save(oldAdmin);
-                }
-
+            }
+            if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
+                User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
+                oldAdmin.setRole("MEMBER");
+                userRepository.save(oldAdmin);
             }
             groupExist.setGroupAdmin(group.getGroupAdmin());
         }

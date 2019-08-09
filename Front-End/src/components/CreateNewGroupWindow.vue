@@ -37,7 +37,7 @@
               <select ref="groupAdmin" v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupDetail.groupAdmin' @change="changeGroupAdmin($event)">
                 <option  
                   class='selectAdminOption' value="">      
-                  Remove Group Admin            
+                  No Group Admin            
                 </option>     
                 <option  
                   class='selectAdminOption'
@@ -81,7 +81,7 @@
               <label for="namaInput">Balance </label>
             </div>
             <div class="valueInput">
-              <div  v-show="edit==false"  class="value">: Rp {{groupDetail.groupBalance | thousandSeparators}}</div>
+              <div v-if="add==false"  v-show="edit==false"  class="value">: Rp {{groupDetail.groupBalance | thousandSeparators}}</div>
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Balance' v-model='newGroupDetail.groupBalance'  @keypress="checkChar" required/>
             </div>
           </div>
@@ -90,7 +90,7 @@
               <label  for="namaInput">Used Balance</label>
             </div>
             <div class="valueInput" style="width:40%">
-              <div  v-show="edit==false"  class="value">: Rp {{groupDetail.balanceUsed | thousandSeparators}}
+              <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{groupDetail.balanceUsed | thousandSeparators}}
               </div>            
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Used Balance' v-model='newGroupDetail.balanceUsed' @keypress="checkChar" required/>
             </div>
@@ -160,10 +160,7 @@
         } else if(this.newGroupDetail.bankAccountNumber === '') {
           alert('Harap masukkan nomor handphone user')
           return false
-        } else if(this.fileInput === null) {
-          alert('Harap masukkan foto user.')
-          return false
-        }
+        } 
         return true
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
       },
@@ -441,7 +438,6 @@
     outline: none;
     padding: 5px;
     color: var(--primary-4);
-
   }
   .singleLineInput::placeholder {
     color: var(--primary-1);

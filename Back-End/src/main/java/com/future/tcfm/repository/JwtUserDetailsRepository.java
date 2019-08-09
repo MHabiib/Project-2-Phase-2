@@ -12,5 +12,6 @@ public interface JwtUserDetailsRepository extends MongoRepository<JwtUserDetails
     JwtUserDetails findByEmail(String email);
     List<JwtUserDetails> findAllByGroupName(String gName);
     void deleteAllByGroupName(String gName);
+    void deleteByEmail(String email);
     JwtUserDetails findByAccessTokenAndRefreshToken(String accessToken,String refreshToken);
 }

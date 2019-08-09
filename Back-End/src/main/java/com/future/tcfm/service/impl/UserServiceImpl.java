@@ -32,7 +32,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -151,42 +153,51 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity manageUser(String id, User user){
         User userExist = userRepository.findByIdUser(id);
         Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true);
+        Map<String,String> responseMap = new HashMap();
         if(userExist==null){
-            return new ResponseEntity("Username not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Username not found!", HttpStatus.NOT_FOUND);
         }
-        if(!userExist.getGroupName().equals(user.getGroupName())) {
-            //notification untuk group lamanya
-            if(groupExist==null){
-                return new ResponseEntity("Group not found!", HttpStatus.NOT_FOUND);
+        if(!userExist.getGroupName().equalsIgnoreCase(user.getGroupName())){
+            if(userExist.getPeriodeTertinggal()>0){
+
+                responseMap.put("message","Error : This user have not completed their payment ("+userExist.getPeriodeTertinggal().toString()+" periode(s) left).\nThis user have to complete his payment in order to switch group.");
+                return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            userExist.setJoinDate(new Date().getTime());
-            userExist.setGroupName(user.getGroupName());
-            userExist.setPeriodeTertinggal(1);
-            userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod()-1);
-            notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
-
-
-            notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
-            //notification untuk group barunya
-            notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
-            notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
+            if(user.getGroupName().equalsIgnoreCase("")){
+                userExist.setGroupName("GROUP_LESS");
+            }else{
+                userExist.setJoinDate(new Date().getTime());
+                userExist.setGroupName(user.getGroupName());
+                userExist.setPeriodeTertinggal(1);
+                userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod()-1);
+                notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
+                notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
+                //notification untuk group barunya
+                notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
+                notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
+            }
         }
         if(!userExist.getRole().equals(user.getRole())){
             if(user.getRole().equals("GROUP_ADMIN")){
+//                if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
+//                    return new ResponseEntity()
+//                }
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());
-                oldAdmin.setRole("MEMBER");
+                if(oldAdmin != null){
+                    oldAdmin.setRole("MEMBER");
+                    userRepository.save(oldAdmin);
+                }
                 groupExist.setGroupAdmin(user.getEmail());
-                userRepository.save(oldAdmin);
-            }
+                groupRepository.save(groupExist);
+             }
         }
-        userExist.setRole(userExist.getRole());
+        userExist.setRole(user.getRole());
         userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
         userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
-        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByEmail(userExist.getEmail());
-        jwtUserDetailsRepository.delete(jwtUserDetails);
+        jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
         userRepository.save(userExist);
         return new ResponseEntity(userExist,HttpStatus.OK);
     }
