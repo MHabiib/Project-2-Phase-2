@@ -70,7 +70,7 @@ public class JwtGenerator {
      */
     public ResponseEntity loginResponse(LoginRequest loginRequest){
         System.out.println(loginRequest);
-        User userExist = userRepository.findByEmail(loginRequest.getEmail());
+        User userExist = userRepository.findByEmailAndActive(loginRequest.getEmail(),true);
         if (userExist!=null) {
             if (passwordEncoder.matches(loginRequest.getPassword(), userExist.getPassword())){
                 Map responseMap = new HashMap<>();

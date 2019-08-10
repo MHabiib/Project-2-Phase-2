@@ -14,7 +14,7 @@ public interface UserService {
     User getUser(String email);
     ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException;
 
-    ResponseEntity manageUser(String id, User user);
+    ResponseEntity manageUser(String id, User user,String newGroupAdmin);
 
     ResponseEntity updateUserV2(String id, String userJSONString, MultipartFile file) throws IOException;
     ResponseEntity getImage(String imageName) throws IOException;

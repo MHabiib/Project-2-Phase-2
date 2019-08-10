@@ -1,23 +1,32 @@
 <template>
   <div class='fixedPosition'>
-    <div class='createNewExpenseWindow'>
-      <div class='createNewExpenseWindowSize'>
-        <div class="createNewExpenseHeader">
+    <div class='createNewUserWindow'>
+      <div class='createNewUserWindowSize'>
+        <div class="createNewUserHeader">
           <div>{{this.headerTitle}}</div>
           <div class='buttonGroup'>
+            <div v-if='!edit' class="buttonDisband"  @click="deleteUser(userDetail.idUser)">Resign User</div>
             <div class="editButton" @click="editUserDetailWindow">{{editBtnName}}</div>
             <div  class="editButton"  @click="closeUserDetailWindow">{{closeBtnName}}</div>   
           </div>
         </div>
 
-        <div class="createNewExpenseBody">
+        <div class="createNewUserBody">
+          <div v-if="add==false">
+            <div class="labelInput" >
+              <label for="namaInput">Created Date</label>
+            </div>
+            <div class="valueInput">
+              <div  class="value">: {{userDetail.joinDate | dateFormatter}}</div>
+            </div>
+          </div>
           <div>
             <div class="labelInput" >
               <label for="namaInput">Name</label>
             </div>
             <div class="valueInput">
               <div v-if="add==false" v-show="edit==false" class="value">: {{userDetail.name}} </div>
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Nama' v-model='newUserDetail.name'/>
+              <input v-if="edit" class='singleLineInput' type="text" placeholder='Name' v-model='newUserDetail.name'/>
             </div>
           </div>
           <div>
@@ -76,6 +85,22 @@
                 </select>
             </div>
           </div>
+          <div v-if="groupAdminGroupChanged" >
+            <div class="labelInput" >
+              <label for="emailInput">New Group Admin</label>
+            </div>
+            <div class="valueInput">
+              <div v-if="add==false" v-show="edit==false" class="value">: <span class="inlineInput"> {{userDetail.groupName}}</span>/ {{userDetail.role}}</div>
+              <select v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupAdmin' @change="changeGroupAdmin($event)">  
+                <option  
+                  class='selectAdminOption'
+                  v-for='(member,index) in groupMemberList' :key='index'
+                  :value='member.email'>
+                    {{member.name}}
+                </option>  
+              </select>             
+            </div>
+          </div>
           <div v-if="edit">
             <div class="labelInput" >
               <label for="emailInput">Password</label>
@@ -113,6 +138,9 @@
         fileInput: null,
         newPassword:'',
         groupList: [],
+        groupMemberList:[],
+        groupAdminGroupChanged : false,
+        newGroupAdmin:'',
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
       }
     },    
@@ -128,7 +156,13 @@
       this.edit=this.editMode
       this.add=this.addMode
       this.getAllGroup();
+      // if(!this.add) this.getMember();
       this.newUserDetail = Object.assign({},this.userDetail)
+    },
+    watch:{
+      groupAdminGroupChanged: function(oldVal,newVal){
+        this.groupAdminGroupChanged = this.newUserDetail.groupName === this.userDetail.groupName ? false : this.userDetail.role === 'GROUP_ADMIN'
+      }
     },
     methods: {
       closeAddNewUserWindow() {
@@ -156,9 +190,11 @@
                 this.groupList = res;
               }
             )
+            if(!this.add) this.getMember();
+
           } else {
-            alert('Sesi Anda telah berakhir, harap refresh kembali halaman ini.');
-            window.location.reload();
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            alert('Oops! Something wrong happened.');
           }
         })
         .catch(err => {
@@ -166,8 +202,38 @@
           console.log(err);
         })
       },
+      getMember() {
+        // let gName = this.newGroupDetail.name==undefined ? "GROUP_LESS":this.newGroupDetail.name
+        console.log("GroupName : "+this.userDetail.groupName)
+        fetch(`${Helper.backEndAddress}/api/group/${this.userDetail.groupName}/members`, {
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          },
+          method: 'GET'
+        })
+          .then(response => {
+            if(response.status==401){
+              this.groupMemberList=[]
+              Helper.getNewToken(this.getMember)
+            } else{
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              if(response.ok){
+                response.json().then(
+                  res => {
+                    console.log(res)
+                    this.groupMemberList = res
+                  }
+                )
+              }
+            }            
+          })
+      },
       changeGroup(e) {
         this.newUserDetail.groupName = e.target.value;
+        this.groupAdminGroupChanged = !this.groupAdminGroupChanged;
+      },
+      changeGroupAdmin(e){
+        this.newGroupAdmin= e.target.value;
       },
       changeRole(e) {
         this.newUserDetail.role = e.target.value;
@@ -217,7 +283,7 @@
       updateUser(jsonBody){
         if(!this.validateInput()) return;
 
-        fetch(`${Helper.backEndAddress}/api/user/managementUser/${this.newUserDetail.idUser}`,{
+        fetch(`${Helper.backEndAddress}/api/user/managementUser/${this.newUserDetail.idUser}?newGroupAdmin=${this.newGroupAdmin}`,{
           headers: {
             'Content-Type':'application/json',
             Authorization: localStorage.getItem('accessToken')},
@@ -246,6 +312,36 @@
             }
         })
       },
+      deleteUser(idUser){
+        if(this.add) return
+        let isConfirmed = confirm('Are you sure to resign this user?\nResigning user can\'t be undo.')
+        if(!isConfirmed) return;
+        fetch(`${Helper.backEndAddress}/api/user/${idUser}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          },
+        })
+        .then(response => {
+          if(response.status==401){
+            Helper.getNewToken(this.deleteUser.bind(null,idUser))
+          } else if(response.ok) {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            alert(`User resigned succeed.Any last information regarding ${this.newUserDetail.name} has been sent to ${this.newUserDetail.email}`);
+            this.closeAddNewUserWindow()
+            this.$emit('refreshData')                 
+          } else if(response.status==500){
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            response.json().then( res => {
+                alert(res.message)
+              })
+            }
+        })
+        .catch(err => {
+          alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
+          console.log(err);
+        })      
+      },
       closeUserDetailWindow() {
         if(this.edit==false) { this.$emit('closeAddNewUserWindow'); return}
         let formData = new FormData();
@@ -259,7 +355,7 @@
         else{
           let groupAdminChanged = this.newUserDetail.role != this.userDetail.role ? true : false 
           if(groupAdminChanged){
-            if(!confirm("Are you sure to change this user's  role?")) {
+            if(!confirm("Are you sure to change this user's  role? *previus group admin will be demoted to member.")) {
               return
             }
           }
@@ -315,7 +411,7 @@
   .sa {
     font-weight: 800;
   }
-  .createNewExpenseWindow {
+  .createNewUserWindow {
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -326,7 +422,7 @@
     position: absolute;
   }
 
-  .createNewExpenseHeader {
+  .createNewUserHeader {
     background-color: var(--primary-0);
     color: var(--lightColor);
     padding: 16px 12px;
@@ -342,12 +438,12 @@
     font-weight: 600;
   }
 
-  .createNewExpenseWindowSize {
-    width: 35%;
+  .createNewUserWindowSize {
+    width: 40%;
     height: fit-content;
   }
 
-  .createNewExpenseBody {
+  .createNewUserBody {
     background-color: white;
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
@@ -395,14 +491,16 @@
   }
 
   .buttonDisband {
-    color: red;
+    color: #fff;
     display:inline-block;
-    width: 25%;
+    /* width: 25%; */
     text-align:center;
+    font-weight:400;
     border-radius: 10px;
-    padding: 2px 0;
+    padding: 7px;
     font-size: 12px;    
   }
+
   .buttonDisband:hover{
     cursor: pointer;
     color: pointer;
@@ -436,7 +534,7 @@
     border-radius: 2px;
   }
   .inlineInput{
-    width: 49%;
+    width: 49% !important;
     display: inline-block;
   }
 
@@ -476,8 +574,28 @@
     width: 70%;
   }
 
-  .createNewExpenseFlexLine {
+  .createNewUserFlexLine {
     display: flex;
     align-items: center;
+  }
+  .selectAdmin {
+    outline: none;
+    border: none;
+    padding: 10px !important;
+    color: var(--primary-4);
+    width: 100%;
+    /* height: 40px; */
+    background-color: var(--lightColor);
+    margin-top: 15px;
+    margin-right: 12px;
+    border-radius: 5px;
+  }
+
+  .selectAdmin:hover, .selectAdminOption:hover{
+    cursor: pointer;
+  }
+  .selectAdminOption{
+    padding: 10px;
+    color: var(--primary-3);
   }
 </style>

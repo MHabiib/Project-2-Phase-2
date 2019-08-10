@@ -12,6 +12,7 @@ import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -124,18 +125,20 @@ public class UserServiceImpl implements UserService {
         String myRole = getCurrentUser().getAuthorities().toString();
         String groupName = myRole.contains("SUPER_ADMIN") ? "" : getCurrentUser().getGroupName();
         Pageable pageable = createPageRequest(key,"asc",page,size);
+        Sort sort = new Sort(Sort.Direction.ASC,"name");
         Query myQuery = new Query().with(pageable);
         criteria = Criteria.where(key).regex(value,"i").and("groupName").is(groupName).and("active").is(true);
         if(membersOnly){
             criteria = Criteria.where("groupName").regex(getCurrentUser().getGroupName()).and("active").is(true);
         }
         else if(key.equalsIgnoreCase("period")){
-            pageable = createPageRequest(key,"desc",page,size);
             criteria = Criteria.where("groupName").regex(groupName).and("active").is(true);
+            sort = new Sort(Sort.Direction.DESC,"TotalPeriodPayed");
         }else if(groupName.equalsIgnoreCase("")){
             criteria = Criteria.where(key).regex(value,"i").and("active").is(true);
         }
-        myQuery.addCriteria(criteria);
+
+        myQuery.addCriteria(criteria).with(sort);
         List<User> paymentList =  mongoTemplate.find(myQuery,User.class,"user");
         return PageableExecutionUtils.getPage(
                 paymentList,
@@ -144,13 +147,14 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * function yg d call ktk merubah data user yg dilakukan super_admin
+     * management user
      * @param id
      * @param user
+     * @param newGroupAdmin //admin baru untuk grup lama jika yg pindaha dalah grup admin
      * @return
      */
     @Override
-    public ResponseEntity manageUser(String id, User user){
+    public ResponseEntity manageUser(String id, User user, String newGroupAdmin){
         User userExist = userRepository.findByIdUser(id);
         Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true);
         Map<String,String> responseMap = new HashMap();
@@ -159,25 +163,46 @@ public class UserServiceImpl implements UserService {
         }
         if(!userExist.getGroupName().equalsIgnoreCase(user.getGroupName())){
             if(userExist.getPeriodeTertinggal()>0){
-
                 responseMap.put("message","Error : This user have not completed their payment ("+userExist.getPeriodeTertinggal().toString()+" periode(s) left).\nThis user have to complete his payment in order to switch group.");
                 return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            if(user.getGroupName().equalsIgnoreCase("")){
-                userExist.setGroupName("GROUP_LESS");
-            }else{
+            if(!newGroupAdmin.equalsIgnoreCase("")) {
+                User newAdmin = userRepository.findByEmailAndActive(newGroupAdmin, true);
+                if (newAdmin == null) {
+                    return new ResponseEntity<>("Error 404:Email User Not found", HttpStatus.NOT_FOUND);
+                }
+                newAdmin.setRole("GROUP_ADMIN");
+                userRepository.save(newAdmin);
+
+                Group oldGroup = groupRepository.findByNameAndActive(userExist.getGroupName(), true);
+                oldGroup.setGroupAdmin(newGroupAdmin);
+                groupRepository.save(oldGroup);
+                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
+
+                notificationService.createNotification(userExist.getName() + " just been promoted to be the new group admin!", null, userExist.getGroupName(), TYPE_GROUP);
+                notificationService.createNotification("Congrats! you have been promoted to be the new group admin.", userExist.getEmail(), userExist.getGroupName(), TYPE_PERSONAL);
+                // terakhir sampai disini jangan lupa diuji
+            }else {
+
+                userExist.setBalance(0.0);
+                userExist.setBalanceUsed(0.0);
                 userExist.setJoinDate(new Date().getTime());
-                userExist.setGroupName(user.getGroupName());
+                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
                 userExist.setPeriodeTertinggal(1);
-                userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod()-1);
-                notifMessage = userExist.getEmail()+USER_LEFT_GROUP;
-                notificationService.createNotification(notifMessage,userExist.getEmail(),userExist.getGroupName(),TYPE_GROUP);
+                userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod() - 1);
+                notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
+                notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
                 //notification untuk group barunya
-                notifMessage = userExist.getEmail()+USER_JOINED_GROUP;
-                notificationService.createNotification(notifMessage,userExist.getEmail(),user.getGroupName(),TYPE_GROUP);
+                notifMessage = userExist.getEmail() + USER_JOINED_GROUP;
+                notificationService.createNotification(notifMessage, userExist.getEmail(), user.getGroupName(), TYPE_GROUP);
             }
+        } else{
+            userExist.setBalance(user.getBalance());
+            userExist.setBalanceUsed(user.getBalanceUsed());
+            userExist.setTotalPeriodPayed(user.getTotalPeriodPayed());
+            userExist.setPeriodeTertinggal(user.getPeriodeTertinggal());
         }
-        if(!userExist.getRole().equals(user.getRole())){
+        if(!userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") && groupExist != null){ //cek role jika pindah grup, timpa admin lama, bila roleny group admin juga
             if(user.getRole().equals("GROUP_ADMIN")){
 //                if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
 //                    return new ResponseEntity()
@@ -189,10 +214,12 @@ public class UserServiceImpl implements UserService {
                 }
                 groupExist.setGroupAdmin(user.getEmail());
                 groupRepository.save(groupExist);
+                notificationService.createNotification(userExist.getName()+" just been promoted to be the new group admin!",null,userExist.getGroupName(),TYPE_GROUP);
+                notificationService.createNotification("Congrats! you have been promoted to be the new group admin.",userExist.getEmail(),userExist.getGroupName(),TYPE_PERSONAL);
              }
         }
-        userExist.setRole(user.getRole());
-        userExist.setEmail(user.getEmail());
+        userExist.setRole(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? "" : user.getRole());
+//        userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());
@@ -294,14 +321,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> deleteUser(String email) {
-        User userExist = userRepository.findByEmail(email);
+    public ResponseEntity<?> deleteUser(String id) {
+        User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
             return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
         if(userExist.getPeriodeTertinggal()>0){
-            return new ResponseEntity<>(userExist.getPeriodeTertinggal(),HttpStatus.OK);
+            Map responseMap = new HashMap();
+            responseMap.put("message","Error : This user have not completed their payment ("+userExist.getPeriodeTertinggal().toString()+" periode(s) left).\nThis user have to complete his payment before resignation.");
+            return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         userExist.setActive(false);
+        jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
         userRepository.save(userExist);
         return new ResponseEntity<>("User deleted!", HttpStatus.OK);
     }

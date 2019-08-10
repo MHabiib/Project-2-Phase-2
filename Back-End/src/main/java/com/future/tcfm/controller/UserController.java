@@ -29,11 +29,11 @@ public class UserController {
 
     @GetMapping("/search")
     public Page<User> searchAllUser(
-            @RequestParam(value = "query",required = false, defaultValue = "")String query,
-            @RequestParam(value = "membersOnly",required = false, defaultValue = "false")Boolean membersOnly,
-            @RequestParam(value = "page",required = false, defaultValue = "0")int page,
-            @RequestParam(value = "size",required = false, defaultValue = "10")int size) throws ParseException {
-        return userService.searchBy(query,membersOnly,page,size);
+            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "membersOnly", required = false, defaultValue = "false") Boolean membersOnly,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws ParseException {
+        return userService.searchBy(query, membersOnly, page, size);
     }
 
     @GetMapping("/email") // ini seharusnya gk usah, cukup @GetMapping aja gmn? biar jadi /api/user?email=value
@@ -56,6 +56,7 @@ public class UserController {
 
     /**
      * api dibawah untuk SUPER_ADMIN yang mengupdate data user scr eksplisit
+     *
      * @param id
      * @param user
      * @return
@@ -64,9 +65,10 @@ public class UserController {
     @PutMapping(value = "/managementUser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(
             @PathVariable("id") String id,
-            @RequestBody User user
+            @RequestBody User user,
+            @RequestParam(value = "newGroupAdmin",defaultValue = "") String newGroupAdmin
     ) throws IOException {
-        return userService.manageUser(id,user);
+        return userService.manageUser(id, user,newGroupAdmin);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,20 +80,13 @@ public class UserController {
         return userService.updateUserV2(id, userJSONString, file);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteUser(String email) {
-        return userService.deleteUser(email);
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity delete(@PathVariable("id") String id) {
+        return userService.deleteUser(id);
     }
-
 }
 
-
-//    @DeleteMapping(value = "/user/{id}",produces = MediaType.APPLICATION_JSON_VALUE  )
-//    public ResponseEntity delete(@PathVariable("id")int id){
-//        return userService.deleteUser(id);
-//    }
-//}
-//    @PutMapping("/{id}")
-//    public ResponseEntity updateUser(@PathVariable("id") String id, @RequestBody User user) {
-//        return userService.updateUser(id,user);
+//    @DeleteMapping
+//    public ResponseEntity deleteUser(String email) {
+//        return userService.deleteUser(email);
 //    }

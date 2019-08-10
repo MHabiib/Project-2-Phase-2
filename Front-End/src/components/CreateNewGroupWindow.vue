@@ -6,6 +6,7 @@
           <div>{{this.headerTitle}}<span v-if="add==false">, Total Members : {{groupMemberList.length}}</span> </div>
           <div class='buttonGroup'>
             <!-- <div class="closeButton" @click="closeGroupDetailWindow">Close</div> -->
+            <div v-if='!edit' class="buttonDisband"  @click="disbandGroup">Disband Group</div>
             <div class="editButton" @click="editGroupDetailWindow">{{editBtnName}}</div>
             <div  class="editButton"  @click="closeGroupDetailWindow">{{closeBtnName}}</div>          
           </div>
@@ -25,7 +26,7 @@
             </div>
             <div class="valueInput">
               <div v-if="add==false" v-show="edit==false" class="value">: {{groupDetail.name}} </div>
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Nama' v-model='newGroupDetail.name'/>
+              <input v-if="edit" class='singleLineInput' type="text" placeholder='Name' v-model='newGroupDetail.name'/>
             </div>
           </div>
           <div class="myParent">
@@ -89,12 +90,12 @@
             <div class="labelInput" >
               <label  for="namaInput">Used Balance</label>
             </div>
-            <div class="valueInput" style="width:40%">
+            <div class="valueInput">
               <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{groupDetail.balanceUsed | thousandSeparators}}
               </div>            
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Used Balance' v-model='newGroupDetail.balanceUsed' @keypress="checkChar" required/>
             </div>
-            <div v-if='!edit' class="buttonDisband"  @click="disbandGroup">Disband Group</div>
+            <!-- <div v-if='!edit' class="buttonDisband"  @click="disbandGroup">Disband Group</div> -->
           </div>
         </div>
       </div>
@@ -191,7 +192,7 @@
       },
       disbandGroup(){
         if(this.add) return
-        let isConfirmed = confirm('Are you sure to disband this group?\nDisbanding group can\'t be undo')
+        let isConfirmed = confirm('Are you sure to disband this group?\nDisbanding group can\'t be undo.')
         if(!isConfirmed) return;
         fetch(`${Helper.backEndAddress}/api/group/${this.newGroupDetail.idGroup}`,{
           headers: {
@@ -379,7 +380,6 @@
     color: var(--primary-0);
     border-radius: 50%;
     font-size: 12px;
-    cursor: pointer;
     font-weight: 400;
     margin-left: 10px;
   }
@@ -390,20 +390,23 @@
   }
 
   .buttonDisband {
-    color: red;
+    color: #fff;
     display:inline-block;
-    width: 25%;
+    /* width: 25%; */
     text-align:center;
+    font-weight:400;
     border-radius: 10px;
-    padding: 2px 0;
+    padding: 7px;
     font-size: 12px;    
   }
+
   .buttonDisband:hover{
     cursor: pointer;
     color: pointer;
     background-color: red;  
     color: white;
   }
+
   .labelInput{
     text-align: left;
     margin-left: 10px;
