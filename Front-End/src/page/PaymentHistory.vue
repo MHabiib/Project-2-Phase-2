@@ -12,11 +12,22 @@
             Payment Table <span class="nextPrev" @click="year-=1">&#8249;</span>   {{checkYear}}   <span class="nextPrev" @click="year+=1">&#8250;</span>
           </div>
 
-          <div style='display: flex;'>
+          <div class="myParent" style='display: flex;'>
             <input class='paymentTableSearch' type="text" placeholder="Search by Names..." v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
+            <!-- <div class="dropdownMenu" >
+                <multiselect 
+                  v-model="filter" 
+                  :allow-empty="false" 
+                  :options="options" 
+                  :searchable="false" 
+                  :close-on-select="true" 
+                  :show-labels="false" 
+                  placeholder="Pick a value">
+                </multiselect> -->
+            <!-- </div> -->
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
               <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
@@ -63,10 +74,13 @@
   import UserContributedWindow from '../components/userContributedWindow';
   import payNowWindow from '../components/payNow';
   import Helper from '../../Helper';
+  import Multiselect from 'vue-multiselect'
 
   export default {
     components:{
-      'payNowWindow': payNowWindow
+      'payNowWindow': payNowWindow,
+      'multiselect': Multiselect,
+
     },
     computed: {
       rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);},
@@ -91,7 +105,8 @@
         loading:false,
         searchQuery:'',
         groupCreated:{},
-        filter:'period'
+        filter:'period',
+        // options:['name','period'],
       }
     },
 
@@ -106,7 +121,10 @@
     mounted(){
       this.scroll()
     },
-    watch:{
+    watch:{      
+      filter : function (newQuery, oldQuery) {
+        this.searchData(0)  
+      },
       searchQuery: function(oldVal,newVal){
         this.searchData(0)
       }
@@ -186,6 +204,7 @@
     }
   }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
   .paymentComponent {display: flex;}
@@ -206,6 +225,7 @@
     border-radius: 5px;
     align-items: center;
     width: 90%;
+    font-weight: 600;
     margin: auto;
     position: relative;
     z-index: 1;
@@ -272,6 +292,21 @@
 
   .paymentTableSearch::placeholder {color: var(--primary-1)}
 
+  #app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{
+    /* background-color: var(--lightColor); */
+    font-size: 14px;
+    color: var(--primary-0) ;
+    border-radius: 5px;
+  }
+
+  .dropdownMenu{
+    margin-left: 10px;
+    position: relative;
+    width: 10vw;
+  }
+  .dropdownMenu:hover{
+    cursor:pointer;
+  }
   .refreshBtn {
     background-color: #fff;
     color: var(--primary-0);

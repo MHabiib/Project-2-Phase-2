@@ -181,15 +181,14 @@ public class UserServiceImpl implements UserService {
 
                 notificationService.createNotification(userExist.getName() + " just been promoted to be the new group admin!", null, userExist.getGroupName(), TYPE_GROUP);
                 notificationService.createNotification("Congrats! you have been promoted to be the new group admin.", userExist.getEmail(), userExist.getGroupName(), TYPE_PERSONAL);
-                // terakhir sampai disini jangan lupa diuji
             }else {
 
                 userExist.setBalance(0.0);
                 userExist.setBalanceUsed(0.0);
-                userExist.setJoinDate(new Date().getTime());
+                userExist.setJoinDate(System.currentTimeMillis());
                 userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
                 userExist.setPeriodeTertinggal(1);
-                userExist.setTotalPeriodPayed(groupExist.getCurrentPeriod() - 1);
+                userExist.setTotalPeriodPayed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getTotalPeriodPayed() : groupExist.getCurrentPeriod() - 1);
                 notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
                 notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
                 //notification untuk group barunya
@@ -285,6 +284,7 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getRole().equals("GROUP_ADMIN")){
             if(!groupExist.getGroupAdmin().equalsIgnoreCase(""))
+
                 return new ResponseEntity<>("Failed to save User!\nGroup admin already exists!", HttpStatus.BAD_REQUEST);
             else{
                 groupExist.setGroupAdmin(user.getEmail());
@@ -307,7 +307,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setTotalPeriodPayed(groupExist.getCurrentPeriod()+user.getTotalPeriodPayed()-1);//-1 karena bulan sekarang
         user.setPeriodeTertinggal(groupExist.getCurrentPeriod()-user.getTotalPeriodPayed());
-        user.setJoinDate(new Date().getTime());
+        user.setJoinDate(System.currentTimeMillis());
         user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         user.setActive(true);
         user.setBalance((user.getTotalPeriodPayed()-groupExist.getCurrentPeriod()+1)*groupExist.getRegularPayment());
