@@ -23,6 +23,10 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
+    @GetMapping(value = "/last",produces = MediaType.APPLICATION_JSON_VALUE)
+    public Expense getLastExpense(){
+        return expenseService.getLastExpense();
+    }
     @GetMapping
     public List<Expense> loadAll (){
         return expenseService.loadAll();

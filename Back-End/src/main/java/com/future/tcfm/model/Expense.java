@@ -25,8 +25,8 @@ public class Expense {
     private String requester;
     private List<UserContributedList> userContributed;
     private Long createdDate;
-    private Long rejectedDate;
-    private Long approvedDate;
+//    private Long rejectedDate;
+//    private Long approvedDate;
     private Boolean status;
     private Long lastModifiedAt;
     private String approvedOrRejectedBy;

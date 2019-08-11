@@ -294,6 +294,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         return null;
     }
 
+    @Override
+    public Expense getLastExpense() {
+        return expenseRepository.findTop1ByGroupNameAndStatusOrderByCreatedDateDesc(getCurrentUser().getGroupName(),true);
+    }
+
 /*
     @Override
     public ResponseEntity management(ExpenseRequest request) {
