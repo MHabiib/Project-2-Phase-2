@@ -189,11 +189,14 @@ const monthList =["January","February","March","April","May","June","July","Augu
       },
       submitPembayaran() {
         if(!this.validateInput()) return;
+        console.log('Tgl TF: '+ new Date(this.tanggalTransfer).getTime())
+        let paymentDateInMillis = new Date(this.tanggalTransfer).getTime()
         let formData = new FormData();
         formData.append('payment', JSON.stringify({
           periode: this.periode,
           nomorRekeningPengirim: this.nomorRekeningPengirim,
           namaPengirim: this.namaPengirim,
+          paymentDate: paymentDateInMillis,
           emailMemberLain: this.untukMemberLain ? this.emailMemberLain : "",
           email: localStorage.getItem('userEmail'),
           price: this.totalTagihan

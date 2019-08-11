@@ -290,7 +290,6 @@
     border-radius: 5px;
     align-items: center;
     font-weight: 600;
-
     width: 90%;
     margin: auto;
     position: relative;

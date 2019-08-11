@@ -16,6 +16,7 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -101,7 +102,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         payment.setIsChecked(false);
-        payment.setPaymentDate(System.currentTimeMillis());
+        payment.setPaymentDate(payment.getPaymentDate());
         payment.setGroupName(userExist.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(payment);
@@ -277,7 +278,7 @@ public class PaymentServiceImpl implements PaymentService {
             int dValue = value.equalsIgnoreCase("")? 0 :Integer.parseInt(value);
             criteria = Criteria.where(key).gt(dValue).and("groupName").regex(groupName);
         }
-        myQuery.addCriteria(criteria);
+        myQuery.addCriteria(criteria).with(new Sort(Sort.Direction.DESC,"paymentDate"));
         List<Payment> paymentList =  mongoTemplate.find(myQuery,Payment.class,"payment");
         return PageableExecutionUtils.getPage(
                 paymentList,

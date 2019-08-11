@@ -283,6 +283,17 @@
     font-weight: 600;
   }
 
+  .managementTableBody {
+    background-color: var(--lightColor);
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+    padding: 50px 20px 20px 20px;
+    position: relative;
+    top: -35px;
+    color: var(--primary-4);
+    text-align: center;
+  }
+  
   .managementTableHeadSearch {
     outline: none;
     padding: 12px 10px;
@@ -304,15 +315,6 @@
     height: 29px;
   }
 
-  .managementTableBody {
-    background-color: var(--lightColor);
-    color: var(--primary-4);
-    position: relative;
-    top: -45px;
-    border-radius: 5px;
-    height: 70vh;
-    padding: 60px 20px 20px 20px;
-  }
 
   .managementTableHeadAddNew {
     background-color: #fff;
@@ -340,9 +342,10 @@
   }
 
   .managementTableBody tbody {
-    height: 68vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+    height: 55vh;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
+    overflow: auto;
     box-sizing: border-box;
     border-top: solid 1px var(--primary-1);
     line-height: 42px;

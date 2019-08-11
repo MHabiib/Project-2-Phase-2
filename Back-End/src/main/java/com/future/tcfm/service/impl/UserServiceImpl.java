@@ -137,7 +137,6 @@ public class UserServiceImpl implements UserService {
         }else if(groupName.equalsIgnoreCase("")){
             criteria = Criteria.where(key).regex(value,"i").and("active").is(true);
         }
-
         myQuery.addCriteria(criteria).with(sort);
         List<User> paymentList =  mongoTemplate.find(myQuery,User.class,"user");
         return PageableExecutionUtils.getPage(
