@@ -236,11 +236,12 @@
           return false;
         } else if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
             this.newUser.password = this.newPassword           
-        } else if(this.newPassword!=='' && this.newPassword.length>=5 && (this.newPassword !== this.repeatPassword)){
+        } else if(this.newPassword!=='' && this.newPassword.length<=5 || (this.newPassword !== this.repeatPassword)){
             alert('please input a valid password')
             return false
         }
-          return true
+        this.newUser.password = this.currentUser.password === this.newUser.password ? "" : this.newPassword 
+        return true
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
       },    
     }

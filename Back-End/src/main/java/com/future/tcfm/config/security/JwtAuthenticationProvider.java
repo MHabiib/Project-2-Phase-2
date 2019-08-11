@@ -31,7 +31,6 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
         }
         return jwtUserDetails;
     }
-
     @Override
     public boolean supports(Class<?> aClass) {
         return (JwtAuthenticationToken.class.isAssignableFrom(aClass));

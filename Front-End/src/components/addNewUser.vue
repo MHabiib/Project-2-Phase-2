@@ -193,7 +193,6 @@
       }
     },
     methods: {
-
       closeAddNewUserWindow() {
         this.$emit('closeAddNewUserWindow');
       },
@@ -373,7 +372,7 @@
           console.log(err);
         })      
       },
-      closeUserDetailWindow() {
+      closeUserDetailWindow() { // CLOSE BUTTON FUNCTION CALLED
         if(this.edit==false) { this.$emit('closeAddNewUserWindow'); return}
         if(!this.validateInput()) return;
         let formData = new FormData();
@@ -430,12 +429,13 @@
             this.newUserDetail.periodeTertinggal = 0
           } if(this.newUserDetail.role === ''){
             this.newUserDetail.role = 'MEMBER'           
-          } if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
-            this.newUserDetail.password = this.newPassword           
-          } else if(this.newPassword!=='' && this.newPassword.length>=5 && (this.newPassword !== this.repeatPassword)){
+          } else if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
+            this.newUserDetail.password = this.newPassword          
+          } else if(this.newPassword!=='' && this.newPassword.length<=5 || (this.newPassword !== this.repeatPassword)){
             alert('please input a valid password')
             return false
           }
+          this.newUserDetail.password = this.userDetail.password == this.newUserDetail.password ? "" : this.newPassword 
           return true
         }
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';

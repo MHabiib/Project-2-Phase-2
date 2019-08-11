@@ -25,7 +25,8 @@ Vue.component('HeaderSection', HeaderSection);
 Vue.mixin({
   data: function() {
     return {
-      groupName: localStorage.groupName
+      groupName: localStorage.groupName,
+      myRole: localStorage.role
     }
   },
   computed:{
