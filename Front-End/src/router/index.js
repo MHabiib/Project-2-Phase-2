@@ -9,9 +9,10 @@ import MembersPage from '../page/Members';
 import ManageUserPage from '../page/ManageUser';
 import ManageGroupPage from '../page/ManageGroup';
 import SidebarComponent from '../components/Sidebar';
- import HeaderSection from '../components/HeaderSection';
+import HeaderSection from '../components/HeaderSection';
 import PaymentHistoryPage from '../page/PaymentHistory';
 import ManagePaymentPage from '../page/ManagePayment';
+import ProfilePage from '../page/Profile'
 import tugasWeb from '../page/tugasWeb';
 import '../index.css';
 
@@ -25,6 +26,12 @@ Vue.mixin({
     return {
 
     }
+  },
+  computed:{
+
+  },
+  methods:{
+
   },
   filters: {
     thousandSeparators: function(numbers) {
@@ -73,7 +80,8 @@ const router = new Router({
     {
       path: '/',
       redirect: to => {
-        if(localStorage.getItem('token')) {
+        // if(localStorage.getItem('token')) {
+        if(localStorage.getItem('accessToken')) {
           return '/dashboard'
         } else {
           return '/login'
@@ -93,6 +101,11 @@ const router = new Router({
     {
       path: '/managepayment',
       component: ManagePaymentPage,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/profile',
+      component: ProfilePage,   
       meta: { requiresAuth: true }
     },
     {

@@ -217,11 +217,18 @@
         this.showBulkInsertWindow = false;
       },
       scroll() {
-        document.getElementById('infiniteScroll').onscroll = (e) => {
-          if(e.target.clientHeight + e.target.scrollTop >= e.target.scrollHeight) {
-            console.log('Infinite Triggered')
+        const paymentTable = document.querySelector('#infiniteScroll');
+        paymentTable.addEventListener('scroll', e => {
+          // console.log(paymentTable.scrollTop + paymentTable.clientHeight+" : "+paymentTable.scrollHeight)
+          if((paymentTable.scrollTop + paymentTable.clientHeight)+1>= paymentTable.scrollHeight) {
+            console.log('infinite scroll triggered!')
+            if(this.dataGroup.last!=true & this.loading==false){   
+              this.loading=true;
+              this.getGroupData(this.dataGroup.pageable.pageNumber+1)
+              console.log('get more data!')
+            }
           }
-        };
+        })
       },
       dateFormatter(dateToFormat) {
         const monthToString = (month)=> {

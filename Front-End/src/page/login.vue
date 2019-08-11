@@ -45,10 +45,12 @@
             localStorage.setItem('groupName', res.data.groupName);
             localStorage.setItem('role', res.data.role);
             localStorage.setItem('groupCreatedDate', parseInt(res.data.groupCreatedDate));
-
+            localStorage.setItem('imageURL', res.data.imageURL)
+            this.$store.dispatch('setUser',res.data.currentUser)
+            alert('Welcome '+ this.$store.getters.user.name)
           })
           .then(()=> {
-            alert('Login Berhasil');
+            // alert('Login Berhasil');
             this.$router.push('/dashboard');
             
             // this.$router.push('/tugasweb');// hanya sebuah tugas web (coba-coba punya) #abaikanSaja

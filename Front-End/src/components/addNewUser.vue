@@ -25,7 +25,11 @@
               <label for="namaInput">Name</label>
             </div>
             <div class="valueInput">
-              <div v-if="add==false" v-show="edit==false" class="value">: {{userDetail.name}} </div>
+              <div v-if="add==false" v-show="edit==false" class="value pp">: {{userDetail.name}} </div>
+              <div v-if="add==false" v-show="!edit" class="value pp" style="width:20%;display:">
+                  <!-- <img v-if="!ppAvailable" src="../assets/profile.png" alt="pp" class="profilePicture"> -->
+                  <img v-if="ppAvailable" :src="userDetail.imageURL" alt="pp" class="profilePicture">
+              </div>
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Name' v-model='newUserDetail.name'/>
             </div>
           </div>
@@ -63,8 +67,8 @@
             </div>
             <div class="valueInput">
               <div v-if="add==false" v-show="edit==false" class="value">: <span class="inlineInput">{{userDetail.totalPeriodPayed}}</span>/ {{userDetail.periodeTertinggal>0?userDetail.periodeTertinggal:0}}</div>
-              <input v-if="edit" class='singleLineInput inlineInput' type="text" placeholder='Period Paid' v-model='newUserDetail.totalPeriodPayed' @keypress="checkChar"/>
-              <input v-if="edit" class='singleLineInput inlineInput' type="text" placeholder='Period Missed' v-model='newUserDetail.periodeTertinggal' @keypress="checkChar"/>
+              <input v-if="edit" class='singleLineInput inlineInput' type="number" placeholder='Period Paid' v-model='newUserDetail.totalPeriodPayed' @keypress="checkChar"/>
+              <input v-if="edit" class='singleLineInput inlineInput' type="number" placeholder='Period Missed' v-model='newUserDetail.periodeTertinggal' @keypress="checkChar"/>
             </div>
           </div>
           <div >
@@ -110,7 +114,20 @@
               <input class='singleLineInput inlineInput' type="password" placeholder='Repeat Password' v-model='repeatPassword'/>
             </div>
           </div>
-        </div>
+          <div v-if="add" class="fileInput" >
+            <div class="labelInput" >
+              <label for="emailInput">Profile Picture</label>
+            </div>
+            <div  class="valueInput">
+              <input 
+                accept="image/*" 
+                type="file" 
+                @change="changeFile($event)" 
+                class="selectFile"
+                placeholder="Image file"/>
+            </div>            
+          </div>
+        </div>     
       </div>
     </div>
   </div>
@@ -133,10 +150,11 @@
         },
         edit:false,
         add:false,
+        updateProfile:false,
         newUserDetail:{},
-        repeatPassword:'',
         fileInput: null,
         newPassword:'',
+        repeatPassword:'',
         groupList: [],
         groupMemberList:[],
         groupAdminGroupChanged : false,
@@ -150,14 +168,20 @@
       },
       closeBtnName: function(){
         return this.closeButtonNames[this.edit].name
+      },
+      ppAvailable(){
+        if(this.newUserDetail.imageURL==='' || this.newUserDetail.imageURL== null || this.newUserDetail.imageURL=="null"){
+          return false
+        }
+        return true
       }
     },
     created() {
+      this.newUserDetail = Object.assign({},this.userDetail)
       this.edit=this.editMode
       this.add=this.addMode
       this.getAllGroup();
-      // if(!this.add) this.getMember();
-      this.newUserDetail = Object.assign({},this.userDetail)
+      if(!this.add) this.getMember();
     },
     watch:{
       groupAdminGroupChanged: function(oldVal,newVal){
@@ -165,6 +189,7 @@
       }
     },
     methods: {
+
       closeAddNewUserWindow() {
         this.$emit('closeAddNewUserWindow');
       },
@@ -204,7 +229,7 @@
       },
       getMember() {
         // let gName = this.newGroupDetail.name==undefined ? "GROUP_LESS":this.newGroupDetail.name
-        console.log("GroupName : "+this.userDetail.groupName)
+        // console.log("GroupName : "+this.userDetail.groupName)
         fetch(`${Helper.backEndAddress}/api/group/${this.userDetail.groupName}/members`, {
           headers: {
             Authorization: localStorage.getItem('accessToken')
@@ -248,7 +273,7 @@
         }
       },
       createNewUser(formData) { 
-        if(!this.validateInput()) return;
+        // if(!this.validateInput()) return;
 
         fetch(`${Helper.backEndAddress}/api/user`, {
           method: 'POST',
@@ -262,26 +287,23 @@
             Helper.getNewToken(this.createNewUser.bind(null,formData))
           } else if(response.ok) {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            response.json().then(
-              res => {
-                this.newGroupDetail = res;
-                alert('Succeed to add new user.');
-                this.closeAddNewUserWindow();
-                this.$emit('refreshData');            
-                }
-            )
+            alert('Succeed to add new user.');
+            this.closeAddNewUserWindow();
+            this.$emit('refreshData');           
+            
           } else {
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             console.log(response);
-            alert('Oops! Something wrong happened. Please make sure the data is valid');
+            alert(`Oops! Something wrong happened ${response.status}`);
           }
         })
-        .catch(err => {
-          alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
-          console.log(err);
-        })      
+        // .catch(err => {
+        //   alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
+        //   console.log(err);
+        // })      
       },
       updateUser(jsonBody){
-        if(!this.validateInput()) return;
+        // if(!this.validateInput()) return;
 
         fetch(`${Helper.backEndAddress}/api/user/managementUser/${this.newUserDetail.idUser}?newGroupAdmin=${this.newGroupAdmin}`,{
           headers: {
@@ -344,6 +366,7 @@
       },
       closeUserDetailWindow() {
         if(this.edit==false) { this.$emit('closeAddNewUserWindow'); return}
+        if(!this.validateInput()) return;
         let formData = new FormData();
 
         formData.append('user', JSON.stringify(this.newUserDetail))
@@ -394,8 +417,13 @@
           } if(this.newUserDetail.periodeTertinggal === ''){
             this.newUserDetail.periodeTertinggal = 0
           } if(this.newUserDetail.role === ''){
-            this.newUserDetail.role = 'MEMBER'
-          } 
+            this.newUserDetail.role = 'MEMBER'           
+          } if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
+            this.newUserDetail.password = this.newPassword           
+          } else if(this.newPassword!=='' && this.newPassword.length>=5 && (this.newPassword !== this.repeatPassword)){
+            alert('please input a valid password')
+            return false
+          }
           return true
         }
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
@@ -546,7 +574,20 @@
     outline: none;
     padding: 5px;
     color: var(--primary-4);
-
+  }
+  .pp{
+    width: 45% !important;
+    display: inline-block;
+  }
+  .profilePicture {
+    width:100px;
+    height:120px;
+    border-radius:50%;
+    display:flex;
+    position:absolute;
+    right:10%;
+    top:20%;
+    /* border: solid 2px var(--primary-1); */
   }
   .singleLineInput::placeholder {
     color: var(--primary-1);
@@ -567,13 +608,31 @@
   .selectGroup:hover, .selectRole:hover {
     cursor: pointer;
   }
+  .fileInput{
+      text-align: center;
+  }
   .selectFile {
-    color: var(--primary-0);
-    margin-top: 12px;
-    margin-left: -15px;
-    width: 70%;
+    outline: none;
+    border: none;
+    padding: 10px !important;
+    color: var(--primary-4);
+    /* width: %; */
+    /* height: 40px; */
+    background-color: var(--lightColor);
+    margin-top: 15px;
+    margin-right: 12px;
+    border-radius: 10px;
   }
 
+  .selectFile:hover{
+    cursor: pointer;
+    color:white;
+    background-color: var(--primary-1);
+  }
+  .selectFileOption{
+    padding: 10px;
+    color: var(--primary-3);
+  }
   .createNewUserFlexLine {
     display: flex;
     align-items: center;

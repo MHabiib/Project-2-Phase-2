@@ -153,36 +153,12 @@
         isAdmin: localStorage.getItem('role') === 'SUPER_ADMIN'
       }
     },
-    methods: {
+    methods: {    
       ...mapActions([
         'logout'
       ]),
       backToLogin() {
-
-        let jsonBody = JSON.stringify({
-            accessToken:localStorage.getItem('accessToken').substring(6),
-            refreshToken:localStorage.getItem('refreshToken')
-        })
-        fetch(`${Helper.backEndAddress}/auth/signout`,{
-          method:'PUT',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          body:jsonBody
-        }).then(response=>{
-          if(response.ok){
-            localStorage.removeItem('accessToken')
-            localStorage.removeItem('refreshToken')
-            localStorage.removeItem('groupName')
-            localStorage.removeItem('userEmail')
-            localStorage.removeItem('role')
-            localStorage.removeItem('groupCreatedDate')
-            this.$router.push('/login')
-          }
-          else{
-            alert('Failed to log out!Something terrible happened.')
-          }
-        })
+        this.$router.push('/login')
       },
       changeView(view) {
         this.$router.push(view)

@@ -3,7 +3,6 @@ import App from './app';
 import router from './router';
 import axios from 'axios';
 import store from './store/store';
-import byPass from './page/Dashboard.vue';
 
 Object.defineProperties(Vue.prototype, {
   axios: {
