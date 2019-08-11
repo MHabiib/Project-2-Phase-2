@@ -65,7 +65,8 @@ public class JwtValidator {
     }
     public ResponseEntity getRefreshToken(String accesToken, String refreshToken){
 //        System.out.println(accesToken+"\n"+refreshToken);
-        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByAccessTokenAndRefreshToken(accesToken,refreshToken);
+//        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByAccessTokenAndRefreshToken(accesToken,refreshToken);
+        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByRefreshToken(refreshToken);
         if(jwtUserDetails==null){
             return new ResponseEntity("404 token not found", HttpStatus.NOT_FOUND);
         }

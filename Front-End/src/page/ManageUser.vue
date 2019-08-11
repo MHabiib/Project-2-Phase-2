@@ -12,7 +12,7 @@
           </div>
 
           <div class="myParent" style='display: flex;'>
-            <input class='managementTableHeadSearch' type="text" placeholder="Search by " v-model='searchQuery'/>
+            <input class='managementTableHeadSearch' type="text" :placeholder="'Search by '+ searchPlaceHolder " v-model='searchQuery'/>
             <div   class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 
@@ -108,6 +108,9 @@
     computed: {
       rightPanelWidth: function() {
         return (document.documentElement.clientWidth - 280);
+      }, 
+      searchPlaceHolder:function(){
+        return this.filter == "date before"  || this.filter == "date after"  ? "(dd-MMMM-yyyy)" : this.filter
       }
     },
     created() {
