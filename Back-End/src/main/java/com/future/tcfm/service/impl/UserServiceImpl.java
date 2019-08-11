@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
         Query myQuery = new Query().with(pageable);
         criteria = Criteria.where(key).regex(value,"i").and("groupName").is(groupName).and("active").is(true);
         if(membersOnly){
-            criteria = Criteria.where("groupName").regex(getCurrentUser().getGroupName()).and("active").is(true);
+            criteria = Criteria.where("groupName").is(getCurrentUser().getGroupName()).and("active").is(true);
         }
         else if(key.equalsIgnoreCase("period")){
             criteria = Criteria.where("groupName").regex(groupName).and("active").is(true);
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
         userExist.setRole(user.getRole());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
-        if(!user.getPassword().equalsIgnoreCase("")) {
+        if(!user.getPassword().equalsIgnoreCase("") && user.getPassword().length()>=5) {
             userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         }
         jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
@@ -276,7 +276,7 @@ public class UserServiceImpl implements UserService {
         }
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
-        if(!user.getPassword().equalsIgnoreCase("")) {
+        if(!user.getPassword().equalsIgnoreCase("") && user.getPassword().length()>=5) {
             userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
         }
         userRepository.save(userExist);
@@ -326,7 +326,9 @@ public class UserServiceImpl implements UserService {
         user.setTotalPeriodPayed(groupExist.getCurrentPeriod()+user.getTotalPeriodPayed()-1);//-1 karena bulan sekarang
         user.setPeriodeTertinggal(groupExist.getCurrentPeriod()-user.getTotalPeriodPayed());
         user.setJoinDate(System.currentTimeMillis());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        if(!user.getPassword().equalsIgnoreCase("") && user.getPassword().length()>=5) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        }else return new ResponseEntity(HttpStatus.BAD_REQUEST);
         user.setActive(true);
         user.setBalance((user.getTotalPeriodPayed()-groupExist.getCurrentPeriod()+1)*groupExist.getRegularPayment());
         user.setBalanceUsed((double)0);
