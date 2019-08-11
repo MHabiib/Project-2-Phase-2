@@ -22,7 +22,7 @@ public class JwtValidator {
 
 
     @Value("${app.refreshTokenExpirationInMS}")
-    private Long refreshTokenExpirationInMs;
+    private Long refreshTokenExpirationInMs = 10800000L;
 
     @Autowired
     private JwtGenerator jwtGenerator;
@@ -68,20 +68,24 @@ public class JwtValidator {
 //        JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByAccessTokenAndRefreshToken(accesToken,refreshToken);
         JwtUserDetails jwtUserDetails = jwtUserDetailsRepository.findByRefreshToken(refreshToken);
         if(jwtUserDetails==null){
-            return new ResponseEntity("404 token not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("404 token not found", HttpStatus.NOT_FOUND);
         }
         if(jwtUserDetails.getRefreshTokenExpiredAt()<System.currentTimeMillis()){
             jwtUserDetailsRepository.delete(jwtUserDetails);
-            return new ResponseEntity("RefreshToken is expired. Please re-login",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("RefreshToken is expired. Please re-login",HttpStatus.UNAUTHORIZED);
         }
         String newToken = jwtGenerator.generateToken(jwtUserDetails.getEmail());
-        String newRefreshToken = jwtGenerator.generateRefreshToken(jwtUserDetails.getId());
-        jwtUserDetails.setAccessToken(newToken);
-        jwtUserDetails.setRefreshToken(newRefreshToken);
+//        String newRefreshToken = jwtGenerator.generateRefreshToken(jwtUserDetails.getId());
+//        jwtUserDetails.setAccessToken(newToken);
+//        jwtUserDetails.setRefreshToken(newRefreshToken);
+        jwtUserDetails.setRefreshToken(refreshToken);
+
         jwtUserDetails.setRefreshTokenExpiredAt(new Date().getTime()+refreshTokenExpirationInMs);
         Map<String,String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken",newToken);
-        tokenMap.put("refreshToken",newRefreshToken);
+//        tokenMap.put("refreshToken",newRefreshToken);
+        tokenMap.put("refreshToken",refreshToken);
+        jwtUserDetails.setRefreshToken(refreshToken);
         jwtUserDetails.setLastModifiedAt(System.currentTimeMillis());
         jwtUserDetailsRepository.save(jwtUserDetails);
         return new ResponseEntity(tokenMap,HttpStatus.OK);

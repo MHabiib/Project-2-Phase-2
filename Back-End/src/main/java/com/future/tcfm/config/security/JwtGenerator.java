@@ -77,6 +77,9 @@ public class JwtGenerator {
                 String refreshToken = generateRefreshToken(userExist.getIdUser());
                 String accessToken = generateToken(userExist.getEmail());
                 Group groupExist= groupRepository.findByNameAndActive(userExist.getGroupName(),true);
+                if(groupExist == null){
+                    groupExist = Group.builder().createdDate(0L).build();
+                }
                 responseMap.put("accessToken",accessToken);
                 responseMap.put("refreshToken",refreshToken);
                 responseMap.put("role",userExist.getRole());

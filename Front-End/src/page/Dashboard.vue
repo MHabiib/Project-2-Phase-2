@@ -129,10 +129,14 @@
               </div>
             </div>
 
-            <div class='secondRowBodyLower'>
-              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Last expense (<span class='lastExpense'>{{lastExpense.title}}</span>)
-              {{lastExpense.lastModifiedAt | fromNow}}
-              .
+            <div class='secondRowBodyLower' >
+                <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>
+                <span v-show="isLastAvailable"> 
+                  Last expense (<span class='lastExpense'>{{lastExpense.title}}</span>){{lastExpense.lastModifiedAt | fromNow}}. 
+                </span> 
+                <span v-show="!isLastAvailable"> 
+                 There isn't any expense yet. 
+                </span> 
             </div>
           </div>
         </div>
@@ -190,6 +194,7 @@
         year:0,
         groupCreated:{},
         lastExpense:{},
+        isLastAvailable :false,
       }
     },
     computed: {
@@ -228,7 +233,8 @@
               response.json().then(
                 res => {
                   console.log("Last Expense : "+res)
-                  this.lastExpense=res;
+                  this.lastExpense=res
+                  this.isLastAvailable = true
                 }
               )
             }  

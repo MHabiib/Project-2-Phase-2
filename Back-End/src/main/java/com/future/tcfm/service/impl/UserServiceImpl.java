@@ -193,8 +193,10 @@ public class UserServiceImpl implements UserService {
             }
             if(!newGroupAdmin.equalsIgnoreCase("")) {
                 updateGroupAdmin(newGroupAdmin, userExist, user);
-                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
+//                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
             }
+            userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
+
             userExist.setBalance(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? user.getBalance() :  0.0 );
             userExist.setBalanceUsed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS")? user.getBalanceUsed() : 0.0 );
             userExist.setPeriodeTertinggal(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getPeriodeTertinggal() : 1 );
@@ -232,11 +234,12 @@ public class UserServiceImpl implements UserService {
              }
         }
 
-        userExist.setRole(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? "" : user.getRole());
+        userExist.setRole(user.getRole());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
-        userExist.setPassword(user.getPassword());
-        userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        if(!user.getPassword().equalsIgnoreCase("")) {
+            userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        }
         jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
         userRepository.save(userExist);
         return new ResponseEntity(userExist,HttpStatus.OK);
@@ -273,8 +276,9 @@ public class UserServiceImpl implements UserService {
         }
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
-        userExist.setPassword(user.getPassword());
-        userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        if(!user.getPassword().equalsIgnoreCase("")) {
+            userExist.setPassword(passwordEncoder.encode(user.getPassword()));//ENCRYPTION PASSWORD
+        }
         userRepository.save(userExist);
         return new ResponseEntity(userExist,HttpStatus.OK);
     }

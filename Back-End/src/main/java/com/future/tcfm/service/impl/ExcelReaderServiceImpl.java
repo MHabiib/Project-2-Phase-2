@@ -62,6 +62,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                             .createdDate(System.currentTimeMillis())
                             .groupBalance(0.0)
                             .bankAccountNumber("")
+                            .bankAccountName("")
                             .regularPayment(0.0)
                             .currentPeriod(1)
                             .active(true)
