@@ -146,6 +146,32 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     *
+     * @param newGroupAdmin
+     * @param userExist // user data before request
+     * @param user // new user data from request
+     * @return
+     */
+    private void updateGroupAdmin(String newGroupAdmin,User userExist, User user){
+        if(!newGroupAdmin.equalsIgnoreCase("")) { // set admin baru jika admin lama pindah role jadi member
+            User newAdmin = userRepository.findByEmailAndActive(newGroupAdmin, true);
+            if (newAdmin == null) {
+//                return new ResponseEntity<>("Error 404:Email User Not found", HttpStatus.NOT_FOUND);
+                throw new RuntimeException("Error, new admin(email) not fonud!");
+            }
+            newAdmin.setRole("GROUP_ADMIN");
+            userRepository.save(newAdmin);
+
+            Group oldGroup = groupRepository.findByNameAndActive(userExist.getGroupName(), true);
+            oldGroup.setGroupAdmin(newGroupAdmin);
+            groupRepository.save(oldGroup);
+//            userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
+
+            notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
+            notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
+        }
+    }
+    /**
      * management user
      * @param id
      * @param user
@@ -155,7 +181,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity manageUser(String id, User user, String newGroupAdmin){
         User userExist = userRepository.findByIdUser(id);
-        Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true);
+        Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true); // new group
         Map<String,String> responseMap = new HashMap();
         if(userExist==null){
             return new ResponseEntity<>("Username not found!", HttpStatus.NOT_FOUND);
@@ -166,35 +192,24 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if(!newGroupAdmin.equalsIgnoreCase("")) {
-                User newAdmin = userRepository.findByEmailAndActive(newGroupAdmin, true);
-                if (newAdmin == null) {
-                    return new ResponseEntity<>("Error 404:Email User Not found", HttpStatus.NOT_FOUND);
-                }
-                newAdmin.setRole("GROUP_ADMIN");
-                userRepository.save(newAdmin);
-
-                Group oldGroup = groupRepository.findByNameAndActive(userExist.getGroupName(), true);
-                oldGroup.setGroupAdmin(newGroupAdmin);
-                groupRepository.save(oldGroup);
+                updateGroupAdmin(newGroupAdmin, userExist, user);
                 userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
-
-                notificationService.createNotification(userExist.getName() + " just been promoted to be the new group admin!", null, userExist.getGroupName(), TYPE_GROUP);
-                notificationService.createNotification("Congrats! you have been promoted to be the new group admin.", userExist.getEmail(), userExist.getGroupName(), TYPE_PERSONAL);
-            }else {
-
-                userExist.setBalance(0.0);
-                userExist.setBalanceUsed(0.0);
-                userExist.setJoinDate(System.currentTimeMillis());
-                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
-                userExist.setPeriodeTertinggal(1);
-                userExist.setTotalPeriodPayed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getTotalPeriodPayed() : groupExist.getCurrentPeriod() - 1);
-                notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
-                notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
-                //notification untuk group barunya
-                notifMessage = userExist.getEmail() + USER_JOINED_GROUP;
-                notificationService.createNotification(notifMessage, userExist.getEmail(), user.getGroupName(), TYPE_GROUP);
             }
+            userExist.setBalance(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? user.getBalance() :  0.0 );
+            userExist.setBalanceUsed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS")? user.getBalanceUsed() : 0.0 );
+            userExist.setPeriodeTertinggal(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getPeriodeTertinggal() : 1 );
+            userExist.setTotalPeriodPayed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getTotalPeriodPayed() : groupExist.getCurrentPeriod() - 1);
+
+            userExist.setJoinDate(System.currentTimeMillis());
+            notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
+            notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
+            //notification untuk group barunya
+            notifMessage = userExist.getEmail() + USER_JOINED_GROUP;
+            notificationService.createNotification(notifMessage, userExist.getEmail(), user.getGroupName(), TYPE_GROUP);
         } else{
+            if(!newGroupAdmin.equalsIgnoreCase("")) {
+                updateGroupAdmin(newGroupAdmin, userExist, user);
+            }
             userExist.setBalance(user.getBalance());
             userExist.setBalanceUsed(user.getBalanceUsed());
             userExist.setTotalPeriodPayed(user.getTotalPeriodPayed());
@@ -216,8 +231,8 @@ public class UserServiceImpl implements UserService {
                 notificationService.createNotification("Congrats! you have been promoted to be the new group admin.",userExist.getEmail(),userExist.getGroupName(),TYPE_PERSONAL);
              }
         }
+
         userExist.setRole(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? "" : user.getRole());
-//        userExist.setEmail(user.getEmail());
         userExist.setName(user.getName());
         userExist.setPhone(user.getPhone());
         userExist.setPassword(user.getPassword());

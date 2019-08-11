@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Payment'/>
+      <HeaderSection :headerTitle="'Group '+groupName+'\'s Members\' Payment'"/>
       <div style="margin:10px 5px;color: var(--primary-0)">First payment start from : {{monthList[groupCreated.month]}} {{groupCreated.year}}</div>
       <div class="paymentsBodySection">
         
@@ -96,6 +96,7 @@
     data: function() {
       return {
         searchMode:false,
+        groupName:localStorage.groupName,
         monthList:[],
         start:'',
         dataUser:{},
@@ -218,6 +219,7 @@
 
   .paymentsTableHeader {
     background-color: var(--primary-0);
+
     color: var(--lightColor);
     display: flex;
     justify-content: space-between;

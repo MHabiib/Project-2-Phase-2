@@ -34,6 +34,7 @@ import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.GROUP_PROFILE_UPDATE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
 import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_PERSONAL;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -126,6 +127,8 @@ public class GroupServiceImpl implements GroupService {
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
                 userRepository.save(newAdmin);
+                notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
+                notificationService.createNotification("Congrats! you have been promoted to Group Admin!", newAdmin.getEmail(),null, TYPE_PERSONAL);
             }
             if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign

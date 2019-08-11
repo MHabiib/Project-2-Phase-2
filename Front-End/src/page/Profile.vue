@@ -37,14 +37,13 @@
                 <!-- <th>&nbsp;&nbsp;</th> -->
                 <td>Group Name</td>
                 <td>: {{currentUser.groupName}}</td>
-                <td>{{currentUser.joinDate | dateFormatter}}</td>
+                <td>Join Date {{currentUser.joinDate | dateFormatter}}</td>
                 <!-- <th>Status</th> -->
               </tr>
               <tr>
                 <td>My Balance / Contribution</td>
                 <td>: {{currentUser.balance}}</td>
-                <td>/ {{currentUser.balanceUsed}}
-                  
+                <td>/ {{currentUser.balanceUsed}}                  
                 </td>
               </tr>
               <tr>
@@ -214,9 +213,11 @@
             response.json().then(
               res => {
                 // console.log(res)
+                this.editMode=false
                 alert('Profile Updated!')
                 this.currentUser = res
                 this.newUser = Object.assign({},res)
+
               }
             )           
           } else {

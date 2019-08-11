@@ -15,6 +15,7 @@ import ManagePaymentPage from '../page/ManagePayment';
 import ProfilePage from '../page/Profile'
 import tugasWeb from '../page/tugasWeb';
 import '../index.css';
+import * as moment from 'moment';
 
 
 Vue.use(Router);
@@ -24,7 +25,7 @@ Vue.component('HeaderSection', HeaderSection);
 Vue.mixin({
   data: function() {
     return {
-
+      groupName: localStorage.groupName
     }
   },
   computed:{
@@ -50,6 +51,9 @@ Vue.mixin({
         }
         return result;
       }
+    },
+    fromNow(date) {
+      return moment(date).fromNow()
     },
     dateFormatter(dateToFormat) {
       const monthToString = (month)=> {

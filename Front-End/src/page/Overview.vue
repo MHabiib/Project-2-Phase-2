@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanelOverview' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Overview'/>
+      <HeaderSection :headerTitle="'Group '+groupName+'\'s Overview'"/>
 
       <div class='bodySection'>
         <div class="overviewLeftSection">
@@ -140,7 +140,8 @@
         overviewData: {},
         showExpenseDetailWindow: false,
         groupNotificationList:[],
-        es:null
+        es:null,
+        groupName : localStorage.groupName
       }
     },
     computed: {
