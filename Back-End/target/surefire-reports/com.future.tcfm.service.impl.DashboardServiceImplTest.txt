@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: com.future.tcfm.service.impl.DashboardServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.358 s <<< FAILURE! - in com.future.tcfm.service.impl.DashboardServiceImplTest
+initializationError(com.future.tcfm.service.impl.DashboardServiceImplTest)  Time elapsed: 0.006 s  <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+
+No tests found in DashboardServiceImplTest
+Is the method annotated with @Test?
+Is the method public?
+
+Caused by: java.lang.reflect.InvocationTargetException
+Caused by: org.junit.runners.model.InitializationError
+

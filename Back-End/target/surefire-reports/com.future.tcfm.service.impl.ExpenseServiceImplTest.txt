@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.future.tcfm.service.impl.ExpenseServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.341 s <<< FAILURE! - in com.future.tcfm.service.impl.ExpenseServiceImplTest
+createExpense(com.future.tcfm.service.impl.ExpenseServiceImplTest)  Time elapsed: 0.003 s  <<< ERROR!
+java.lang.NullPointerException
+	at com.future.tcfm.service.impl.ExpenseServiceImplTest.createExpense(ExpenseServiceImplTest.java:87)
+

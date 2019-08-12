@@ -1,0 +1,27 @@
+-------------------------------------------------------------------------------
+Test set: com.future.tcfm.TeamCashFlowManagementApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 8.77 s <<< FAILURE! - in com.future.tcfm.TeamCashFlowManagementApplicationTests
+contextLoads(com.future.tcfm.TeamCashFlowManagementApplicationTests)  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'documentationPluginsBootstrapper' defined in URL [jar:file:/C:/Users/ACER/.m2/repository/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2.jar!/springfox/documentation/spring/web/plugins/DocumentationPluginsBootstrapper.class]: Unsatisfied dependency expressed through constructor parameter 1; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'webMvcRequestHandlerProvider' defined in URL [jar:file:/C:/Users/ACER/.m2/repository/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2.jar!/springfox/documentation/spring/web/plugins/WebMvcRequestHandlerProvider.class]: Unsatisfied dependency expressed through constructor parameter 1; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'requestMappingHandlerMapping' defined in class path resource [org/springframework/web/servlet/config/annotation/DelegatingWebMvcConfiguration.class]: Invocation of init method failed; nested exception is java.lang.IllegalStateException: Ambiguous mapping. Cannot map 'uploadController' method 
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException
+to {PUT /api/user/{id}, produces [application/json]}: There is already 'userController' bean method
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException mapped.
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: 
+Error creating bean with name 'webMvcRequestHandlerProvider' defined in URL [jar:file:/C:/Users/ACER/.m2/repository/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2.jar!/springfox/documentation/spring/web/plugins/WebMvcRequestHandlerProvider.class]: Unsatisfied dependency expressed through constructor parameter 1; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'requestMappingHandlerMapping' defined in class path resource [org/springframework/web/servlet/config/annotation/DelegatingWebMvcConfiguration.class]: Invocation of init method failed; nested exception is java.lang.IllegalStateException: Ambiguous mapping. Cannot map 'uploadController' method 
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException
+to {PUT /api/user/{id}, produces [application/json]}: There is already 'userController' bean method
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException mapped.
+Caused by: org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'requestMappingHandlerMapping' defined in class path resource [org/springframework/web/servlet/config/annotation/DelegatingWebMvcConfiguration.class]: Invocation of init method failed; nested exception is java.lang.IllegalStateException: Ambiguous mapping. Cannot map 'uploadController' method 
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException
+to {PUT /api/user/{id}, produces [application/json]}: There is already 'userController' bean method
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException mapped.
+Caused by: java.lang.IllegalStateException: 
+Ambiguous mapping. Cannot map 'uploadController' method 
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException
+to {PUT /api/user/{id}, produces [application/json]}: There is already 'userController' bean method
+public org.springframework.http.ResponseEntity com.future.tcfm.controller.UserController.update(java.lang.String,org.springframework.web.multipart.MultipartFile,java.lang.String) throws java.io.IOException mapped.
+

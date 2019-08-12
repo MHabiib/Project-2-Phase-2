@@ -1,0 +1,32 @@
+-------------------------------------------------------------------------------
+Test set: com.future.tcfm.service.impl.UserServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 7, Skipped: 0, Time elapsed: 0.027 s <<< FAILURE! - in com.future.tcfm.service.impl.UserServiceImplTest
+updateUserV2(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0.011 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+getUserByEmail(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+loadAll(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+checkImageFile(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+saveUploadedFile(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+createUserV2(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+
+getImage(com.future.tcfm.service.impl.UserServiceImplTest)  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.IllegalArgumentException: WebApplicationContext is required
+	at com.future.tcfm.service.impl.UserServiceImplTest.setup(UserServiceImplTest.java:64)
+

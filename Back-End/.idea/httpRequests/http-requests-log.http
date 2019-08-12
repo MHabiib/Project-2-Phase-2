@@ -1,0 +1,19 @@
+POST http://localhost:8088/feedback
+Content-Type: application/json{"name":"Future","email":"future@gdn.com","feedback":"Yes or Yes"}
+
+<> 2019-04-17T050509.401.json
+
+###
+
+POST http://localhost:8088/feedback
+Content-Type: application/json
+{:
+  "name": "Future",
+  "email": "future@gdn.com",
+  "feedback": "Yes or Yes"
+}:
+
+<> 2019-04-17T050405.400.html
+
+###
+

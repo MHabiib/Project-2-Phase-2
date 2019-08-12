@@ -1,0 +1,7 @@
+{
+  "timestamp": "2019-04-17T10:05:09.815+0000",
+  "status": 401,
+  "error": "Unauthorized",
+  "message": "Unauthorized",
+  "path": "/feedback"
+}
