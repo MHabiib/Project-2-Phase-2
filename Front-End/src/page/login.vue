@@ -1,5 +1,5 @@
 <template>
-  <div class="loginWrapper">
+  <div class="loginWrapper" :style="{'background-image': 'url(' + require('../assets/bg.jpg') + ')'}">
     <div class="loginComponent">
       <div class="loginTitle">
         Login

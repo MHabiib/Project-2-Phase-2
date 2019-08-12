@@ -40,9 +40,11 @@ public class ExpenseServiceImplTest {
     public void init(){
         expense = new Expense();
         user = new User();
+
         user.setName("Sana");
         user.setGroupName("BDZ");
         user.setEmail("sana@jyp.com");
+
         expense.setGroupName("BDZ");
         expense.setTitle("Sound");
         expense.setDetail("Marshall");
