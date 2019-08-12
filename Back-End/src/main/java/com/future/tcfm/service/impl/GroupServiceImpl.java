@@ -179,7 +179,7 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setActive(false);
         groupRepository.save(groupExist);
         for (User user:userList){
-            user.setGroupName("");
+            user.setGroupName("GROUP_LESS");
             userRepository.save(user);
             emailService.userResign(user.getEmail());
         }
