@@ -132,7 +132,7 @@
             <div class='secondRowBodyLower' >
                 <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>
                 <span v-show="isLastAvailable"> 
-                  Last expense (<span class='lastExpense'>{{lastExpense.title}}</span>){{lastExpense.lastModifiedAt | fromNow}}. 
+                  Last expense (<span class='lastExpense'>{{lastExpense.title}}</span>) {{lastExpense.lastModifiedAt | fromNow}}. 
                 </span> 
                 <span v-show="!isLastAvailable"> 
                  There isn't any expense yet. 

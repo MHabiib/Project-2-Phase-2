@@ -18,11 +18,12 @@ let getNewToken = function(callback){
           window.location='/login'
           console.log('Error failed to get refreshToken')
         }
-        else {
+        else {                
           res.json().then((data)=>{ // parse response dari server ke JSON
             localStorage.setItem("accessToken","Token "+data.accessToken)//timpa token lama dengan token yang baru
             localStorage.setItem("refreshToken",data.refreshToken) 
             console.log('HelperJS: succeed to get new token!')
+            this.loading = false
             callback()//jalankan kembali request yang sempat ditolak karena 401 di atas
           })
         }

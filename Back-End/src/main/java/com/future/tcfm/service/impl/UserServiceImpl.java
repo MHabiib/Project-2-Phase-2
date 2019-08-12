@@ -345,15 +345,20 @@ public class UserServiceImpl implements UserService {
         User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
             return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
+        Map responseMap = new HashMap();
         if(userExist.getPeriodeTertinggal()>0){
-            Map responseMap = new HashMap();
             responseMap.put("message","Error : This user have not completed their payment ("+userExist.getPeriodeTertinggal().toString()+" periode(s) left).\nThis user have to complete his payment before resignation.");
+            return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(userExist.getRole().equalsIgnoreCase("GROUP_ADMIN")){
+            responseMap.put("message","Please set a new Group Admin before resign.");
             return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         userExist.setActive(false);
         jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
         userRepository.save(userExist);
-        return new ResponseEntity<>("User deleted!", HttpStatus.OK);
+        responseMap.put("message","User resigned succeed.");
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
 

@@ -75,7 +75,7 @@
       v-if='showGroupDetailWindow'
       @updateGroupDetailWindow="updateGroupDetailWindow"
       @closeGroupDetailWindow="closeGroupDetailWindow"
-      @refreshData="getGroupData"
+      @refreshData="searchData(0)"
       :groupDetail="this.detailGroupSelected"
       :headerTitle ="this.headerTitle"
       :editMode ="this.editMode"
@@ -83,6 +83,7 @@
     />
     <bulkInsertWindow
     v-if="showBulkInsertWindow"
+    @updateBulkInsertWindow="searchData(0)"
     @closeBulkInsertWindow="closeBulkInsertWindow"
     />
   </div>
@@ -109,8 +110,7 @@
       },
       searchPlaceHolder:function(){
         return this.filter == "date before"  || this.filter == "date after"  ? "(dd-MMMM-yyyy)" : this.filter
-      }
-      
+      }    
     },
     data: function() {
       return {
@@ -154,7 +154,7 @@
             response.json().then(
               res => {
                 this.groupList=res.content
-                this.dataPayment = res;
+                this.dataGroup = res;
                 setTimeout(e=>{this.loading=false},500)
 
                 // this.loading=false
@@ -173,14 +173,14 @@
         })
         .then(response => {
           if(response.status==401){
-            Helper.getNewToken(this.getPendingPayment.bind(null,this.dataPayment.pageable.pageNumber+1))
+            Helper.getNewToken(this.getPendingPayment.bind(null,this.dataGroup.pageable.pageNumber+1))
           }
           else{
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
                 this.groupList=this.groupList.concat(res.content)
-                this.dataPayment = res;
+                this.dataGroup = res;
                 setTimeout(e=>{this.loading=false},500)
                 // this.loading=false;
               }

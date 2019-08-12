@@ -56,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> loadAll() {
-        return groupRepository.findAll();
+        return groupRepository.findAllByActive(true);
     }
 
     @Override
@@ -172,17 +172,20 @@ public class GroupServiceImpl implements GroupService {
                 memberHasNotPaid.add(user);
             }
         }
-        System.out.println("Member hasnt paid : "+memberHasNotPaid);
+        System.out.println("Member hasn't paid : "+memberHasNotPaid);
         if(memberHasNotPaid.size()>0){
             return new ResponseEntity<>(memberHasNotPaid, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+//        userList.forEach(user -> {
+//            user.setGroupName("GROUP_LESS");
+//        });
         groupExist.setActive(false);
         groupRepository.save(groupExist);
         for (User user:userList){
             user.setGroupName("GROUP_LESS");
-            userRepository.save(user);
             emailService.userResign(user.getEmail());
         }
+        userRepository.saveAll(userList);
         return new ResponseEntity<>("Group just been disbanded!",HttpStatus.OK);
     }
 

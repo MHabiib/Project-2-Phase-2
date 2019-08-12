@@ -205,13 +205,15 @@
               Helper.getNewToken(this.disbandGroup)
             } else if(response.ok){
               localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              this.$emit('refreshData')
               alert(`Group successfuly disbanded.\nAny last information regarding group ${this.newGroupDetail.name} has been sent to every member\'s email.`)
             } else if(response.status == 500){
               localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
               response.json().then(res=>{
                 let message = ''
                 res.forEach((element,index) => {
-                  message+=index+1+". " +element.name+"\n"
+                  // message+=index+1+". " +element.name+"\n"
+                  message+=`${index+1}. ${element.name} (${element.periodeTertinggal} period(s))\n`
                 });
                 alert(`Failed to disband group, ${res.length} member(s) haven't completed their payment\n${message}`)
               })

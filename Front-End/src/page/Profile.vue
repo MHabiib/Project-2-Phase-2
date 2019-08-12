@@ -37,7 +37,7 @@
                 <!-- <th>&nbsp;&nbsp;</th> -->
                 <td>Group Name</td>
                 <td>: {{currentUser.groupName}}</td>
-                <td>Join Date {{currentUser.joinDate | dateFormatter}}</td>
+                <td>, joined since {{currentUser.joinDate | dateFormatter}}</td>
                 <!-- <th>Status</th> -->
               </tr>
               <tr>
@@ -74,6 +74,10 @@
                   <input class='updateInput' type="text" placeholder='Phone' v-model='newUser.phone'/>
                 <td><img v-if="ppAvailable" :src="currentUser.imageURL" alt="pp" class="profilePicture"></td>
              </tr>
+              <tr v-show="!editMode">
+                <td>Role</td>
+                <td>: {{currentUser.role}}</td>
+              </tr>
              <div v-if="editMode">
               <tr>
                 <td>Password</td>

@@ -26,8 +26,11 @@
                 class="selectFile"
                 placeholder="Excel file"/>
             </div>
-            <div @click="uploadFile" class="uploadButton">
+            <div  @click="uploadFile" class="uploadButton">
                 Upload
+            </div>
+            <div v-show="loading" style="text-align:center">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             </div>
           </div>       
         </div>
@@ -66,9 +69,8 @@
     created() {
 
     },
-    methods: {
-                  //get file template excel
-      downloadFile(){
+    methods: {                 
+      downloadFile(){ //get file template excel
         fetch(`${Helper.backEndAddress}/api/file`,{
         // fetch(`http://localhost:8081/file`,{
           headers: {
@@ -95,9 +97,10 @@
         this.createBulkInsert()
       },
       createBulkInsert(){
+        // if(this.loading=true) return
         let formData = new FormData();
         formData.append('file',this.fileInput)
-
+        this.loading=true
         fetch(`${Helper.backEndAddress}/api/file`,{
           headers: {
             Authorization: localStorage.getItem('accessToken'),
@@ -112,8 +115,9 @@
             } else {
                 localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
                 if(response.ok){
+                  setTimeout(e=>{this.loading=false},500)                     
                   alert('bulk insert succeed!');
-                  this.$emit('updateBulkInsertWindow');                             
+                  this.$emit('updateBulkInsertWindow');
                 }
             }
         })
@@ -282,6 +286,43 @@
   .selectFileOption{
     padding: 10px;
     color: var(--primary-3);
+  }
+  .lds-ring {
+    display: block;
+    position: absolute;
+    top:43%;
+    right:43%;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid var(--primary-2);
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: var(--primary-2) transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
 </style>
