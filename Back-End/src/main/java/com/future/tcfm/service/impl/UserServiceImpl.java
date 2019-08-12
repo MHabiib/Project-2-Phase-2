@@ -130,11 +130,13 @@ public class UserServiceImpl implements UserService {
         criteria = Criteria.where(key).regex(value,"i").and("groupName").is(groupName).and("active").is(true);
         if(membersOnly){
             criteria = Criteria.where("groupName").is(getCurrentUser().getGroupName()).and("active").is(true);
-        }
-        else if(key.equalsIgnoreCase("period")){
+        } else if(key.equalsIgnoreCase("period" ) && groupName.equalsIgnoreCase("")){ // for super admin
             criteria = Criteria.where("groupName").regex(groupName).and("active").is(true);
             sort = new Sort(Sort.Direction.DESC,"TotalPeriodPayed");
-        }else if(groupName.equalsIgnoreCase("")){
+        } else if(key.equalsIgnoreCase("period" ) && !groupName.equalsIgnoreCase("")){ // for member
+            criteria = Criteria.where("groupName").is(groupName).and("active").is(true);
+            sort = new Sort(Sort.Direction.DESC,"TotalPeriodPayed");
+        } else if(groupName.equalsIgnoreCase("")){
             criteria = Criteria.where(key).regex(value,"i").and("active").is(true);
         }
         myQuery.addCriteria(criteria).with(sort);
