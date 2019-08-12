@@ -58,7 +58,11 @@ public class GroupServiceImpl implements GroupService {
     public List<Group> loadAll() {
         return groupRepository.findAllByActive(true);
     }
+<<<<<<< HEAD
 //
+=======
+
+>>>>>>> 744c9098baa01f42779dcf8b9a7e790c43b8b445
     @Override
     public ResponseEntity getGroupById(String id) {
         Group groupExist= groupRepository.findByIdGroup(id);
