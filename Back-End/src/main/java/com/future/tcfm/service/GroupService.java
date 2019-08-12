@@ -5,6 +5,7 @@ import com.future.tcfm.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface GroupService {
     List<User> membersGroup(String groupName);
     List<User> membersGroupByEmail(String email);
 
-    ResponseEntity disbandGroup(String id);
+    ResponseEntity disbandGroup(String id) throws MessagingException;
 
     int getGroupCreatedMonth(String groupName);
 

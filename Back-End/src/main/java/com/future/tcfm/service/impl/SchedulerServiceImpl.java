@@ -67,13 +67,13 @@ public class SchedulerServiceImpl implements SchedulerService {
 
             for (User user : listUser) {
                 yearBefore=LocalDate.now().getYear();
+                monthBefore= LocalDate.now().getMonthValue()+1;
                 monthChecker=0;
                 yearChecker=0;
-                monthBefore= LocalDate.now().getMonthValue();
 
                 group = groupMap.get(user.getGroupName());
                 user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
-                if (user.getPeriodeTertinggal() > 0) {
+                if (user.getPeriodeTertinggal() > 0) { //jika true berarti user belum membayar iuran
                     if(user.getPeriodeTertinggal()>11){
                         monthChecker=user.getPeriodeTertinggal() % 12;
                         yearChecker=(user.getPeriodeTertinggal()-monthChecker)/12;
@@ -83,6 +83,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                     else{
                         monthBefore-=user.getPeriodeTertinggal();
                     }
+
                     if(monthBefore<=0){
                         monthBefore+=12;
                         yearBefore-=1;

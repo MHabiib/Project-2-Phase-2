@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class GroupController {
 //        return groupService.findMembersGroupByEmail(email,filter,year,page,size);
 //    }
     @DeleteMapping("/{id}")
-    public ResponseEntity disbandGroup(@PathVariable("id") String id) {
+    public ResponseEntity disbandGroup(@PathVariable("id") String id) throws MessagingException {
         return groupService.disbandGroup(id);
     }
 }

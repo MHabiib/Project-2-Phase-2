@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -159,7 +160,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResponseEntity disbandGroup(String id) {
+    public ResponseEntity disbandGroup(String id) throws MessagingException {
         Group groupExist = groupRepository.findByIdGroup(id);
         List<User> memberHasNotPaid = new ArrayList<>();
         if (groupExist == null) {
@@ -177,9 +178,9 @@ public class GroupServiceImpl implements GroupService {
         }
         groupExist.setActive(false);
         groupRepository.save(groupExist);
-        /**
-         * tambahkan fungsi utk send email berisi data payment tiap-tiap member dan balance mereka disini.
-         */
+        for (User user:userList){
+            emailService.userResign(user.getEmail());
+        }
         return new ResponseEntity<>("Group just been disbanded!",HttpStatus.OK);
     }
 
