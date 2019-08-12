@@ -201,7 +201,7 @@ public class EmailServiceImpl implements EmailService {
                     "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+expenseListStr+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group Untuk Prosedur Pengambilan Uang Kembali.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
             //this.emailSender.send(message);
             System.out.println("\n--------------------------------------------------------");
-            System.out.println(name+" \n"+expenseListStr);
+            System.out.println(name+" \n"+expenseListStr+"\n Dana yang dikembalikan"+user.getBalance());
             System.out.println("--------------------------------------------------------\n");
         }
         return new ResponseEntity<>("Some error occured.", HttpStatus.BAD_REQUEST);

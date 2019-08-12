@@ -179,6 +179,8 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setActive(false);
         groupRepository.save(groupExist);
         for (User user:userList){
+            user.setGroupName("");
+            userRepository.save(user);
             emailService.userResign(user.getEmail());
         }
         return new ResponseEntity<>("Group just been disbanded!",HttpStatus.OK);
