@@ -13,8 +13,8 @@
 
           <div class='cardStyleOneBody'>
 
-            <div class='cardStyleOneTitle'>Total Expenses by Value this month</div>
-            <div class='cardStyleOneDescription'>Expense by Value last month Rp {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
+            <div class='cardStyleOneTitle'>Total Debit This Month</div>
+            <div class='cardStyleOneDescription'>Toal Debit Last Month Rp {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
           </div>
         </div>
 
@@ -24,8 +24,8 @@
           </div>
 
           <div class='cardStyleOneBody'>
-            <div class='cardStyleOneTitle'>Total Expenses by Quantity this month</div>
-            <div class='cardStyleOneDescription'>Expense by Quantity last month {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
+            <div class='cardStyleOneTitle'>Total Expense This Month</div>
+            <div class='cardStyleOneDescription'>Total Expense Last Month {{dashboardData.expenseByQuantityBefore | thousandSeparators}}</div>
           </div>
         </div>
 
@@ -64,7 +64,8 @@
             </div>
 
             <div class='secondRowBodyLower'>
-               </div>
+              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
+            </div>
           </div>
         </div>
 
@@ -85,7 +86,8 @@
             </div>
 
             <div class='secondRowBodyLower'>
-               </div>
+              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
+            </div>
           </div>
         </div>
 
@@ -106,7 +108,8 @@
             </div>
 
             <div class='secondRowBodyLower'>
-               </div>
+              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
+            </div>
           </div>
         </div>
 
@@ -126,8 +129,14 @@
               </div>
             </div>
 
-            <div class='secondRowBodyLower'>
-              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/> Last expense is&nbsp;<span class='lastExpense'>Beli Meja</span>.
+            <div class='secondRowBodyLower' >
+                <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>
+                <span v-show="isLastAvailable"> 
+                  Last expense (<span class='lastExpense'>{{lastExpense.title}}</span>){{lastExpense.lastModifiedAt | fromNow}}. 
+                </span> 
+                <span v-show="!isLastAvailable"> 
+                 There isn't any expense yet. 
+                </span> 
             </div>
           </div>
         </div>
@@ -184,6 +193,8 @@
         dataPayNow: {},
         year:0,
         groupCreated:{},
+        lastExpense:{},
+        isLastAvailable :false,
       }
     },
     computed: {
@@ -200,11 +211,36 @@
     },
     created() {
       this.getDashboardData();
+      this.getLastExpense();
       this.groupCreated.month=new Date(parseInt(localStorage.groupCreatedDate)).getMonth()
       this.groupCreated.year=new Date(parseInt(localStorage.groupCreatedDate)).getFullYear()
       this.year=new Date().getFullYear()
     },
     methods: {
+      getLastExpense(){
+        fetch(`${Helper.backEndAddress}/api/expense/last`, {
+          headers: {
+            'Authorization': localStorage.getItem('accessToken')
+          }
+        })
+        .then(response => {
+          if(response.status==401){
+            Helper.getNewToken(this.getLastExpense)
+          }
+          else{
+            localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+            if(response.ok){
+              response.json().then(
+                res => {
+                  console.log("Last Expense : "+res)
+                  this.lastExpense=res
+                  this.isLastAvailable = true
+                }
+              )
+            }  
+          }      
+        })
+      },
       getThisYearTotalPeriodPayed: function(totalPeriodPayed,year){
         let monthList=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Des"]
         this.monthPaid=[]

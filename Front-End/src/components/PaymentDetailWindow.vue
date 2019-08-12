@@ -1,56 +1,56 @@
 <template>
   <div class='fixedPosition'>
-    <div class='expenseDetailWindow'>
-      <div class='expenseWindowSize'>
-        <div class="expenseDetailHeader">
+    <div class='paymentDetailWindow'>
+      <div class='paymentWindowSize'>
+        <div class="paymentDetailHeader">
           <div>Payment Id : {{paymentDetail.idPayment}}</div>
           <div class="closeButton" @click="closePaymentDetailWindow">Close</div>
         </div>
 
-        <div class="expenseDetailBody">
-          <div class="expenseDetailFirstRow expenseDetailRow">
-            <div class="expenseDetailContainer">
-              <div class='expenseDetailLabel'>Nama Pengirim</div>
-              <div class="expenseDetailValue">: {{paymentDetail.namaPengirim}}</div>
+        <div class="paymentDetailBody">
+          <div class="paymentDetailFirstRow paymentDetailRow">
+            <div class="paymentDetailContainer">
+              <div class='paymentDetailLabel'>Nama Pengirim</div>
+              <div class="paymentDetailValue">: {{paymentDetail.namaPengirim}}</div>
             </div>
 
-            <div class="expenseDetailDate">
+            <div class="paymentDetailDate">
               {{paymentDetail.paymentDate | dateFormatter}}
             </div>
           </div>
-          <div class="expenseDetailSecondRow expenseDetailRow ">
-            <div class="expenseDetailContainer">
-              <div class='expenseDetailLabel'>Bayar Untuk</div>
-              <div class="expenseDetailValue">: {{paymentDetail.emailMemberLain==""||paymentDetail.emailMemberLain==null? paymentDetail.email:paymentDetail.emailMemberLain}}</div>
+          <div class="paymentDetailSecondRow paymentDetailRow ">
+            <div class="paymentDetailContainer">
+              <div class='paymentDetailLabel'>Bayar Untuk</div>
+              <div class="paymentDetailValue">: {{paymentDetail.emailMemberLain==""||paymentDetail.emailMemberLain==null? paymentDetail.email:paymentDetail.emailMemberLain}}</div>
             </div>
           </div>
-          <div class="expenseDetailSecondRow expenseDetailRow ">
-            <div class="expenseDetailContainer">
-              <div class='expenseDetailLabel'>Total Period</div>
-              <div class="expenseDetailValue">: {{paymentDetail.periode}} <span style="font-weight:600">( Rp {{paymentDetail.price |thousandSeparators}} )</span></div>
+          <div class="paymentDetailSecondRow paymentDetailRow ">
+            <div class="paymentDetailContainer">
+              <div class='paymentDetailLabel'>Total Period</div>
+              <div class="paymentDetailValue">: {{paymentDetail.periode}} <span style="font-weight:600">( Rp {{paymentDetail.price |thousandSeparators}} )</span></div>
             </div>
 
 
           </div>
 
-          <div class="expenseDetailThirdRow expenseDetailRow">
-            <div class="expenseDetailContainer">
-              <div class='expenseDetailLabel'>Bukti Pembayaran</div>
-              <div class="expenseDetailValue">: </div>
+          <div class="paymentDetailThirdRow paymentDetailRow">
+            <div class="paymentDetailContainer">
+              <div class='paymentDetailLabel'>Bukti Pembayaran</div>
+              <div class="paymentDetailValue">: </div>
 
             </div>
           </div>
-          <div class="expenseDetailFourthRow expenseDetailRow">
+          <div class="paymentDetailFourthRow paymentDetailRow">
               <zoom-on-hover :img-normal="paymentDetail.imageURL" :scale="1.8"></zoom-on-hover>
           </div>
 
-          <div class="expenseDetailFifthRow expenseDetailRow">
-            <div class="expenseDetailContainer">
-              <div class='expenseDetailLabel'>Status</div>
-              <div class="expenseDetailValue">: {{paymentDetail.isRejected | statusChecker}}</div>
+          <div class="paymentDetailFifthRow paymentDetailRow">
+            <div class="paymentDetailContainer">
+              <div class='paymentDetailLabel'>Status</div>
+              <div class="paymentDetailValue">: {{paymentDetail.isRejected | statusChecker}}</div>
             </div>
 
-            <div class="expenseDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && paymentDetail.isRejected===null" >
+            <div class="paymentDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && paymentDetail.isRejected===null" >
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
                 @click="updatePaymentStatus(paymentDetail.idPayment ,false)"
@@ -150,7 +150,7 @@
 <style>
   .fixedPosition {position: absolute;}
 
-  .expenseDetailWindow {
+  .paymentDetailWindow {
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -162,7 +162,7 @@
     color: var(--primary-3);
   }
 
-  .expenseDetailHeader {
+  .paymentDetailHeader {
     background-color: var(--primary-0);
     color: var(--lightColor);
     padding: 16px 20px;
@@ -179,8 +179,8 @@
     font-weight: 600;
   }
 
-  .expenseWindowSize {
-    width: 35vw;
+  .paymentWindowSize {
+    width: 30vw;
     height: 80vh;
     position: relative;
     top: -10vh;
@@ -192,7 +192,7 @@
     font-weight: 400;
   }
 
-  .expenseDetailBody {
+  .paymentDetailBody {
     background-color: white;
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
@@ -205,24 +205,24 @@
     font-size: 14px;
   }
 
-  .expenseDetailFirstRow,
-  .expenseDetailFifthRow,
-  .expenseDetailButton,
-  .expenseDetailRequester,
-  .expenseDetailSecondRow {
+  .paymentDetailFirstRow,
+  .paymentDetailFifthRow,
+  .paymentDetailButton,
+  .paymentDetailRequester,
+  .paymentDetailSecondRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .expenseDetailRow {margin-top: 15px;}
+  .paymentDetailRow {margin-top: 15px;}
 
-  .expenseDetailContainer {
+  .paymentDetailContainer {
     display: flex;
     width: 300px;
   }
 
-  .expenseDetailFourthRow {
+  .paymentDetailFourthRow {
     border: solid 1px var(--primary-1);
     text-align: center;
     padding: 5px;
@@ -231,7 +231,7 @@
     border-radius: 5px;
   }
 
-  .expenseDetailButton {
+  .paymentDetailButton {
     cursor: pointer;
     color: var(--lightColor);
     font-size: 12px;
@@ -251,7 +251,7 @@
   .acceptButton:hover, .rejectButton:hover {opacity: .9;}
   .acceptButton:active, .rejectButton:active {opacity: 1;}
 
-  .expenseDetailLabel {
+  .paymentDetailLabel {
     width: 125px;
     font-weight: 600;
   }

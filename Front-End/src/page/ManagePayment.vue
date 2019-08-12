@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Payments'/>
+      <HeaderSection :headerTitle="'Group '+groupName+'\'s Members\' Payment'"/>
 
       <div class="paymentsBodySection">
         <div class="paymentsTableHeader">

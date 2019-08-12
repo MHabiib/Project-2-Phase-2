@@ -89,7 +89,7 @@
                 </select>
             </div>
           </div>
-          <div v-if="groupAdminGroupChanged" >
+          <div v-if="groupAdminGroupChanged || groupAdminChanged" >
             <div class="labelInput" >
               <label for="emailInput">New Group Admin</label>
             </div>
@@ -158,6 +158,7 @@
         groupList: [],
         groupMemberList:[],
         groupAdminGroupChanged : false,
+        groupAdminChanged: false,
         newGroupAdmin:'',
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
       }
@@ -186,10 +187,12 @@
     watch:{
       groupAdminGroupChanged: function(oldVal,newVal){
         this.groupAdminGroupChanged = this.newUserDetail.groupName === this.userDetail.groupName ? false : this.userDetail.role === 'GROUP_ADMIN'
+      },
+      groupAdminChanged: function(oldVal,newVal){
+        this.groupAdminChanged =  this.userDetail.role === 'GROUP_ADMIN'? this.newUserDetail.role !== this.userDetail.role : false
       }
     },
     methods: {
-
       closeAddNewUserWindow() {
         this.$emit('closeAddNewUserWindow');
       },
@@ -245,8 +248,11 @@
               if(response.ok){
                 response.json().then(
                   res => {
-                    console.log(res)
-                    this.groupMemberList = res
+                    // someArray = someArray.filter(x => x.name !== 'Kristian')
+                    let array = res
+                    array = array.filter(user => user.email !== this.userDetail.email)
+                    console.log('Calon Admin Baru : '+array)
+                    this.groupMemberList = array
                   }
                 )
               }
@@ -262,6 +268,8 @@
       },
       changeRole(e) {
         this.newUserDetail.role = e.target.value;
+        this.groupAdminChanged = !this.groupAdminChanged;
+
       },
       changeFile(e) {
          if(e.target.files[0].size > 5000000) {
@@ -364,7 +372,7 @@
           console.log(err);
         })      
       },
-      closeUserDetailWindow() {
+      closeUserDetailWindow() { // CLOSE BUTTON FUNCTION CALLED
         if(this.edit==false) { this.$emit('closeAddNewUserWindow'); return}
         if(!this.validateInput()) return;
         let formData = new FormData();
@@ -376,7 +384,7 @@
           this.createNewUser(formData);return
         }
         else{
-          let groupAdminChanged = this.newUserDetail.role != this.userDetail.role ? true : false 
+          let groupAdminChanged = this.newUserDetail.role != this.userDetail.role ? this.newUserDetail.role === "GROUP_ADMIN" : false 
           if(groupAdminChanged){
             if(!confirm("Are you sure to change this user's  role? *previus group admin will be demoted to member.")) {
               return
@@ -407,6 +415,9 @@
         } else if(this.newUserDetail.phone === '') {
           alert('Please input phone number.')
           return false;
+        } else if((this.groupAdminGroupChanged === true || this.groupAdminChanged === true) && this.newGroupAdmin==='') {
+          alert('Please input new Group Admin.')
+          return false;
         } else {
           if(this.newUserDetail.balance === ''){
             this.newUserDetail.balance = 0
@@ -418,12 +429,13 @@
             this.newUserDetail.periodeTertinggal = 0
           } if(this.newUserDetail.role === ''){
             this.newUserDetail.role = 'MEMBER'           
-          } if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
-            this.newUserDetail.password = this.newPassword           
-          } else if(this.newPassword!=='' && this.newPassword.length>=5 && (this.newPassword !== this.repeatPassword)){
+          } else if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
+            this.newUserDetail.password = this.newPassword          
+          } else if(this.newPassword!=='' && this.newPassword.length<=5 || (this.newPassword !== this.repeatPassword)){
             alert('please input a valid password')
             return false
           }
+          this.newUserDetail.password = this.userDetail.password == this.newUserDetail.password ? "" : this.newPassword 
           return true
         }
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
@@ -576,6 +588,7 @@
     color: var(--primary-4);
   }
   .pp{
+    text-align: left;
     width: 45% !important;
     display: inline-block;
   }

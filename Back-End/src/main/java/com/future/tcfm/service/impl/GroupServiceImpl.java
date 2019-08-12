@@ -34,6 +34,7 @@ import static com.future.tcfm.config.SecurityConfig.getCurrentUser;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.GROUP_PROFILE_UPDATE;
 import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_GROUP;
 import static com.future.tcfm.service.impl.ExpenseServiceImpl.createPageRequest;
+import static com.future.tcfm.service.impl.NotificationServiceImpl.TYPE_PERSONAL;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -101,7 +102,7 @@ public class GroupServiceImpl implements GroupService {
         if(group.getCurrentPeriod()==0)   group.setCurrentPeriod(1);
         if(group.getGroupAdmin()==null)   group.setGroupAdmin("");
 
-        group.setGroupAdmin(group.getGroupAdmin().equalsIgnoreCase("")?"":group.getGroupAdmin());
+        group.setGroupAdmin(group.getGroupAdmin().equalsIgnoreCase("") ? "":group.getGroupAdmin());
         group.setCreatedDate(System.currentTimeMillis());
         group.setLastModifiedAt(System.currentTimeMillis());
         group.setClosedDate(0L);
@@ -126,6 +127,8 @@ public class GroupServiceImpl implements GroupService {
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
                 userRepository.save(newAdmin);
+                notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
+                notificationService.createNotification("Congrats! you have been promoted to Group Admin!", newAdmin.getEmail(),null, TYPE_PERSONAL);
             }
             if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign
@@ -137,6 +140,7 @@ public class GroupServiceImpl implements GroupService {
         groupExist.setGroupBalance(group.getGroupBalance());
         groupExist.setBalanceUsed(group.getBalanceUsed());
         groupExist.setBankAccountNumber(group.getBankAccountNumber());
+        groupExist.setBankAccountName(group.getBankAccountName());
         groupExist.setLastModifiedAt(System.currentTimeMillis());
         groupExist.setCurrentPeriod(group.getCurrentPeriod());
         if(isNameAvailable) {

@@ -20,17 +20,16 @@
           </div>
 
           <div class="payNowOneRow">
-            <div>
-              <input @keypress="checkChar" type="number" min="1" max="99" maxlength="2" name="periode" id="periode" placeholder="Number of periods" v-model='periode'/>
+            <div style="width: 45%">
+              <input style="width: 90%"  @keypress="checkChar" type="number" min="1" max="99" maxlength="2" name="periode" id="periode" placeholder="Number of periods" v-model='periode'/>
             </div>
-
-            <div>
+            <div style="text-align:left">
               Total harus dibayar: Rp {{totalTagihan | thousandSeparators}}
             </div>
           </div>
 
           <div class="payNowOneRow">
-            <input
+              <input style="width: 40%"
               type="text"
               name="rekeningPengirim"
               id="rekeningPengirim"
@@ -39,8 +38,8 @@
               v-model='nomorRekeningPengirim'
             />
 
-            <input
-              style="flex: 1"
+            <input 
+              style="flex: 1;width:40%"
               type="text"
               name="namaPengirim"
               id="namaPengirim"
@@ -50,11 +49,11 @@
           </div>
 
           <div class="payNowOneRow">
-            <input
+              <input style="width: 40%"
               type="date"
               name="tanggalTransfer"
               id="tanggalTransfer"
-              placeholder="dd/mm/yyyy"
+              placeholder=""
               v-model='tanggalTransfer'
             />
             
@@ -354,6 +353,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
   }
 
   .payNowOneRow {
+    width: 32vw;
     display: flex;
     align-items: center;
     margin-top: 10px;
@@ -369,8 +369,10 @@ const monthList =["January","February","March","April","May","June","July","Augu
     padding: 5px;
     background: transparent;
   }
-
-  .payNowOneRow input::placeholder {
+  .payInput {
+    width:60%;
+  }
+  input::placeholder {
     color: var(--primary-1);
   }
   #app .myParent .dropdownMenu .multiselect__tags,.multiselect__single, .multiselect__element{

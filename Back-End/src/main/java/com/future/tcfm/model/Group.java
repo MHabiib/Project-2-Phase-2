@@ -33,6 +33,7 @@ public class Group {
     private Double groupBalance;
     private Double balanceUsed;
     private String bankAccountNumber;
+    private String bankAccountName;
 //    private Double totalExpense;
     private Boolean active;
     private Integer currentPeriod;

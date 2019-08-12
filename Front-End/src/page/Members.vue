@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Members'/>
+      <HeaderSection :headerTitle="'Group '+groupName+'\'s Members'"/>
 
       <div class="membersBodySection">
         <div class="membersTableHeader">
@@ -89,14 +89,13 @@
         searchQuery: '',
         showInviteMemberWindow: false,
         loading:false,
-        groupName:'',
+        groupName:localStorage.groupName,       
         filter:'name',
         options:['name','email','role']
       }
     },
     created() {
       this.searchData(0)
-      this.groupName=localStorage.getItem('groupName')
     },
     mounted(){
       this.scroll();

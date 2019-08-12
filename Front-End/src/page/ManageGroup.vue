@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Groups'/>
+      <HeaderSection headerTitle='Manage Group'/>
       <div class="groupsBodySection">
         <div class="groupsTableHeader">
           <div class="groupsTableHeaderTitle">

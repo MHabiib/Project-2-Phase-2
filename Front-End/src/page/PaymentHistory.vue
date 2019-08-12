@@ -3,7 +3,7 @@
     <SidebarComponent />
 
     <div class='rightPanel' :style="{ width: rightPanelWidth + 'px' }">
-      <HeaderSection headerTitle='Payment'/>
+      <HeaderSection :headerTitle="'Group '+groupName+'\'s Members\' Payment'"/>
       <div style="margin:10px 5px;color: var(--primary-0)">First payment start from : {{monthList[groupCreated.month]}} {{groupCreated.year}}</div>
       <div class="paymentsBodySection">
         
@@ -13,11 +13,11 @@
           </div>
 
           <div class="myParent" style='display: flex;'>
-            <input class='paymentTableSearch' type="text" placeholder="Search by Names..." v-model='searchQuery'/>
+            <input class='paymentTableSearch' type="text" :placeholder="'Search by '+filter " v-model='searchQuery'/>
             <!-- <div class="refreshBtn"  @click='searchData(0)'>
               <img src="../assets/magnifier.png" width="18px" alt="Search">
             </div> -->
-            <!-- <div class="dropdownMenu" >
+            <div class="dropdownMenu" >
                 <multiselect 
                   v-model="filter" 
                   :allow-empty="false" 
@@ -26,8 +26,8 @@
                   :close-on-select="true" 
                   :show-labels="false" 
                   placeholder="Pick a value">
-                </multiselect> -->
-            <!-- </div> -->
+                </multiselect>
+            </div>
             <div class="refreshBtn" @click='searchData(0)'>
               <!-- Refresh -->
               <img src="../assets/sinchronize-256.png" width="16px" alt="Refresh">
@@ -41,6 +41,7 @@
               <tr>
                 <th style="width:1.5vw">&nbsp;&nbsp;</th>
                 <th>Name</th>
+                <th v-if="myRole==='SUPER_ADMIN'">Group</th>
                 <th  v-for='(month,index) in monthList' :key='"month-"+index'>
                   {{month.substring(0,3)}}
                 </th>
@@ -53,6 +54,7 @@
               >
                 <td style="width:1.5vw">{{i+1}}.</td>
                 <td >{{user.name}}</td>
+                <td v-if="myRole==='SUPER_ADMIN'">{{user.groupName}}</td>
                 <td v-for='j in (getThisYearTotalPeriodPayed(user.totalPeriodPayed,year)<0?0:getThisYearTotalPeriodPayed(user.totalPeriodPayed,year))' :key='"ceklis-"+j'   > 
                   &#10004;
                 </td>
@@ -89,13 +91,12 @@
           this.year=this.groupCreated.year
         }
         return this.year
-      },
-
-      
-      },
+      },      
+    },
     data: function() {
       return {
         searchMode:false,
+        groupName:localStorage.groupName,
         monthList:[],
         start:'',
         dataUser:{},
@@ -106,7 +107,7 @@
         searchQuery:'',
         groupCreated:{},
         filter:'period',
-        // options:['name','period'],
+        options:['name','group','period'],
       }
     },
 
@@ -127,7 +128,8 @@
       },
       searchQuery: function(oldVal,newVal){
         this.searchData(0)
-      }
+      },
+
     },
     methods: {
       searchData(page){
@@ -147,6 +149,7 @@
             response.json().then(
               res => {
                 this.userList=res.content 
+                this.userList = this.userList.filter(user => user.groupName !== 'GROUP_LESS')
                 this.dataUser=res
                 setTimeout(e=>{this.loading=false},500)
               }
@@ -180,6 +183,8 @@
             response.json().then(
               res => {
                 this.userList=this.userList.concat(res.content)
+                this.userList = this.userList.filter(user => user.groupName !== 'GROUP_LESS')
+
                 this.dataUser=res
                 setTimeout(e=>{this.loading=false},500)
 
@@ -218,6 +223,7 @@
 
   .paymentsTableHeader {
     background-color: var(--primary-0);
+
     color: var(--lightColor);
     display: flex;
     justify-content: space-between;

@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.omg.SendingContext.RunTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class ExcelReaderServiceImpl implements ExcelReaderService {
@@ -27,8 +30,11 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+
     @Override
     @Transactional
+    @Async
     public Boolean saveFile(MultipartFile file) {
         try {
             List<Group> groupList = groupRepository.findAllByActive(true);
@@ -62,6 +68,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                             .createdDate(System.currentTimeMillis())
                             .groupBalance(0.0)
                             .bankAccountNumber("")
+                            .bankAccountName("")
                             .regularPayment(0.0)
                             .currentPeriod(1)
                             .active(true)
@@ -135,44 +142,47 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             Sheet sheet = workbook.getSheet("User");
             Iterator<Row> rows = sheet.iterator();
             List<User> userList = new ArrayList<>();
-            while (rows.hasNext()) {
-                Row currentRow = rows.next();
-                // skip row (0)
-                if(currentRow.getRowNum() == 0) {
-                    continue;
-                }
-                Iterator<Cell> cellsInRow = currentRow.iterator();
-                User user = new User();
-                int cellIndex = 0;
-                while (cellsInRow.hasNext()) {
-                    Cell currentCell = cellsInRow.next();
-                    currentCell.setCellType(CellType.STRING);
-                    if(cellIndex==0) { // email
-                        user.setEmail(currentCell.getStringCellValue());
-                    } else if(cellIndex==1) { // password
-                        user.setPassword(currentCell.getStringCellValue());
-                    } else if(cellIndex==2) { // name
-                        user.setName(currentCell.getStringCellValue());
-                    } else if(cellIndex==3) { // phone number
-                        user.setPhone(currentCell.getStringCellValue());
-                    } else if(cellIndex==4) { // groupName
-                        user.setGroupName(currentCell.getStringCellValue());
-                    } else if(cellIndex==5) { // role
-                        user.setRole(currentCell.getStringCellValue());
-                    }
-                    cellIndex++;
-                }
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                user.setTotalPeriodPayed(0);
-                user.setBalance(0.0);
-                user.setBalanceUsed(0.0);
-                user.setPeriodeTertinggal(1);
-                user.setJoinDate(System.currentTimeMillis());
-                user.setActive(true);
-                user.setImagePath("");
-                user.setImageURL("");
-                userList.add(user);
-            }
+            executor.execute(() -> {
+                        while (rows.hasNext()) {
+                            Row currentRow = rows.next();
+                            System.out.println("Reading row-"+currentRow.getRowNum());
+                            // skip row (0)
+                            if (currentRow.getRowNum() == 0) {
+                                continue;
+                            }
+                            Iterator<Cell> cellsInRow = currentRow.iterator();
+                            User user = new User();
+                            int cellIndex = 0;
+                            while (cellsInRow.hasNext()) {
+                                Cell currentCell = cellsInRow.next();
+                                currentCell.setCellType(CellType.STRING);
+                                if (cellIndex == 0) { // email
+                                    user.setEmail(currentCell.getStringCellValue());
+                                } else if (cellIndex == 1) { // password
+                                    user.setPassword(currentCell.getStringCellValue());
+                                } else if (cellIndex == 2) { // name
+                                    user.setName(currentCell.getStringCellValue());
+                                } else if (cellIndex == 3) { // phone number
+                                    user.setPhone(currentCell.getStringCellValue());
+                                } else if (cellIndex == 4) { // groupName
+                                    user.setGroupName(currentCell.getStringCellValue());
+                                } else if (cellIndex == 5) { // role
+                                    user.setRole(currentCell.getStringCellValue());
+                                }
+                                cellIndex++;
+                            }
+                            user.setPassword(passwordEncoder.encode(user.getPassword()));
+                            user.setTotalPeriodPayed(0);
+                            user.setBalance(0.0);
+                            user.setBalanceUsed(0.0);
+                            user.setPeriodeTertinggal(1);
+                            user.setJoinDate(System.currentTimeMillis());
+                            user.setActive(true);
+                            user.setImagePath("");
+                            user.setImageURL("");
+                            userList.add(user);
+                        }
+                    });
             // Close WorkBook
             workbook.close();
             return userList;

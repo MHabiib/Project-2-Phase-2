@@ -11,6 +11,7 @@ import java.util.List;
 public interface JwtUserDetailsRepository extends MongoRepository<JwtUserDetails, String> {
     JwtUserDetails findByEmail(String email);
     List<JwtUserDetails> findAllByGroupName(String gName);
+    JwtUserDetails findByRefreshToken(String refreshToken);
     void deleteAllByGroupName(String gName);
     void deleteByEmail(String email);
     JwtUserDetails findByAccessTokenAndRefreshToken(String accessToken,String refreshToken);
