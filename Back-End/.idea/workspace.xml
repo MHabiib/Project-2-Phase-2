@@ -2,153 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8745a6b8-50b6-4f3a-84fe-6632d4874eea" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/MavenWrapperDownloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/MavenWrapperDownloader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/AdditionalResourceWebConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/AdditionalResourceWebConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/SwaggerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/mail/MailConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/mail/MailConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationEntryPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationTokenFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtFailureHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtFailureHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtSuccessHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/EmailController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ExpenseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ExpenseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/GroupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/NotificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/OverviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/OverviewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/SchedulerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/SchedulerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Dashboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Dashboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Expense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Expense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtAuthenticationToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtAuthenticationToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtUserDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Notification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/NotificationEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/NotificationEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/EmailRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/EmailRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/ExpenseRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/ExpenseRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/Overview.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/Overview.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/TokenResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/ReqResModel/TokenResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/ExpenseContributedDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/ExpenseContributedDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/ExpenseIdContributed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/ExpenseIdContributed.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/PaymentDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/PaymentDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/UserContributedList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/UserContributedList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/ExpenseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/ExpenseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/GroupRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/GroupRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/JwtUserDetailsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/JwtUserDetailsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/NotificationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/NotificationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/PaymentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/DashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/DashboardService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExcelReaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExcelReaderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExpenseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExpenseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/GroupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/GroupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/NotificationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/OverviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/OverviewService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/SchedulerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/SchedulerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/EmailServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/NotificationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/SchedulerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/SchedulerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/TeamCashFlowManagementApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/TeamCashFlowManagementApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/GroupServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/GroupServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/DashboardServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/DashboardServiceImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/ExpenseServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/ExpenseServiceImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/GroupServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/GroupServiceImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/UserServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/UserServiceImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/test/test.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/test/test.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/.babelrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/.postcssrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/.postcssrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/Helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/Helper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/build.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/check-versions.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/check-versions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/vue-loader.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/vue-loader.conf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/webpack.base.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/webpack.base.conf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/webpack.dev.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/webpack.dev.conf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/build/webpack.prod.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/build/webpack.prod.conf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/config/dev.env.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/config/dev.env.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/config/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/config/prod.env.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/config/prod.env.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/download.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/download.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/app.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/app.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/BulkInsertWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/BulkInsertWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/CreateNewGroupWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/CreateNewGroupWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/HeaderSection.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/HeaderSection.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/PaymentDetailWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/PaymentDetailWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/addNewUser.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/addNewUser.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/createNewExpense.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/createNewExpense.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/expenseDetailWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/expenseDetailWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/inviteMember.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/inviteMember.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/payNow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/payNow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/sidebar.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/userContributedWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/userContributedWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/zoomOnHover.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/zoomOnHover.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Expenses.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Expenses.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/ManageGroup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/ManageGroup.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/ManagePayment.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/ManagePayment.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/ManageUser.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/ManageUser.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Members.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Members.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Overview.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Overview.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Payment.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Payment.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/PaymentHistory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/PaymentHistory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/Profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/Profile.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/tugasWeb.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/tugasWeb.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/store/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/store/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/zoomOnHover.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/zoomOnHover.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/vue.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/sidebar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/sidebar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/src/assets/dashboard-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/src/assets/invoice-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/src/assets/logo-blibli.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/sidebar.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/main.js" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -162,23 +26,19 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtSuccessHandler.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+            <state relative-caret-position="153">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationTokenFilter.java">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -236,6 +96,25 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tcfm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Back-End" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="future" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tcfm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Back-End" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="future" type="462c0819:PsiDirectoryNode" />
               <item name="tcfm" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -244,6 +123,8 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="future" type="462c0819:PsiDirectoryNode" />
               <item name="tcfm" type="462c0819:PsiDirectoryNode" />
               <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -253,6 +134,8 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="future" type="462c0819:PsiDirectoryNode" />
               <item name="tcfm" type="462c0819:PsiDirectoryNode" />
               <item name="config" type="462c0819:PsiDirectoryNode" />
               <item name="mail" type="462c0819:PsiDirectoryNode" />
@@ -263,21 +146,18 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="future" type="462c0819:PsiDirectoryNode" />
               <item name="tcfm" type="462c0819:PsiDirectoryNode" />
-              <item name="controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tcfm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Back-End" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="security" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -301,7 +181,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.TeamCashFlowManagementApplication (1)">
+    <configuration name="TeamCashFlowManagementApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="Back-End" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.future.tcfm.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.future.tcfm.TeamCashFlowManagementApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TeamCashFlowManagementApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="tcfm" />
       <extension name="coverage">
@@ -317,6 +210,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.TeamCashFlowManagementApplication (1)" />
         <item itemvalue="Spring Boot.TeamCashFlowManagementApplication" />
       </list>
     </recent_temporary>
@@ -332,34 +226,25 @@
       <option name="presentableId" value="Default" />
       <updated>1565708287367</updated>
       <workItem from="1565708290538" duration="792000" />
+      <workItem from="1565711088982" duration="258000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="792000" />
+    <option name="totallyTimeSpent" value="1065000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="Image Layers" />
-      <window_info id="UI Designer" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Capture Tool" />
-      <window_info id="Web" side_tool="true" />
-      <window_info id="Learn" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16257995" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="FindBugs-IDEA" />
-      <window_info anchor="bottom" id="Spring" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info active="true" anchor="bottom" id="Event Log" sideWeight="0.50035536" side_tool="true" visible="true" weight="0.32901832" />
-      <window_info anchor="bottom" id="Messages" sideWeight="0.49964464" visible="true" weight="0.32901832" />
-      <window_info anchor="bottom" id="Java Enterprise" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Learn" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info id="Web" order="7" side_tool="true" />
+      <window_info id="Image Layers" order="8" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49964464" weight="0.32901832" />
@@ -367,18 +252,27 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Maven" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="Codota" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Mongo Explorer" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Bean Validation" />
+      <window_info anchor="bottom" id="FindBugs-IDEA" order="7" />
+      <window_info anchor="bottom" id="Spring" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50035536" side_tool="true" visible="true" weight="0.32901832" />
+      <window_info anchor="bottom" id="Java Enterprise" order="11" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Version Control" order="13" />
+      <window_info anchor="bottom" id="Docker" order="14" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Messages" order="15" sideWeight="0.49964464" visible="true" weight="0.32901832" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Codota" order="4" />
+      <window_info anchor="right" id="Palette" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Mongo Explorer" order="7" />
+      <window_info anchor="right" id="Database" order="8" />
+      <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Theme Preview" order="10" />
+      <window_info anchor="right" id="Bean Validation" order="11" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,10 +292,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+        <state relative-caret-position="153">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtAuthenticationTokenFilter.java">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
