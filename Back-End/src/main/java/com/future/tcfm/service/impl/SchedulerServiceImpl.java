@@ -48,7 +48,13 @@ public class SchedulerServiceImpl implements SchedulerService {
         List<User> listUser = userRepository.findAll();
         Map<String,Group> groupMap = new HashMap<>();
 
-        listUser.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
+        listUser.forEach(user ->
+        {
+            if(user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
+            else {
+            groupMap.put(user.getGroupName(), groupRepository.findByName(user.getGroupName()));
+        }
+        });
         int monthNow = LocalDate.now().getMonthValue();
         String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
         groupMap.forEach((groupName,groupVal)->{

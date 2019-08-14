@@ -100,7 +100,7 @@ public class GroupServiceImpl implements GroupService {
         Group groupExist = groupRepository.findByNameAndActive(group.getName(),true);
         if (groupExist != null &&groupExist.getActive().equals(false))
             return new ResponseEntity<>("Failed to save Group!\nName already exists!", HttpStatus.BAD_REQUEST);
-        if(group.getCurrentPeriod()==0)   group.setCurrentPeriod(1);
+        if(group.getCurrentPeriod()==null)   group.setCurrentPeriod(1);
         if(group.getGroupAdmin()==null)   group.setGroupAdmin("");
 
         group.setGroupAdmin(group.getGroupAdmin().equalsIgnoreCase("") ? "":group.getGroupAdmin());
