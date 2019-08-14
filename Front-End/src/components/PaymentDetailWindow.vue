@@ -50,7 +50,7 @@
               <div class="paymentDetailValue">: {{paymentDetail.isRejected | statusChecker}}</div>
             </div>
 
-            <div class="paymentDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && paymentDetail.isRejected===null" >
+            <div class="paymentDetailButton" v-if="role !== 'MEMBER' && paymentDetail.isRejected===null" >
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
                 @click="updatePaymentStatus(paymentDetail.idPayment ,false)"
