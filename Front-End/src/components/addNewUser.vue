@@ -5,7 +5,7 @@
         <div class="createNewUserHeader">
           <div>{{this.headerTitle}}</div>
           <div class='buttonGroup'>
-            <div v-if='!edit' class="buttonDisband"  @click="deleteUser(userDetail.idUser)">Resign User</div>
+            <div v-if='!edit' class="buttonDisbandUser"  @click="deleteUser(userDetail.idUser)">Resign User</div>
             <div class="editButton" @click="editUserDetailWindow">{{editBtnName}}</div>
             <div  class="editButton"  @click="closeUserDetailWindow">{{closeBtnName}}</div>   
           </div>
@@ -89,20 +89,25 @@
                 </select>
             </div>
           </div>
-          <div v-if="groupAdminGroupChanged || groupAdminChanged" >
-            <div class="labelInput" >
-              <label for="emailInput">New Group Admin</label>
-            </div>
-            <div class="valueInput">
-              <div v-if="add==false" v-show="edit==false" class="value">: <span class="inlineInput"> {{userDetail.groupName}}</span>/ {{userDetail.role}}</div>
-              <select v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupAdmin' @change="changeGroupAdmin($event)">  
-                <option  
-                  class='selectAdminOption'
-                  v-for='(member,index) in groupMemberList' :key='index'
-                  :value='member.email'>
-                    {{member.name}}
-                </option>  
-              </select>             
+          <div  v-if="groupAdminGroupChanged || groupAdminChanged" >
+            <!-- <div v-if="add==false && groupMemberList.length == 0" style="text-align:center" >
+              <div v-if='edit' class="buttonDisbandGroup"  @click="deleteUser(userDetail.idUser)">Disband Group</div>
+            </div> -->
+            <div v-if="add==false && groupMemberList.length > 0">
+              <div class="labelInput" >
+                <label for="emailInput">New Group Admin</label>
+              </div>
+              <div class="valueInput">
+                <div v-if="add==false" v-show="edit==false" class="value">: <span class="inlineInput"> {{userDetail.groupName}}</span>/ {{userDetail.role}}</div>
+                <select v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupAdmin' @change="changeGroupAdmin($event)">  
+                  <option  
+                    class='selectAdminOption'
+                    v-for='(member,index) in groupMemberList' :key='index'
+                    :value='member.email'>
+                      {{member.name}}
+                  </option>  
+                </select>    
+              </div>
             </div>
           </div>
           <div v-if="edit">
@@ -183,13 +188,14 @@
       this.add=this.addMode
       this.getAllGroup();
       if(!this.add) this.getMember();
+      console.log(this.groupMemberList.length)
     },
     watch:{
       groupAdminGroupChanged: function(oldVal,newVal){
-        this.groupAdminGroupChanged = this.newUserDetail.groupName === this.userDetail.groupName ? false : this.userDetail.role === 'GROUP_ADMIN'
+        this.groupAdminGroupChanged = this.newUserDetail.groupName === this.userDetail.groupName ? false : this.userDetail.role === 'GROUP_ADMIN'&& this.userDetail.groupName !== 'GROUP_LESS'
       },
       groupAdminChanged: function(oldVal,newVal){
-        this.groupAdminChanged =  this.userDetail.role === 'GROUP_ADMIN'? this.newUserDetail.role !== this.userDetail.role : false
+        this.groupAdminChanged =  this.userDetail.role === 'GROUP_ADMIN' && this.userDetail.groupName !== 'GROUP_LESS'? this.newUserDetail.role !== this.userDetail.role : false
       }
     },
     methods: {
@@ -297,8 +303,7 @@
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             alert('Succeed to add new user.');
             this.closeAddNewUserWindow();
-            this.$emit('refreshData');           
-            
+            this.$emit('refreshData');       
           } else {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             console.log(response);
@@ -312,7 +317,6 @@
       },
       updateUser(jsonBody){
         // if(!this.validateInput()) return;
-
         fetch(`${Helper.backEndAddress}/api/user/managementUser/${this.newUserDetail.idUser}?newGroupAdmin=${this.newGroupAdmin}`,{
           headers: {
             'Content-Type':'application/json',
@@ -372,23 +376,61 @@
           console.log(err);
         })      
       },
+      disbandPreviousGroup(){
+        let previousGroup = this.groupList.find( x => x.name === this.userDetail.groupName)
+        console.log("Previous Group Name / Id: "+ previousGroup.name + " / " + previousGroup.idGroup)
+        if(this.add) return
+        let isConfirmed = confirm('Are you sure to disband this group?\nDisbanding group can\'t be undo.')
+        if(!isConfirmed) return;
+        fetch(`${Helper.backEndAddress}/api/group/${previousGroup.idGroup}`,{
+          headers: {
+            'Content-Type' : 'application/json',
+            Authorization: localStorage.getItem('accessToken')},
+          method:'DELETE',
+        }).then(response => {
+            if(response.status==401){
+              console.log('groupId : '+this.groupId)
+              Helper.getNewToken(this.disbandPreviousGroup)
+            } else if(response.ok){
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              this.updateUser(JSON.stringify(this.newUserDetail)) // now change the user group after disband group succeed
+              this.$emit('refreshData')
+              alert(`Group successfuly disbanded.\nAny last information regarding group ${this.previousGroup.name} has been sent to every member\'s email.`)
+            } else if(response.status == 500){
+              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
+              response.json().then(res=>{
+                let message = ''
+                res.forEach((element,index) => {
+                  // message+=index+1+". " +element.name+"\n"
+                  message+=`${index+1}. ${element.name} (${element.periodeTertinggal} period(s))\n`
+                });
+                alert(`Failed to disband group, ${res.length} member(s) haven't completed their payment\n${message}`)
+              })
+            }
+        })
+      },
       closeUserDetailWindow() { // CLOSE BUTTON FUNCTION CALLED
         if(this.edit==false) { this.$emit('closeAddNewUserWindow'); return}
         if(!this.validateInput()) return;
         let formData = new FormData();
-
         formData.append('user', JSON.stringify(this.newUserDetail))
-
         formData.append('file', this.fileInput);
+
         if(this.add==true){
           this.createNewUser(formData);return
         }
         else{
           let groupAdminChanged = this.newUserDetail.role != this.userDetail.role ? this.newUserDetail.role === "GROUP_ADMIN" : false 
           if(groupAdminChanged){
-            if(!confirm("Are you sure to change this user's  role? *previus group admin will be demoted to member.")) {
+            if(!confirm("Are you sure to change this user's  role? *previous group admin will be demoted to member.")) {
               return
             }
+          }
+          if(this.newUserDetail.groupName!==this.userDetail.groupName && this.groupMemberList.length==0){
+            if(confirm(`Are you sure to change this user's  group? *this action will disband group ${this.userDetail.groupName} because ${this.userDetail.groupName} will have 0 member`)) {
+              this.disbandPreviousGroup()
+            }
+            return 
           }
           this.updateUser(JSON.stringify(this.newUserDetail))
         }//else end here
@@ -398,6 +440,7 @@
         this.edit = !this.edit;
       }, 
       validateInput(){
+        
         let isEmailValid = this.reg.test(this.newUserDetail.email)
         if(this.add){
           if(this.newPassword!==this.repeatPassword || this.newPassword==='') {
@@ -415,7 +458,8 @@
         } else if(this.newUserDetail.phone === '') {
           alert('Please input phone number.')
           return false;
-        } else if((this.groupAdminGroupChanged === true || this.groupAdminChanged === true) && this.newGroupAdmin==='') {
+        // } else if((this.groupAdminGroupChanged === true || this.groupAdminChanged === true)  && this.newGroupAdmin ==='') {
+        } else if(((this.groupAdminGroupChanged === true || this.groupAdminChanged === true)  && this.newGroupAdmin ==='') && this.groupMemberList.length>0) {
           alert('Please input new Group Admin.')
           return false;
         } else {
@@ -530,8 +574,8 @@
     align-items: center;
   }
 
-  .buttonDisband {
-    color: #fff;
+  .buttonDisbandGroup, .buttonDisbandUser {
+    color: red;
     display:inline-block;
     /* width: 25%; */
     text-align:center;
@@ -540,8 +584,20 @@
     padding: 7px;
     font-size: 12px;    
   }
-
-  .buttonDisband:hover{
+  .buttonDisbandUser{
+    color: white !important;
+  }
+  .buttonDisbandGroup {
+    display:inline-block;
+    /* width: 25%; */
+    margin-top:10px;
+    text-align:center;
+    font-weight:400;
+    border-radius: 10px;
+    padding: 7px;
+    font-size: 12px;    
+  }
+  .buttonDisbandGroup:hover, .buttonDisbandUser:hover{
     cursor: pointer;
     color: pointer;
     background-color: red;  
