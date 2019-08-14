@@ -43,7 +43,7 @@
               <div class="expenseDetailValue">: {{newExpenseDetail.status | statusChecker}}</div>
             </div>
 
-            <div class="expenseDetailButton" v-if="role === 'SUPER_ADMIN' && 'GROUP_ADMIN' && newExpenseDetail.status===null">
+            <div class="expenseDetailButton" v-if="role !== 'MEMBER' && newExpenseDetail.status===null">
               <div
                 :class="{disableButton: disableButton ,rejectButton: !disableButton}"
                 @click="updateExpenseStatus(newExpenseDetail.idExpense ,false)"
