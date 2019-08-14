@@ -18,7 +18,7 @@ public interface EmailService {
     ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException;
 
     @Async
-    void periodicMailSender (String email, String monthBeforeStr,int yearBefore) throws MessagingException;
+    void periodicMailSender (String email, String monthBeforeStr,int yearBefore, String monthNowStr, int yearNow) throws MessagingException;
 
     @Async
     void periodicMailReminderSender (String email) throws MessagingException;

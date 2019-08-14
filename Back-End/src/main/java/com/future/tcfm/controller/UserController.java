@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity delete(@PathVariable("id") String id) {
+    public ResponseEntity delete(@PathVariable("id") String id) throws MessagingException {
         return userService.deleteUser(id);
     }
 }

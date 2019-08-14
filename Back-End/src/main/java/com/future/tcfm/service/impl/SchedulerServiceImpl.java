@@ -48,17 +48,19 @@ public class SchedulerServiceImpl implements SchedulerService {
         List<User> listUser = userRepository.findAll();
         Map<String,Group> groupMap = new HashMap<>();
 
-        listUser.forEach(user ->
-        {
-            if(user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
-            else {
-            groupMap.put(user.getGroupName(), groupRepository.findByName(user.getGroupName()));
-        }
+        listUser.forEach(user -> {
+            if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
+            else
+                groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName()));
         });
-        int monthNow = LocalDate.now().getMonthValue();
-        String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        groupMap.forEach((groupName,groupVal)->{
-            groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
+
+         groupMap.forEach((groupName,groupVal)->{
+             if(groupVal.getCurrentPeriod()==null){
+                 groupVal.setCurrentPeriod(1);
+             }
+             else{
+                 groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
+             }
             groupRepository.save(groupVal);
         });
 
@@ -67,27 +69,46 @@ public class SchedulerServiceImpl implements SchedulerService {
             int monthChecker = 0;
             int yearChecker=0;
             int monthBefore =0;
+            int monthNow = 0;
+            int yearNow=0;
 
             Group group;
+
             String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
-
             for (User user : listUser) {
-                yearBefore=LocalDate.now().getYear();
-                monthBefore= LocalDate.now().getMonthValue()+1;
-                monthChecker=0;
-                yearChecker=0;
-
                 group = groupMap.get(user.getGroupName());
-                user.setPeriodeTertinggal(group.getCurrentPeriod() - user.getTotalPeriodPayed());
+                yearNow=Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getYear();
+                monthNow=Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+                monthNow+=group.getCurrentPeriod();
+
+/*                Exception in thread "pool-5-thread-1" java.lang.NullPointerException
+                at com.future.tcfm.service.impl.SchedulerServiceImpl.lambda$scheduler$2(SchedulerServiceImpl.java:80)
+                at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+                at java.lang.Thread.run(Thread.java:748)*/
+
+                if(monthNow>12){
+                    monthChecker=monthNow % 12;
+                    yearChecker=(monthNow-monthChecker)/12;
+                    monthNow=monthChecker;
+                    yearNow+=yearChecker;
+                }
+
+                yearBefore=yearNow;
+                monthBefore= monthNow;
+
+                String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+                user.setPeriodeTertinggal(user.getPeriodeTertinggal()+1);
                 if (user.getPeriodeTertinggal() > 0) { //jika true berarti user belum membayar iuran
                     if(user.getPeriodeTertinggal()>11){
+
                         monthChecker=user.getPeriodeTertinggal() % 12;
                         yearChecker=(user.getPeriodeTertinggal()-monthChecker)/12;
                         monthBefore-=monthChecker;
                         yearBefore-=yearChecker;
                     }
                     else{
-                        monthBefore-=user.getPeriodeTertinggal();
+                        monthBefore-=user.getPeriodeTertinggal()-1; //dikurang 1 karena untuk mendapaktan value bulan yang belum di bayar
                     }
 
                     if(monthBefore<=0){
@@ -98,7 +119,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 //                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
                     notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
-                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore);
+                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }
@@ -106,7 +127,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                 else {
                     notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
-                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore);
+                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }

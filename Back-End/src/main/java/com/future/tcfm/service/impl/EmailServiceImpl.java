@@ -50,12 +50,10 @@ public class EmailServiceImpl implements EmailService {
     //email max 500 mail/day
 
     @Async
-    public void periodicMailSender( String email, String monthBeforeStr,int yearBefore) throws MessagingException {
+    public void periodicMailSender( String email, String monthBeforeStr,int yearBefore, String monthNowStr, int yearNow) throws MessagingException {
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
-        String monthNowStr=Month.of(LocalDate.now().getMonthValue()).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        int yearNow=LocalDate.now().getYear();
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

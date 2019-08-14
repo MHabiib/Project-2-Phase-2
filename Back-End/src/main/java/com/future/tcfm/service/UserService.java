@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface UserService {
 
     Page<User> searchBy(String query,Boolean membersOnly,int page, int size);
 
-    ResponseEntity deleteUser(String email);
+    ResponseEntity deleteUser(String email) throws MessagingException;
 }

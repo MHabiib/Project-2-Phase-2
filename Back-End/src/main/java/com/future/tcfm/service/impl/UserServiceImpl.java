@@ -7,6 +7,7 @@ import com.future.tcfm.model.User;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.JwtUserDetailsRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.EmailService;
 import com.future.tcfm.service.NotificationService;
 import com.future.tcfm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.FileTypeMap;
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    EmailService emailService;
 
     @Autowired
     JwtUserDetailsRepository jwtUserDetailsRepository;
@@ -343,7 +348,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> deleteUser(String id) {
+    public ResponseEntity<?> deleteUser(String id) throws MessagingException {
         User userExist = userRepository.findByIdUser(id);
         if (userExist == null)
             return new ResponseEntity<>("Failed to delete User!\nUserId not found!", HttpStatus.BAD_REQUEST);
@@ -359,6 +364,7 @@ public class UserServiceImpl implements UserService {
         userExist.setActive(false);
         jwtUserDetailsRepository.deleteByEmail(userExist.getEmail());
         userRepository.save(userExist);
+        emailService.userResign(userExist.getEmail());
         responseMap.put("message","User resigned succeed.");
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
