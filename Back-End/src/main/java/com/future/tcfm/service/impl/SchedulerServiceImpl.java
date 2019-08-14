@@ -45,9 +45,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Transactional
     @Scheduled(cron = "0 10 10 05 * ?") // setiap tanggal 10  disetiap bulan jam 10 : 05
     public void scheduler() throws MessagingException {
-        List<User> listUser = userRepository.findAll();
+        List<User> listUser = userRepository.findAllByActive(true);
         Map<String,Group> groupMap = new HashMap<>();
-
         listUser.forEach(user -> {
             if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
             else
@@ -141,11 +140,14 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Transactional
     @Scheduled(cron = "0 7 10 05 * ?") // setiap tanggal 7 disetiap bulan jam 10 : 05
     public void schedulerReminder() throws MessagingException {
-        List<User> listUser = userRepository.findAll();
+        List<User> listUser = userRepository.findAllByActive(true);
         sseMvcExecutor.execute(() -> {//pisahThread
             for(User user:listUser){
                 try {
-                    emailService.periodicMailReminderSender(user.getEmail());
+                    if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
+                    else{
+                     emailService.periodicMailReminderSender(user.getEmail());
+                    }
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
@@ -157,11 +159,14 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Transactional
     @Scheduled(cron = "0 31 10 05 * ?") // setiap tanggal 31 disetiap bulan jam 10 : 05
     public void monthlyCashStatement() throws MessagingException {
-        List<User> listUser = userRepository.findAll();
+        List<User> listUser = userRepository.findAllByActive(true);
         sseMvcExecutor.execute(() -> {//pisahThread
             for(User user:listUser){
                 try {
-                    emailService.monthlyCashStatement(user.getEmail());
+                    if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
+                    else{
+                     emailService.monthlyCashStatement(user.getEmail());
+                    }
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
