@@ -60,7 +60,6 @@
                 </td>
                 </tr>
                 <div v-show="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
-
             </tbody>
           </table>
         </div>
@@ -108,11 +107,13 @@
         groupCreated:{},
         filter:'period',
         options:['name','group','period'],
+        groupOnly:false
       }
     },
 
     created() {
       this.searchData(0)
+      this.showAll = this.$myRole === 'SUPER_ADMIN'
       this.monthList=["January","February","March","April","May","June","July","August","September","October","November","December"]
       this.groupCreated.month=new Date(parseInt(localStorage.groupCreatedDate)).getMonth()
       this.groupCreated.year=new Date(parseInt(localStorage.groupCreatedDate)).getFullYear()
@@ -134,7 +135,7 @@
     methods: {
       searchData(page){
         this.loading=true
-        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {              
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&membersOnly=${this.showAll}&page=${page}`, {              
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }
@@ -168,7 +169,7 @@
       getMembersData(page) {
         this.loading=true
         // fetch(`${Helper.backEndAddress}/api/group/membersByEmail?email=${localStorage.getItem('userEmail')}&page=${page}&filter=${'totalPeriodPayed'}`, {
-        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&page=${page}`, {              
+        fetch(`${Helper.backEndAddress}/api/user/search?query=${this.filter}:${this.searchQuery}&membersOnly=${this.showAll}&page=${page}`, {              
           headers: {
             Authorization: localStorage.getItem('accessToken')
           }

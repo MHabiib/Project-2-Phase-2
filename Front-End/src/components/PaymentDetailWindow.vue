@@ -73,12 +73,10 @@
 
 <script>
   import Helper from '../../Helper';
-  import VueResponsiveImage from 'vue-responsive-image';
   import ZoomOnHover from '../components/zoomOnHover';
 
   export default {
     components:{
-      'VueResponsiveImage':VueResponsiveImage,
       'ZoomOnHover':ZoomOnHover,
     },
     props: ['payment'],
