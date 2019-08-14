@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,8 @@ public class GroupServiceImplTest {
         group = new Group();
         group.setName("Breakthrough");
         group.setIdGroup(GROUP_ID);
-//        group.setTotalExpense((double) 1000000);
-        group.setClosedDate(null);
+        group.setCurrentPeriod(1);
+        group.setClosedDate(null);;
         group.setRegularPayment((double) 10000);
         group.setGroupBalance((double) 50000000);
         group.setActive(true);
@@ -54,6 +55,8 @@ public class GroupServiceImplTest {
         user=new User();
         user.setIdUser(USER_ID);
         user.setGroupName("Breakthrough");
+
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -88,27 +91,29 @@ public class GroupServiceImplTest {
 
     @Test
     public void createGroup() {
-        Group group = new Group();
-        group.setName("NotSameName");
+        Group groupTest = new Group();
+        groupTest.setName("NotSameName");
+        groupTest.setCurrentPeriod(1);
 
-        doReturn(group).when(groupRepository).findByName(this.group.getName());
-        doReturn(group).when(groupRepository).save(group);
+        doReturn(group).when(groupRepository).findByName(groupTest.getName());
+        doReturn(group).when(groupRepository).save(groupTest);
 
-        ResponseEntity<?> result = groupService.createGroup(group);
+        ResponseEntity<?> result = groupService.createGroup(groupTest);
 
-        Mockito.verify(groupRepository,Mockito.times(1)).save(group);
+        Mockito.verify(groupRepository,Mockito.times(1)).save(groupTest);
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
     public void createGroupWithSameName() {
-        Group group = new Group();
-        group.setName("Breakthrough");
+        Group groupTest = new Group();
+        groupTest.setName("Breakthrough");
+        groupTest.setCurrentPeriod(1);
 
-        doReturn(group).when(groupRepository).findByName(this.group.getName());
+        doReturn(group).when(groupRepository).findByNameAndActive(groupTest.getName(),true);
         //doReturn(group).when(groupRepository).save(group);
 
-        ResponseEntity<?> result = groupService.createGroup(group);
+        ResponseEntity<?> result = groupService.createGroup(groupTest);
 
 //        Assert.assertNull(result);
         Mockito.verify(groupRepository, Mockito.times(1)).findByName(Mockito.anyString());

@@ -80,6 +80,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (expenseExist != null)
             return new ResponseEntity<>("Failed to request Expense!\nTitle already exists!", HttpStatus.BAD_REQUEST);*/
         User userExist = userRepository.findByEmail(expense.getRequester());
+        if (userExist == null)
+            return new ResponseEntity<>("404 :\nUser not Found!", HttpStatus.NOT_FOUND);
         Group groupExist = groupRepository.findByName(userExist.getGroupName());
         if (groupExist == null)
             return new ResponseEntity<>("404 :\nGroup not Found!", HttpStatus.NOT_FOUND);

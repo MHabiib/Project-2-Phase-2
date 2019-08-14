@@ -85,7 +85,7 @@ public class UserServiceImplTest extends AbstractTestNGSpringContextTests {
 
         List<User> found =userRepository.findAll();
 
-        assertThat(found.get(0).getName()).isEqualTo("Admin");
+        assertThat(found.get(0).getName()).isEqualTo("Super Admin JYP");
 
      /*   Mockito.when(userRepository.findAll()).thenReturn(users);
 

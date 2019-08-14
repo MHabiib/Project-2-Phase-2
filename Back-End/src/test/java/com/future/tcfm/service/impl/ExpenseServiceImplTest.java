@@ -3,6 +3,7 @@ package com.future.tcfm.service.impl;
 import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.User;
 import com.future.tcfm.repository.ExpenseRepository;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -29,6 +30,9 @@ public class ExpenseServiceImplTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    GroupRepository groupRepository;
 
     @InjectMocks
     ExpenseServiceImpl expenseService;
