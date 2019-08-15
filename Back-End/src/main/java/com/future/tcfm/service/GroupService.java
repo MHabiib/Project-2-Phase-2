@@ -14,7 +14,7 @@ public interface GroupService {
     Page<User> findMembersGroupByEmail(String email,String filter,int year, int page, int size);
 
     ResponseEntity createGroup(Group group);
-    ResponseEntity updateGroup(String id,Group group);
+    ResponseEntity updateGroup(String id,Group group) throws MessagingException;
     List<User> membersGroup(String groupName);
     List<User> membersGroupByEmail(String email);
 

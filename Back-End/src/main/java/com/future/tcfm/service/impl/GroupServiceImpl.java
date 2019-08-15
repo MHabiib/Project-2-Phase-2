@@ -114,9 +114,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public ResponseEntity updateGroup(String id, Group group) {
+    public ResponseEntity updateGroup(String id, Group group) throws MessagingException {
         Group groupExist = groupRepository.findByIdGroup(id);
-        List<User> userList;
+        List<User> userList= new ArrayList<>();
         List<Expense> expenseList;
         if (groupExist == null)
             return new ResponseEntity<>("Failed to update group!\nGroupId not found!", HttpStatus.NOT_FOUND);
@@ -128,8 +128,13 @@ public class GroupServiceImpl implements GroupService {
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
                 userRepository.save(newAdmin);
+                userList.add((User) userRepository.findByGroupNameAndActive(newAdmin.getGroupName(),true));
+                for(User sendTo:userList){
+                    emailService.emailNotification(newAdmin.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
+                }
                 notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
-                notificationService.createNotification("Congrats! you have been promoted to Group Admin!", newAdmin.getEmail(),null, TYPE_PERSONAL);
+                emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",newAdmin.getEmail());
+                notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
             }
             if(!groupExist.getGroupAdmin().equalsIgnoreCase("")){
                 User oldAdmin = userRepository.findByEmail(groupExist.getGroupAdmin());//gk pakai active karena bisa saja admin lama udh resign

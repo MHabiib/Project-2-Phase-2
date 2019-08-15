@@ -34,10 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,7 +156,8 @@ public class UserServiceImpl implements UserService {
      * @param user // new user data from request
      * @return
      */
-    private void updateGroupAdmin(String newGroupAdmin,User userExist, User user){
+    private void updateGroupAdmin(String newGroupAdmin,User userExist, User user) throws MessagingException {
+        List<User> listUserGroup = new ArrayList<>();
         if(!newGroupAdmin.equalsIgnoreCase("")) { // set admin baru jika admin lama pindah role jadi member
             User newAdmin = userRepository.findByEmailAndActive(newGroupAdmin, true);
             if (newAdmin == null) {
@@ -173,8 +171,12 @@ public class UserServiceImpl implements UserService {
             oldGroup.setGroupAdmin(newGroupAdmin);
             groupRepository.save(oldGroup);
 //            userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
-
+            listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
+            for(User sendTo:listUserGroup){
+                emailService.emailNotification(newAdmin.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
+            }
             notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
+            emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",newAdmin.getEmail());
             notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
         }
     }
@@ -186,7 +188,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public ResponseEntity manageUser(String id, User user, String newGroupAdmin){
+    public ResponseEntity manageUser(String id, User user, String newGroupAdmin) throws MessagingException {
+        List<User> listUserGroup = new ArrayList<>();
         User userExist = userRepository.findByIdUser(id);
         Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true); // new group
         Map<String,String> responseMap = new HashMap();
@@ -236,9 +239,14 @@ public class UserServiceImpl implements UserService {
                 }
                 groupExist.setGroupAdmin(user.getEmail());
                 groupRepository.save(groupExist);
-                notificationService.createNotification(userExist.getName()+" just been promoted to be the new group admin!",null,userExist.getGroupName(),TYPE_GROUP);
-                notificationService.createNotification("Congrats! you have been promoted to be the new group admin.",userExist.getEmail(),userExist.getGroupName(),TYPE_PERSONAL);
-             }
+                listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
+                for(User sendTo:listUserGroup){
+                    emailService.emailNotification(userExist.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
+                }
+                notificationService.createNotification(userExist.getName() + " just been promoted to Group Admin!", null, userExist.getGroupName(), TYPE_GROUP);
+                emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",userExist.getEmail());
+                notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", userExist.getEmail(), null, TYPE_PERSONAL);
+            }
         }
 
         userExist.setRole(user.getRole());
@@ -292,7 +300,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException {
+    public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException, MessagingException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);
         System.out.println(user);
         User userExist = userRepository.findByEmail(user.getEmail());
@@ -343,7 +351,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         notifMessage= user.getName()+USER_JOINED_GROUP;
         notificationService.createNotification(notifMessage,user.getEmail(),user.getGroupName(),TYPE_GROUP);
-
+        emailService.emailNotification(notifMessage,user.getEmail());
         return new ResponseEntity<>("Succeed to create user!",HttpStatus.OK);
     }
 

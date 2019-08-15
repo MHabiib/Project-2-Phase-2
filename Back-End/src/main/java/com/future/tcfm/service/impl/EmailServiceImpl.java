@@ -118,7 +118,9 @@ public class EmailServiceImpl implements EmailService {
         helper.setText("<html><body>" +
                 "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
                 "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>"+messages+"<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team - Blibli.com</p></td></tr></body></html>",true);
-
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("Halo "+name+"<br><br>"+messages);
+        System.out.println("-------------------------------------------------------------------------");
         //this.emailSender.send(message);
     }
 
@@ -144,7 +146,7 @@ public class EmailServiceImpl implements EmailService {
             }
         }
         else{
-            expenseListStr="\"Ooopss!!! Group anda belum ada kontribusi :C\"";
+            expenseListStr="\"Ooopss!!! Group anda belum ada kontribusi :(\"";
         }
 
         MimeMessage message = emailSender.createMimeMessage();
@@ -188,7 +190,7 @@ public class EmailServiceImpl implements EmailService {
                 }
             }
             else{
-                expenseListStr="\"Ooopss!!! anda belum ada kontribusi dalam group ini :C\"";
+                expenseListStr="\"Ooopss!!! anda belum ada kontribusi dalam group ini :(\"";
             }
 
             MimeMessage message = emailSender.createMimeMessage();

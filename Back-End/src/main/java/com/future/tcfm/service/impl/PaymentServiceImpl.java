@@ -190,6 +190,7 @@ public class PaymentServiceImpl implements PaymentService {
         paymentExist.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(paymentExist);
         notificationService.createNotification(notificationMessage,paymentExist.getEmail(),null,TYPE_PERSONAL);
+        emailService.emailNotification(notificationMessage,paymentExist.getEmail());
         executor.execute(() -> {
             try {
                 emailService.emailNotification(notificationMessage, paymentExist.getEmail());//pengiriman email untuk user yang berkontribusi
