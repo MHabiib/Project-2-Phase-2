@@ -49,7 +49,7 @@ public class GroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) {
+    public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) throws MessagingException {
         return groupService.updateGroup(id,group);
     }
     @GetMapping("/search")

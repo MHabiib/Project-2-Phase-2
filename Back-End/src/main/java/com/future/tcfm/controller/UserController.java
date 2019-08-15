@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity create(
             @Nullable @RequestPart("file") MultipartFile file,
             @RequestPart("user") String userJSONString
-    ) throws IOException {
+    ) throws IOException, MessagingException {
         return userService.createUserV2(userJSONString, file);
     }
 
@@ -68,7 +68,7 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody User user,
             @RequestParam(value = "newGroupAdmin",defaultValue = "") String newGroupAdmin
-    ) throws IOException {
+    ) throws IOException, MessagingException {
         return userService.manageUser(id, user,newGroupAdmin);
     }
 

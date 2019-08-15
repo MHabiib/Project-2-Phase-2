@@ -91,11 +91,14 @@ public class SchedulerServiceImpl implements SchedulerService {
                     yearChecker=(monthNow-monthChecker)/12;
                     monthNow=monthChecker;
                     yearNow+=yearChecker;
+                    if(monthNow==0){
+                        monthNow+=12;
+                        yearNow-=1;
+                    }
                 }
 
                 yearBefore=yearNow;
                 monthBefore= monthNow;
-
                 String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
                 user.setPeriodeTertinggal(user.getPeriodeTertinggal()+1);
                 if (user.getPeriodeTertinggal() > 0) { //jika true berarti user belum membayar iuran
@@ -118,7 +121,10 @@ public class SchedulerServiceImpl implements SchedulerService {
 //                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
                     notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
-                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
+                        if (user.getPeriodeTertinggal()==1)
+                            emailService.periodicMailSender(user.getEmail(), "THISMONTH",yearBefore,monthNowStr,yearNow);
+                        else
+                            emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }

@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class GroupServiceImplTest {
     }
 
     @Test
-    public void updateGroup() {
+    public void updateGroup() throws MessagingException {
         Group group = new Group();
         group.setName("BOOM BOOM");
 
@@ -133,7 +134,7 @@ public class GroupServiceImplTest {
     }
 
     @Test
-    public void updateGroupIdNotFound() {
+    public void updateGroupIdNotFound() throws MessagingException {
 
         Group group = new Group();
         group.setName("BOOM BOOM");
