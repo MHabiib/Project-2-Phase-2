@@ -7,8 +7,8 @@
 
       <form @submit="loginHandler">
         <div class="loginBody">
-          <input type="email" name="email" placeholder="Email" v-model="emailInput" /><br />
-          <input type="password" name="password" placeholder="Password" v-model="passwordInput" /><br />
+          <input type="email" name="email" placeholder="Email" v-model="email" /><br />
+          <input type="password" name="password" placeholder="Password" v-model="password" /><br />
           <button @click.prevent="loginHandler">Go</button>
         </div>
       </form>
@@ -23,37 +23,45 @@
   export default {
     data: function() {
       return {
-        emailInput: '',
-        passwordInput: ''
+        email: '',
+        password: '',
+        message: '',
+        response:{},
       }
     },
     methods: {
       loginHandler() {
+        if(this.email === '' || this.password === ''){
+          this.message = 'Please input email/password.'
+          alert(this.message)
+          return;
+        }
+
         let dataLogin = {
-          email: this.emailInput,
-          password: this.passwordInput
+          email: this.email,
+          password: this.password
         };
 
         this.axios
           .post(`${Helper.backEndAddress}/auth/signin`, dataLogin)
           .then(res => {
-            console.log(res);
+            this.response = res;
+            console.log(this.response)
             // this.$store.dispatch("login", res.data);
             localStorage.setItem('accessToken', `Token ${res.data.accessToken}`);
             localStorage.setItem('refreshToken', res.data.refreshToken);
-            localStorage.setItem('userEmail', this.emailInput);
+            localStorage.setItem('userEmail', this.email);
             localStorage.setItem('groupName', res.data.groupName);
             localStorage.setItem('role', res.data.role);
             localStorage.setItem('groupCreatedDate', parseInt(res.data.groupCreatedDate));
             localStorage.setItem('imageURL', res.data.imageURL)
             this.$store.dispatch('setUser',res.data.currentUser)
-            alert('Welcome '+ this.$store.getters.user.name)
+            this.message='Welcome '+ this.$store.getters.user.name
+            alert(this.message)
+            
           })
           .then(()=> {
-            // alert('Login Berhasil');
             this.$router.push('/dashboard');
-            
-            // this.$router.push('/tugasweb');// hanya sebuah tugas web (coba-coba punya) #abaikanSaja
           })
           .catch(err => {alert(`Catch an error: ${err}`)})
       }

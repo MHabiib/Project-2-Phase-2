@@ -107,7 +107,8 @@
         groupCreated:{},
         filter:'period',
         options:['name','group','period'],
-        groupOnly:false
+        groupOnly:false,
+        showAll:false
       }
     },
 

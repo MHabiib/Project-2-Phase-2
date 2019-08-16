@@ -195,6 +195,7 @@
         groupCreated:{},
         lastExpense:{},
         isLastAvailable :false,
+        email:localStorage.getItem('userEmail')
       }
     },
     computed: {
@@ -254,7 +255,7 @@
         this.monthNotYetPaid=(this.monthPaid.splice(result))
       },
       getDashboardData() {
-        fetch(`${Helper.backEndAddress}/api/dashboard?email=${localStorage.getItem('userEmail')}`, {
+        fetch(`${Helper.backEndAddress}/api/dashboard?email=${this.email}`, {
           headers: {
             'Authorization': localStorage.getItem('accessToken')
           }

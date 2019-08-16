@@ -14,13 +14,10 @@
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
     },
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/"
-    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "<rootDir>/src/components/*.{vue}",
-      "<rootDir>/src/pages/*.{vue}",
+      "<rootDir>/src/page/*.{vue}",
       "!*/node_modules/*"
     ],
     "coverageDirectory": "test/coverage",
@@ -28,17 +25,20 @@
       "lcov",
       "text"
     ],
+    "testMatch": [
+      "<rootDir>/test/specs/**/*.spec.(js)"
+    ],
     "testURL": "http://localhost/"
   },
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Habib <mhabibofficial@yahoo.com>",
+  "author": "Testing <testing@yahoo.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "node build/build.js",
-    "unit": "jest"
+    "unit": "jest --coverage --no-cache"
   },
   "dependencies": {
     "axios": "^0.18.1",
@@ -54,15 +54,19 @@
     "@babel/preset-env": "^7.5.5",
     "@vue/test-utils": "^1.0.0-beta.24",
     "autoprefixer": "^7.1.2",
-    "babel-core": "^6.22.1",
+    "axios-mock-adapter": "^1.17.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.2",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-jest": "^22.4.4",
     "babel-loader": "^7.1.1",
+    "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.22.0",
+    "babel-register": "^6.26.0",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
@@ -71,7 +75,9 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^23.4.2",
+    "jest-mock-axios": "^3.1.0",
     "jest-transform-stub": "^2.0.0",
+    "moxios": "^0.4.0",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
@@ -103,5 +109,46 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "> 1%",
+              "last 2 versions",
+              "not ie <= 8",
+              "Chrome >= 41"
+            ]
+          },
+          "modules": false
+        }
+      ],
+      "stage-2"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "dynamic-import-node"
+        ],
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "browsers": [
+                  "> 1%",
+                  "last 2 versions",
+                  "not ie <= 8",
+                  "Chrome >= 41"
+                ]
+              }
+            }
+          ]
+        ]
+      }
+    }
+  }
 }

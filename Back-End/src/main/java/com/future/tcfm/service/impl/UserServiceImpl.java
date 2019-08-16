@@ -239,10 +239,10 @@ public class UserServiceImpl implements UserService {
                 }
                 groupExist.setGroupAdmin(user.getEmail());
                 groupRepository.save(groupExist);
-                listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
-                for(User sendTo:listUserGroup){
-                    emailService.emailNotification(userExist.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
-                }
+//                listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
+//                for(User sendTo:listUserGroup){
+//                    emailService.emailNotification(userExist.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
+//                }
                 notificationService.createNotification(userExist.getName() + " just been promoted to Group Admin!", null, userExist.getGroupName(), TYPE_GROUP);
                 emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",userExist.getEmail());
                 notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", userExist.getEmail(), null, TYPE_PERSONAL);

@@ -35,11 +35,11 @@
           </div>
           <div>
             <div class="labelInput" >
-              <label for="emailInput">Email</label>
+              <label for="emailInput" >Email</label>
             </div>
-            <div class="valueInput">
+            <div  class="valueInput">
               <div v-if="add==false" v-show="edit==false" class="value">: {{userDetail.email}} </div>
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Email' v-model='newUserDetail.email'/>
+              <input v-if="edit && add" class='singleLineInput' type="text" placeholder='Email' v-model='newUserDetail.email'/>
             </div>
           </div>
           <div>
@@ -426,7 +426,7 @@
               return
             }
           }
-          if(this.newUserDetail.groupName!==this.userDetail.groupName && this.groupMemberList.length==0){
+          if(this.userDetail.groupName !== 'GROUP_LESS' && this.newUserDetail.groupName!==this.userDetail.groupName && this.groupMemberList.length==0){
             if(confirm(`Are you sure to change this user's  group? *this action will disband group ${this.userDetail.groupName} because ${this.userDetail.groupName} will have 0 member`)) {
               this.disbandPreviousGroup()
             }
