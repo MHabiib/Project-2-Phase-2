@@ -59,15 +59,17 @@ public class OverviewServiceImpl implements OverviewService {
     }
 
     private String getPercentageTotalCashUsed(Group groupExist, int totalMembers){
+/*
         long selisihBulanDalamMs = System.currentTimeMillis()-groupExist.getCreatedDate();
         int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
         double saldoSekarangSeharusnya = selisihBulan*groupExist.getRegularPayment()*totalMembers;
 
+*/
 
 
-        double result = groupExist.getBalanceUsed()/saldoSekarangSeharusnya;
+        double result = groupExist.getBalanceUsed()/groupExist.getGroupBalance();
 //test
-        DecimalFormat df=new DecimalFormat("##");
+        DecimalFormat df=new DecimalFormat("##.##");
         return df.format(result*100);
         //return Double.parseDouble(new DecimalFormat("##.##").format(result))*100;
     }

@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MongoTemplate mongoTemplate;
     private String notifMessage;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository=userRepository;
+    }
+
     @Override
     public List<User> loadAll() {
         return userRepository.findAll();
@@ -171,10 +176,6 @@ public class UserServiceImpl implements UserService {
             oldGroup.setGroupAdmin(newGroupAdmin);
             groupRepository.save(oldGroup);
 //            userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
-            listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
-            for(User sendTo:listUserGroup){
-                emailService.emailNotification(newAdmin.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
-            }
             notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
             emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",newAdmin.getEmail());
             notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
@@ -239,10 +240,6 @@ public class UserServiceImpl implements UserService {
                 }
                 groupExist.setGroupAdmin(user.getEmail());
                 groupRepository.save(groupExist);
-//                listUserGroup.add((User) userRepository.findByGroupNameAndActive(userExist.getGroupName(),true));
-//                for(User sendTo:listUserGroup){
-//                    emailService.emailNotification(userExist.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
-//                }
                 notificationService.createNotification(userExist.getName() + " just been promoted to Group Admin!", null, userExist.getGroupName(), TYPE_GROUP);
                 emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",userExist.getEmail());
                 notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", userExist.getEmail(), null, TYPE_PERSONAL);

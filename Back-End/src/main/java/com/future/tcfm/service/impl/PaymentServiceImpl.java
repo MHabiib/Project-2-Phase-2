@@ -73,11 +73,16 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     String notificationMessage;
+
+    public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this.paymentRepository=paymentRepository;
+    }
+
     @Override
     public ResponseEntity createPayment(String paymentJSONString, MultipartFile file) throws IOException, MessagingException {
         Payment payment  = new ObjectMapper().readValue(paymentJSONString, Payment.class);
         System.out.print("Isi payment:");
-        System.out.print(payment);
+        System.out.println(payment);
         User userExist = userRepository.findByEmail(payment.getEmail());
         Group groupExist = groupRepository.findByName(userExist.getGroupName());
 
