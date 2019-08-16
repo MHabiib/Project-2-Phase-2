@@ -19,6 +19,7 @@
 <script>
   document.title = 'Login | Team Cash Flow Management';
   import Helper from '../../Helper';
+  import axios from 'axios';
 
   export default {
     data: function() {
@@ -42,7 +43,7 @@
           password: this.password
         };
 
-        this.axios
+        axios
           .post(`${Helper.backEndAddress}/auth/signin`, dataLogin)
           .then(res => {
             this.response = res;

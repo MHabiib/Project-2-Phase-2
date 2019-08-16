@@ -303,14 +303,14 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity createUserV2(String userJSONString, MultipartFile file) throws IOException, MessagingException {
         User user  = new ObjectMapper().readValue(userJSONString, User.class);
         System.out.println(user);
-        User userExist = userRepository.findByEmail(user.getEmail());
-        Group groupExist = groupRepository.findByName(user.getGroupName());
+        User userExist = userRepository.findByEmailAndActive(user.getEmail(),true);
+        Group groupExist = groupRepository.findByNameAndActive(user.getGroupName(),true);
         if(userExist!=null){
             return new ResponseEntity("Username/password already existed!", HttpStatus.BAD_REQUEST);
         }
         if (groupExist == null){
             groupExist = new Group();
-            groupExist.setCurrentPeriod(0);
+            groupExist.setCurrentPeriod(1);
             groupExist.setRegularPayment((double)0);
             user.setGroupName("GROUP_LESS");
 //            return new ResponseEntity<>("Failed to save User!\nGroup doesn't exists!", HttpStatus.BAD_REQUEST);

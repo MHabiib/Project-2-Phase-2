@@ -65,6 +65,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                             .name(user.getGroupName())
                             .balanceUsed(0.0)
                             .createdDate(System.currentTimeMillis())
+                            .lastModifiedAt(System.currentTimeMillis())
                             .groupBalance(0.0)
                             .bankAccountNumber("")
                             .bankAccountName("")
