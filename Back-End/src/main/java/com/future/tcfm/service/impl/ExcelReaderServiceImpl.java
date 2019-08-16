@@ -34,7 +34,6 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
 
     @Override
     @Transactional
-    @Async
     public Boolean saveFile(MultipartFile file) {
         try {
             List<Group> groupList = groupRepository.findAllByActive(true);
@@ -142,7 +141,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
             Sheet sheet = workbook.getSheet("User");
             Iterator<Row> rows = sheet.iterator();
             List<User> userList = new ArrayList<>();
-            executor.execute(() -> {
+//            executor.execute(() -> {
                         while (rows.hasNext()) {
                             Row currentRow = rows.next();
                             System.out.println("Reading row-"+currentRow.getRowNum());
@@ -182,7 +181,7 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
                             user.setImageURL("");
                             userList.add(user);
                         }
-                    });
+//                    });
             // Close WorkBook
             workbook.close();
             return userList;
