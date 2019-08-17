@@ -367,7 +367,7 @@ public class UserServiceImpl implements UserService {
             responseMap.put("message","Error : This user has balance < 0");
             return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if(userExist.getRole().equalsIgnoreCase("GROUP_ADMIN")){
+        if(userExist.getRole().equalsIgnoreCase("GROUP_ADMIN") && !userExist.getGroupName().equalsIgnoreCase("GROUP_LESS")){
             responseMap.put("message","Please set a new Group Admin before resign.");
             return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
         }
