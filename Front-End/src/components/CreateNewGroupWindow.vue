@@ -55,7 +55,7 @@
             </div>
             <div class="valueInput">
               <div v-if="add==false" v-show="edit==false" class="value">: {{groupDetail.bankAccountNumber}} </div>
-              <input v-if="edit" class='singleLineInput' type="text" placeholder='Group Bank Account' v-model='newGroupDetail.bankAccountNumber'/>
+              <input v-if="edit" class='singleLineInput' type="text" placeholder='Group Bank Account' v-model='newGroupDetail.bankAccountNumber'  @keypress="checkChar"/>
             </div>
           </div>
           <div>
@@ -72,7 +72,7 @@
               <label  for="namaInput">Regular Payment</label>
             </div>
             <div class="valueInput">
-              <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{groupDetail.regularPayment | thousandSeparators}}</div>
+              <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{ groupDetail.regularPayment | thousandSeparators}}}</div>
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Regular Payment' v-model='newGroupDetail.regularPayment' @keypress="checkChar"/>
             </div>
           </div>
@@ -148,22 +148,26 @@
       this.add = this.addMode
       this.newGroupDetail = Object.assign({},this.groupDetail)
       this.getMember()
-      // this.getGroupData(this.groupId)
     },
 
     methods: {
       validateInput(){
-        if(this.newGroupDetail.name === '') {
+        if(this.newGroupDetail.name === '' || this.newGroupDetail.name == null) {
           alert('Group name can\'t be null.')
           return false
-        } else if(this.newGroupDetail.groupCurrentPeriod === '') {
-            this.newGroupDetail.groupCurrentPeriod=1
-        } else if(this.newGroupDetail.bankAccountNumber === '') {
-          alert('Harap masukkan nomor handphone user')
+        }  else if(this.newGroupDetail.bankAccountNumber === '' || this.newGroupDetail.bankAccountNumber == null) {
+          alert('Please insert a valid group\'s bank account number')
           return false
-        } 
-        return true
-        // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
+        } else {
+          if(this.newGroupDetail.groupCurrentPeriod === '' || this.newGroupDetail.groupCurrentPeriod == null) {
+              this.newGroupDetail.groupCurrentPeriod=1
+          } if(this.newGroupDetail.groupBalance === '' || this.newGroupDetail.groupBalance == null) {
+              this.newGroupDetail.groupBalance=0.0
+          } if(this.newGroupDetail.regularPayment === '' || this.newGroupDetail.regularPayment == null) {
+              this.newGroupDetail.regularPayment=0.0
+          }
+            return true
+          }
       },
       updateGroup(jsonBody){
         fetch(`${Helper.backEndAddress}/api/group/${this.newGroupDetail.idGroup}`,{
@@ -233,18 +237,24 @@
               Helper.getNewToken(this.createNewGroup.bind(null,jsonBody))
             } else {
                 localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-                response.json().then(
-                  res => {
-                    this.newGroupDetail = res;
-                    alert('group created!')
-                    this.$emit('updateGroupDetailWindow');
-                  }
-                )
+                if(response.ok){
+                  response.json().then(
+                    res => {
+                      this.newGroupDetail = res;
+                      alert('group created!')
+                      this.$emit('updateGroupDetailWindow');
+                    }
+                  )
+                }
+                else{
+                  alert(`Oops! Something wrong happened (${response.status}).`)
+                }
             }
         })
       },
       closeGroupDetailWindow() {
         if(this.edit==false) { this.$emit('closeGroupDetailWindow'); return}
+        if(!this.validateInput()) return;
         let jsonBody = JSON.stringify(this.newGroupDetail);
         if(this.add==true){
           this.createNewGroup(jsonBody);return

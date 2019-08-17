@@ -6,7 +6,7 @@
       </div>
 
       <div class="menuContainer">
-        <div class="menuParent" :class='{ activeMenu: isDashboard }'>
+        <div class="menuParent dashBoard" :class='{ activeMenu: isDashboard }'>
           <div v-show="isDashboard" class='littleBlue'></div>
           <div class="menuWrapper" @click="changeView('/dashboard')">
             <img src="../assets/dashboard-icon.png" alt="Dashboard" class='menuIcon'>
@@ -91,7 +91,7 @@
 
         </div>
 
-        <div class="menuParent" v-if='isAdmin'>
+        <div class="menuParent management" v-if='isAdmin'>
           <div class="menuWrapper" @click="managementExpand = !managementExpand">
             <img src="../assets/management-icon.png" alt="Dashboard" class='menuIcon'>
             Management

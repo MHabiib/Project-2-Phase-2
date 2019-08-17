@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components/Sidebar.vue renders correctly 1`] = `
+<div
+  class="sidebarComponent"
+>
+  <div>
+    <div
+      class="logoBlibli"
+    >
+      <img
+        alt="Logo Blibli"
+        class="logoBlibli"
+        src="../assets/logo-blibli.png"
+      />
+    </div>
+     
+    <div
+      class="menuContainer"
+    >
+      <div
+        class="menuParent dashBoard"
+      >
+        <div
+          class="littleBlue"
+          style="display: none;"
+        />
+         
+        <div
+          class="menuWrapper"
+        >
+          <img
+            alt="Dashboard"
+            class="menuIcon"
+            src="../assets/dashboard-icon.png"
+          />
+          
+          Dashboard
+        
+        </div>
+      </div>
+       
+      <div
+        class="menuParent"
+      >
+        <div
+          class="menuWrapper"
+        >
+          <img
+            alt="Dashboard"
+            class="menuIcon"
+            src="../assets/detail-icon.png"
+          />
+          
+          Group Detail
+        
+        </div>
+         
+        <div
+          class="spacer"
+        />
+         
+        <div
+          class="menuChild"
+        >
+          <div
+            class=""
+          />
+           
+          <div
+            class="menuChildText"
+          >
+            Overview
+          </div>
+           
+          <div />
+        </div>
+         
+        <div
+          class="menuChild"
+        >
+          <div
+            class=""
+          />
+           
+          <div
+            class="menuChildText"
+          >
+            Expenses
+          </div>
+           
+          <div />
+        </div>
+         
+        <div
+          class="menuChild"
+        >
+          <div
+            class=""
+          />
+           
+          <div
+            class="menuChildText"
+          >
+            Members
+          </div>
+           
+          <div />
+        </div>
+      </div>
+       
+      <div
+        class="menuParent"
+      >
+        <div
+          class="littleBlue"
+          style="display: none;"
+        />
+         
+        <div
+          class="menuWrapper"
+        >
+          <img
+            alt="Dashboard"
+            class="menuIcon"
+            src="../assets/invoice-icon.png"
+          />
+          
+          Payment
+        
+        </div>
+         
+        <div
+          class="spacer"
+        />
+         
+        <div
+          class="menuChild"
+        >
+          <div
+            class=""
+          />
+           
+          <div
+            class="menuChildText"
+          >
+            History
+          </div>
+           
+          <div />
+        </div>
+         
+        <div
+          class="menuChild"
+        >
+          <div
+            class=""
+          />
+           
+          <div
+            class="menuChildText"
+          >
+            Manage
+          </div>
+           
+          <div />
+        </div>
+      </div>
+       
+      <!---->
+    </div>
+  </div>
+   
+  <div
+    class="logoutButton"
+  >
+    
+    Logout
+  
+  </div>
+</div>
+`;

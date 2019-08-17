@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db18e852-c823-4ad9-b94e-d6a4dfb97e62" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/src/components/CreateNewGroupWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/components/CreateNewGroupWindow.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/src/page/ManageGroup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/src/page/ManageGroup.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/package-lock.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,7 +37,7 @@
     <session id="662685410">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="117" />
+          <entry key="project.closed" value="118" />
           <entry key="project.open.time.1" value="5" />
           <entry key="project.open.time.12" value="5" />
           <entry key="project.open.time.13" value="5" />
@@ -108,7 +102,7 @@
           <entry key="dummy" value="66" />
           <entry key="java" value="58929" />
           <entry key="properties" value="252" />
-          <entry key="txt" value="3221" />
+          <entry key="txt" value="3237" />
           <entry key="vue" value="1" />
           <entry key="xml" value="42" />
         </counts>
@@ -116,7 +110,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JAVA" value="58929" />
-          <entry key="PLAIN_TEXT" value="3287" />
+          <entry key="PLAIN_TEXT" value="3303" />
           <entry key="Properties" value="252" />
           <entry key="Vue.js" value="1" />
           <entry key="XML" value="42" />
@@ -169,10 +163,16 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="199" column="49" lean-forward="true" selection-start-line="199" selection-start-column="49" selection-end-line="199" selection-end-column="49" />
+            <state relative-caret-position="340">
+              <caret line="212" column="136" lean-forward="true" selection-start-line="212" selection-start-column="136" selection-end-line="212" selection-end-column="136" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#2549#2550#0" expanded="true" />
+                <element signature="e#2599#2600#0" expanded="true" />
+                <element signature="e#2648#2649#0" expanded="true" />
+                <element signature="e#2695#2696#0" expanded="true" />
+                <element signature="e#3037#3038#0" expanded="true" />
+                <element signature="e#3093#3094#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -342,7 +342,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="950" />
     <option name="width" value="980" />
     <option name="height" value="1040" />
@@ -694,14 +694,7 @@
       <workItem from="1565933567511" duration="1603000" />
       <workItem from="1565935231485" duration="19000" />
       <workItem from="1565952990721" duration="34000" />
-      <workItem from="1565953935503" duration="3269000" />
-    </task>
-    <task id="LOCAL-00047" summary="-validation on disband group">
-      <created>1563618043540</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1563618043541</updated>
+      <workItem from="1565953935503" duration="4186000" />
     </task>
     <task id="LOCAL-00048" summary="-Add New User and role validation tested">
       <created>1563622787801</created>
@@ -1039,11 +1032,18 @@
       <option name="project" value="LOCAL" />
       <updated>1565935157226</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="-minor bug fixes">
+      <created>1565957871624</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1565957871625</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="641858000" />
+    <option name="totallyTimeSpent" value="642775000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1069,7 +1069,7 @@
       <window_info id="Web" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4986577" visible="true" weight="0.32551318" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4986577" weight="0.32551318" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35630497" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1105,7 +1105,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-finished search API on payment history" />
     <MESSAGE value="-patch" />
     <MESSAGE value="-Added filter searchBy on searchAPI" />
     <MESSAGE value="-Added interface on expenseSearch" />
@@ -1130,7 +1129,8 @@
     <MESSAGE value="-switched to dev2" />
     <MESSAGE value="-fix bug on payment history" />
     <MESSAGE value="-bug fix on bulk insert" />
-    <option name="LAST_COMMIT_MESSAGE" value="-bug fix on bulk insert" />
+    <MESSAGE value="-minor bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="-minor bug fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1199,25 +1199,25 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>88</line>
+          <line>93</line>
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>91</line>
+          <line>96</line>
           <properties />
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>89</line>
+          <line>94</line>
           <properties />
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>147</line>
+          <line>152</line>
           <properties />
           <option name="timeStamp" value="58" />
         </line-breakpoint>
@@ -1229,7 +1229,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>189</line>
+          <line>194</line>
           <properties />
           <option name="timeStamp" value="62" />
         </line-breakpoint>
@@ -1253,13 +1253,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</url>
-          <line>106</line>
+          <line>111</line>
           <properties />
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</url>
-          <line>109</line>
+          <line>114</line>
           <properties />
           <option name="timeStamp" value="69" />
         </line-breakpoint>
@@ -1289,25 +1289,25 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>153</line>
+          <line>158</line>
           <properties />
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>166</line>
+          <line>171</line>
           <properties />
           <option name="timeStamp" value="99" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>168</line>
+          <line>173</line>
           <properties />
           <option name="timeStamp" value="101" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</url>
-          <line>157</line>
+          <line>162</line>
           <properties />
           <option name="timeStamp" value="103" />
         </line-breakpoint>
@@ -1740,10 +1740,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="199" column="49" lean-forward="true" selection-start-line="199" selection-start-column="49" selection-end-line="199" selection-end-column="49" />
+        <state relative-caret-position="340">
+          <caret line="212" column="136" lean-forward="true" selection-start-line="212" selection-start-column="136" selection-end-line="212" selection-end-column="136" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2549#2550#0" expanded="true" />
+            <element signature="e#2599#2600#0" expanded="true" />
+            <element signature="e#2648#2649#0" expanded="true" />
+            <element signature="e#2695#2696#0" expanded="true" />
+            <element signature="e#3037#3038#0" expanded="true" />
+            <element signature="e#3093#3094#0" expanded="true" />
           </folding>
         </state>
       </provider>

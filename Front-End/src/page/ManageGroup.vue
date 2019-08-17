@@ -57,8 +57,8 @@
                 <td>{{index+1}}.</td>
                 <td>{{group.name}}</td>
                 <td>{{group.groupAdmin}}</td>
-                <td>Rp {{group.groupBalance == null ? 0 : group.groupBalance | thousandSeparators}}</td>
-                <td>Rp {{group.regularPayment == null ? 0 : group.groupBalance| thousandSeparators}}</td>
+                <td>Rp {{group.groupBalance | thousandSeparators}}</td>
+                <td>Rp {{group.regularPayment| thousandSeparators}}</td>
                 <td>{{group.createdDate | dateFormatter}}</td>
 
                 <!-- <td>{{group.active ? "Active" : "Non-Active"}}</td> -->

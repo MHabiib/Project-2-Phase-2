@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for CreateNewGroupWindow.vue</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> CreateNewGroupWindow.vue
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/86</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/45</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/23</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/86</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;template&gt;
+  &lt;div class='fixedPosition'&gt;
+    &lt;div class='createNewGroupWindow'&gt;
+      &lt;div class='createNewGroupWindowSize'&gt;
+        &lt;div class="createNewGroupHeader"&gt;
+          &lt;div&gt;{{this.headerTitle}}&lt;span v-if="add==false"&gt;, Total Members : {{groupMemberList.length}}&lt;/span&gt; &lt;/div&gt;
+          &lt;div class='buttonGroup'&gt;
+            &lt;!-- &lt;div class="closeButton" @click="closeGroupDetailWindow"&gt;Close&lt;/div&gt; --&gt;
+            &lt;div v-if='!edit' class="buttonDisband"  @click="disbandGroup"&gt;Disband Group&lt;/div&gt;
+            &lt;div class="editButton" @click="editGroupDetailWindow"&gt;{{editBtnName}}&lt;/div&gt;
+            &lt;div  class="editButton"  @click="closeGroupDetailWindow"&gt;{{closeBtnName}}&lt;/div&gt;          
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="createNewGroupBody"&gt;
+          &lt;div v-if="add==false"&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label for="namaInput"&gt;Created Date&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div  class="value"&gt;: {{groupDetail.createdDate | dateFormatter}}&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label for="namaInput"&gt;Group Name &lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false" class="value"&gt;: {{groupDetail.name}} &lt;/div&gt;
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Name' v-model='newGroupDetail.name'/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class="myParent"&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label for="namaInput"&gt;Group Admin &lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false" class="value"&gt;: {{groupDetail.groupAdmin}}&lt;/div&gt;
+              &lt;select ref="groupAdmin" v-if="edit" name="selectAdmin" id="selectAdmin" class='selectAdmin' v-model='newGroupDetail.groupAdmin' @change="changeGroupAdmin($event)"&gt;
+                &lt;option  
+                  class='selectAdminOption' value=""&gt;      
+                  No Group Admin            
+                &lt;/option&gt;     
+                &lt;option  
+                  class='selectAdminOption'
+                  v-for='(member,index) in groupMemberList' :key='index'
+                  :value='member.email'&gt;
+                    {{member.name}}
+                &lt;/option&gt;           
+              &lt;/select&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label for="namaInput"&gt;Group Bank Account&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false" class="value"&gt;: {{groupDetail.bankAccountNumber}} &lt;/div&gt;
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Group Bank Account' v-model='newGroupDetail.bankAccountNumber'/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label  for="namaInput"&gt;Group Current Period&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false"  class="value"&gt;: {{groupDetail.currentPeriod}}&lt;/div&gt;
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Current Period (Default: 1)' v-model='newGroupDetail.currentPeriod' @keypress="checkChar"/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label  for="namaInput"&gt;Regular Payment&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false"  class="value"&gt;: Rp {{groupDetail.regularPayment | thousandSeparators}}&lt;/div&gt;
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Regular Payment' v-model='newGroupDetail.regularPayment' @keypress="checkChar"/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label for="namaInput"&gt;Balance &lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false"  v-show="edit==false"  class="value"&gt;: Rp {{groupDetail.groupBalance | thousandSeparators}}&lt;/div&gt;
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Balance' v-model='newGroupDetail.groupBalance'  @keypress="checkChar" required/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;div class="labelInput" &gt;
+              &lt;label  for="namaInput"&gt;Used Balance&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class="valueInput"&gt;
+              &lt;div v-if="add==false" v-show="edit==false"  class="value"&gt;: Rp {{groupDetail.balanceUsed | thousandSeparators}}
+              &lt;/div&gt;            
+              &lt;input v-if="edit" class='singleLineInput' type="text" placeholder='Used Balance' v-model='newGroupDetail.balanceUsed' @keypress="checkChar" required/&gt;
+            &lt;/div&gt;
+            &lt;!-- &lt;div v-if='!edit' class="buttonDisband"  @click="disbandGroup"&gt;Disband Group&lt;/div&gt; --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&nbsp;
+&lt;script&gt;
+<span class="cstat-no" title="statement not covered" >  import Helper from '../../Helper';</span>
+<span class="cstat-no" title="statement not covered" >  import Members from "../page/Members";</span>
+&nbsp;
+  export default {
+    components:{
+    },
+    props: ['groupDetail','editMode','addMode','headerTitle'],
+<span class="fstat-no" title="function not covered" >    data: function() {</span>
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        newGroupDetail: {},
+        groupMemberList:[],
+        disableButton: false,
+        dStatus:null,
+        namaInput:'',
+        filter:'Tzuyu',
+        options: ["Tzuyu","Sana","Jihyo"],
+        loading:false,
+        editButtonNames:{
+          "false":{name:'Edit'},
+          "true":{name:'Cancel'}
+        },
+        closeButtonNames:{
+          "false":{name:'Close'},
+          "true":{name:'Save'}
+        },
+        edit:null,
+        add:null,
+        reg: /^(([^&lt;&gt;()\[\]\\.,;:\s@"]+(\.[^&lt;&gt;()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+      }
+    },
+    computed:{
+<span class="fstat-no" title="function not covered" >      editBtnName: function(){</span>
+<span class="cstat-no" title="statement not covered" >        return this.editButtonNames[this.edit].name</span>
+      },
+<span class="fstat-no" title="function not covered" >      closeBtnName: function(){</span>
+<span class="cstat-no" title="statement not covered" >        return this.closeButtonNames[this.edit].name</span>
+      }
+    },
+<span class="fstat-no" title="function not covered" >    created() {</span>
+<span class="cstat-no" title="statement not covered" >      console.log("Edit Mode : "+this.editMode)</span>
+<span class="cstat-no" title="statement not covered" >      this.edit = this.editMode</span>
+<span class="cstat-no" title="statement not covered" >      this.add = this.addMode</span>
+<span class="cstat-no" title="statement not covered" >      this.newGroupDetail = Object.assign({},this.groupDetail)</span>
+<span class="cstat-no" title="statement not covered" >      this.getMember()</span>
+      // this.getGroupData(this.groupId)
+    },
+&nbsp;
+    methods: {
+<span class="fstat-no" title="function not covered" >      validateInput(){</span>
+<span class="cstat-no" title="statement not covered" >        if(this.newGroupDetail.name === '') {</span>
+<span class="cstat-no" title="statement not covered" >          alert('Group name can\'t be null.')</span>
+<span class="cstat-no" title="statement not covered" >          return false</span>
+<span class="cstat-no" title="statement not covered" >        } else if(this.newGroupDetail.groupCurrentPeriod === '') {</span>
+<span class="cstat-no" title="statement not covered" >            this.newGroupDetail.groupCurrentPeriod=1</span>
+<span class="cstat-no" title="statement not covered" >        } else if(this.newGroupDetail.bankAccountNumber === '') {</span>
+<span class="cstat-no" title="statement not covered" >          alert('Harap masukkan nomor handphone user')</span>
+<span class="cstat-no" title="statement not covered" >          return false</span>
+        } 
+<span class="cstat-no" title="statement not covered" >        return true</span>
+        // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
+      },
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      updateGroup(jsonBody){</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        fetch(`${Helper.backEndAddress}/api/group/${this.newGroupDetail.idGroup}`,{</span></span>
+          headers: {
+            'Content-Type' : 'application/json',
+            Authorization: localStorage.getItem('accessToken')},
+          method:'PUT',
+          body:jsonBody
+        }).then(response =&gt; {
+<span class="cstat-no" title="statement not covered" >            if(response.status==401){</span>
+<span class="cstat-no" title="statement not covered" >              console.log('groupId : '+this.groupId)</span>
+<span class="cstat-no" title="statement not covered" >              Helper.getNewToken(this.updateGroup.bind(null,jsonBody))</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))</span>
+<span class="cstat-no" title="statement not covered" >                if(response.ok){</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                  response.json().then(</span></span>
+                    res =&gt; {
+<span class="cstat-no" title="statement not covered" >                      this.newGroupDetail = res;</span>
+<span class="cstat-no" title="statement not covered" >                      alert('group updated!')</span>
+<span class="cstat-no" title="statement not covered" >                      this.$emit('updateGroupDetailWindow');</span>
+                    }
+                  )
+                }
+            }
+        })
+      },
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      disbandGroup(){</span></span>
+<span class="cstat-no" title="statement not covered" >        if(this.add) return</span>
+<span class="cstat-no" title="statement not covered" >        let isConfirmed = confirm('Are you sure to disband this group?\nDisbanding group can\'t be undo.')</span>
+<span class="cstat-no" title="statement not covered" >        if(!isConfirmed) return;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        fetch(`${Helper.backEndAddress}/api/group/${this.newGroupDetail.idGroup}`,{</span></span>
+          headers: {
+            'Content-Type' : 'application/json',
+            Authorization: localStorage.getItem('accessToken')},
+          method:'DELETE',
+        }).then(response =&gt; {
+<span class="cstat-no" title="statement not covered" >            if(response.status==401){</span>
+<span class="cstat-no" title="statement not covered" >              console.log('groupId : '+this.groupId)</span>
+<span class="cstat-no" title="statement not covered" >              Helper.getNewToken(this.disbandGroup)</span>
+<span class="cstat-no" title="statement not covered" >            } else if(response.ok){</span>
+<span class="cstat-no" title="statement not covered" >              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))</span>
+<span class="cstat-no" title="statement not covered" >              this.$emit('refreshData')</span>
+<span class="cstat-no" title="statement not covered" >              alert(`Group successfuly disbanded.\nAny last information regarding group ${this.newGroupDetail.name} has been sent to every member\'s email.`)</span>
+<span class="cstat-no" title="statement not covered" >            } else if(response.status == 500){</span>
+<span class="cstat-no" title="statement not covered" >              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >              response.json().then(res=&gt;{</span></span>
+<span class="cstat-no" title="statement not covered" >                let message = ''</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                res.forEach((element,index) =&gt; {</span></span>
+                  // message+=index+1+". " +element.name+"\n"
+<span class="cstat-no" title="statement not covered" >                  message+=`${index+1}. ${element.name} (${element.periodeTertinggal} period(s))\n`</span>
+                });
+<span class="cstat-no" title="statement not covered" >                alert(`Failed to disband group, ${res.length} member(s) haven't completed their payment\n${message}`)</span>
+              })
+            }
+        })
+      },
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      createNewGroup(jsonBody){</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        fetch(`${Helper.backEndAddress}/api/group`,{</span></span>
+          headers: {
+            'Content-Type' : 'application/json',
+            Authorization: localStorage.getItem('accessToken')},
+          method:'POST',
+          body:jsonBody
+        }).then(response =&gt; {
+<span class="cstat-no" title="statement not covered" >            if(response.status==401){</span>
+<span class="cstat-no" title="statement not covered" >              console.log('groupId : '+this.groupId)</span>
+<span class="cstat-no" title="statement not covered" >              Helper.getNewToken(this.createNewGroup.bind(null,jsonBody))</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                response.json().then(</span></span>
+                  res =&gt; {
+<span class="cstat-no" title="statement not covered" >                    this.newGroupDetail = res;</span>
+<span class="cstat-no" title="statement not covered" >                    alert('group created!')</span>
+<span class="cstat-no" title="statement not covered" >                    this.$emit('updateGroupDetailWindow');</span>
+                  }
+                )
+            }
+        })
+      },
+<span class="fstat-no" title="function not covered" >      closeGroupDetailWindow() {</span>
+<span class="cstat-no" title="statement not covered" >        if(this.edit==false) { this.$emit('closeGroupDetailWindow'); return}</span>
+<span class="cstat-no" title="statement not covered" >        let jsonBody = JSON.stringify(this.newGroupDetail);</span>
+<span class="cstat-no" title="statement not covered" >        if(this.add==true){</span>
+<span class="cstat-no" title="statement not covered" >          this.createNewGroup(jsonBody);return</span>
+        }
+        else{
+<span class="cstat-no" title="statement not covered" >          let nameChanged = this.newGroupDetail.name != this.groupDetail.name ? true : false </span>
+<span class="cstat-no" title="statement not covered" >          if(nameChanged){</span>
+<span class="cstat-no" title="statement not covered" >            if(!confirm("Changing group name will reset all group's latest activity\nAre you sure to change the group's name?"))            {</span>
+<span class="cstat-no" title="statement not covered" >              return</span>
+            }
+          }
+<span class="cstat-no" title="statement not covered" >          this.updateGroup(jsonBody)</span>
+&nbsp;
+        }//else end here
+      },
+<span class="fstat-no" title="function not covered" >      editGroupDetailWindow() {</span>
+<span class="cstat-no" title="statement not covered" >        if(this.addMode) {this.$emit('closeGroupDetailWindow'); return}</span>
+<span class="cstat-no" title="statement not covered" >        this.edit = !this.edit;</span>
+      },      
+<span class="fstat-no" title="function not covered" >      changeGroupAdmin(e){</span>
+<span class="cstat-no" title="statement not covered" >        this.newGroupDetail.groupAdmin = e.target.value;</span>
+      },
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      getMember() {</span></span>
+<span class="cstat-no" title="statement not covered" >        let gName = this.newGroupDetail.name==undefined ? "GROUP_LESS":this.newGroupDetail.name</span>
+<span class="cstat-no" title="statement not covered" >        console.log("GroupName : "+this.newGroupDetail.name)</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >        fetch(`${Helper.backEndAddress}/api/group/${gName}/members`, {</span></span>
+          headers: {
+            Authorization: localStorage.getItem('accessToken')
+          },
+          method: 'GET'
+        })
+          .then(response =&gt; {
+<span class="cstat-no" title="statement not covered" >            if(response.status==401){</span>
+<span class="cstat-no" title="statement not covered" >              this.groupMemberList=[]</span>
+<span class="cstat-no" title="statement not covered" >              Helper.getNewToken(this.getMember)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+            else if(response.ok){
+<span class="cstat-no" title="statement not covered" >              localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >              response.json().then(</span></span>
+                res =&gt; {
+<span class="cstat-no" title="statement not covered" >                  console.log(res)</span>
+<span class="cstat-no" title="statement not covered" >                  this.groupMemberList = res</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                  setTimeout(e=&gt;{this.loading=false},500)</span></span>
+                }
+              )
+            }
+          })
+      },    
+<span class="fstat-no" title="function not covered" >      checkChar(e) {</span>
+<span class="cstat-no" title="statement not covered" >        if(e.keyCode &gt;= 48 &amp;&amp; e.keyCode &lt;= 57 || e.keyCode === 8) {} else {</span>
+<span class="cstat-no" title="statement not covered" >          e.preventDefault();</span>
+        }
+      },
+&nbsp;
+    },
+    
+  }
+&lt;/script&gt;
+&lt;style src="vue-multiselect/dist/vue-multiselect.min.css"&gt;&lt;/style&gt;
+&nbsp;
+&lt;style&gt;
+  .fixedPosition {
+    position: absolute;
+  }
+  .red {
+    color: RED;
+  }
+  .createNewGroupWindow {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgba(0, 0, 0, .2);
+    z-index: 2;
+    position: absolute;
+  }
+&nbsp;
+  .createNewGroupHeader {
+    background-color: var(--primary-0);
+    color: var(--lightColor);
+    padding: 16px 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+    width: 95%;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+  }
+&nbsp;
+  .createNewGroupWindowSize {
+    width: 40%;
+    height: fit-content;
+  }
+&nbsp;
+  .createNewGroupBody {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
+    position: relative;
+    top: -30px;
+    padding: 20px;
+    padding-top: 32px;
+    height: 100%;
+  }
+&nbsp;
+  .closeButton {
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 400;
+  }
+  .editButton{
+    font-size: 12px;
+    padding: 7px; 
+    /* color: var(--primary-0); */
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 400;
+    margin-left: 10px;
+  }
+  .editButton:hover{
+    color: pointer;
+    background-color: #fff;  
+    color: var(--primary-0);
+  }
+&nbsp;
+  .okButton {
+    background-color: #fff;
+    padding: 7px;
+    color: var(--primary-0);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 400;
+    margin-left: 10px;
+  }
+&nbsp;
+  .buttonGroup {
+    display: flex;
+    align-items: center;
+  }
+&nbsp;
+  .buttonDisband {
+    color: #fff;
+    display:inline-block;
+    /* width: 25%; */
+    text-align:center;
+    font-weight:400;
+    border-radius: 10px;
+    padding: 7px;
+    font-size: 12px;    
+  }
+&nbsp;
+  .buttonDisband:hover{
+    cursor: pointer;
+    color: pointer;
+    background-color: red;  
+    color: white;
+  }
+&nbsp;
+  .labelInput{
+    text-align: left;
+    margin-left: 10px;
+    display: inline-block;
+    color: var(--primary-4);
+    width: 30%;
+    font-size: 14px;
+  }
+  .valueInput{
+    text-align: right;
+    display: inline-block;
+    width: 66%;
+  }
+  .singleLineInput {
+    outline: none;
+    padding: 5px;
+    width: 100%;
+    border: solid 1px var(--primary-1);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    color: var(--primary-2);
+    margin-top: 15px;
+    box-sizing: border-box;
+    border-radius: 2px;
+  }
+  .value{
+    text-align: left;
+    font-size:14px;
+    margin-top: 15px;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    color: var(--primary-4);
+  }
+  .singleLineInput::placeholder {
+    color: var(--primary-1);
+  }
+  
+  .selectAdmin {
+    outline: none;
+    border: none;
+    padding: 10px !important;
+    color: var(--primary-4);
+    width: 100%;
+    /* height: 40px; */
+    background-color: var(--lightColor);
+    margin-top: 15px;
+    margin-right: 12px;
+    border-radius: 5px;
+  }
+&nbsp;
+  .selectAdmin:hover, .selectAdminOption:hover{
+    cursor: pointer;
+  }
+  .selectAdminOption{
+    padding: 10px;
+    color: var(--primary-3);
+  }
+&lt;/style&gt;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Aug 15 2019 18:40:35 GMT+0700 (SE Asia Standard Time)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>
