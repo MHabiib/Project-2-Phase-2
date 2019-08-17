@@ -9,7 +9,7 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
-    private static final String MY_EMAIL = "future.medan2@gmail.com";
+    private static final String MY_EMAIL = "future.medan@gmail.com";
     private static final String MY_PASSWORD = "futuregdn";
 
     @Bean

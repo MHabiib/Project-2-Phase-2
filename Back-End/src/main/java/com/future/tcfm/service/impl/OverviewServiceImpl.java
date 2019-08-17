@@ -67,7 +67,7 @@ public class OverviewServiceImpl implements OverviewService {
 */
 
 
-        double result = groupExist.getBalanceUsed()/groupExist.getGroupBalance();
+        double result = groupExist.getBalanceUsed()/(groupExist.getGroupBalance()+groupExist.getBalanceUsed());
 //test
         DecimalFormat df=new DecimalFormat("##.##");
         return df.format(result*100);

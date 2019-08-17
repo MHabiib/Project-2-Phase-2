@@ -176,7 +176,7 @@ public class GroupServiceImpl implements GroupService {
         }
         List<User> userList = userRepository.findByGroupNameAndActiveOrderByNameAsc(groupExist.getName(), true);
         for (User user : userList) {
-            if (user.getPeriodeTertinggal() > 0) {
+            if (user.getPeriodeTertinggal() > 0 || user.getBalance()<0) {
                 memberHasNotPaid.add(user);
             }
         }

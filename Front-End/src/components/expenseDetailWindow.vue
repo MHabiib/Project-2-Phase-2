@@ -102,6 +102,10 @@
               alert('Oops!Something wrong happened, please redo your action.')
               Helper.getNewToken(this.updateExpenseStatus.bind(null,this.expenseDetail.idExpense,this.dStatus))
             }
+            else if(response.status==400 ){
+              alert('Oops! Your group balance not enough!')
+              Helper.getNewToken(this.updateExpenseStatus.bind(null,this.expenseDetail.idExpense,this.dStatus))
+            }
             else if(response.ok) {
               localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
               this.getExpenseData(this.newExpenseDetail.idExpense);

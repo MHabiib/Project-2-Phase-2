@@ -64,8 +64,7 @@
             </div>
 
             <div class='secondRowBodyLower'>
-              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
-            </div>
+               </div>
           </div>
         </div>
 
@@ -86,8 +85,7 @@
             </div>
 
             <div class='secondRowBodyLower'>
-              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
-            </div>
+              </div>
           </div>
         </div>
 
@@ -108,8 +106,7 @@
             </div>
 
             <div class='secondRowBodyLower'>
-              <img src='../assets/last-expense.png' alt='Last Update Icon' width='14px'/>Updated {{new Date().getTime() | fromNow}} 
-            </div>
+              </div>
           </div>
         </div>
 

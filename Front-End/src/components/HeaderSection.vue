@@ -32,13 +32,13 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <!--<div class="row">
         <div class="profileItems">
           <div class="profileText">
             Log out
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="notificationContainer" v-show="showNotification">
       <div class="notificationItems" v-show="isNotifNull">

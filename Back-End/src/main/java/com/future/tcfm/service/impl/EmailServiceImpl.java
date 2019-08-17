@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -135,6 +136,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void monthlyCashStatement(String email) throws MessagingException {
+        String balanceUsed;
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
@@ -145,10 +147,12 @@ public class EmailServiceImpl implements EmailService {
         List<ExpenseIdContributed> expenseIdContributedUser = user.getExpenseIdContributed();
         if(expenseIdContributed!=null && expenseIdContributed.size()!=0){
             for(Expense expense: expenseIdContributed){
+                NumberFormat n = NumberFormat.getCurrencyInstance();
+                balanceUsed = n.format(expenseIdContributedUser.get(0).getUsedBalance());
                 ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
                 expenseContributedDetails.setTitle(expense.getTitle());
                 expenseContributedDetails.setDetail(expense.getDetail());
-                expenseContributedDetails.setPrice(expenseIdContributedUser.get(0).getUsedBalance());
+                expenseContributedDetails.setPrice(balanceUsed);
                 listExpense.add(expenseContributedDetails);
                 expenseListStr+=(expenseContributedDetails.toString());
             }
@@ -180,6 +184,8 @@ public class EmailServiceImpl implements EmailService {
             return new ResponseEntity<>("Kamu belum bisa resign, Pembayaran iuran kamu belum lunas !", HttpStatus.BAD_REQUEST);
         }
         else{
+            String userBalance;
+            String balanceUsed;
             String name = user.getName();
             String groupName = user.getGroupName();
             String expenseListStr="";
@@ -188,11 +194,14 @@ public class EmailServiceImpl implements EmailService {
             List<ExpenseIdContributed> expenseIdContributed = user.getExpenseIdContributed();
             if(expenseIdContributed!=null){
                 for(ExpenseIdContributed expense: expenseIdContributed){
+                    NumberFormat n = NumberFormat.getCurrencyInstance();
+                    balanceUsed = n.format(expenseIdContributed.get(0).getUsedBalance());
+
                     Expense e = expenseRepository.findByIdExpense(expense.getIdExpense()) ;
                     ExpenseContributedDetails expenseContributedDetails = new ExpenseContributedDetails();
                     expenseContributedDetails.setTitle(e.getTitle());
                     expenseContributedDetails.setDetail(e.getDetail());
-                    expenseContributedDetails.setPrice(expenseIdContributed.get(0).getUsedBalance());//RECHECK!!!!!!!!!!!
+                    expenseContributedDetails.setPrice(balanceUsed);
                     listExpense.add(expenseContributedDetails);
                     expenseListStr+=(expenseContributedDetails.toString());
                 }
@@ -200,7 +209,8 @@ public class EmailServiceImpl implements EmailService {
             else{
                 expenseListStr="\"Ooopss!!! anda belum ada kontribusi dalam group ini :(\"";
             }
-
+            NumberFormat n = NumberFormat.getCurrencyInstance();
+            userBalance = n.format(user.getBalance());
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
             helper.setTo("mhabibofficial2@gmail.com");
@@ -208,10 +218,10 @@ public class EmailServiceImpl implements EmailService {
 
             helper.setText("<html><body>" +
                     "<img src=\"https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fattachment.freshdesk.com%2Finline%2Fattachment%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzUwMTYyOTE1ODgsImRvbWFpbiI6ImJsaWJsaWNhcmUuZnJlc2hkZXNrLmNvbSIsImFjY291bnRfaWQiOjc4OTM5M30.cHSBN2d9_8FZrmY3y6-n5b5FY3RUzJ-4JV6SD_EWXfc&t=1563855732&ymreqid=f2fe503c-78f1-5207-1c52-e00005011400&sig=kAn2UYZJzmVcvzCbWALl_g--~C\" alt=\"www.blibli.com\" width=\"700\" height=\"100\" style=\"border:0px;\">" +
-                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+expenseListStr+"<br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : Rp. "+user.getBalance()+"<br>Harap Hubungi Admin Group Untuk Prosedur Pengambilan Uang Kembali.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
-            //this.emailSender.send(message);
+                    "<tr><td style=\"padding:15px;\"><p>Halo "+name+"<br><br>Kamu Baru Saja Meninggalkan Group "+groupName+"<br><br>Berikut ini merupakan list penggunaan dana kamu<br><br>"+expenseListStr+"<br>Kamu telah membayar iuran group sebanyak "+user.getTotalPeriodPayed()+"x <br><br>Jumlah dana yang akan dikembalikan kepadamu ialah senilai : "+userBalance+"<br>Harap Hubungi Admin Group Untuk Prosedur Pengambilan Uang Kembali.<br><br>Semoga hari anda menyenangkan. Terima Kasih.<br><br><br><br>Salam hangat,<br>Admin Team "+groupName+" - Blibli.com</p></td></tr></body></html>",true);
+            this.emailSender.send(message);
             System.out.println("\n--------------------------------------------------------");
-            System.out.println(name+" \n"+expenseListStr+"\n Dana yang dikembalikan"+user.getBalance());
+            System.out.println(name+" \n"+expenseListStr+"\n Dana yang dikembalikan "+userBalance);
             System.out.println("--------------------------------------------------------\n");
         }
         return new ResponseEntity<>("Some error occured.", HttpStatus.BAD_REQUEST);

@@ -212,8 +212,11 @@ public class ExpenseServiceImpl implements ExpenseService {
             if(expenseExist.getStatus()!=null){
                 return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
             }
-            expenseExist.setStatus(true);
             Group group = groupRepository.findByName(expenseExist.getGroupName());
+            if(expenseExist.getPrice()>group.getGroupBalance()){
+                return new ResponseEntity<>("Cannot accept expense, not enough group balance!",HttpStatus.BAD_REQUEST);
+            }
+            expenseExist.setStatus(true);
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
             adminTarget.setEmail(group.getGroupAdmin());
             //notif...

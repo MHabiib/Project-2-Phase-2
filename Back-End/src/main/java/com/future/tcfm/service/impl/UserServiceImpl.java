@@ -362,6 +362,10 @@ public class UserServiceImpl implements UserService {
             responseMap.put("message","Error : This user have not completed their payment ("+userExist.getPeriodeTertinggal().toString()+" periode(s) left).\nThis user have to complete his payment before resignation.");
             return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        if(userExist.getBalance()<0){
+            responseMap.put("message","Error : This user has balance < 0");
+            return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         if(userExist.getRole().equalsIgnoreCase("GROUP_ADMIN")){
             responseMap.put("message","Please set a new Group Admin before resign.");
             return new ResponseEntity<>(responseMap,HttpStatus.INTERNAL_SERVER_ERROR);
