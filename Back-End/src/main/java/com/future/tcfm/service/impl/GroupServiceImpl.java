@@ -131,10 +131,7 @@ public class GroupServiceImpl implements GroupService {
                 User newAdmin = userRepository.findByEmailAndActive(group.getGroupAdmin(),true);
                 newAdmin.setRole("GROUP_ADMIN");
                 userRepository.save(newAdmin);
-                userList.add((User) userRepository.findByGroupNameAndActive(newAdmin.getGroupName(),true));
-                for(User sendTo:userList){
-                    emailService.emailNotification(newAdmin.getName() + " just been promoted to Group Admin!",sendTo.getEmail());
-                }
+
                 notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
                 emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",newAdmin.getEmail());
                 notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
