@@ -88,6 +88,7 @@ public class PaymentServiceImplTest {
         SecurityContextHolder.setContext(securityContext);
         //to provide security config
 
+        //
         doReturn(user).when(userRepository).findByEmail("userTest@jyp.com");
         doReturn(group).when(groupRepository).findByName(user.getGroupName());
         when(paymentRepository.save(payment)).thenReturn(payment);
