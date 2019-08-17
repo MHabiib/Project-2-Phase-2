@@ -88,7 +88,7 @@
               </div>
 
               <div class="overviewRightCardBody">
-                Total cash is used.
+                Total balance is used.
               </div>
             </div>
           </div>
