@@ -263,6 +263,7 @@
   .managementTable {
     margin-top: 20px;
     height: 80vh;
+
   }
 
   .managementTableHead {
@@ -279,6 +280,7 @@
     position: relative;
     z-index: 1;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
+    
   }
 
   .managementTableHeadTitle {
@@ -348,12 +350,14 @@
     height: 55vh;
     /* overflow-y: auto;
     overflow-x: hidden; */
-    overflow: auto;
+    overflow : auto;
     box-sizing: border-box;
     border-top: solid 1px var(--primary-1);
     line-height: 42px;
   }
-
+  .managementTableBody tbody#infiniteScroll {
+    max-height:400px
+  }
   .manageUserComponent .managementTableBody thead tr, .manageUserComponent .managementTableBody tbody { display: block; box-sizing: border-box; }
   .manageUserComponent .managementTableBody tbody td:nth-child(1), .manageUserComponent .managementTableBody thead tr th:nth-child(1) { width: 1.5vw; padding-left: 12px}
   .manageUserComponent .managementTableBody tbody td:nth-child(2), .manageUserComponent .managementTableBody thead tr th:nth-child(2) { width: 10vw; padding-left: 12px}

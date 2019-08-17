@@ -121,9 +121,6 @@
     data: function() {
       return {
         email:localStorage.getItem('userEmail'),
-        dataProfile: {},
-        ProfileList:[],
-        detailprofileelected: '',
         currentUser : {},
         newUser:{},
         fileInput:null,
@@ -140,7 +137,7 @@
       if(this.currentUser.name ==null || this.currentUser.name == undefined){
         this.getUserData(this.email)
       }
-      console.log('Current User :: '+ this.currentUser.name)
+      // console.log('Current User :: '+ this.currentUser.name)
     },
     computed: {
       rightPanelWidth: function() {return (document.documentElement.clientWidth - 280);
@@ -179,7 +176,7 @@
               if(response.ok){
                 response.json().then(
                   res => {
-                    console.log(res)
+                    // console.log(res)
                     this.currentUser = res
                     this.newUser = Object.assign({},res)
                   }
@@ -221,12 +218,11 @@
                 alert('Profile Updated!')
                 this.currentUser = res
                 this.newUser = Object.assign({},res)
-
               }
             )           
           } else {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            console.log(response);
+            // console.log(response);
             alert(`Oops! Something wrong happened ${response.status}.`);
           }
         })
@@ -239,13 +235,15 @@
           alert('Please input phone number.')
           return false;
         } else if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
-            this.newUser.password = this.newPassword           
+            this.newUser.password = this.newPassword      
+            return true     
         } else if(this.newPassword!=='' && this.newPassword.length<=5 || (this.newPassword !== this.repeatPassword)){
             alert('please input a valid password')
             return false
+        } else {
+          this.newUser.password = this.currentUser.password === this.newUser.password ? "" : this.newPassword 
+          return true
         }
-        this.newUser.password = this.currentUser.password === this.newUser.password ? "" : this.newPassword 
-        return true
         // return (this.email == "")? "" : (this.reg.test(this.email)) ? 'has-success' : 'has-error';
       },    
     }

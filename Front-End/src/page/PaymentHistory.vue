@@ -275,7 +275,9 @@
     text-align: center;
     /* padding-left: 5px; */
   }
-
+  .paymentsTableBody tbody{
+    max-height:400px
+  }
   .paymentsTableBody tbody td:nth-child(2), td:nth-child(1), .paymentsTableBody thead tr th:nth-child(2), th:nth-child(1) {
     width: 15vw;
     text-align: left;  

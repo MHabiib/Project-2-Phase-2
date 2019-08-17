@@ -120,6 +120,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
         tanggalTransfer: '',
         buktiTransfer: null,
         regularPayment:0,
+        myEmail:localStorage.getItem('userEmail'),
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
       }
     },
@@ -132,7 +133,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
       }
     },
     created() {
-      console.log(this.dataPayNow);
+      // console.log(this.dataPayNow);
       this.getMember();
     },
     methods: {
@@ -161,7 +162,6 @@ const monthList =["January","February","March","April","May","June","July","Augu
         }
       },
       validateInput(emailInput){
-        let isEmailValid = this.reg.test(emailInput)
         if(this.periode ==="") {
           alert('Periode can\'t be null.')
           return false
@@ -188,7 +188,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
       },
       submitPembayaran() {
         if(!this.validateInput()) return;
-        console.log('Tgl TF: '+ new Date(this.tanggalTransfer).getTime())
+        // console.log('Tgl TF: '+ new Date(this.tanggalTransfer).getTime())
         let paymentDateInMillis = new Date(this.tanggalTransfer).getTime()
         let formData = new FormData();
         formData.append('payment', JSON.stringify({
@@ -219,17 +219,16 @@ const monthList =["January","February","March","April","May","June","July","Augu
             alert('Berhasil!\nMenunggu konfirmasi pembayaran dari Group Admin');
             this.closePayNowWindow();
           } else {
-            console.log(response);
+            // console.log(response);
             alert('Terjadi kesalahan. Harap periksa kembali input Anda.')
           }
         })
         .catch(err => {
           alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
-          console.log(err);
+          // console.log(err);
         })
       },
-      getMember() {
-
+    getMember() {
       fetch(`${Helper.backEndAddress}/api/group/members`, {
         headers: {
           Authorization: localStorage.getItem('accessToken')
@@ -245,12 +244,12 @@ const monthList =["January","February","March","April","May","June","July","Augu
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
             response.json().then(
               res => {
-                console.log(res)
+                // console.log(res)
                 this.groupMemberList.length=0
                 res.forEach( element =>{
                   this.groupMemberList.push(element.email)
                 })
-                let index = this.groupMemberList.indexOf(localStorage.getItem('userEmail'));
+                let index = this.groupMemberList.indexOf(this.myEmail);
                 if (index !== -1) this.groupMemberList.splice(index, 1);
                 setTimeout(e=>{this.loading=false},500)
               }

@@ -59,16 +59,12 @@ describe('Components/Sidebar.vue',()=>{
         expect(wrapper.vm.isDashboard).toBe(true)
     })
     test('role admin\'s menu',()=>{
+        expect(wrapper.text()).not.toContain('Management')
+
         wrapper.setData({
             isAdmin : true
         })
         expect(wrapper.text()).toContain('Management')
-    })
-    test('non admin\'s menu',()=>{
-        wrapper.setData({
-            isAdmin : false
-        })
-        expect(wrapper.text()).not.toContain('Management')
     })
 
 

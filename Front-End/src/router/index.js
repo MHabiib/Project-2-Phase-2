@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardPage from '../page/Dashboard';
-import PaymentPage from '../page/Payment';
 import LoginPage from '../page/Login';
 import OverviewPage from '../page/Overview';
 import ExpensesPage from '../page/Expenses';
@@ -13,7 +12,6 @@ import HeaderSection from '../components/HeaderSection';
 import PaymentHistoryPage from '../page/PaymentHistory';
 import ManagePaymentPage from '../page/ManagePayment';
 import ProfilePage from '../page/Profile'
-import tugasWeb from '../page/tugasWeb';
 import '../index.css';
 import * as moment from 'moment';
 
