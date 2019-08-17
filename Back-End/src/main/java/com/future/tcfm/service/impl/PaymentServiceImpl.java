@@ -84,16 +84,16 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.print("Isi payment:");
         System.out.println(payment);
         User userExist = userRepository.findByEmail(payment.getEmail());
-        Group groupExist = groupRepository.findByName(userExist.getGroupName());
-
-        if(payment.getEmail() == null){
-            return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
-        }
         if(userExist==null){
             return new ResponseEntity("User email does not exist", HttpStatus.NOT_FOUND);
         }
+        Group groupExist = groupRepository.findByName(userExist.getGroupName());
+
         if(groupExist==null) {
             return new ResponseEntity("Group name does not exist", HttpStatus.NOT_FOUND);
+        }
+        if(payment.getEmail() == null){
+            return new ResponseEntity("400: Payment is null", HttpStatus.BAD_REQUEST);
         }
         if(checkImageFile(file)){
             try {
