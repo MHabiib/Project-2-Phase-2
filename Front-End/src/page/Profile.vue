@@ -121,9 +121,6 @@
     data: function() {
       return {
         email:localStorage.getItem('userEmail'),
-        dataProfile: {},
-        ProfileList:[],
-        detailprofileelected: '',
         currentUser : {},
         newUser:{},
         fileInput:null,
@@ -232,15 +229,16 @@
       }, 
       validateInput(){
         if(this.newUser.name === '') {
-          // alert('Name can\'t be null.')
+          alert('Name can\'t be null.')
           return false;
         } else if(this.newUser.phone === '') {
-          // alert('Please input phone number.')
+          alert('Please input phone number.')
           return false;
         } else if((this.newPassword!=='' && this.newPassword.length>=5) && (this.newPassword === this.repeatPassword)){
-            this.newUser.password = this.newPassword           
+            this.newUser.password = this.newPassword      
+            return true     
         } else if(this.newPassword!=='' && this.newPassword.length<=5 || (this.newPassword !== this.repeatPassword)){
-            // alert('please input a valid password')
+            alert('please input a valid password')
             return false
         } else {
           this.newUser.password = this.currentUser.password === this.newUser.password ? "" : this.newPassword 

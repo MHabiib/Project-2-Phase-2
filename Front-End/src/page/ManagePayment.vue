@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="managePamentsTableBody">
+        <div class="managePaymentsTableBody">
           <table>
             <thead>
               <tr>
@@ -267,7 +267,7 @@
     font-weight: 600;
   }
 
-  .managePamentsTableBody {
+  .managePaymentsTableBody {
     background-color: var(--lightColor);
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .3);
@@ -278,34 +278,35 @@
     text-align: center;
   }
 
-  .managePamentsTableBody table {width: 100%;}
+  .managePaymentsTableBody table {width: 100%;}
 
-  .managePamentsTableBody tbody {
+  .managePaymentsTableBody tbody {
     height: 55vh;
+    max-height:400px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     box-sizing: border-box;
     border-top: solid 1px var(--primary-1);
   }
 
-  .managePamentsTableBody tbody tr td {text-align:left;padding-top: 12px; padding-bottom: 12px;}
-  .managePamentsTableBody thead tr, .managePamentsTableBody tbody {text-align:left;display: block; box-sizing: border-box;}
+  .managePaymentsTableBody tbody tr td {text-align:left;padding-top: 12px; padding-bottom: 12px;}
+  .managePaymentsTableBody thead tr, .managePaymentsTableBody tbody {text-align:left;display: block; box-sizing: border-box;}
 
-  .managePamentsTableBody tbody td:nth-child(1), .managePamentsTableBody thead tr th:nth-child(1) {
+  .managePaymentsTableBody tbody td:nth-child(1), .managePaymentsTableBody thead tr th:nth-child(1) {
     width: 1.5vw;
     text-align: left;
     padding-left: 10px;
   }
 
-  .managePamentsTableBody tbody td:nth-child(2), .managePamentsTableBody thead tr th:nth-child(2) {
+  .managePaymentsTableBody tbody td:nth-child(2), .managePaymentsTableBody thead tr th:nth-child(2) {
     width: 10vw;
     text-align: left;
     padding-left: 10px;
   }
 
-  .managePamentsTableBody tbody td:nth-child(3), .managePamentsTableBody thead tr th:nth-child(3) {width: 20vw;}
-  .managePamentsTableBody tbody td:nth-child(4), .managePamentsTableBody thead tr th:nth-child(4) {width: 11vw;}
-  .managePamentsTableBody tbody td:nth-child(5), .managePamentsTableBody thead tr th:nth-child(5) {width: 10vw;}
+  .managePaymentsTableBody tbody td:nth-child(3), .managePaymentsTableBody thead tr th:nth-child(3) {width: 20vw;}
+  .managePaymentsTableBody tbody td:nth-child(4), .managePaymentsTableBody thead tr th:nth-child(4) {width: 11vw;}
+  .managePaymentsTableBody tbody td:nth-child(5), .managePaymentsTableBody thead tr th:nth-child(5) {width: 10vw;}
 
   .showMembersButton {cursor: pointer;}
 

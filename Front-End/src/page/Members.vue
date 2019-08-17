@@ -238,6 +238,7 @@
   }
   .membersTableBody tbody {
     height: 55vh;
+    max-height:400px;
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;

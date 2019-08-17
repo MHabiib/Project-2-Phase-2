@@ -317,8 +317,9 @@
 
   .groupsTableBody tbody {
     height: 55vh;
+    max-height: 400px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     box-sizing: border-box;
     border-top: solid 1px var(--primary-1);
   }
