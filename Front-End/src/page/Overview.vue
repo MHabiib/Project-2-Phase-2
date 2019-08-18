@@ -24,15 +24,17 @@
               </div>
             </div>
 
-            <div class="overviewLeftCard" @click="navigateTo('/members')">
+            <div class="overviewLeftCard" @click="navigateTo('/expenses')">
               <div class="overviewLeftHeader">
-                <img src="../assets/members.png" alt="Members">
+                <img src="../assets/balance.png" alt="Balance">
               </div>
 
               <div class="overviewLeftBody">
                 <div class="overviewLeftBodyUpper">
-                  <div class="overviewLeftBodyUpperTitle">Members</div>
-                  <div class="overviewLeftBodyUpperValue">{{overviewData.totalMembers}}</div>
+                  <div class="overviewLeftBodyUpperTitle">Total balance used</div>
+<!--                  <div class="overviewLeftBodyUpperValue">{{overviewData.totalMembers}}</div>-->
+                  <div class="overviewLeftBodyUpperValue"> {{overviewData.percentageTotalCashUsed}}</div>
+
                 </div>
 
                 <div class="overviewLeftBodyLower">
@@ -83,12 +85,12 @@
             </div>
 
             <div class="overviewRightCard">
-              <div class="overviewRightCardHeader">
-               {{overviewData.percentageTotalCashUsed}}%
+              <div class="overviewRightCardHeader" style="width: 77%;">
+                {{overviewData.averagePerExpense}}
               </div>
 
               <div class="overviewRightCardBody">
-                Total balance is used.
+                Debit Average / Expense
               </div>
             </div>
           </div>
@@ -385,7 +387,7 @@
   }
 
   .overviewRightCardHeader {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 600;
     color: var(--lightColor);
     background-color: var(--primary-0);

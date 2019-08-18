@@ -15,9 +15,10 @@ import java.util.List;
 public class Overview {
     private List<Expense> latestExpense;
     private Double groupBalance;
-    private Integer totalMembers;
+    private String averagePerExpense;
     private Integer paymentPaidThisMonth;
     private String percentageTotalCashUsed;
     private Long latestJoinDate;
+    private Integer totalMembers;
     private Long latestExpenseDate;
 }

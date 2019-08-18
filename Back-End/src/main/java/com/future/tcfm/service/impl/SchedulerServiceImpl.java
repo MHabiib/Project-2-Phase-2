@@ -40,45 +40,44 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     private ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
 
-//
+    //
     @Async
     @Transactional
     @Scheduled(cron = "0 10 10 05 * ?") // setiap tanggal 10  disetiap bulan jam 10 : 05
     public void scheduler() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);
-        Map<String,Group> groupMap = new HashMap<>();
+        Map<String, Group> groupMap = new HashMap<>();
         listUser.forEach(user -> {
-            if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
-            else
-                groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName()));
+            if (user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")) {
+            } else
+                groupMap.put(user.getGroupName(), groupRepository.findByName(user.getGroupName()));
         });
 
-         groupMap.forEach((groupName,groupVal)->{
-             if(groupVal.getCurrentPeriod()==null){
-                 groupVal.setCurrentPeriod(1);
-             }
-             else{
-                 groupVal.setCurrentPeriod(groupVal.getCurrentPeriod()+1); //misalkan sudah berganti bulan, maka update period group
-             }
+        groupMap.forEach((groupName, groupVal) -> {
+            if (groupVal.getCurrentPeriod() == null) {
+                groupVal.setCurrentPeriod(1);
+            } else {
+                groupVal.setCurrentPeriod(groupVal.getCurrentPeriod() + 1); //misalkan sudah berganti bulan, maka update period group
+            }
             groupRepository.save(groupVal);
         });
 
         sseMvcExecutor.execute(() -> {//pisahThread
             int yearBefore = 0;
             int monthChecker = 0;
-            int yearChecker=0;
-            int monthBefore =0;
+            int yearChecker = 0;
+            int monthBefore = 0;
             int monthNow = 0;
-            int yearNow=0;
+            int yearNow = 0;
 
             Group group;
 
             String monthBeforeStr = "";//untuk mendapatkan value bulan yang belum dibayar user
             for (User user : listUser) {
                 group = groupMap.get(user.getGroupName());
-                yearNow=Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getYear();
-                monthNow=Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
-                monthNow+=group.getCurrentPeriod();
+                yearNow = Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getYear();
+                monthNow = Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+                monthNow += group.getCurrentPeriod();
 
 /*                Exception in thread "pool-5-thread-1" java.lang.NullPointerException
                 at com.future.tcfm.service.impl.SchedulerServiceImpl.lambda$scheduler$2(SchedulerServiceImpl.java:80)
@@ -86,53 +85,51 @@ public class SchedulerServiceImpl implements SchedulerService {
                 at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
                 at java.lang.Thread.run(Thread.java:748)*/
 
-                if(monthNow>12){
-                    monthChecker=monthNow % 12;
-                    yearChecker=(monthNow-monthChecker)/12;
-                    monthNow=monthChecker;
-                    yearNow+=yearChecker;
-                    if(monthNow==0){
-                        monthNow+=12;
-                        yearNow-=1;
+                if (monthNow > 12) {
+                    monthChecker = monthNow % 12;
+                    yearChecker = (monthNow - monthChecker) / 12;
+                    monthNow = monthChecker;
+                    yearNow += yearChecker;
+                    if (monthNow == 0) {
+                        monthNow += 12;
+                        yearNow -= 1;
                     }
                 }
 
-                yearBefore=yearNow;
-                monthBefore= monthNow;
-                String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-                user.setPeriodeTertinggal(user.getPeriodeTertinggal()+1);
+                yearBefore = yearNow;
+                monthBefore = monthNow;
+                String monthNowStr = Month.of(monthNow).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+                user.setPeriodeTertinggal(user.getPeriodeTertinggal() + 1);
                 if (user.getPeriodeTertinggal() > 0) { //jika true berarti user belum membayar iuran
-                    if(user.getPeriodeTertinggal()>11){
+                    if (user.getPeriodeTertinggal() > 11) {
 
-                        monthChecker=user.getPeriodeTertinggal() % 12;
-                        yearChecker=(user.getPeriodeTertinggal()-monthChecker)/12;
-                        monthBefore-=monthChecker;
-                        yearBefore-=yearChecker;
-                    }
-                    else{
-                        monthBefore-=user.getPeriodeTertinggal()-1; //dikurang 1 karena untuk mendapaktan value bulan yang belum di bayar
+                        monthChecker = user.getPeriodeTertinggal() % 12;
+                        yearChecker = (user.getPeriodeTertinggal() - monthChecker) / 12;
+                        monthBefore -= monthChecker;
+                        yearBefore -= yearChecker;
+                    } else {
+                        monthBefore -= user.getPeriodeTertinggal() - 1; //dikurang 1 karena untuk mendapaktan value bulan yang belum di bayar
                     }
 
-                    if(monthBefore<=0){
-                        monthBefore+=12;
-                        yearBefore-=1;
+                    if (monthBefore <= 0) {
+                        monthBefore += 12;
+                        yearBefore -= 1;
                     }
-                    monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
+                    monthBeforeStr = Month.of(monthBefore).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 //                notificationService.createNotification("You haven't made any payment from "+ monthBeforeStr+" to "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
                     notificationService.createNotification("You have missed " + user.getPeriodeTertinggal() + "'s month payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
-                        if (user.getPeriodeTertinggal()==1)
-                            emailService.periodicMailSender(user.getEmail(), "THISMONTH",yearBefore,monthNowStr,yearNow);
+                        if (user.getPeriodeTertinggal() == 1)
+                            emailService.periodicMailSender(user.getEmail(), "THISMONTH", yearBefore, monthNowStr, yearNow);
                         else
-                            emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
+                            emailService.periodicMailSender(user.getEmail(), monthBeforeStr, yearBefore, monthNowStr, yearNow);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     notificationService.createNotification("Thank you for completing " + monthNowStr + "'s payment", user.getEmail(), user.getGroupName(), TYPE_PERSONAL);
                     try {
-                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr,yearBefore,monthNowStr,yearNow);
+                        emailService.periodicMailSender(user.getEmail(), monthBeforeStr, yearBefore, monthNowStr, yearNow);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }
@@ -148,11 +145,11 @@ public class SchedulerServiceImpl implements SchedulerService {
     public void schedulerReminder() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);
         sseMvcExecutor.execute(() -> {//pisahThread
-            for(User user:listUser){
+            for (User user : listUser) {
                 try {
-                    if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
-                    else{
-                     emailService.periodicMailReminderSender(user.getEmail());
+                    if (user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")) {
+                    } else {
+                        emailService.periodicMailReminderSender(user.getEmail());
                     }
                 } catch (MessagingException e) {
                     e.printStackTrace();
@@ -167,11 +164,11 @@ public class SchedulerServiceImpl implements SchedulerService {
     public void monthlyCashStatement() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);
         sseMvcExecutor.execute(() -> {//pisahThread
-            for(User user:listUser){
+            for (User user : listUser) {
                 try {
-                    if(user.getGroupName().equalsIgnoreCase("")||user.getGroupName().equalsIgnoreCase("GROUP_LESS")){}
-                    else{
-                     emailService.monthlyCashStatement(user.getEmail());
+                    if (user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")) {
+                    } else {
+                        emailService.monthlyCashStatement(user.getEmail());
                     }
                 } catch (MessagingException e) {
                     e.printStackTrace();
@@ -179,74 +176,4 @@ public class SchedulerServiceImpl implements SchedulerService {
             }
         });
     }
-//    @Async
-////    @Scheduled(fixedRate = 5000L)
-//    @Transactional
-//    public void checkUserPeriodPaid(){
-//        System.out.println("This is the checkUserPeriodPaid method!");
-//        List<User> userList = userRepository.findAllByActive(true);
-//        Map<String,Group> groupMap = new HashMap<String,Group>();
-//        userList.forEach(user -> groupMap.put(user.getGroupName(),groupRepository.findByName(user.getGroupName())));
-//        Group group;
-//        String message=PAYMENT_LATE;
-//        for (User user : userList) {
-//            group = groupMap.get(user.getGroupName());
-//            if(user.getTotalPeriodPayed()<group.getCurrentPeriod()){
-//                user.setPeriodeTertinggal(group.getCurrentPeriod()-user.getTotalPeriodPayed());
-//                notificationService.createNotification(message,user.getEmail(),null,TYPE_PERSONAL);
-//            }
-//        }
-//        userRepository.saveAll(userList);
-//    }
 }
-
-/*
-
- for (User user : listUser) {
-
-        int yearNow= LocalDate.now().getYear();
-        int monthNow= LocalDate.now().getMonthValue();
-        int period = 0;
-
-*/
-/*
-  int range=user.getPeriodeTertinggal();
-
-            String monthNowStr=Month.of(monthNow).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
-            int monthBefore= monthNow-range;
-            if(monthBefore<1){{ monthBefore+=12; } }
-            String monthBeforeStr=Month.of(monthBefore).getDisplayName(TextStyle.FULL,Locale.ENGLISH);
-*//*
-
-
-
-        emailService.userResign(user.getEmail());
-*/
-/*
- if(period<user.getTotalPeriodPayed()){
-               //emailService.periodicMailSender(user.getEmail(),range);
-                 emailService.userResign(user.getEmail());
-
-if(range>1)
-                    notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_GROUP);
-               else
-                    notificationService.createNotification("Anda Belum Membayar Iuran Bulan "+monthBeforeStr+" - "+monthNowStr, user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-            }
-            else{
-*//*
-
-        emailService.userResign(user.getEmail());
-        //    emailService.periodicMailSender(user.getEmail(),range);
-*/
-/*
-                notificationService.createNotification("Anda Telah Membayar Iuran Bulan "+monthNowStr , user.getEmail(),user.getGroupName(),TYPE_PERSONAL);
-            }
-*//*
-
-
-
-        //emailService.sendMailWithUsername(user.getEmail(),user.getName());
-    }
-
-}
-*/

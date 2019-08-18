@@ -30,6 +30,8 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -48,10 +50,12 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     public JavaMailSender emailSender;
 
+    ExecutorService executor = Executors.newSingleThreadExecutor();
     //email max 500 mail/day
 
     @Async
     public void periodicMailSender( String email, String monthBeforeStr,int yearBefore, String monthNowStr, int yearNow) throws MessagingException {
+
         User user  = userRepository.findByEmail(email);
         String name = user.getName();
         String groupName = user.getGroupName();
