@@ -1,5 +1,5 @@
 
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import CreateNewExpense from '@/components/createNewExpense'
 import {GlobalWithFetchMock} from "jest-fetch-mock";
@@ -34,7 +34,7 @@ beforeEach(()  => {
     // const expectedResponse =  ['a','b','c'] 
     // fetch.mockResponseOnce(JSON.stringify(expectedResponse))
 
-    wrapper = shallowMount(CreateNewExpense, {
+    wrapper = mount(CreateNewExpense, {
         // stubs:['HeaderSection','SidebarComponent'],
 
         mocks:{
@@ -118,6 +118,28 @@ describe('Profile.vue',() =>{
         input.trigger('keypress')
         input.trigger('change')
         expect(wrapper.vm.thousandSeparators).toBeCalled()
+    })
+    test('event refreshData called',(done)=>{
+        wrapper.setData({
+            biaya: '1000',
+            namaPengeluaran: 'test',
+            deskripsiPengeluaran: 'testing1234567890'
+        })
+        // fetch.mockResponseOnce({ok:true})
+        // wrapper.vm.createNewExpense = jest.fn()
+        const res = {
+            headers: {
+                get: jest.fn()
+            },
+            ok:true
+        }
+        global.fetch = jest.fn().mockResolvedValue(res); 
+        wrapper.vm.createNewExpense()
+        wrapper.vm.$nextTick(() => {
+            expect(wrapper.emitted().refreshData.length).toBe(1)            
+            expect(wrapper.emitted().refreshData.length).toBe(1)
+            done()
+        })
     })
 })
 

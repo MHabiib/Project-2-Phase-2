@@ -95,12 +95,14 @@
           }
           else if(response.ok) {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            alert('Expense berhasil diajukan!\nMenunggu persetujuan dari group admin')
+            console.log('asd')
+            alert('Request expense succeed!\nWaiting for admin group confirmation.')
+            console.log('dsa')
             this.$emit('refreshData');
             this.$emit('closeCreateNewExpenseWindow');
           } else {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            alert('Gagal meminta expense baru. Silahkan cek kembali input Anda atau refresh halaman ini.');
+            alert(`Oops! Something wrong happened ${response.status}`);
           }
         })
         .catch(err => {
