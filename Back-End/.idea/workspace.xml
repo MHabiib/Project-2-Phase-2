@@ -3,8 +3,34 @@
   <component name="ChangeListManager">
     <list default="true" id="db18e852-c823-4ad9-b94e-d6a4dfb97e62" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/BulkInsertWindow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/BulkInsertWindow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/CreateNewGroupWindow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/CreateNewGroupWindow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/HeaderSection.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/HeaderSection.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/PaymentDetailWindow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/PaymentDetailWindow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/addNewUser.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/addNewUser.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/createNewExpense.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/createNewExpense.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/expenseDetailWindow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/expenseDetailWindow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/inviteMember.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/inviteMember.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/payNow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/payNow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/sidebar.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/sidebar.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/userContributedWindow.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/userContributedWindow.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/zoomOnHover.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/components/zoomOnHover.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Dashboard.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Dashboard.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Expenses.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Expenses.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManageGroup.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManageGroup.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManagePayment.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManagePayment.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManageUser.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/ManageUser.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Members.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Members.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Overview.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Overview.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/PaymentHistory.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/PaymentHistory.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Profile.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/Profile.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/login.vue.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov-report/page/login.vue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End/test/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End/test/coverage/lcov.info" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -73,7 +99,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="JwtAuthenticationTokenFilter" value="1" />
-          <entry key="java" value="1572" />
+          <entry key="java" value="1584" />
           <entry key="jpg" value="1" />
           <entry key="js" value="1" />
           <entry key="json" value="1" />
@@ -87,7 +113,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="1" />
-          <entry key="JAVA" value="1572" />
+          <entry key="JAVA" value="1584" />
           <entry key="JSON" value="1" />
           <entry key="JavaScript" value="1" />
           <entry key="PATCH" value="1" />
@@ -100,17 +126,17 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="66" />
-          <entry key="java" value="58929" />
+          <entry key="java" value="59036" />
           <entry key="properties" value="252" />
-          <entry key="txt" value="3263" />
+          <entry key="txt" value="3306" />
           <entry key="vue" value="1" />
           <entry key="xml" value="42" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="58929" />
-          <entry key="PLAIN_TEXT" value="3329" />
+          <entry key="JAVA" value="59036" />
+          <entry key="PLAIN_TEXT" value="3372" />
           <entry key="Properties" value="252" />
           <entry key="Vue.js" value="1" />
           <entry key="XML" value="42" />
@@ -121,68 +147,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExcelReaderService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="67" column="70" selection-start-line="67" selection-start-column="70" selection-end-line="67" selection-end-column="70" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#loadFile#0;class#ExcelReaderServiceImpl#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="129" column="47" lean-forward="true" selection-start-line="129" selection-start-column="47" selection-end-line="129" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6">
-              <caret line="191" column="5" lean-forward="true" selection-start-line="191" selection-start-column="5" selection-end-line="191" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="85" column="50" selection-start-line="85" selection-start-column="50" selection-end-line="85" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/GroupController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="73" column="31" lean-forward="true" selection-start-line="73" selection-start-column="31" selection-end-line="73" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1043">
-              <caret line="232" selection-start-line="232" selection-end-line="234" selection-end-column="19" />
+            <state relative-caret-position="120">
+              <caret line="114" selection-start-line="114" selection-end-line="114" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2549#2550#0" expanded="true" />
@@ -197,10 +165,51 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/FileController.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="381">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
+              <folding>
+                <element signature="e#824#825#0" expanded="true" />
+                <element signature="e#887#888#0" expanded="true" />
+                <element signature="e#1614#1615#0" expanded="true" />
+                <element signature="e#1663#1664#0" expanded="true" />
+                <element signature="e#1846#1847#0" expanded="true" />
+                <element signature="e#1896#1897#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="194" selection-start-line="194" selection-end-line="194" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="42" selection-start-line="42" selection-end-line="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -208,8 +217,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.1.5.RELEASE/spring-web-5.1.5.RELEASE-sources.jar!/org/springframework/web/method/support/InvocableHandlerMethod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="137" selection-start-line="137" selection-end-line="137" />
+            <state relative-caret-position="381">
+              <caret line="197" selection-start-line="197" selection-end-line="197" />
             </state>
           </provider>
         </entry>
@@ -230,7 +239,6 @@
       <find>updategroup</find>
       <find>disband</find>
       <find>disbandGroup</find>
-      <find>createPayment</find>
       <find>updateGroup</find>
       <find>GroupC</find>
       <find>oldA</find>
@@ -256,6 +264,7 @@
       <find>regularPayment</find>
       <find>balanceused</find>
       <find>password</find>
+      <find>createPayment</find>
     </findStrings>
     <replaceStrings>
       <replace>responseMap</replace>
@@ -287,7 +296,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/NotificationService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/NotificationRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/NotificationController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/AuthController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/GroupService.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/ExpenseServiceImplTest.java" />
@@ -300,7 +308,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/mail/MailConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ExpenseController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/EmailService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Payment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/PaymentRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/PaymentService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/PaymentController.java" />
@@ -320,7 +327,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/EmailServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtUserDetails.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/config/security/JwtGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/GroupController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/JwtUserDetailsRepository.java" />
@@ -330,8 +336,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/TeamCashFlowManagementApplication.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/SchedulerServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Payment.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java" />
       </list>
     </option>
   </component>
@@ -361,9 +370,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="950" />
-    <option name="width" value="980" />
-    <option name="height" value="1040" />
+    <option name="x" value="-8" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -499,6 +508,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="tcfm" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tcfm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Back-End" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tcfm" type="462c0819:PsiDirectoryNode" />
               <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -539,7 +557,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565935111137" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1566059899266" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../references/java-read-write-excel-file-using-apache-poi-master" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -558,6 +576,127 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.future.tcfm.model" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/config/mail/MailConfig.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/model/list/ExpenseContributedDetails.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/EmailServiceImpl.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/test/java/com/future/tcfm/service/impl/PaymentServiceImplTest.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../Front-End/package-lock.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../Front-End/src/components/HeaderSection.vue</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../Front-End/src/components/expenseDetailWindow.vue</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../Front-End/src/page/Dashboard.vue</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -713,28 +852,7 @@
       <workItem from="1565935231485" duration="19000" />
       <workItem from="1565952990721" duration="34000" />
       <workItem from="1565953935503" duration="4186000" />
-      <workItem from="1566028983890" duration="5256000" />
-    </task>
-    <task id="LOCAL-00049" summary=".Added groupAdmin(String) on group collection&#10;.Added percentageCashUsed and Totalpayment data on getOverView API">
-      <created>1563639072317</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1563639072317</updated>
-    </task>
-    <task id="LOCAL-00050" summary="patch bug fix">
-      <created>1563690654525</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1563690654527</updated>
-    </task>
-    <task id="LOCAL-00051" summary="patch for overview page NPE">
-      <created>1563693824865</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1563693824865</updated>
+      <workItem from="1566028983890" duration="12469000" />
     </task>
     <task id="LOCAL-00052" summary="Added clearNotification API">
       <created>1563809488649</created>
@@ -1058,11 +1176,32 @@
       <option name="project" value="LOCAL" />
       <updated>1566031038276</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="-fixed scroll bug">
+      <created>1566048689533</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1566048689533</updated>
+    </task>
+    <task id="LOCAL-00099" summary="-fixed scroll bug">
+      <created>1566054762230</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1566054762230</updated>
+    </task>
+    <task id="LOCAL-00100" summary="-fixed resign group_admin user">
+      <created>1566056346925</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1566056346925</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="648031000" />
+    <option name="totallyTimeSpent" value="655244000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1077,7 +1216,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17583893" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09798658" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1088,8 +1227,8 @@
       <window_info id="Web" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4986577" visible="true" weight="0.3240469" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.35630497" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4986577" weight="0.33870968" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3548387" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32844576" />
@@ -1100,7 +1239,7 @@
       <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49932885" weight="0.3181818" />
       <window_info anchor="bottom" id="Java Enterprise" order="12" weight="0.32844576" />
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="14" weight="0.3313783" />
+      <window_info anchor="bottom" id="Version Control" order="14" weight="0.32674772" />
       <window_info anchor="bottom" id="Dependency Viewer" order="15" weight="0.32624114" />
       <window_info anchor="bottom" id="Inspection Results" order="16" weight="0.32907802" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -1124,8 +1263,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Added filter searchBy on searchAPI" />
-    <MESSAGE value="-Added interface on expenseSearch" />
     <MESSAGE value="-dynamic search on expense" />
     <MESSAGE value="-fixed logic bug on new user periodPaid&#10;-update monthly scheduled scheduler" />
     <MESSAGE value="-changed notif message for latepayment&#10;(nb*:Karena Month.of hanya bisa terima 1 - 12 )" />
@@ -1149,7 +1286,9 @@
     <MESSAGE value="-bug fix on bulk insert" />
     <MESSAGE value="-minor bug fixes" />
     <MESSAGE value="-added test on profile.vue" />
-    <option name="LAST_COMMIT_MESSAGE" value="-added test on profile.vue" />
+    <MESSAGE value="-fixed scroll bug" />
+    <MESSAGE value="-fixed resign group_admin user" />
+    <option name="LAST_COMMIT_MESSAGE" value="-fixed resign group_admin user" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1161,14 +1300,6 @@
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java</url>
-          <line>66</line>
-          <properties class="com.future.tcfm.controller.UserController" method="update">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java</url>
@@ -1218,24 +1349,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>88</line>
-          <properties />
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>96</line>
-          <properties />
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>91</line>
-          <properties />
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
           <line>152</line>
           <properties />
           <option name="timeStamp" value="58" />
@@ -1245,12 +1358,6 @@
           <line>67</line>
           <properties />
           <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>194</line>
-          <properties />
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ExpenseController.java</url>
@@ -1277,18 +1384,6 @@
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</url>
-          <line>114</line>
-          <properties />
-          <option name="timeStamp" value="69" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java</url>
-          <line>21</line>
-          <properties />
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java</url>
           <line>83</line>
           <properties />
@@ -1313,18 +1408,6 @@
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>171</line>
-          <properties />
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
-          <line>173</line>
-          <properties />
-          <option name="timeStamp" value="101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java</url>
           <line>162</line>
           <properties />
@@ -1332,7 +1415,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java</url>
-          <line>209</line>
+          <line>213</line>
           <properties />
           <option name="timeStamp" value="105" />
         </line-breakpoint>
@@ -1341,12 +1424,6 @@
           <line>140</line>
           <properties />
           <option name="timeStamp" value="106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java</url>
-          <line>42</line>
-          <properties />
-          <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java</url>
@@ -1378,6 +1455,12 @@
           <properties />
           <option name="timeStamp" value="118" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java</url>
+          <line>109</line>
+          <properties />
+          <option name="timeStamp" value="119" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-field">
           <url>file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExcelReaderServiceImpl.java</url>
           <line>26</line>
@@ -1397,13 +1480,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/PaymentController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/repository/UserRepository.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -1443,13 +1519,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="246">
           <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Expense.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="32" column="38" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -1508,34 +1577,10 @@
     <entry file="file://$PROJECT_DIR$/../Front-End/src/components/CreateNewGroupWindow.vue">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="53" column="9" lean-forward="true" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/JwtUserDetails.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="33" column="30" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -1620,16 +1665,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Front-End/package-lock.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1637,21 +1672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="35" lean-forward="true" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="60" column="16" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
-          <folding>
-            <element signature="e#824#825#0" expanded="true" />
-            <element signature="e#887#888#0" expanded="true" />
-            <element signature="e#1614#1615#0" expanded="true" />
-            <element signature="e#1663#1664#0" expanded="true" />
-            <element signature="e#1846#1847#0" expanded="true" />
-            <element signature="e#1896#1897#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1683,13 +1703,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Group.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="21" column="18" lean-forward="true" selection-start-line="21" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/ExcelReaderService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1715,13 +1728,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.1.5.RELEASE/spring-web-5.1.5.RELEASE-sources.jar!/org/springframework/web/method/support/InvocableHandlerMethod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1785">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-core/9.0.16/tomcat-embed-core-9.0.16-sources.jar!/org/apache/catalina/connector/Request.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
@@ -1736,13 +1742,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="85" column="50" selection-start-line="85" selection-start-column="50" selection-end-line="85" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/ExpenseServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6">
@@ -1750,10 +1749,69 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Group.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Expense.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="32" column="38" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="29" column="27" lean-forward="true" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/model/Payment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/OverviewServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="53" column="16" lean-forward="true" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-702">
+          <caret line="188" column="17" selection-start-line="188" selection-start-column="17" selection-end-line="188" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.1.5.RELEASE/spring-web-5.1.5.RELEASE-sources.jar!/org/springframework/web/method/support/InvocableHandlerMethod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="197" selection-start-line="197" selection-end-line="197" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/ImageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/UserServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1043">
-          <caret line="232" selection-start-line="232" selection-end-line="234" selection-end-column="19" />
+        <state relative-caret-position="120">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2549#2550#0" expanded="true" />
@@ -1766,10 +1824,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/GroupServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="e#887#888#0" expanded="true" />
+            <element signature="e#1614#1615#0" expanded="true" />
+            <element signature="e#1663#1664#0" expanded="true" />
+            <element signature="e#1846#1847#0" expanded="true" />
+            <element signature="e#1896#1897#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/DashboardServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/future/tcfm/service/impl/PaymentServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
-          <caret line="129" column="47" lean-forward="true" selection-start-line="129" selection-start-column="47" selection-end-line="129" selection-end-column="47" />
+          <caret line="194" selection-start-line="194" selection-end-line="194" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

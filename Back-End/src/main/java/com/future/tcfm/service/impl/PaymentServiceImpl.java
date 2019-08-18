@@ -106,7 +106,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         payment.setIsChecked(false);
-        payment.setPaymentDate(payment.getPaymentDate());
+        payment.setPaymentDate(payment.getPaymentDate()==null ? System.currentTimeMillis() : payment.getPaymentDate());
         payment.setGroupName(userExist.getGroupName());
         payment.setLastModifiedAt(System.currentTimeMillis());
         paymentRepository.save(payment);
