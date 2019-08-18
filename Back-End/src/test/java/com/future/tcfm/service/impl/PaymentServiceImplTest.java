@@ -1,6 +1,7 @@
 package com.future.tcfm.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.future.tcfm.config.SecurityConfig;
 import com.future.tcfm.model.*;
 import com.future.tcfm.repository.*;
 import org.junit.Assert;
@@ -57,8 +58,11 @@ public class PaymentServiceImplTest {
     @InjectMocks
     private PaymentServiceImpl paymentService;
 
-    @InjectMocks
+    @Mock
     private NotificationServiceImpl notificationService;
+
+    @Mock
+    private EmailServiceImpl emailService;
 
 
     private User user;
@@ -82,12 +86,13 @@ public class PaymentServiceImplTest {
 
     @Test
     public void testCreate() throws IOException, MessagingException {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
         //to provide security config
-
+        JwtUserDetails applicationUser = mock(JwtUserDetails.class);
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(SecurityConfig.getCurrentUser()).thenReturn(applicationUser);
         //
         doReturn(user).when(userRepository).findByEmail("userTest@jyp.com");
         doReturn(group).when(groupRepository).findByName(user.getGroupName());

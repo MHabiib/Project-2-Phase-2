@@ -15,7 +15,7 @@ import java.util.List;
 public interface ExpenseRepository extends MongoRepository<Expense, String>   {
     Expense findByTitle(String title);
     Expense findTop1ByGroupNameAndStatusOrderByCreatedDateDesc(String groupName,Boolean status);
-
+    Integer countByGroupNameAndStatus(String groupName,Boolean bool);
     List<Expense> findByGroupNameLikeAndGroupCurrentPeriodAndStatus(String groupName,int groupCurrentPeriod,Boolean bool);
     List<Expense> findByGroupNameLikeAndStatusOrderByCreatedDateDesc(String groupName,Boolean bool);
     List<Expense> findByGroupNameLikeOrderByCreatedDateDesc(String groupName);

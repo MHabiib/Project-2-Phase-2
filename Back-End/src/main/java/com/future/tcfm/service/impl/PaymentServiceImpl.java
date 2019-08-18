@@ -97,7 +97,6 @@ public class PaymentServiceImpl implements PaymentService {
         }
         if(checkImageFile(file)){
             try {
-//              Ini String.valueOf() nya gw delete soalnya kata SpringBoot itu not necessary. Kalau ternyata perlu masukin lagi + kabarin y
                 String fileName = "payment/"+System.currentTimeMillis() + "_" + payment.getEmail() + "_" + file.getOriginalFilename();
                 saveUploadedFile(file,fileName);
                 payment.setImagePath(fileName);
@@ -171,7 +170,6 @@ public class PaymentServiceImpl implements PaymentService {
         if(thisPayment.getStatus()){
             if(!paymentExist.getIsChecked()){
                 paymentExist.setIsRejected(false);
-//                User user = userRepository.findByEmail(payFor);
                 Group group = groupRepository.findByName(paymentExist.getGroupName());
                 if(payForExist.getBalance()==null){
                     payForExist.setBalance(0.0);

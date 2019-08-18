@@ -13,17 +13,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.client.ExpectedCount;
+import reactor.core.publisher.Mono;
 
 import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.client.ExpectedCount.times;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class GroupServiceImplTest {
     private static final String GROUP_ID = "groupId";
     private static final String USER_ID = "userId";
@@ -45,30 +49,40 @@ public class GroupServiceImplTest {
     public void init(){
         group = new Group();
         group.setName("Breakthrough");
-        group.setIdGroup(GROUP_ID);
-//        group.setTotalExpense((double) 1000000);
-        group.setClosedDate(null);
-        group.setRegularPayment((double) 10000);
-        group.setGroupBalance((double) 50000000);
         group.setActive(true);
-
-        user=new User();
-        user.setIdUser(USER_ID);
-        user.setGroupName("Breakthrough");
     }
+
+    @Test
+    public void testFindByIdNotNull() {
+        when(groupRepository.save(group)).thenReturn(group);
+
+        groupService.createGroup(group);
+        group.setIdGroup("ID_Group");
+
+        when(groupRepository.findByNameAndActive(group.getName(),true)).thenReturn(group);
+        ResponseEntity foundGroup = groupService.getGroupById(group.getIdGroup());
+
+        Assert.assertNotNull("Found group must not be null", foundGroup);
+        Assert.assertEquals("Group not found!", foundGroup.getBody());
+        Assert.assertEquals(HttpStatus.NOT_FOUND, foundGroup.getStatusCode());
+
+        verify(groupRepository, Mockito.times(1)).save(group);
+        verify(groupRepository, Mockito.times(1)).findByNameAndActive("Breakthrough",true);
+    }
+
 
     @Test
     public void loadAll() {
         // Data preparation
         List<Group> groups = Arrays.asList(group,group,group);
-        Mockito.when(groupRepository.findAll()).thenReturn(groups);
+        when(groupRepository.findAll()).thenReturn(groups);
 
         // Method call
         List<Group> groupList= groupService.loadAll();
 
         // Verification
         Assert.assertThat(groupList, Matchers.hasSize(3));
-        Mockito.verify(groupRepository, Mockito.times(1)).findAll();
+        verify(groupRepository, Mockito.times(1)).findAll();
         Mockito.verifyNoMoreInteractions(groupRepository);
     }
 
@@ -76,14 +90,14 @@ public class GroupServiceImplTest {
     public void membersGroup() {
         // Data preparation
         List<User> users = Arrays.asList(user,user,user);
-        Mockito.when(userRepository.findByGroupNameAndActive(user.getGroupName(),true)).thenReturn(users);
+        when(userRepository.findByGroupNameAndActive(user.getGroupName(),true)).thenReturn(users);
 
         // Method call
         List<User> memberList= groupService.membersGroup(user.getGroupName());
 
         // Verification
         Assert.assertThat(memberList, Matchers.hasSize(3));
-        Mockito.verify(userRepository, Mockito.times(1)).findByGroupNameAndActive(user.getGroupName(),true);
+        verify(userRepository, Mockito.times(1)).findByGroupNameAndActive(user.getGroupName(),true);
         Mockito.verifyNoMoreInteractions(groupRepository);
     }
 
@@ -97,24 +111,10 @@ public class GroupServiceImplTest {
 
         ResponseEntity<?> result = groupService.createGroup(group);
 
-        Mockito.verify(groupRepository,Mockito.times(1)).save(group);
+        verify(groupRepository,Mockito.times(1)).save(group);
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
-    @Test
-    public void createGroupWithSameName() {
-        Group group = new Group();
-        group.setName("Breakthrough");
-
-        doReturn(group).when(groupRepository).findByName(this.group.getName());
-        //doReturn(group).when(groupRepository).save(group);
-
-        ResponseEntity<?> result = groupService.createGroup(group);
-
-//        Assert.assertNull(result);
-        Mockito.verify(groupRepository, Mockito.times(1)).findByName(Mockito.anyString());
-        Assert.assertEquals(result.getStatusCode(),HttpStatus.BAD_REQUEST);
-    }
 
     @Test
     public void updateGroup() throws MessagingException {
@@ -129,7 +129,7 @@ public class GroupServiceImplTest {
 
         ResponseEntity<?> result = groupService.createGroup(group);
 
-        Mockito.verify(groupRepository,Mockito.times(1)).save(group);
+        verify(groupRepository,Mockito.times(1)).save(group);
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
@@ -146,7 +146,7 @@ public class GroupServiceImplTest {
         ResponseEntity<?> result = groupService.updateGroup(group.getIdGroup(),group);
 
 //        Assert.assertNull(result);
-        Mockito.verify(groupRepository, Mockito.times(1)).findByIdGroup(Mockito.anyString());
+        verify(groupRepository, Mockito.times(1)).findByIdGroup(Mockito.anyString());
         Assert.assertEquals(result.getStatusCode(),HttpStatus.NOT_FOUND);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class OverviewServiceImpl implements OverviewService {
 
     @Override
     public Overview getData(String email) {
+
         User dUser = userRepository.findByEmail(email);
         Group userGroup = groupRepository.findByNameAndActive(dUser.getGroupName(),true);
         List<Expense> listExpense = expenseRepository.findTop10ByGroupNameOrderByCreatedDateDesc(userGroup.getName());
@@ -50,27 +52,29 @@ public class OverviewServiceImpl implements OverviewService {
         Overview overviewData = new Overview();
         overviewData.setLatestExpense(listExpense);
         overviewData.setGroupBalance(userGroup.getGroupBalance());
-        overviewData.setTotalMembers(totalUser);
-        overviewData.setPercentageTotalCashUsed(getPercentageTotalCashUsed(userGroup,totalUser));
+        overviewData.setAveragePerExpense(getMoneyValue(userGroup));
+        overviewData.setPercentageTotalCashUsed(getPercentageTotalCashUsed(userGroup));
         overviewData.setPaymentPaidThisMonth(paymentPaidThisMonth);
         overviewData.setLatestJoinDate(System.currentTimeMillis());
         overviewData.setLatestExpenseDate(latestExpense.getLastModifiedAt());
+        overviewData.setTotalMembers(userRepository.countByGroupName(userGroup.getName()));
         return overviewData;
     }
-
-    private String getPercentageTotalCashUsed(Group groupExist, int totalMembers){
-/*
-        long selisihBulanDalamMs = System.currentTimeMillis()-groupExist.getCreatedDate();
-        int selisihBulan = (int)(selisihBulanDalamMs/2.628e+9)+1;
-        double saldoSekarangSeharusnya = selisihBulan*groupExist.getRegularPayment()*totalMembers;
-
-*/
-
-
-        double result = groupExist.getBalanceUsed()/(groupExist.getGroupBalance()+groupExist.getBalanceUsed());
+    private String getMoneyValue(Group groupExist){
+        String balanceUsed;
+        double result = groupExist.getBalanceUsed()/expenseRepository.countByGroupNameAndStatus(groupExist.getName(),true);
+        NumberFormat n = NumberFormat.getCurrencyInstance();
+        balanceUsed = n.format(result);
+        return balanceUsed;
+    }
+    private String getPercentageTotalCashUsed(Group groupExist){
+        String balanceUsed;
+        double result = groupExist.getBalanceUsed();
+        NumberFormat n = NumberFormat.getCurrencyInstance();
+        balanceUsed = n.format(result);
+        return balanceUsed;
 //test
-        DecimalFormat df=new DecimalFormat("##.##");
-        return df.format(result*100);
-        //return Double.parseDouble(new DecimalFormat("##.##").format(result))*100;
+        /*DecimalFormat df=new DecimalFormat("##.##");
+        return df.format(result*100);*/
     }
 }
