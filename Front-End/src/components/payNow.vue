@@ -179,7 +179,8 @@ const monthList =["January","February","March","April","May","June","July","Augu
         }else if(this.buktiTransfer === null) {
           alert('Please input the proof of payment.')
           return false
-        } else if(this.tanggalTransfer === null){
+        } else if(new Date(this.tanggalTransfer).getTime() <= 25200000){
+          alert('Please input payment date.')
           return false
         }
         return true
@@ -188,7 +189,7 @@ const monthList =["January","February","March","April","May","June","July","Augu
       },
       submitPembayaran() {
         if(!this.validateInput()) return;
-        // console.log('Tgl TF: '+ new Date(this.tanggalTransfer).getTime())
+        console.log('Tgl TF: '+ new Date(this.tanggalTransfer).getTime())
         let paymentDateInMillis = new Date(this.tanggalTransfer).getTime()
         let formData = new FormData();
         formData.append('payment', JSON.stringify({

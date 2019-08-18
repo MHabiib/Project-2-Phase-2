@@ -22,6 +22,7 @@ localVue.use(VueRouter)
 localVue.use(Vuex)
 
 beforeEach(()  => {
+    window.alert = jest.fn()
     wrapper = shallowMount(Login, {
         propsData: {},
         mocks: { $t: () => {} },
@@ -72,8 +73,7 @@ describe('Login.vue',() =>{
             password: 'fakepassword'
           };
         wrapper.setData(dataLogin)
-        const jsdomAlert = window.alert;  // remember the jsdom alert
-        window.alert = () => {}; //provide empty implementation
+
         
         wrapper.vm.loginHandler()
         wrapper.vm.$router.push = jest.fn()
@@ -82,6 +82,7 @@ describe('Login.vue',() =>{
     
         mockAxios.mockResponse(responseObj)
         expect(mockAxios.post).toHaveBeenCalledWith('http://localhost:8088/auth/signin', dataLogin );
+        expect(window.alert).toBeCalled()
         // window.alert=jsdomAlert
         // expect(wrapper.vm.$router.push).toBeCalled()
 

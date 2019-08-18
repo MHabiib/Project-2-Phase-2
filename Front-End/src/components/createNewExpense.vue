@@ -11,9 +11,9 @@
         </div>
 
         <div class="createNewExpenseBody">
-          <input class='singleLineInput' type="text" placeholder='Perkiraan Biaya' v-model='biaya' @keypress="checkChar" @change="checkChange"/>
-          <input class='singleLineInput' type="text" placeholder='Nama Pengeluaran' v-model='namaPengeluaran'/>
-          <textarea class='multiLineInput' type="text" placeholder='Jelaskan lebih lengkap tentang pengeluaran ini di sini...' v-model='deskripsiPengeluaran'/>
+          <input class='singleLineInput price' type="text" placeholder='Estimated Cost' v-model='biaya' @keypress="checkChar" @change="checkChange"/>
+          <input class='singleLineInput' type="text" placeholder='Expense Title' v-model='namaPengeluaran'/>
+          <textarea class='multiLineInput' type="text" placeholder='Expense Details...' v-model='deskripsiPengeluaran'/>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@
         }
       },
       createNewExpense() {
+        if(!this.validateInput()) return;
         let biayaWithOutDot = '';
         this.biaya.toString().split('').forEach(element => {
           if(element !== '.') {biayaWithOutDot += element}
@@ -106,6 +107,20 @@
           alert('Terjadi kesalahan. Harap periksa kembali koneksi internet Anda.');
           console.log(err);
         })
+      },
+      validateInput(){
+        if(this.biaya === ''){
+          alert('Please input the estimated cost.')
+          return false
+        } else if(this.namaPengeluaran === '') {
+          alert('Please input the expense title.')
+          return false
+        } else if(this.deskripsiPengeluaran === '') {
+          alert('Please input the expense details.')
+          return false
+        } else {
+          return true
+        }
       }
     }
   }
