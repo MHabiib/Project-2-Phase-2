@@ -1,6 +1,8 @@
 package com.future.tcfm.service.impl;
 
+import com.future.tcfm.model.Group;
 import com.future.tcfm.model.User;
+import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -10,10 +12,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,55 +33,33 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 //@RunWith(MockitoJUnitRunner.Silent.class)
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringBootTest
-@ContextConfiguration
-public class UserServiceImplTest extends AbstractTestNGSpringContextTests {
-    private static final String USER_ID = "userId";
+@RunWith(MockitoJUnitRunner.class)
+public class UserServiceImplTest {
 
-
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
-    private WebApplicationContext wac;
-    private MockMvc mockMvc;
+    @Mock
+    private GroupRepository groupRepository;
 
+    @Mock
+    private WebApplicationContext wac;
 
     @InjectMocks
     UserServiceImpl userService;
 
     private User user;
-
-
-
-    @Before
-    public void setup() {
-        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
-        this.mockMvc = builder.build();
-    }
-
-
-    @Before
-    public void init(){
-        user = new User();
-        user.setName("Nancy");
-        user.setIdUser(USER_ID);
-        user.setGroupName("ISH");
-        user.setRole("STAFF");
-        user.setEmail("nancy@gdn.com");
-        user.setPassword("nancy123");
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-    }
+    private Group group;
 
     @Test
     public void loadAll() {
@@ -111,38 +93,21 @@ public class UserServiceImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void createUserV2() {}
+    public void manageUser() throws MessagingException {
+        user=  new User();
+        user.setGroupName("Test");
+        user.setActive(true);
+        user.setIdUser("ID");
 
-    @Test
-    public void updateUserV2() throws Exception{
+        group = new Group();
+        group.setName("Test");
+        group.setActive(true);
 
-            ResultMatcher ok = MockMvcResultMatchers.status().isOk();
+        when(userRepository.findByIdUser(user.getIdUser())).thenReturn(user);
+        when(groupRepository.findByNameAndActive(user.getGroupName(),true)).thenReturn(group);
 
-            String fileName = "test.txt";
-            File file = new File(UserServiceImpl.UPLOADED_FOLDER + fileName);
-            //delete if exits
-            file.delete();
-
-            MockMultipartFile mockMultipartFile = new MockMultipartFile("user-file",fileName,
-                    "text/plain", "test data".getBytes());
-
-            MockHttpServletRequestBuilder builder =
-                    MockMvcRequestBuilders.fileUpload("/upload")
-                            .file(mockMultipartFile);
-            this.mockMvc.perform(builder).andExpect(ok)
-                    .andDo(MockMvcResultHandlers.print());;
-            Assert.assertTrue(file.exists());
+        userService.manageUser(user.getIdUser(),user,"");
     }
-
-/*        MockMultipartFile pic = new MockMultipartFile("data", "filename.jpg", "text/plain", "some xml".getBytes());
-
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/upload")
-                .file(pic)
-                .param("some-random", "4"))
-                .andExpect(status().is(200))
-                .andExpect(content().string("success"));*/
-
 
     @Test
     public void getImage() {}
@@ -153,6 +118,13 @@ public class UserServiceImplTest extends AbstractTestNGSpringContextTests {
     @Test
     public void checkImageFile() {}
 
+    @Test
+    public void deleteUser() throws MessagingException {
+        user=new User();
+        user.setIdUser("ID");
+
+        ResponseEntity e = userService.deleteUser("asd");
+    }
 
 
 }

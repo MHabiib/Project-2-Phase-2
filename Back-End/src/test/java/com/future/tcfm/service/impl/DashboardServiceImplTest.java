@@ -31,33 +31,48 @@ public class DashboardServiceImplTest {
     private ExpenseRepository expenseRepository;
 
     @Mock
-    private GroupRepository groupRepository;
+    private PaymentRepository paymentRepository;
 
     @Mock
-    private Group group;
+    private GroupRepository groupRepository;
 
     @InjectMocks
     private DashboardServiceImpl dashboardService;
 
+    private Group group;
     private Expense expense;
     private Expense expense2;
     private User user;
 
     @Before
     public void init(){
-        MockitoAnnotations.initMocks(this);
         user=new User();
+        User user2 = new User();
         group=new Group();
         expense = new Expense();
         expense2 = new Expense();
 
         user.setEmail("userTest@jyp.com");
         user.setGroupName("groupTest");
-        User user2 = new User();
         user2.setEmail("userTest2@jyp.com");
         user2.setGroupName("groupTest");
+        user.setTotalPeriodPayed(2);
+        user2.setTotalPeriodPayed(4);
+        user.setBalanceUsed(10000D);
+        user2.setBalanceUsed(20000D);
         expense.setTitle("TestExpense");
+        expense.setLastModifiedAt(1565890529084L);
+        expense.setStatus(true);
+        expense.setPrice(1230000D);
         expense2.setTitle("TestExpense2");
+        expense2.setLastModifiedAt(1565890529084L);
+        expense2.setStatus(true);
+        expense2.setPrice(500000D);
+        group.setRegularPayment(50000D);
+        group.setGroupBalance(100000D);
+        group.setBankAccountNumber("828000001");
+        group.setGroupAdmin("admin@test.com");
+
     }
 
     @Test
@@ -69,21 +84,9 @@ public class DashboardServiceImplTest {
 
         Dashboard dashboard=dashboardService.getData(user.getEmail());
 
-        User foundUser = userRepository.findByEmail(user.getEmail());
-        Group foundGroup = groupRepository.findByNameAndActive(user.getGroupName(),true);
-        int countGroup = userRepository.countByGroupName(user.getGroupName());
-//        List<Expense> foundExpenses = expenseRepository.findByGroupNameLikeAndStatusOrderByCreatedDateDesc(user.getGroupName(),true);
+        Assert.assertNotNull("Found AdminAccountNumber must not be null", dashboard.getAdminAccountNumber());
+        Assert.assertNotNull("Found groupAdminName must not be null", dashboard.getAdminName());
 
-        Assert.assertNotNull("Found user must not be null", dashboard.getAdminAccountNumber());
-        Assert.assertNotNull("Found group must not be null", dashboard.getAdminName());
-        Assert.assertNotNull("Count group must not be null", dashboard.getExpenseByQuantitiyPercent());
-      /*  Assert.assertNotNull("Found expenses must not be null", foundExpenses);
-        Assert.assertEquals("Expense must contain only two expenses", 2, foundExpenses.size());
-        Assert.assertSame("Found expense must equal sample category TestExpense", expense, foundExpenses.get(0));
-        Assert.assertSame("Found expense must equal sample category TestExpense2", expense2, foundExpenses.get(1));
-        Assert.assertEquals("TestExpense", foundExpenses.get(0).getTitle());
-        Assert.assertEquals("TestExpense2", foundExpenses.get(1).getTitle());
-*/
         verify(userRepository, times(1)).findByEmail(user.getEmail());
     }
 }

@@ -1,9 +1,14 @@
 package com.future.tcfm.service.impl;
 
+import com.future.tcfm.model.Expense;
 import com.future.tcfm.model.Group;
+import com.future.tcfm.model.JwtUserDetails;
 import com.future.tcfm.model.User;
+import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
+import com.future.tcfm.repository.JwtUserDetailsRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.NotificationService;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,10 +21,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.client.ExpectedCount;
 import reactor.core.publisher.Mono;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +42,27 @@ public class GroupServiceImplTest {
     private static final String USER_ID = "userId";
 
     @Mock
+    private JwtUserDetailsRepository jwtUserDetailsRepository;
+
+    @Mock
     private GroupRepository groupRepository;
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ExpenseRepository expenseRepository;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     GroupServiceImpl groupService;
 
     private Group group;
     private User user;
+    private JwtUserDetails jwtUserDetails;
+    private Expense expense;
 
 
     @Before
@@ -119,15 +139,18 @@ public class GroupServiceImplTest {
     @Test
     public void updateGroup() throws MessagingException {
         Group group = new Group();
-        group.setName("BOOM BOOM");
+        group.setName("Group Test");
+        group.setIdGroup("ID_Group");
+        group.setGroupAdmin("groupAdmin@test.com");
+        expense = new Expense();
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(new JwtUserDetails(), null));
 
-        // Method call
-        groupService.updateGroup(GROUP_ID,group);
+        when(groupRepository.findByIdGroup(group.getIdGroup())).thenReturn(group);
+        when(groupRepository.countAllByNameAndActive(group.getName(),true)).thenReturn(0);
+        when(expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(group.getName())).thenReturn(Arrays.asList(expense));
 
-        doReturn(group).when(groupRepository).findByIdGroup(this.group.getIdGroup());
-        doReturn(group).when(groupRepository).save(group);
-
-        ResponseEntity<?> result = groupService.createGroup(group);
+        ResponseEntity<?> result = groupService.updateGroup(group.getIdGroup(),group);
 
         verify(groupRepository,Mockito.times(1)).save(group);
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -149,4 +172,6 @@ public class GroupServiceImplTest {
         verify(groupRepository, Mockito.times(1)).findByIdGroup(Mockito.anyString());
         Assert.assertEquals(result.getStatusCode(),HttpStatus.NOT_FOUND);
     }
+
+
 }

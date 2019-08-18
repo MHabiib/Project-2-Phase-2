@@ -42,7 +42,6 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     //
     @Async
-    @Transactional
     @Scheduled(cron = "0 10 10 05 * ?") // setiap tanggal 10  disetiap bulan jam 10 : 05
     public void scheduler() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);
@@ -140,7 +139,6 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Async
-    @Transactional
     @Scheduled(cron = "0 7 10 05 * ?") // setiap tanggal 7 disetiap bulan jam 10 : 05
     public void schedulerReminder() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);
@@ -148,7 +146,8 @@ public class SchedulerServiceImpl implements SchedulerService {
             for (User user : listUser) {
                 try {
                     if (user.getGroupName().equalsIgnoreCase("") || user.getGroupName().equalsIgnoreCase("GROUP_LESS")) {
-                    } else {
+                    }
+                    else {
                         emailService.periodicMailReminderSender(user.getEmail());
                     }
                 } catch (MessagingException e) {
@@ -159,7 +158,6 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Async
-    @Transactional
     @Scheduled(cron = "0 31 10 05 * ?") // setiap tanggal 31 disetiap bulan jam 10 : 05
     public void monthlyCashStatement() throws MessagingException {
         List<User> listUser = userRepository.findAllByActive(true);

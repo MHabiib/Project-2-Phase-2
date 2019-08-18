@@ -49,13 +49,6 @@ public class PaymentController {
         return paymentService.createPayment(paymentJSONString, file);
     }
 
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity update(@PathVariable("id") String id,
-                                 @Nullable @RequestPart("file") MultipartFile file,
-                                 @RequestPart("payment") String paymentJSONString) throws IOException {
-        return paymentService.updatePayment(id, paymentJSONString, file);
-    }
-
     @PutMapping("/managementPayment")
     public ResponseEntity managementPayment(@RequestBody ExpenseRequest thisPayment) throws MessagingException {
         return paymentService.managementPayment(thisPayment);

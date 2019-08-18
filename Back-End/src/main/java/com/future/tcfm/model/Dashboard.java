@@ -19,7 +19,6 @@ public class Dashboard {
     private double yourContribution;
     private String adminAccountNumber;
     private String adminName;
-    private Long lastPayment;
     private int yourPayment;
     private double expenseByValue;
     private int expenseByQuantity;

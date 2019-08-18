@@ -59,6 +59,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
     NotificationService notificationService;
+
     @Override
     public List<Expense> loadAll() {
         return expenseRepository.findAll();
@@ -128,12 +129,6 @@ public class ExpenseServiceImpl implements ExpenseService {
             return new ResponseEntity<>("Expense Not Found!", HttpStatus.NOT_FOUND);
     }
 
-    @Override
-    public List<Expense> expenseGroupByEmail(String userEmail) {
-        User userSelected = userRepository.findByEmail(userEmail);
-        String userGroup = userSelected.getGroupName();
-        return expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(userGroup);
-    }
 
     /**
      * Paging dibawah
@@ -154,21 +149,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         return PageRequest.of(page,size,Sort.by(filter).descending());
     }
 
-    //ini hanya untuk di akses oleh user utk edit request expense mereka
-    @Override
-    public ResponseEntity updateExpense(String id, Expense expense) {
-        Expense expenseExist = expenseRepository.findByTitle(expense.getTitle());
-        if (expenseExist == null)
-            return new ResponseEntity<>("Expense not found!\nerr : 404", HttpStatus.BAD_REQUEST);
-        expenseExist.setTitle(expense.getTitle());
-        expenseExist.setDetail(expense.getDetail());
-        expenseExist.setPrice(expense.getPrice());
-        expenseExist.setLastModifiedAt(System.currentTimeMillis());
-        expenseRepository.save(expenseExist);
-        return new ResponseEntity<>(expense, HttpStatus.OK);
-    }
-
-    @Transactional
     public void updateExpenseContributed(Expense expenseExist,List<User> listUser){
         double balanceUsed = expenseExist.getPrice()/listUser.size();
         List<ExpenseIdContributed> expenseIdContributeds;

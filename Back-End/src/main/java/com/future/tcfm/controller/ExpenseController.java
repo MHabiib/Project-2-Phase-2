@@ -64,11 +64,6 @@ public class ExpenseController {
         return expenseService.createExpense(expense);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Expense> updateExpense(@PathVariable("id") String id, @RequestBody Expense expense) {
-        return expenseService.updateExpense(id,expense);
-    }
-
     @PutMapping("/managementExpense")
     public ResponseEntity managementExpense(@RequestBody ExpenseRequest expenseRequest) throws MessagingException {
         return expenseService.managementExpense(expenseRequest);

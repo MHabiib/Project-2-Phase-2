@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -49,7 +50,7 @@ public class GroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group) throws MessagingException {
+    public ResponseEntity<Group> updateGroup(@PathVariable("id") String id, @RequestBody Group group ) throws MessagingException {
         return groupService.updateGroup(id,group);
     }
     @GetMapping("/search")

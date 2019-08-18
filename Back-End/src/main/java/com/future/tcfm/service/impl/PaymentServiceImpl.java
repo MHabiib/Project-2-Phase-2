@@ -231,13 +231,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity findByGroupNameAndIsPaid(String groupName,String filter, int page, int size) {
-        Page<Payment> paymentList = paymentRepository.findAllByGroupNameOrderByPaymentDateDesc(groupName,createPageRequest(filter,"desc",page,size));
-        if(paymentList==null) return new ResponseEntity<>("Error: 404 Not Found",HttpStatus.NOT_FOUND);
-        return new ResponseEntity(paymentList,HttpStatus.OK);
-    }
-
-    @Override
     public Page<Payment> searchBy(String query, int page, int size) {
         System.out.println("Query Param : "+query);
         Pattern pattern = Pattern.compile("(.*)(:)(.*)");

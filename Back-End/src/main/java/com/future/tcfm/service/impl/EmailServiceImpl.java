@@ -91,12 +91,6 @@ public class EmailServiceImpl implements EmailService {
         }
         //this.emailSender.send(message);
     }
-
-    @Override
-    public ResponseEntity simpleEmail(EmailRequest emailRequest) {
-        return null;
-    }
-
     @Async
     public void periodicMailReminderSender( String email) throws MessagingException {
         User user  = userRepository.findByEmail(email);
@@ -230,33 +224,4 @@ public class EmailServiceImpl implements EmailService {
         }
         return new ResponseEntity<>("Some error occured.", HttpStatus.BAD_REQUEST);
     }
-
-    @Override
-    public ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, emailRequest.getMultipart());
-
-        helper.setTo(emailRequest.getEmail());
-        helper.setSubject("Blibli Future Medan Batch - 3.0");
-        helper.setText("Hello, This is from attachment email sender!");
-        FileSystemResource file = new FileSystemResource(new File(PATH+emailRequest.getFile()));
-
-        helper.addAttachment("Pdf file", file);
-
-        //emailSender.send(message);
-
-        return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
-    }
 }
-
-/*    @Override
-    public ResponseEntity simpleEmail(EmailRequest emailRequest) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(emailRequest.getEmail());
-            message.setSubject("Blibli Future Medan Batch - 3.0");
-            message.setText("simple email sender!");
-
-            this.emailSender.send(message);
-
-         return new ResponseEntity<>("Email Sent!", HttpStatus.OK);
-}*/

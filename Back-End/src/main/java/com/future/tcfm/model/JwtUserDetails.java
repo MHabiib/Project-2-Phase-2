@@ -34,6 +34,7 @@ public class JwtUserDetails implements UserDetails {
         this.authorities = grantedAuthorities;
 
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

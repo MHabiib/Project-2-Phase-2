@@ -17,14 +17,6 @@ public class EmailController {
     @Autowired
     EmailService emailService;
 
-    @PostMapping("/simpleEmail")
-    public ResponseEntity simpleEmail(@RequestBody EmailRequest emailRequest) {
-        return emailService.simpleEmail(emailRequest);
-    }
-    @PostMapping("/attachmentEmail")
-    public ResponseEntity attachmentEmail(@RequestBody EmailRequest emailRequest) throws MessagingException {
-        return emailService.attachmentEmail(emailRequest);
-    }
     @PostMapping("/userResign")
     public ResponseEntity userResign(@RequestBody String email) throws MessagingException {
         return emailService.userResign(email);

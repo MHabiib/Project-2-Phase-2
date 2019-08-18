@@ -70,31 +70,6 @@ public class GroupServiceImpl implements GroupService {
     public List<User> membersGroup(String groupName) {
         return userRepository.findByGroupNameAndActiveOrderByNameAsc(groupName,true);
     }
-
-//  EMAIL -> GET GROUP NAME -> GET ALL MEMBER IN THE GROUP; Robin
-    @Override
-    public List<User> membersGroupByEmail(String email) {
-        String userGroup = userRepository.findByEmail(email).getGroupName();
-        return userRepository.findByGroupNameAndActive(userGroup,true);
-    }
-
-    @Override
-    public int getGroupCreatedMonth(String groupName) {
-        Group groupExist = groupRepository.findByNameAndActive(groupName, true);
-        if (groupExist == null)
-            throw new RuntimeException("GROUP NOT FOUND!");
-        return Instant.ofEpochMilli(groupExist.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
-    }
-    /**
-     * paging
-     * @param email,page,size
-     * @return
-     */
-    @Override
-    public Page<User> findMembersGroupByEmail(String email,String filter,int year, int page, int size) {
-        String userGroup = userRepository.findByEmail(email).getGroupName();
-        return userRepository.findByGroupName(userGroup,createPageRequest(filter,"",page,size));
-    }
     @Override
     public ResponseEntity<?> createGroup(Group group) {
         Group groupExist = groupRepository.findByNameAndActive(group.getName(),true);

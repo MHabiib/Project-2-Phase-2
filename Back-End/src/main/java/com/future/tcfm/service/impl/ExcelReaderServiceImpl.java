@@ -33,7 +33,6 @@ public class ExcelReaderServiceImpl implements ExcelReaderService {
     ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
-    @Transactional
     public Boolean saveFile(MultipartFile file) {
         try {
             List<Group> groupList = groupRepository.findAllByActive(true);

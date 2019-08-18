@@ -7,15 +7,12 @@ import org.springframework.scheduling.annotation.Async;
 import javax.mail.MessagingException;
 
 public interface EmailService {
-    ResponseEntity simpleEmail(EmailRequest emailRequest);
 
     @Async
     void emailNotification(String message, String email)  throws MessagingException;
 
     @Async
     ResponseEntity userResign(String email) throws MessagingException;
-
-    ResponseEntity attachmentEmail(EmailRequest emailRequest) throws MessagingException;
 
     @Async
     void periodicMailSender (String email, String monthBeforeStr,int yearBefore, String monthNowStr, int yearNow) throws MessagingException;

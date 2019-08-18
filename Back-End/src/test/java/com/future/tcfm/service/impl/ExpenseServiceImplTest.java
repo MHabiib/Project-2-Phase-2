@@ -1,13 +1,13 @@
 package com.future.tcfm.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.future.tcfm.model.Expense;
-import com.future.tcfm.model.Group;
-import com.future.tcfm.model.Payment;
-import com.future.tcfm.model.User;
+import com.future.tcfm.model.*;
+import com.future.tcfm.model.ReqResModel.ExpenseRequest;
+import com.future.tcfm.model.list.ExpenseContributedDetails;
 import com.future.tcfm.repository.ExpenseRepository;
 import com.future.tcfm.repository.GroupRepository;
 import com.future.tcfm.repository.UserRepository;
+import com.future.tcfm.service.NotificationService;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,9 +20,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,77 +43,114 @@ public class ExpenseServiceImplTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    NotificationService notificationService;
+
     @InjectMocks
     ExpenseServiceImpl expenseService;
+
+
 
     private Expense expense;
     private User user;
     private Group group;
+    private ExpenseRequest expenseRequest;
+    private JwtUserDetails jwtUserDetails;
 
     @Before
     public void init(){
-/*        expense = new Expense();
-        user = new User();
-        group=new Group();
-        user.setName("Sana");
-        user.setGroupName("BDZ");
-        user.setEmail("sana@jyp.com");
-        expense.setGroupName("BDZ");
-        expense.setTitle("Sound");
-        expense.setDetail("Marshall");
-        expense.setPrice((double) 15000000);
-        expense.setRequester(user.getEmail());
-        group.setName("BDZ");*/
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testCreate() throws IOException, MessagingException {
-        when(expenseRepository.save(expense)).thenReturn(expense);
-        ResponseEntity createdExpense = expenseService.createExpense(expense);
+    public void testCreateGroupExistNotNull() throws IOException, MessagingException {
+        expense=new Expense();
         expense.setTitle("ALBUM");
+        expense.setRequester("requesterEmail@test.com");
+        expense.setPrice(5000D);
+        user=new User();
+        user.setGroupName("Test");
+        user.setEmail("requesterEmail@test.com");
+        group=new Group();
+        group.setName("Test");
+        group.setGroupBalance(6000D);
 
-        when(expenseRepository.count()).thenReturn(1L);
+        when(groupRepository.findByName(user.getGroupName())).thenReturn(group);
+        when(userRepository.findByEmail(expense.getRequester())).thenReturn(user);
 
-        Assert.assertNotNull("Created category must not be null", createdExpense);
-        Assert.assertSame("Created category must equal sample category", expense, createdExpense);
-        Assert.assertEquals("Categories must contain only one category", 1L, expenseRepository.count());
-        Assert.assertEquals("ALBUM", expense.getTitle());
-        Assert.assertEquals("groupTest", expense.getGroupName());
-
-        verify(expenseRepository, times(1)).save(expense);
-        verify(expenseRepository, times(1)).count();
+        ResponseEntity createExpense = expenseService.createExpense(expense);
     }
 
     @Test
-    public void loadAll() {
-        // Data preparation
-        List<Expense> expenses = Arrays.asList(expense,expense,expense);
-        Mockito.when(expenseRepository.findAll()).thenReturn(expenses);
+    public void testCreateGroupExistNull() throws IOException, MessagingException {
+        expense=new Expense();
+        expense.setTitle("ALBUM");
+        expense.setRequester("requesterEmail@test.com");
+        user=new User();
+        user.setGroupName("Test");
+        user.setEmail("requesterEmail@test.com");
 
-        // Method call
-        List<Expense> expenseList= expenseService.loadAll();
+        when(userRepository.findByEmail(expense.getRequester())).thenReturn(user);
 
-        // Verification
-        Assert.assertThat(expenseList, Matchers.hasSize(3));
-        Mockito.verify(expenseRepository, Mockito.times(1)).findAll();
-        Mockito.verifyNoMoreInteractions(expenseRepository);
+        ResponseEntity createExpense = expenseService.createExpense(expense);
     }
 
     @Test
-    public void expenseGroup() {
-        // Data preparation
-        List<Expense> expenses= Arrays.asList(expense,expense,expense);
-        Mockito.when(expenseRepository.findByGroupNameLikeOrderByCreatedDateDesc(expense.getGroupName())).thenReturn(expenses);
+    public void singleExpense() throws IOException, MessagingException {
+        expense=new Expense();
+        expense.setIdExpense("ID_Expense");
 
-        // Method call
-        List<Expense> expenseList= expenseService.expenseGroup(expense.getGroupName());
+        when(userRepository.findByEmail(expense.getRequester())).thenReturn(user);
 
-        // Verification
-        Assert.assertThat(expenseList, Matchers.hasSize(3));
-        Mockito.verify(expenseRepository, Mockito.times(1)).findByGroupNameLikeOrderByCreatedDateDesc(expense.getGroupName());
-        Mockito.verifyNoMoreInteractions(expenseRepository);
+        ResponseEntity createExpense = expenseService.singleExpense(expense.getIdExpense());
     }
 
+    @Test
+    public void singleExpenseNull() throws IOException, MessagingException {
+        expense=new Expense();
+        when(userRepository.findByEmail(expense.getRequester())).thenReturn(user);
 
+        ResponseEntity createExpense = expenseService.singleExpense(expense.getIdExpense());
+    }
+
+    @Test
+    public void getLastExpense(){
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(new JwtUserDetails(), null));
+
+
+        when(expenseRepository.findTop1ByGroupNameAndStatusOrderByCreatedDateDesc("GroupName",true)).thenReturn(expense);
+        expenseService.getLastExpense();
+    }
+
+    @Test
+    public void managementExpense() throws IOException, MessagingException {
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(new JwtUserDetails(), null));
+
+        //set JWT user details group ?
+
+        expense = new Expense();
+        expense.setIdExpense("ID_EXPENSE");
+        expense.setGroupName("Group Test");
+        expenseRequest=new ExpenseRequest();
+        expenseRequest.setId("ID_EXPENSE");
+        expenseRequest.setStatus(true);
+
+        when(expenseRepository.findByIdExpense(expenseRequest.getId())).thenReturn(expense);
+        when(userRepository.findByRoleAndActive("SUPER_ADMIN",true)).thenReturn(Arrays.asList(user));
+
+        ResponseEntity createExpense = expenseService.managementExpense(expenseRequest);
+    }
+
+    @Test
+    public void managementExpenseNull() throws IOException, MessagingException {
+        expenseRequest=new ExpenseRequest();
+        expenseRequest.setId("ID_EXPENSE");
+        expenseRequest.setStatus(true);
+
+        when(userRepository.findByRoleAndActive("SUPER_ADMIN",true)).thenReturn(Arrays.asList(user));
+
+        ResponseEntity createExpense = expenseService.managementExpense(expenseRequest);
+    }
 }

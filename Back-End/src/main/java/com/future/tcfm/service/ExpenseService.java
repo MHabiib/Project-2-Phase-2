@@ -15,9 +15,7 @@ public interface ExpenseService {
     ResponseEntity createExpense(Expense expense) throws MessagingException;
     ResponseEntity singleExpense(String id);
     Page<Expense> expensePageGroupByEmail(String userEmail,String filter, int page, int size);
-    ResponseEntity updateExpense(String id, Expense expense);
     ResponseEntity managementExpense(ExpenseRequest expenseRequest) throws MessagingException;
-    List<Expense> expenseGroupByEmail(String userEmail);
     Page<Expense> searchBy(String query, int page, int size) throws ParseException;
     Expense getLastExpense();
 }
