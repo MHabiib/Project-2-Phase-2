@@ -62,7 +62,12 @@ public class OverviewServiceImpl implements OverviewService {
     }
     private String getMoneyValue(Group groupExist){
         String balanceUsed;
-        double result = groupExist.getBalanceUsed()/expenseRepository.countByGroupNameAndStatus(groupExist.getName(),true);
+        Integer totalExpense = expenseRepository.countByGroupNameAndStatus(groupExist.getName(),true);
+        if( totalExpense <= 0 || totalExpense == null) {
+            NumberFormat n = NumberFormat.getCurrencyInstance();
+            balanceUsed = n.format(0);
+            return balanceUsed;        }
+        double result = groupExist.getBalanceUsed()/totalExpense;
         NumberFormat n = NumberFormat.getCurrencyInstance();
         balanceUsed = n.format(result);
         return balanceUsed;

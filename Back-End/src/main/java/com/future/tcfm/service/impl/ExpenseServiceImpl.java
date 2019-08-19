@@ -188,17 +188,17 @@ public class ExpenseServiceImpl implements ExpenseService {
         if(!expenseExist.getGroupName().equals(getCurrentUser().getGroupName())){
             return new ResponseEntity<>("403 You are not the group admin of this group",HttpStatus.UNAUTHORIZED);
         }
+        Group group = groupRepository.findByName(expenseExist.getGroupName());
+        adminTarget.setEmail(group.getGroupAdmin());
         if(expenseRequest.getStatus()) {
             if(expenseExist.getStatus()!=null){
                 return new ResponseEntity<>("Expense already approved!",HttpStatus.BAD_REQUEST);
             }
-            Group group = groupRepository.findByName(expenseExist.getGroupName());
             if(expenseExist.getPrice()>group.getGroupBalance()){
                 return new ResponseEntity<>("Cannot accept expense, not enough group balance!",HttpStatus.BAD_REQUEST);
             }
             expenseExist.setStatus(true);
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
-            adminTarget.setEmail(group.getGroupAdmin());
             //notif...
             List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
@@ -208,6 +208,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         else if(!expenseRequest.getStatus()) {
             expenseExist.setStatus(false);
+
             //notif...
             notificationMessage = expenseExist.getRequester() + EXPENSE_REJECTED_MESSAGE +"(" +expenseExist.getTitle()+")";
         }
@@ -223,13 +224,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         sendTo.add(requesterTarget);
         sendTo.add(adminTarget);
 
-        executor.execute(() -> {
+//        executor.execute(() -> {
             try {
                 for (User user : sendTo) {
                     emailService.emailNotification(notificationMessage, user.getEmail());//pengiriman email untuk user yang berkontribusi
                 }
-            }catch (Exception e){e.printStackTrace();;}
-        });
+            }catch (Exception e){e.printStackTrace();}
+//        });
         expenseExist.setLastModifiedAt(System.currentTimeMillis());
         expenseExist.setApprovedOrRejectedBy(getCurrentUser().getEmail());
         expenseRepository.save(expenseExist);

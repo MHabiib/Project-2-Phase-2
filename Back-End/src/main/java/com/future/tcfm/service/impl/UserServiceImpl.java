@@ -206,6 +206,9 @@ public class UserServiceImpl implements UserService {
                 updateGroupAdmin(newGroupAdmin, userExist, user);
 //                userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
             }
+
+            notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
+            notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
             userExist.setGroupName(user.getGroupName().equalsIgnoreCase("") ? "GROUP_LESS" : user.getGroupName());
 
             userExist.setBalance(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ? user.getBalance() :  0.0 );
@@ -214,8 +217,6 @@ public class UserServiceImpl implements UserService {
             userExist.setTotalPeriodPayed(userExist.getGroupName().equalsIgnoreCase("GROUP_LESS") ?  user.getTotalPeriodPayed() : groupExist.getCurrentPeriod() - 1);
 
             userExist.setJoinDate(System.currentTimeMillis());
-            notifMessage = userExist.getEmail() + USER_LEFT_GROUP;
-            notificationService.createNotification(notifMessage, userExist.getEmail(), userExist.getGroupName(), TYPE_GROUP);
             //notification untuk group barunya
             notifMessage = userExist.getEmail() + USER_JOINED_GROUP;
             notificationService.createNotification(notifMessage, userExist.getEmail(), user.getGroupName(), TYPE_GROUP);

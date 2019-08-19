@@ -28,6 +28,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +55,7 @@ public class GroupServiceImpl implements GroupService {
     EmailService emailService;
     @Autowired
     MongoTemplate mongoTemplate;
+    ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public List<Group> loadAll() {
@@ -108,6 +111,7 @@ public class GroupServiceImpl implements GroupService {
                 userRepository.save(newAdmin);
 
                 notificationService.createNotification(newAdmin.getName() + " just been promoted to Group Admin!", null, newAdmin.getGroupName(), TYPE_GROUP);
+
                 emailService.emailNotification("Congrats! you have been promoted to be Group Admin.",newAdmin.getEmail());
                 notificationService.createNotification("Congrats! you have been promoted to be Group Admin.", newAdmin.getEmail(), null, TYPE_PERSONAL);
             }
@@ -135,7 +139,7 @@ public class GroupServiceImpl implements GroupService {
             userRepository.saveAll(userList);
         }
         groupRepository.save(groupExist);
-        notificationService.createNotification(GROUP_PROFILE_UPDATE+getCurrentUser().getEmail(),null,groupExist.getName(),TYPE_GROUP);
+        executor.execute(()-> notificationService.createNotification(GROUP_PROFILE_UPDATE+getCurrentUser().getEmail(),null,groupExist.getName(),TYPE_GROUP));
         return new ResponseEntity<>(groupExist, HttpStatus.OK);
     }
 

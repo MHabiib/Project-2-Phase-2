@@ -16,7 +16,7 @@
               <div class="overviewLeftBody">
                 <div class="overviewLeftBodyUpper">
                   <div class="overviewLeftBodyUpperTitle">Balance</div>
-                  <div class="overviewLeftBodyUpperValue">Rp {{overviewData.groupBalance | thousandSeparators}}</div>
+                  <div class="overviewLeftBodyUpperValue">IDR{{overviewData.groupBalance | thousandSeparators}}</div>
                 </div>
 
                 <div class="overviewLeftBodyLower">
@@ -64,7 +64,7 @@
                     <td>{{index+1}}.</td>
                     <td>{{expense.createdDate | dateFormatter}}</td>
                     <td>{{expense.title}}</td>
-                    <td>Rp {{expense.price | thousandSeparators}}</td>
+                    <td>IDR{{expense.price | thousandSeparators}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -86,7 +86,7 @@
 
             <div class="overviewRightCard">
               <div class="overviewRightCardHeader" style="width: 77%;">
-                {{overviewData.averagePerExpense}}
+                {{overviewData.averagePerExpense == null ? 0 : overviewData.averagePerExpense}}
               </div>
 
               <div class="overviewRightCardBody">
