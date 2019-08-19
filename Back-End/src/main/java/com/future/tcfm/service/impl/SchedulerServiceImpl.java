@@ -75,7 +75,7 @@ public class SchedulerServiceImpl implements SchedulerService {
             for (User user : listUser) {
                 group = groupMap.get(user.getGroupName());
                 yearNow = Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getYear();
-                monthNow = Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+                monthNow = Instant.ofEpochMilli(group.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue()-1;
                 monthNow += group.getCurrentPeriod();
 
 /*                Exception in thread "pool-5-thread-1" java.lang.NullPointerException

@@ -200,6 +200,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             expenseExist.setStatus(true);
             group.setGroupBalance(group.getGroupBalance()-expenseExist.getPrice());
             //notif...
+            //+= jgn timpah
             List<User> listUser = userRepository.findByGroupNameAndActive(group.getName(),true);
             group.setBalanceUsed(group.getBalanceUsed()+expenseExist.getPrice());
             updateExpenseContributed(expenseExist,listUser);//update the user field with transactional

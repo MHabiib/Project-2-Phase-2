@@ -217,16 +217,16 @@ const monthList =["January","February","March","April","May","June","July","Augu
           }
           else if(response.ok) {
             localStorage.setItem('accessToken','Token '+response.headers.get("Authorization"))
-            alert('Berhasil!\nMenunggu konfirmasi pembayaran dari Group Admin');
+            alert('Succeed!\nWaiting for group admin confirmation.');
             this.closePayNowWindow();
           } else {
             // console.log(response);
-            alert('Terjadi kesalahan. Harap periksa kembali input Anda.')
+            alert(`Oops! Something wrong happened ${response.status}.`)
           }
         })
         .catch(err => {
-          alert('Terjadi kesalahan. Harap periksa koneksi internet Anda.');
-          // console.log(err);
+  
+            alert(`Oops! Something wrong happened ${response.status}.`)// console.log(err);
         })
       },
     getMember() {
