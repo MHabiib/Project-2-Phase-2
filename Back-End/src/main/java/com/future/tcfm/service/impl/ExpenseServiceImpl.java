@@ -275,7 +275,6 @@ public class ExpenseServiceImpl implements ExpenseService {
             }catch (Exception e){e.printStackTrace();}
             return expenseRepository.findByGroupNameContainsAndCreatedDateGreaterThanEqualOrderByStatus(groupName,timeStamp,createPageRequest("createdDate","desc",page,size));
         }
-
         return null;
     }
 

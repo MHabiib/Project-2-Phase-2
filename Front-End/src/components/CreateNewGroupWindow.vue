@@ -72,7 +72,7 @@
               <label  for="namaInput">Regular Payment</label>
             </div>
             <div class="valueInput">
-              <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{ groupDetail.regularPayment | thousandSeparators}}}</div>
+              <div v-if="add==false" v-show="edit==false"  class="value">: Rp {{ groupDetail.regularPayment | thousandSeparators}}</div>
               <input v-if="edit" class='singleLineInput' type="text" placeholder='Regular Payment' v-model='newGroupDetail.regularPayment' @keypress="checkChar"/>
             </div>
           </div>

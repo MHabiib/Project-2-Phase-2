@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.mail.MessagingException;
 @CrossOrigin("**")
 @RestController
-@RequestMapping("/scheduler")
+@RequestMapping("api/scheduler")
 public class SchedulerController {
 
     @Autowired
     SchedulerService schedulerService;
-    @GetMapping("/testScheduler")
+
+    @GetMapping("/movetonextmonth")
     public void scheduler() throws MessagingException {
         schedulerService.scheduler();
     }

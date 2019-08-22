@@ -246,7 +246,7 @@
         totalPeriodPayed= totalPeriodPayed - (yearDiff*12)
         let result = totalPeriodPayed + this.groupCreated.month
         result = result > 12 ? 12 : result
-        result = result > 0 ? result : 0
+        result = result > 0 ? result :  0
         this.monthPaid=monthList
         console.log(this.year)
         this.monthNotYetPaid=(this.monthPaid.splice(result))
