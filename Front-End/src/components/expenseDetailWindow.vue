@@ -57,6 +57,9 @@
               >
                 Accept
               </div>
+              <div v-show="loading" style="text-align:center">
+                <div class="loading-center"><div></div><div></div><div></div><div></div></div>
+              </div>
             </div>
           </div>
         </div>
@@ -76,7 +79,8 @@
         disableButton: false,
         dStatus:null,
         role:localStorage.getItem('role'),
-        newExpenseDetail:{}
+        newExpenseDetail:{},
+        loading:false,
       }
     },
     methods: {
@@ -85,6 +89,7 @@
         if(this.disableButton !== true) {
           this.dStatus = status;
           this.disableButton = true;
+          this.loading = true
           fetch(`${Helper.backEndAddress}/api/expense/managementExpense`, {
             method: 'PUT',
             headers: {
@@ -116,6 +121,7 @@
               alert('Oops! Something wrong happened.\n Please try again.')
               this.$emit('refreshData')
             }
+            this.loading=false
           })
         }
       },
@@ -274,4 +280,43 @@
     width: 105px;
     font-weight: 600;
   }
+  .loading-center {
+    display: block;
+    position: absolute;
+    top:43%;
+    right:43%;
+    width: 64px;
+    height: 64px;
+  }
+  .loading-center div {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid var(--primary-2);
+    border-radius: 50%;
+    animation: loading-center 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: var(--primary-2) transparent transparent transparent;
+  }
+  .loading-center div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .loading-center div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .loading-center div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes loading-center {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
 </style>

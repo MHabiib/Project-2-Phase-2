@@ -94,7 +94,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity updateGroup(String id, Group group) throws MessagingException {
         Group groupExist = groupRepository.findByIdGroup(id);
         List<User> userList= new ArrayList<>();
