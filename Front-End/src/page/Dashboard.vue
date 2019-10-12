@@ -8,13 +8,13 @@
       <div class='dashboardFirstRow'>
         <div class='cardStyleOne'>
           <div class  ='cardStyleOneHeader'>
-            <p> Rp {{dashboardData.expenseByValue | thousandSeparators}}</p>
+            <p> IDR {{dashboardData.expenseByValue | thousandSeparators}}</p>
           </div>
 
           <div class='cardStyleOneBody'>
 
             <div class='cardStyleOneTitle'>Total Debit This Month</div>
-            <div class='cardStyleOneDescription'>Toal Debit Last Month Rp {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
+            <div class='cardStyleOneDescription'>Toal Debit Last Month IDR {{dashboardData.expenseByValueBefore | thousandSeparators}}</div>
           </div>
         </div>
 
@@ -59,7 +59,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp {{dashboardData.groupBalance | thousandSeparators}}
+                IDR {{dashboardData.groupBalance | thousandSeparators}}
               </div>
             </div>
 
@@ -101,7 +101,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp {{dashboardData.pendingPayment | thousandSeparators}}
+                IDR {{dashboardData.pendingPayment | thousandSeparators}}
               </div>
             </div>
 
@@ -122,7 +122,7 @@
               </div>
 
               <div class="secondRowBodyUpperValue">
-                Rp {{dashboardData.yourContribution | thousandSeparators}}
+                IDR {{dashboardData.yourContribution | thousandSeparators}}
               </div>
             </div>
 

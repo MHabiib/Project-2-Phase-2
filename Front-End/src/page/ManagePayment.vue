@@ -53,7 +53,7 @@
                     <td>{{payment.email}}</td>
                     <td>{{payment.isRejected | statusChecker}}</td>
                     <td>{{payment.periode}}</td>
-                    <td>Rp {{payment.price | thousandSeparators}}</td>
+                    <td>IDR {{payment.price | thousandSeparators}}</td>
               </tr>
                <div style="text-align:center">
                 <div v-show="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>

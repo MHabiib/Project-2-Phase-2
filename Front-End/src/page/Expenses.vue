@@ -57,7 +57,7 @@
                 <td>{{expense.createdDate | dateFormatter}}</td>
                 <td>{{expense.title}}</td>
                 <td>{{expense.status | statusChecker}}</td>
-                <td>Rp {{expense.price | thousandSeparators}}</td>
+                <td>IDR {{expense.price | thousandSeparators}}</td>
                 <td
                   class='showMembersButton'
                   @click.stop="showUserContributed(expense.title, expense.userContributed)"
